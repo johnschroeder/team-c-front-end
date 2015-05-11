@@ -1,0 +1,13 @@
+{
+  "name": "frontEnd",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./app"
+  },
+  "dependencies": {
+    "debug": "~2.1.1",
+    "express": "~4.11.1",
+    "konfig": "0.2.1"
+  }
+}
