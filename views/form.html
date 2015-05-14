@@ -7,15 +7,36 @@
         TODO make some css changes to make it prettier
         TODO Remove these comments!
     -->
+    <title>Inventory Submission Form</title>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <script src="javascripts/bootstrap.min.js"></script>
 </head>
 <body>
-    <form id="initialForm">
-        <label for="printJob">Print Job: </label>
-        <input type="text" placeholder="I am a placeholder" id="printJob">
+    <p id="pgTitle">
+        Inventory Submission Form
+    </p>
+    <div id="initialForm" >
+        <p>
+            <br> <br>
+            <label for="joNum">Number: </label>
+            <br>
+            <input type="text" placeholder="Enter the job number here   " id="joNum">
+        </p>
+        <p>
+
+            <label for="description"> Description: </label>
+            <br>
+            <input type="text"  placeholder="Enter a description of job here" id="description">
+
+        </p>
+        <p>
+            <label for="user">Submitted By: </label>
+            <br>
+            <input type="text" placeholder="Enter your username here" id="user">
+        </p>
         <div>
-            <input type="submit" class="btn btn-primary">
+            <input type="button" value="Submit Job" >
         </div>
-    </form>
+    </div>
 </body>
