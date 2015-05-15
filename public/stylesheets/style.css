@@ -6,3 +6,26 @@ body {
 a {
   color: #00B7FF;
 }
+#pgTitle {
+  text-allign: center;
+  font-size: 40px;
+  color:darkblue;
+}
+#user{
+  width: 200px;
+  text-align: left;
+}
+#description{
+  width: 200px;
+  text-allign: left;
+}
+#joNum{
+  width: 200px;
+  text-allign: left;
+}
+
+
+h1 {
+  text-allign: center;
+  font-size: 40px;
+}
