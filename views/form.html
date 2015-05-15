@@ -11,11 +11,18 @@
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="javascripts/bootstrap.min.js"></script>
+    <script src="form.js"></script>
 </head>
+
+
+
+
 <body>
     <p id="pgTitle">
         Inventory Submission Form
     </p>
+    <div id="errorMsg" >
+    </div>
     <div id="initialForm" >
         <p>
             <br> <br>
@@ -34,7 +41,7 @@
             <input type="text" placeholder="Enter your username here" id="user">
         </p>
         <div>
-            <input type="button" value="Submit Job" >
+            <input id="btnSubmit" type="button" value="Submit Job" onclick="SubmitForm()" >
         </div>
     </div>
 </body>
