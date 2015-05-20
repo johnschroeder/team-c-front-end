@@ -3,10 +3,10 @@
         "port":50000
     },
     "dev":{
-
+        "api":"http://dev.thisisimp.com/api/"
     },
     "prod":{
-
+        "api":"http://www.thisisimp.com/api"
     },
     "kun":{
 
