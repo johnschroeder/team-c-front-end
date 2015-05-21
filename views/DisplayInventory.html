@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <!-- make title and import links and scripts -->
+    <title>Current Inventory</title>
+
+    <div id="errorMsg" >
+    </div>
+    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/DispInv.js"></script>
+</head>
+
+<body>
+    <p id="pgTitle">
+        Current Inventory
+    </p>
+    <div id="dump">
+        <table id="container" width="100%">
+            <th>ProductID</th>
+            <th>RunID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Customer</th>
+            <th>Description</th>
+            <th>Date Created</th>
+        </table>
+        <script>
+            DisplayInventory();
+        </script>
+    </div>
+
+</body>
+</html>
