@@ -11,7 +11,7 @@ function DisplayInventory(){
         dispReq=new ActiveXObject("Microsoft.XMLHTTP");
     }
 
-    var host = "localhost:50001/displayInventory/";
+    var host = "http://localhost:50001/displayInventory/";
     dispReq.open('Get', host, true);
     dispReq.send();
     var dispTable = document.getElementById("container");
@@ -19,7 +19,7 @@ function DisplayInventory(){
         if(dispReq.readyState == 4 && dispReq.status==200) {
             var DisplayInfo = jQuery.parseJSON(dispReq.responseText);
             var count = DisplayInfo.length;
-            for(i= 0; i < count; i++) {
+            for(i= 1; i < count+1; i++) {
                 var tr =dispTable.insertRow(i);
                 tr.insertCell(0).innerHTML = DisplayInfo[i].ProductID;
                 tr.insertCell(1).innerHTML = DisplayInfo[i].RunID;
