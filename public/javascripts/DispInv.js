@@ -8,7 +8,7 @@ function DisplayInventory(){
     }
    
 
-    var host = "localhost:50001/displayInventory/";
+    var host = "http://localhost:50001/displayInventory/";
     dispReq.open('Get', host, true);
     dispReq.send();
     var dispTable = document.getElementById("container");

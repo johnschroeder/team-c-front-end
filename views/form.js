@@ -18,6 +18,7 @@ function SubmitForm()
 
     submitReq.open('GET', requStr, true);
     submitReq.send();
+
     submitReq.onreadystatechange = function() {
         if ( submitReq.readyState == 4) {
             if(submitReq.responseText.localeCompare('Success!')===0)
