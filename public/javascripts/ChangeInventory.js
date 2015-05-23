@@ -31,7 +31,7 @@ function changeMode(newMode) {
             $("#batchAmountField").show();
             $("#batchLocationField").show();		
             break;
-	default:
+        default:
             $("#input").hide();
             return;
             break;
@@ -70,9 +70,9 @@ function submit() {
         case "removeBatch":
             host = "http://localhost:50001/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
-	default:
+        default:
             $("#response").text("Error");
-	    return;
+            return;
             break;
     }
 
