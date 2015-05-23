@@ -12,25 +12,20 @@
 
 <body onload="init()">
     <h1>Change Inventory</h1>
-    Inventory ID: <input id="inventoryId" class="input" type="text"/><br/>
-    <br/>
-    <a onclick="showAddRun()">Add Run</a><br/>
-    <a onclick="showAddBatch()">Add Batch</a><br/>
-    <div id="addRun">
-        <h3>Add Run</h3>
-        Run ID: <input id="runId" class="input" type="text"/><br/>
-        Date: <input id="runDate" class="input" type="text"/><br/>
-        <button type="submitRun" value="search" onclick="submitAddRun()">Submit</button>
-        <div id="addRunResponse"></div>
-    </div>
+    <a onclick="changeMode('addRun')">Add Run</a><br/>
+    <a onclick="changeMode('removeRun')">Remove Run</a><br/>
+    <a onclick="changeMode('addBatch')">Add Batch</a><br/>
+    <a onclick="changeMode('removeBatch')">Remove Batch</a><br/>
 
-    <div id="addBatch">
-        <h3>Add Batch</h3>
-	Run ID: <input id="batchRunId" class="input" type="text"/><br/>
-        Amount: <input id="batchAmount" class="input" type="text"/><br/>
-        Location: <input id="batchLocation" class="input" type="text"/><br/>
-        <button type="submitBatch" value="search" onclick="submitAddBatch()">Submit</button>
-        <div id="addBatchResponse"></div>
+    <div id="input">
+        <h3 id="modeHeading"></h3>
+	<div id="inventoryIdField">Inventory ID: <input id="inventoryId" class="input" type="text"/></div>
+        <div id="runIdField">Run ID: <input id="runId" class="input" type="text"/></div>
+        <div id="runDateField">Run Date: <input id="runDate" class="input" type="text"/></div>
+        <div id="batchAmountField">Batch Amount: <input id="batchAmount" class="input" type="text"/></div>
+        <div id="batchLocationField">Batch Location: <input id="batchLocation" class="input" type="text"/></div>
+        <button type="submit" value="search" onclick="submit()">Submit</button>
+        <div id="response"></div>
     </div>
 </body>
 </html>
