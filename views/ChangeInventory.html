@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Change Inventory</title>
+    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/ChangeInventory.js"></script>
+</head>
+
+<body onload="init()">
+    <h1>Change Inventory</h1>
+    <a onclick="changeMode('addRun')">Add Run</a><br/>
+    <a onclick="changeMode('removeRun')">Remove Run</a><br/>
+    <a onclick="changeMode('addBatch')">Add Batch</a><br/>
+    <a onclick="changeMode('removeBatch')">Remove Batch</a><br/>
+
+    <div id="input">
+        <h3 id="modeHeading"></h3>
+        <div id="inventoryIdField">Inventory ID: <input id="inventoryId" class="input" type="text"/></div>
+        <div id="runIdField">Run ID: <input id="runId" class="input" type="text"/></div>
+        <div id="runDateField">Run Date: <input id="runDate" class="input" type="text"/></div>
+        <div id="batchAmountField">Batch Amount: <input id="batchAmount" class="input" type="text"/></div>
+        <div id="batchLocationField">Batch Location: <input id="batchLocation" class="input" type="text"/></div>
+        <button type="submit" value="submit" onclick="submit()">Submit</button>
+        <div id="response"></div>
+    </div>
+</body>
+</html>
