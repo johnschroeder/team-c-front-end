@@ -105,7 +105,7 @@
                 return;
             }
 
-            host = host + "/"
+            host = host
                     + product_name + "/"
                     + customer + "/"
                     + description + "/"
@@ -120,6 +120,9 @@
                 else {
                     submit_button.after( "<div class='error-message'>" + response + "</div>");
                 }
+
+            }).fail( function( response ){
+                submit_button.after( "<div class='error-message'>" + response.responseText + "</div>");
             });
         });
     })( jQuery );
