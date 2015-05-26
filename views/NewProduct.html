@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>New Product</title>
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+
+</head>
+<body>
+<div class="title-banner">IMP</div>
+<div class="navigation-menu unimplemented">Sidebar Menu Here</div>
+<div class="content-container new-product-form">
+    <div class="new-item-description unimplemented">New Inventory Item - ID: {TODO}</div>
+
+    <div class="input-row">
+        <div class="input-label">Customer</div>
+        <input class="customer" type="text">
+    </div>
+
+    <div class="input-row">
+        <div class="input-label">Item Name</div>
+        <input class="product-name" type="text">
+    </div>
+
+    <div class="input-row">
+        <div class="input-label">Description</div>
+        <textarea class="description" rows="4" cols="50"></textarea>
+    </div>
+
+    <div class="input-row">
+        <div class="input-label">Image</div>
+        <div class="upload-button">Upload File</div>
+    </div>
+
+    <div class="input-row external-id-input unimplemented">
+        <span class="input-label">External ID</span>
+        <input type="text">
+        <span class="input-label">External System</span>
+        <input type="text">
+    </div>
+
+    <div class="input-row external-id-input">
+        <span class="input-label">External ID</span>
+        <input type="text">
+        <span class="input-label">External System</span>
+        <input type="text">
+    </div>
+
+    <div class="input-row">
+        <div class="submit">Finish</div>
+        <div class="auto-create-run unimplemented"><input type="checkbox">Create a new run of this item when finished</div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    ( function( $ ){
+
+        /**
+         * Generates the current date and returns it as a string
+         * @returns {string}
+         */
+        function getDate() {
+
+            var date_object = new Date();
+            var day = date_object.getDate();
+            var month = date_object.getMonth() + 1;
+            var year = date_object.getFullYear();
+
+            var date = year + "-";
+            if( month < 10 )
+                date += "0";
+            date += month + "-";
+            if( day < 10 )
+                date += "0";
+            date += day;
+
+            return date;
+        }
+
+        //Tack the date on in the upper-right corner
+        $( '.new-item-description').append( "<span class='date'>" + getDate() + "<span>" );
+
+        var submit_button = $( '.submit' );
+
+        //Submit the form when the submit button is clicked
+        submit_button.on( 'click', function(){
+
+            //Remove any previous error messages
+            var error_message = $( '.error-message' );
+            if( error_message.length )
+                error_message.remove();
+
+            var host = "http://localhost:50001/newProductSubmission/";
+            var customer = $( '.customer').val();
+            var product_name = $( '.product-name').val();
+            var description = $( '.description').val();
+            var date = getDate();
+
+            if( !customer.length || !product_name.length || !description.length ){
+                submit_button.after( "<div class='error-message'>One or more required fields isn\'t filled out</div>" );
+                return;
+            }
+
+            host = host
+                    + product_name + "/"
+                    + customer + "/"
+                    + description + "/"
+                    + date + "/";
+
+            $.get( host, function( response ) {
+
+                if( response == "Success" ){
+                    submit_button.after( "<div class='success'>Successfully created product</div>" );
+                    submit_button.remove();
+                }
+                else {
+                    submit_button.after( "<div class='error-message'>" + response + "</div>");
+                }
+
+            }).fail( function( response ){
+                submit_button.after( "<div class='error-message'>" + response.responseText + "</div>");
+            });
+        });
+    })( jQuery );
+</script>
+</body>
+</html>
