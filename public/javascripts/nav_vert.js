@@ -43,7 +43,7 @@ function ViewProducts(){
     $('#main_cont').text("ViewProducts");
 }
 
-function DisplayInventory(){
+function DisplayInventories(){
     $('#main_cont').load('DisplayInventory.html');
 }
 
