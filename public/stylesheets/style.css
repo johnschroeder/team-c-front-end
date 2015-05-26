@@ -78,75 +78,6 @@ h1 {
 /* form.html specific styles
 *******************************/
 
-
-h1 {
-  text-allign: center;
-  font-size: 40px;
-}
-
-/* TODO: Actually style + implement title banner */
-.title-banner {
-  width: 100%;
-  background-color: #0055aa;
-  font-size: 24px;
-  color: white;
-  line-height: 80px;
-  padding-left: 5%;
-}
-
-/* TODO: Actually style + implement sidebar menu */
-.navigation-menu {
-  width: 15%;
-  float: left;
-  background-color: #0086b3;
-  padding-bottom: 500px;
-}
-
-@media (max-width: 800px) {
-  .navigation-menu {
-    display: none;
-  }
-}
-.content-container {
-  width: 85%;
-  float: left;
-}
-
-.input-row {
-  margin-left: 5%;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.input-row .input-label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.input-row input[type=text],
-.input-row textarea {
-  width: 80%;
-}
-
-.input-row input[type=checkbox] {
-  margin-right: 10px;
-}
-
-@media (max-width: 800px) {
-  .input-row input[type=text],
-  .input-row textarea {
-    width: 100%;
-  }
-}
-/* unimplemented class - put on things that haven't been implemented yet */
-.unimplemented {
-  color: red;
-}
-
-
-/* form.html specific styles
-*******************************/
-
 #pgTitle {
   text-allign: center;
   font-size: 40px;
@@ -165,13 +96,6 @@ h1 {
   text-allign: left;
 }
 
-/* NewProduct.html specific styles
-*******************************/
-.new-item-description {
-  font-size: 12px;
-  margin-left: 5%;
-  line-height: 30px;
-}
 
 h1 {
   text-allign: center;
