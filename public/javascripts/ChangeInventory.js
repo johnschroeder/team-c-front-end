@@ -1,13 +1,52 @@
-function init() {
-    $("#input").hide();
-}
-
 var mode = "";
 
-function changeMode(newMode) {
-    mode = newMode;
+function init() {
+    processParams();
+}
 
+function processParams() {
+    var params = getParams();
+    if (params.mode) {
+        changeMode(params.mode);
+    }
+
+    if (params.inventoryId) {
+        $("#inventoryId").val(parseInt(params.inventoryId));
+    }
+
+    if (params.runId) {
+        $("#runId").val(parseInt(params.runId));
+    }
+
+    if (params.runDate) {
+        $("#runDate").val(params.runDate);
+    }
+
+    if (params.batchAmount) {
+        $("#batchAmount").val(parseInt(params.batchAmount));
+    }
+
+    if (params.batchLocation) {
+        $("#batchLocation").val(params.batchLocation);
+    }
+}
+
+function getParams() {
+    var params = {};
+    location.search.substr(1).split("&").forEach(function(each) {
+        if (each !== "") {
+            var pair = each.split("=");
+            params[pair[0]] = pair[1];
+        }
+    });
+
+    return params;
+}
+
+function changeMode(newMode) {
     hideAllFields();
+
+    mode = newMode;
 
     switch (mode) {
         case "addRun":
