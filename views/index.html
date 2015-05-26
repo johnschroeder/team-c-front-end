@@ -1,1 +1,76 @@
-test
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Welcome to IMP for StevensIS</title>
+    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script type="text/javascript" src="js/lib/jquery-1.11.1.min.js" ></script>
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+    <script src="app.js"></script>
+    <script src="javascripts/nav_vert.js"></script>
+
+</head>
+<body>
+<div id="nav_hori"  >
+    <div aligh="left"><img src="image/stevensis_logo.gif"></div>
+    <div align="right">
+        <a href="#login">Log in &nbsp</a>
+        <a href="#about">About &nbsp</a>
+    </div>
+</div>
+
+<div id="nav_vert">
+    <li><button id="Home" onclick="Home()">Home</button>
+
+    </li>
+    <li><button>Manage Inventory</button>
+        <ul>
+            <li><button id="ChangeInventory" onclick="ChangeIventory()">Add Inventory</button></li>
+            <li><button id="PullInventory" onclick="PullInventory()">Pull Inventory</button></li>
+            <li><button id="EditInventory" onclick="EditInventory()">Edit Inventory</button></li>
+        </ul>
+    </li>
+    <li><button>Manage Product</button>
+        <ul>
+            <li><button id="AddProduct" onclick="AddProduct()">Add Product</button></li>
+            <li><button id="EditProducts" onclick="EditProduct()">Edit Products</button></li>
+            <li><button id ="DeleteProduct" onclick="DeleteProduct()">Delete Product</button></li>
+            <li><button id="ViewProducts" onclick="ViewProducts()">View Products</button></li>
+        </ul>
+    </li>
+    <li><button>Track</button>
+        <ul>
+            <li><button id="DisplayInventory" onclick="DisplayInventory()">Track Inventory</button></li>
+        </ul>
+    </li>
+
+    <li><button>Reports</button>
+        <ul>
+            <li><button id="PreDefined" onclick="PreDefinedReports()">Pre-defined</button></li>
+            <li><button id="MakeMyOwn" onclick="MakeMyOwnReport()">Make My Own</button></li>
+        </ul>
+    </li>
+
+    <li><button>Administrator</button>
+        <ul>
+            <li><button id="Audit" onclick="Audit()">Audit</button></li>
+            <li><button id="Logs" onclick="Logs()">Logs</button></li>
+            <li><button id="AddUsers" Onclick="AddUsers()">Add Users</button></li>
+            <li><button id="DeleteUsers" Onclick="DeleteUsers()">Delete Users</button></li>
+            <li><button id="ViewUsers" Onclick="ViewUsers()">View Users</button></li>
+        </ul>
+    </li>
+
+</div>
+
+<div id="main_cont" class="ng-view">
+    Welcome to IMP for StevensIS
+</div>
+
+</body>
+</html>
