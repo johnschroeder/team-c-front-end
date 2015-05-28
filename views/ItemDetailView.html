@@ -2,9 +2,88 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Current Inventory</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
 </head>
-<body>
 
+<body>
+    <div>
+        <div id="detail_view">
+            <button id="Add" onclick="Add()">Add</button>
+        </div>
+        <div id="detail_view">
+            <button id="Pull" onclick="Pull()">Pull</button>
+        </div>
+        <div id="detail_view">
+            <button id="Edit" onclick="Edit()">Edit</button>
+        </div>
+
+        <div class="item-container"></div>
+    </div>
+
+
+<script>
+    var $ = jQuery;
+
+    var detailView = {
+
+        host: "http://localhost:50001/itemDetail/"
+        + "101/", // TODO: Figure out where this is coming from!
+
+        init: function() {
+
+            var self = this;
+            $.get( this.host, function( response ) {
+
+                if( response && response.length ){
+
+                    self.item = jQuery.parseJSON( response );
+                    console.log(self.item);
+                    self.display_item();
+
+                }
+                else {
+
+                    self.render_error( "No inventory found" );
+                }
+
+            }).fail( function( response ){
+
+                self.render_error( "Failed to load inventory: " + response );
+
+            });
+
+        },
+
+        display_item: function() {
+
+            var item_container = $( '.item-container' );
+
+            var item = this.item[0];
+
+            var inventory_item = "<div class='inventory-item'>";
+
+            inventory_item += "<div id=\"productName\">Product Name: " + item.Name + "</div>";
+            inventory_item += "<div id=\"totalQuantity\">Total Quantity: " + item.total + "</div>";
+            inventory_item += "<div id=\"mostRecentRun\">Last run: " + item.mostRecent + "</div>";
+            inventory_item += "</div>";
+
+            item_container.append( inventory_item );
+        },
+
+        render_error: function( error ) {
+
+            $( 'body').prepend( "<div class='error-message'>" + error + "</div>" );
+
+        }
+    };
+
+    detailView.init();
+
+</script>
 </body>
 </html>
+>
