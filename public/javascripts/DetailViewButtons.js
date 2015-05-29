@@ -9,6 +9,7 @@ function Pull() {
 }
 
 function Edit() {
-    //var params = {};
-    //window.open("http://localhost:50000/EditProduct.html?" + mapToQueryString(params), "_self");
+    var params = {};
+    params["productName"] = $("#productNameSpan").val();
+    window.open("http://localhost:50000/EditProduct.html?" + mapToQueryString(params), "_self");
 }
