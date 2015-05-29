@@ -5,7 +5,7 @@ function init() {
 }
 
 function processParams() {
-    var params = getParams();
+    var params = getQueryStringParams();
     if (params.mode) {
         changeMode(params.mode);
     }
@@ -29,18 +29,6 @@ function processParams() {
     if (params.batchLocation) {
         $("#batchLocation").val(params.batchLocation);
     }
-}
-
-function getParams() {
-    var params = {};
-    location.search.substr(1).split("&").forEach(function(each) {
-        if (each !== "") {
-            var pair = each.split("=");
-            params[pair[0]] = pair[1];
-        }
-    });
-
-    return params;
 }
 
 function changeMode(newMode) {
