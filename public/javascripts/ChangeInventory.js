@@ -56,7 +56,7 @@ function changeMode(newMode) {
             break;
         case "removeRun":
             $("#modeHeading").text("Remove Run");
-            $("#runIdField").show();		
+            $("#runIdField").show();
             break;
         case "addBatch":
             $("#modeHeading").text("Add Batch");
@@ -68,7 +68,7 @@ function changeMode(newMode) {
             $("#modeHeading").text("Remove Batch");
             $("#runIdField").show();
             $("#batchAmountField").show();
-            $("#batchLocationField").show();		
+            $("#batchLocationField").show();
             break;
         default:
             $("#input").hide();
@@ -98,16 +98,16 @@ function submit() {
 
     switch (mode) {
         case "addRun":
-            host = "http://localhost:50001/addRun/" + inventoryId + "/" + runDate;
+            host = "http://localhost:50001/changeInventory/addRun/" + inventoryId + "/" + runDate;
             break;
         case "removeRun":
-            host = "http://localhost:50001/removeRun/" + runId		
+            host = "http://localhost:50001/changeInventory/removeRun/" + runId
             break;
         case "addBatch":
-            host = "http://localhost:50001/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            host = "http://localhost:50001/changeInventory/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
         case "removeBatch":
-            host = "http://localhost:50001/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            host = "http://localhost:50001/changeInventory/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
         default:
             $("#response").text("Error");
