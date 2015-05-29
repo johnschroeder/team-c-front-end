@@ -20,6 +20,7 @@ function mapToQueryString(map) {
 
     for (var i = 0; i < entries.length; ++i) {
         s += entries[i];
+
         if (i < entries.length - 1) {
             s += "&";
         }

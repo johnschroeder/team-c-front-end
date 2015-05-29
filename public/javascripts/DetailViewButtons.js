@@ -1,5 +1,6 @@
 function Add() {
     var params = {};
+    params["inventoryId"] = $("#productIDSpan").val();
     window.open("localhost:50000/ChangeInventory.html?mode=addRun&" + mapToQueryString(params), "_self");
 }
 
