@@ -10,6 +10,6 @@ function Pull() {
 
 function Edit() {
     var params = {};
-    params["productName"] = $("#productNameSpan").val();
+    params["inventoryId"] = $("#productIDSpan").val();
     window.open("http://localhost:50000/EditProduct.html?" + mapToQueryString(params), "_self");
 }
