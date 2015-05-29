@@ -32,7 +32,7 @@ function AddProduct(){
 }
 
 function EditProduct(){
-    $('#main_cont').text("EditProduct");
+    $('#main_cont').load("EditProduct.html");
 }
 
 function DeleteProduct(){
