@@ -12,6 +12,7 @@
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/DispLogs.js"></script>
+    <script src="javascripts/clearLogs.js"></script>
 
 </head>
 
@@ -23,13 +24,13 @@
     </p>
 
     <div id="dump">
-        <input type="submit" value="Clear1">
-        <input type="submit" value="Clear2">
+        <button onclick="clearLogs()">Clear All</button>
+        <button onclick="clearLogs()">Clear Checked</button>
+        <button onclick="clearLogs()">Filter</button>
         <table id="container" width="100%">
 
             <th>SELECT</th>
-            <th>logID</th>
-            <th>productID</th>
+            <th>Message</th>
             <script>
                 DisplayLogs();
             </script>
