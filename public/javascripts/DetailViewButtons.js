@@ -1,6 +1,6 @@
 function Add() {
     var params = {};
-    params["inventoryId"] = $("#productIDSpan").val();
+    params["inventoryId"] = getInventoryId();
     window.open("http://localhost:50000/ChangeInventory.html?mode=addRun&" + mapToQueryString(params), "_self");
 }
 
@@ -10,6 +10,10 @@ function Pull() {
 
 function Edit() {
     var params = {};
-    params["inventoryId"] = $("#productIDSpan").val();
+    params["inventoryId"] = getInventoryId();
     window.open("http://localhost:50000/EditProduct.html?" + mapToQueryString(params), "_self");
+}
+
+function getInventoryId() {
+    return detailView.getParameterByName("prodid");
 }
