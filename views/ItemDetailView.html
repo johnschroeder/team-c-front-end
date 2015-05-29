@@ -26,18 +26,24 @@
 
 
 <script>
-    // Comment to link jira & github
     var $ = jQuery;
 
     var detailView = {
 
-        host: "http://localhost:50001/itemDetail/"
-        + "101/", // TODO: Figure out where this is coming from!
+        host: "http://localhost:50001/itemDetail/",
+
+        getParameterByName: function(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        },
 
         init: function() {
-
             var self = this;
-            $.get( this.host, function( response ) {
+            var productID = this.getParameterByName("prodid");
+
+            $.get( this.host.concat(productID).concat('/'), function( response ) {
 
                 if( response && response.length ){
 
@@ -60,25 +66,26 @@
         },
 
         display_item: function() {
-
+            var productID = this.getParameterByName("prodid");
             var item_container = $( '.item-container' );
-
             var item = this.item[0];
-
             var inventory_item = "<div class='inventory-item'>";
 
-            inventory_item += "<div id=\"productName\">Product Name: " + item.Name + "</div>";
-            inventory_item += "<div id=\"totalQuantity\">Total Quantity: " + item.total + "</div>";
-            inventory_item += "<div id=\"mostRecentRun\">Last run: " + item.mostRecent + "</div>";
+            inventory_item += "<div id=\"productName\">Product Name: <span id=\'productName\'>"
+                                + item.Name + "</span></div>";
+            inventory_item += "<div id=\"totalQuantity\">Total Quantity: <span id=\'totalQuantity\'>"
+                                + item.total + "</span></div>";
+            inventory_item += "<div id=\"mostRecentRun\">Last run: <span id=\'totalQuantity\'>"
+                                + item.mostRecent + "</span></div>";
+            inventory_item += "<div id=\"productID\" style=\"display: none;\"><span id=\'productID\'>"
+                                + productID + "</span></div>";
             inventory_item += "</div>";
 
             item_container.append( inventory_item );
         },
 
         render_error: function( error ) {
-
             $( 'body').prepend( "<div class='error-message'>" + error + "</div>" );
-
         }
     };
 
