@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <!-- make title and import links and scripts -->
     <title>Current Inventory</title>
-    <div id="errorMsg" >
+
+    <div id="errorMsg">
     </div>
     <link rel="stylesheet" href="stylesheets/display.style.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
-    <script src="javascripts/DispInv.js"></script>
+    <script src="javascripts/DispLogs.js"></script>
 
 </head>
 
@@ -20,20 +21,19 @@
     <p id="pgTitle">
         Current Inventory
     </p>
+
     <div id="dump">
+        <input type="submit" value="Clear1">
+        <input type="submit" value="Clear2">
         <table id="container" width="100%">
-            <th>ProductID</th>
-            <th>RunID</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Customer</th>
-            <th>Description</th>
-            <th>Date Created</th>
+
+            <th>SELECT</th>
+            <th>logID</th>
+            <th>productID</th>
+            <script>
+                DisplayLogs();
+            </script>
         </table>
-        <script>
-            DisplayInventory();
-        </script>
     </div>
 </div>
 </body>

@@ -11,7 +11,9 @@ function DisplayInventory(){
     var host = "http://localhost:50001/displayInventory/";
     dispReq.open('Get', host, true);
     dispReq.send();
+
     var dispTable = document.getElementById("container");
+
     dispReq.onreadystatechange = function(){
         if(dispReq.readyState == 4 && dispReq.status==200) {
             var DisplayInfo = jQuery.parseJSON(dispReq.responseText);

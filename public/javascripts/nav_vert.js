@@ -15,7 +15,7 @@ function Home(){
     $('#main_cont').load('Home.html');
 }
 
-function ChangeIventory(){
+function ChangeInventory() {
     $('#main_cont').load('ChangeInventory.html');
 }
 
@@ -60,7 +60,7 @@ function Audit(){
 }
 
 function Logs(){
-    $('#main_cont').text("Logs");
+    $('#main_cont').load("Logs.html");
 }
 
 function AddUsers(){
