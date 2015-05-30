@@ -248,32 +248,3 @@ h1 {
 /* EditProduct.html specific styles
 *******************************/
 
-.edit-product-stuff .upload-button,
-.edit-product-stuff .submit {
-  text-align: center;
-  width: 30%;
-  font-size: 18px;
-  line-height: 30px;
-  background-color: #990000;
-  color: #FFFFFF;
-  cursor: pointer;
-}
-
-.edit-product-stuff .submit {
-  background-color: #0086b3;
-}
-
-.edit-product-stuff .submit:hover {
-  background-color: #0055aa;
-}
-
-.edit-product-stuff .upload-button:hover {
-  background-color: #843534;
-}
-
-@media (max-width: 800px) {
-  .edit-product-stuff .upload-button,
-  .edit-product-stuff .submit {
-    width: 100%;
-  }
-}
