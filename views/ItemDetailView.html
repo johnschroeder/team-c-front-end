@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Current Inventory</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <div id="detail_view">
+            <button id="Add" onclick="Add()">Add</button>
+        </div>
+        <div id="detail_view">
+            <button id="Pull" onclick="Pull()">Pull</button>
+        </div>
+        <div id="detail_view">
+            <button id="Edit" onclick="Edit()">Edit</button>
+        </div>
+
+        <div class="item-container"></div>
+    </div>
+
+
+<script>
+    var $ = jQuery;
+
+    var detailView = {
+
+        host: "http://localhost:50001/itemDetail/",
+
+        getParameterByName: function(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        },
+
+        init: function() {
+            var self = this;
+            var productID = this.getParameterByName("prodid");
+
+            $.get( this.host.concat(productID).concat('/'), function( response ) {
+
+                if( response && response.length ){
+
+                    self.item = jQuery.parseJSON( response );
+                    console.log(self.item);
+                    self.display_item();
+
+                }
+                else {
+
+                    self.render_error( "No inventory found" );
+                }
+
+            }).fail( function( response ){
+
+                self.render_error( "Failed to load inventory: " + response );
+
+            });
+
+        },
+
+        display_item: function() {
+            var productID = this.getParameterByName("prodid");
+            var item_container = $( '.item-container' );
+            var item = this.item[0];
+            var inventory_item = "<div class='inventory-item'>";
+
+            inventory_item += "<div id=\"productName\">Product Name: <span id=\'productNameSpan\'>"
+                                + item.Name + "</span></div>";
+            inventory_item += "<div id=\"totalQuantity\">Total Quantity: <span id=\'totalQuantitySpan\'>"
+                                + item.total + "</span></div>";
+            inventory_item += "<div id=\"mostRecentRun\">Last run: <span id=\'totalQuantitySpan\'>"
+                                + item.mostRecent + "</span></div>";
+            inventory_item += "<div id=\"productID\" style=\"display: none;\"><span id=\'productIDSpan\'>"
+                                + productID + "</span></div>";
+            inventory_item += "</div>";
+
+            item_container.append( inventory_item );
+        },
+
+        render_error: function( error ) {
+            $( 'body').prepend( "<div class='error-message'>" + error + "</div>" );
+        }
+    };
+
+    detailView.init();
+
+</script>
+</body>
+</html>
+>

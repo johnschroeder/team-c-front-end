@@ -2,41 +2,133 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <!-- make title and import links and scripts -->
     <title>Current Inventory</title>
-    <div id="errorMsg" >
-    </div>
-    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
-    <script src="javascripts/DispInv.js"></script>
-
-
-
 </head>
 
 <body>
 
-<div>
-    <p id="pgTitle">
-        Current Inventory
-    </p>
-    <div id="dump">
-        <table id="container" width="100%">
-            <th>ProductID</th>
-            <th>RunID</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Customer</th>
-            <th>Description</th>
-            <th>Date Created</th>
-        </table>
-        <script>
-            DisplayInventory();
-        </script>
+    <div>
+        <div class="input-row track-inventory-by">
+            <div class="input-label">Track Inventory By</div>
+            <div class="input-label">[Customer]</div>
+        </div>
+
+        <div class="input-row filter">
+            <div class="input-label">Filter</div>
+            <input type="text">
+        </div>
+
+
+        <div class="inventory-container"></div>
+
     </div>
-</div>
+
+    <script>
+        var $ = jQuery;
+
+        var display_inventory = {
+
+            host: "http://localhost:50001/displayInventory/",
+            inventory: false,
+            consolidated: false,
+
+            init: function() {
+
+                var self = this;
+
+                $.get( this.host, function( response ) {
+
+                    if( response && response.length ){
+
+                        self.inventory = jQuery.parseJSON( response );
+                        self.consolidate_inventory();
+                        self.display_inventory();
+
+                    }
+                    else {
+
+                        self.render_error( "No inventory found" );
+                    }
+
+                }).fail( function( response ){
+
+                    self.render_error( "Failed to load inventory: " + response );
+
+                });
+
+            },
+
+            //TODO: Refactor this to something elegant
+            consolidate_inventory: function() {
+
+                this.consolidated = new Array();
+                if( !this.inventory || !this.inventory.length )
+                    return;
+
+                for( var i = 0; i < this.inventory.length; ++i ){
+
+                    var found = false;
+                    for( var j = 0; j < this.consolidated.length; ++j ){
+
+                        if( this.consolidated[j].ProductID == this.inventory[i].ProductID ){
+                            found = true;
+                            this.consolidated[j].Runs.push( this.inventory[i] );
+                            this.consolidated[j].Total += this.inventory[i].Amount;
+                            this.consolidated[j].Runs.sort( function(a, b){ return a.Date.localeCompare( b.Date ) } );
+                            break;
+                        }
+
+                    }
+
+                    if( !found ){
+                        this.consolidated.push({
+                            ProductID: this.inventory[i].ProductID,
+                            Total: this.inventory[i].Amount,
+                            Runs: [ this.inventory[i] ]
+                        });
+                    }
+
+                }
+
+                console.log( this.consolidated );
+            },
+
+            display_inventory: function() {
+
+                if( !this.consolidated || !this.consolidated.length )
+                    return;
+
+                var inventory_container = $( '.inventory-container' );
+
+                for( var i = 0; i < this.consolidated.length; ++i ){
+
+                    var latest_run = this.consolidated[i].Runs[ this.consolidated[i].Runs.length - 1];
+
+                    var inventory_item = "<div class='inventory-item'>";
+
+                    inventory_item += "<div>" + this.consolidated[i].Runs[0].Customer + ":" + this.consolidated[i].Runs[0].Name + "</div>";
+                    inventory_item += "<div>Last run: " + latest_run.Date + "(+" + latest_run.Amount + ")</div>";
+                    inventory_item += "<div>Total: " + this.consolidated[i].Total + "</div>";
+
+                    inventory_item += "</div>";
+
+                    inventory_container.append( inventory_item );
+                }
+            },
+
+            render_error: function( error ) {
+
+                $( 'body').prepend( "<div class='error-message'>" + error + "</div>" );
+
+            }
+        };
+
+        display_inventory.init();
+
+    </script>
 </body>
 </html>
