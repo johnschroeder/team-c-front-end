@@ -28,7 +28,7 @@ function sendRequest(host, callback) {
 }
 
 function reSubmit(){
-    //var prodID = $(".selectedID").val();
+    //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
     var newCustName = $(".customer").val();
     var newProdName  = $(".product-name").val();
     var newDescript  = $(".description").val();
