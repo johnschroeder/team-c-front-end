@@ -12,7 +12,6 @@ function DisplayLogs() {
     dispReq.send();
 
     var dispTable = document.getElementById("container");
-
     dispReq.onreadystatechange = function () {
         if (!(dispReq.readyState == 4 && dispReq.status == 200)) {
         } else {
@@ -21,7 +20,14 @@ function DisplayLogs() {
             for (i = 0; i < count; i++) {
                 var di = DisplayInfo[i];
                 var tr = dispTable.insertRow(i + 1);
-                tr.insertCell(0).innerHTML = "<input type='checkbox' name= 'logMark' + i value='logNumber' + i>"
+                var value = '' + di.logID;
+                var checkbox = document.createElement("input");
+
+                checkbox.type = "checkbox";    // make the element a checkbox
+                checkbox.name = "logMark";      // give it a name we can check on the server side
+                checkbox.value = value;         // make its value "pair"
+
+                tr.insertCell(0).innerHTML.checkbox;
                 switch (di.LogType) {
                     case 0:
                         tr.insertCell(1).innerHTML = di.date + " " + di.amount + " " +

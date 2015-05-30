@@ -24,16 +24,19 @@
     </p>
 
     <div id="dump">
-        <button onclick="clearLogs()">Clear All</button>
-        <button onclick="clearLogs()">Clear Checked</button>
-        <button onclick="clearLogs()">Filter</button>
+        <button onclick="clearLogs(0)">Clear All</button>
+        <button onclick="clearLogs(1)">Clear Checked</button>
+        <button onclick="clearLogs(2)">Filter</button>
         <table id="container" width="100%">
-
+            <thead>
             <th>SELECT</th>
             <th>Message</th>
+            </thead>
+            <tbody>
             <script>
                 DisplayLogs();
             </script>
+            </tbody>
         </table>
     </div>
 </div>
