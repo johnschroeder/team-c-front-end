@@ -3,10 +3,14 @@
 
 <div class="new-product-form">
     <h1>Edit Product</h1>
+    <div>
+        <strong>Editing ProductID: </strong>
+        <strong class="selectedID"></strong>
+    </div>
 
     <div class="input-row">
         <div class="input-label">Customer</div>
-        <textarea class="customer" tyep="textarea"> </textarea>
+        <textarea class="customer" rows="1" type="textarea"> </textarea>
     </div>
 
     <div class="input-row">
@@ -23,10 +27,11 @@
         <div class="input-label">Image</div>
         <div class="upload-button">Upload Different File</div>
     </div>
-    <script>showProductID()</script>
+    <script>showProductID(100)</script>
 
     <div class="input-row">
-        <div class="submit">Done Editing</div>
+        <div class="submit" onclick="reSubmit()">Done Editing</div>
+
     </div>
 
 </div>

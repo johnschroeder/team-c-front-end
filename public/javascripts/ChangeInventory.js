@@ -62,7 +62,7 @@ function submit() {
             host = "http://localhost:50001/addRun/" + inventoryId + "/" + runDate;
             break;
         case "removeRun":
-            host = "http://localhost:50001/removeRun/" + runId		
+            host = "http://localhost:50001/removeRun/" + runId;
             break;
         case "addBatch":
             host = "http://localhost:50001/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
