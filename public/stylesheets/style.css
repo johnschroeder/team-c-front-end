@@ -74,6 +74,10 @@ h1 {
   color: red;
 }
 
+.error-message {
+  color: red;
+  font-size: 18px;
+}
 
 /* form.html specific styles
 *******************************/
@@ -260,4 +264,76 @@ h1 {
 #detail_view button:hover, #nav a.active {
     background: #999;
     color: #fff;
+}
+
+/* DisplayInventory.html specific styles
+*******************************/
+.display-inventory-container .thumbnail {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  float: left;
+  clear: both;
+  margin-right: 20px;
+}
+@media (max-width: 800px) {
+  .display-inventory-container .thumbnail {
+    display: none;
+  }
+}
+
+.display-inventory-container .inventory-item {
+  width: 100%;
+  min-height: 100px;
+  clear: both;
+  line-height: 25px;
+  position: relative;
+  padding-bottom: 50px;
+  margin-top: 25px;
+  border-bottom: 2px dashed grey;
+}
+
+.display-inventory-container span {
+  font-size: 18px;
+}
+
+.display-inventory-container .total {
+  position: absolute;
+  right: 20%;
+  top: 0;
+  font-size: 24px;
+  line-height: 100px;
+}
+
+@media (max-width: 800px) {
+  .display-inventory-container .total {
+    position: relative;
+    line-height: 40px;
+    right: 0;
+  }
+}
+
+.display-inventory-container .name {
+  margin-left: 2%;
+}
+
+.display-inventory-container .input-row {
+  width: 33%;
+  float: left;
+}
+
+.display-inventory-container .filter {
+  width: 80%;
+}
+
+@media (max-width: 800px) {
+  .display-inventory-container .input-row {
+    width: 100%;
+  }
+}
+.display-inventory-container .menu {
+  width: 100%;
+  border-bottom: 2px dashed grey;
+  float: left;
+  margin-bottom: 25px;
 }
