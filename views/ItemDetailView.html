@@ -42,7 +42,7 @@
         init: function() {
             var self = this;
             var productID = this.getParameterByName("prodid");
-
+console.log(productID);
             $.get( this.host.concat(productID).concat('/'), function( response ) {
 
                 if( response && response.length ){
