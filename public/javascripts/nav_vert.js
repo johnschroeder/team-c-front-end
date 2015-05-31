@@ -11,6 +11,13 @@ $(document).ready(function () {
     });
 });
 
+function preventBehavior(e)
+{
+    e.preventDefault();
+};
+
+document.addEventListener("touchmove", preventBehavior, false);
+
 function Home(){
     $('#main_cont').load('Home.html');
 }

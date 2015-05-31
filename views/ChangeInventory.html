@@ -8,17 +8,18 @@
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/QueryStringHelper.js"></script>
     <script src="javascripts/ChangeInventory.js"></script>
 </head>
 
-<body onload="init()">
+<body>
     <h1>Change Inventory</h1>
     <a onclick="changeMode('addRun')">Add Run</a><br/>
     <a onclick="changeMode('removeRun')">Remove Run</a><br/>
     <a onclick="changeMode('addBatch')">Add Batch</a><br/>
     <a onclick="changeMode('removeBatch')">Remove Batch</a><br/>
 
-    <div id="input">
+    <div id="input" hidden="hidden">
         <h3 id="modeHeading"></h3>
         <div id="inventoryIdField">Inventory ID: <input id="inventoryId" class="input" type="text"/></div>
         <div id="runIdField">Run ID: <input id="runId" class="input" type="text"/></div>
@@ -28,5 +29,6 @@
         <button type="submit" value="submit" onclick="submit()">Submit</button>
         <div id="response"></div>
     </div>
+    <script>init()</script>
 </body>
 </html>

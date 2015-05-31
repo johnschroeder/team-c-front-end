@@ -1,13 +1,40 @@
-function init() {
-    $("#input").hide();
-}
-
 var mode = "";
 
-function changeMode(newMode) {
-    mode = newMode;
+function init() {
+    processParams();
+}
 
+function processParams() {
+    var params = getQueryStringParams();
+    if (params.mode) {
+        changeMode(params.mode);
+    }
+
+    if (params.inventoryId) {
+        $("#inventoryId").val(parseInt(params.inventoryId));
+    }
+
+    if (params.runId) {
+        $("#runId").val(parseInt(params.runId));
+    }
+
+    if (params.runDate) {
+        $("#runDate").val(params.runDate);
+    }
+
+    if (params.batchAmount) {
+        $("#batchAmount").val(parseInt(params.batchAmount));
+    }
+
+    if (params.batchLocation) {
+        $("#batchLocation").val(params.batchLocation);
+    }
+}
+
+function changeMode(newMode) {
     hideAllFields();
+
+    mode = newMode;
 
     switch (mode) {
         case "addRun":
@@ -17,7 +44,7 @@ function changeMode(newMode) {
             break;
         case "removeRun":
             $("#modeHeading").text("Remove Run");
-            $("#runIdField").show();		
+            $("#runIdField").show();
             break;
         case "addBatch":
             $("#modeHeading").text("Add Batch");
@@ -29,7 +56,7 @@ function changeMode(newMode) {
             $("#modeHeading").text("Remove Batch");
             $("#runIdField").show();
             $("#batchAmountField").show();
-            $("#batchLocationField").show();		
+            $("#batchLocationField").show();
             break;
         default:
             $("#input").hide();
@@ -59,16 +86,16 @@ function submit() {
 
     switch (mode) {
         case "addRun":
-            host = "http://localhost:50001/addRun/" + inventoryId + "/" + runDate;
+            host = "http://localhost:50001/changeInventory/addRun/" + inventoryId + "/" + runDate;
             break;
         case "removeRun":
-            host = "http://localhost:50001/removeRun/" + runId;
+            host = "http://localhost:50001/changeInventory/removeRun/" + runId
             break;
         case "addBatch":
-            host = "http://localhost:50001/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            host = "http://localhost:50001/changeInventory/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
         case "removeBatch":
-            host = "http://localhost:50001/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            host = "http://localhost:50001/changeInventory/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
         default:
             $("#response").text("Error");
