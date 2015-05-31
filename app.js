@@ -1,3 +1,42 @@
+/**
+ *
+ * AngularJS Routing
+ */
+/*
+var IMP = angular.module('IMP', []);
+
+IMP.config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.
+            when('/ChangeInventory', {
+                templateUrl: 'views/ChangeInventory.html',
+                controller: 'ChangeInventoryController'
+            }).
+            when('/DisplayInventory', {
+                templateUrl: 'public/views/DisplayInventory.html',
+                controller: 'DisplayInventoryController'
+            }).
+            when('/Home', {
+                templateUrl: 'views/Home.html',
+                controller: 'HomeController'
+            }).
+            otherwise({
+                redirectTo: '/Home'
+            });
+    }]);
+
+
+
+/**
+ *
+ * End of AngularJS Routing
+ */
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 var express = require('express');
 var path = require('path');
 var config = require('konfig')();

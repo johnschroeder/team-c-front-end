@@ -13,3 +13,7 @@ body {
 #container,td{
     border-style: double;
 }
+
+#header,td{
+    border-style: double;
+}

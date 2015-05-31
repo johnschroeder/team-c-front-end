@@ -17,14 +17,18 @@
     <a onclick="changeMode('removeRun')">Remove Run</a><br/>
     <a onclick="changeMode('addBatch')">Add Batch</a><br/>
     <a onclick="changeMode('removeBatch')">Remove Batch</a><br/>
+    <a onclick="changeMode('addSubBatch')">Add SubBatch</a><br/>
+    <a onclick="changeMode('removeSubBatch')">Remove SubBatch</a><br/>
 
-    <div id="input">
+    <div id="input" hidden="hidden">
         <h3 id="modeHeading"></h3>
         <div id="inventoryIdField">Inventory ID: <input id="inventoryId" class="input" type="text"/></div>
         <div id="runIdField">Run ID: <input id="runId" class="input" type="text"/></div>
         <div id="runDateField">Run Date: <input id="runDate" class="input" type="text"/></div>
         <div id="batchAmountField">Batch Amount: <input id="batchAmount" class="input" type="text"/></div>
-        <div id="batchLocationField">Batch Location: <input id="batchLocation" class="input" type="text"/></div>
+        <div id="batchLocationField">SubBatch Location: <input id="subbatchLocation" class="input" type="text"/></div>
+        <div id="subbatchAmountField">SubBatch Amount: <input id="subbatchAmount" class="input" type="text"/></div>
+        <div id="subbatchLocationField">Batch Location: <input id="batchLocation" class="input" type="text"/></div>
         <button type="submit" value="submit" onclick="submit()">Submit</button>
         <div id="response"></div>
     </div>

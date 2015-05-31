@@ -1,6 +1,3 @@
-function init() {
-    $("#input").hide();
-}
 
 var mode = "";
 
@@ -31,6 +28,18 @@ function changeMode(newMode) {
             $("#batchAmountField").show();
             $("#batchLocationField").show();		
             break;
+        case "addSubBatch":
+            $("#modeHeading").text("Add SubBatch");
+            $("#runIdField").show();
+            $("#subbatchAmountField").show();
+            $("#subbatchLocationField").show();
+            break;
+        case "removeSubBatch":
+            $("#modeHeading").text("Remove SubBatch");
+            $("#runIdField").show();
+            $("#subbatchAmountField").show();
+            $("#subbatchLocationField").show();
+            break;
         default:
             $("#input").hide();
             return;
@@ -46,6 +55,8 @@ function hideAllFields() {
     $("#runDateField").hide();
     $("#batchAmountField").hide();
     $("#batchLocationField").hide();
+    $("#subbatchAmountField").hide();
+    $("#subbatchLocationField").hide();
 }
 
 function submit() {
@@ -54,6 +65,8 @@ function submit() {
     var runDate = $("#runDate").val();
     var batchAmount = parseInt($("#batchAmount").val());
     var batchLocation = $("#batchLocation").val();
+    var subbatchAmout = parseInt($("#subbatchAmount").val());
+    var subbatchLocation = $("#subbatchLocation").val();
 
     var host;
 
@@ -69,6 +82,12 @@ function submit() {
             break;
         case "removeBatch":
             host = "http://localhost:50001/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            break;
+        case "addSubBatch":
+            host = "http://localhost:50001/addBatch/" + runId + "/" + subbatchAmount + "/" + batchLocation;
+            break;
+        case "removeSubBatch":
+            host = "http://localhost:50001/removeBatch/" + runId + "/" + subbatchAmount + "/" + batchLocation;
             break;
         default:
             $("#response").text("Error");
