@@ -20,6 +20,7 @@ function showProductID(selectedID){
     });
 }
 
+
 function sendRequest(host, callback) {
     if (window.XMLHttpRequest) {
         dispReq = new XMLHttpRequest();
