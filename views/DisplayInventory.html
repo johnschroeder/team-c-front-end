@@ -123,7 +123,7 @@
 
                         var inventory_item = "<div class='inventory-item " + concatenated_customer + "'>";
                         inventory_item +=
-                                "<div><a href='ItemDetailView.html?prodid=" + this.consolidated[i].Runs[0].ProductID + "'>"
+                                "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.consolidated[i].Runs[0].ProductID + "'>"
                                 + "<div class='thumbnail unimplemented'>Thumbnail</div>"
                                 + "<span class='customer'>" + this.consolidated[i].Runs[0].Customer + ":" + "</span>"
                                 + "<span class='name'>" + this.consolidated[i].Runs[0].Name + "</span>"
@@ -146,6 +146,7 @@
                     }
 
                     this.setup_customer_select_menu();
+                    this.setup_links();
                 },
 
                 /**
@@ -154,7 +155,7 @@
                  */
                 render_error: function( error ) {
 
-                    $( 'body').prepend( "<div class='error-message'>" + error + "</div>" );
+                    $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
 
                 },
 
@@ -174,6 +175,20 @@
                             $( '.inventory-item').hide();
                             $( '.'+selection).show();
                         }
+
+                    });
+                },
+
+                setup_links: function() {
+
+                    $( '.display-inventory-container').find( '.detail-view').on( 'touchend click', function( evt ){
+
+                       evt.preventDefault();
+
+                        var product_id = $( this).data( 'id' );
+                        $('#main_cont').load('ItemDetailView.html', function(){
+                            detailView.init( product_id );
+                        });
 
                     });
                 }
