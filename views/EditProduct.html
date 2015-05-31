@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-
+<head>
+    <script src="javascripts/QueryStringHelper.js"></script>
+</head>
 <div class="new-product-form">
     <h1>Edit Product</h1>
     <div>
@@ -27,7 +29,7 @@
         <div class="input-label">Image</div>
         <div class="upload-button">Upload Different Image</div>
     </div>
-    <script>showProductID(100)</script>
+    <script>showProductID(parseInt(getQueryStringParams().inventoryId))</script>
 
     <div class="input-row external-id-input unimplemented">
         <span class="input-label">External ID</span>
@@ -44,7 +46,7 @@
     </div>
 
     <div class="input-row">
-        <div class="submit" onclick="reSubmit()">Done Editing</div>
+        <div class="submit" onclick="reSubmit(parseInt(getQueryStringParams().inventoryId))">Done Editing</div>
     </div>
 
 </div>

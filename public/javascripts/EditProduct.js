@@ -1,7 +1,9 @@
 function showProductID(selectedID){
     //TODO implement getQueryStringParams().inventoryID
+    // I have made selected id as 100 for now for testing purposes until i get the getQueryStringParams().inventoryID
     //var selectedID = getQueryStringParams().inventoryID;
    // var selectedID = "100";
+    console.log(selectedID);
     var host = "http://localhost:50001/EditProduct/" +selectedID +"/";
 
     sendRequest(host, function() {
@@ -27,12 +29,12 @@ function sendRequest(host, callback) {
     dispReq.onreadystatechange = callback;
 }
 
-function reSubmit(){
+function reSubmit(selectedID){
     //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
+    var prodID = selectedID;
     var newCustName = $(".customer").val();
     var newProdName  = $(".product-name").val();
     var newDescript  = $(".description").val();
-    var prodID =100;
     var host = "http://localhost:50001/reSubmit/" + prodID + "/" + newCustName +"/" + newProdName + "/" + newDescript;
 
     sendRequest(host, function() {
