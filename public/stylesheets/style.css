@@ -1,4 +1,3 @@
-
 /* sitewide styles
 	*******************************/
 body {
@@ -210,7 +209,7 @@ h1 {
 }
 #nav_vert li ul {
   display: none; // used to hide sub-menus
-list-style-type: none;
+  list-style-type: none;
 }
 
 #nav_vert li ul li {
@@ -264,8 +263,8 @@ list-style-type: none;
   width: 250px;
 }
 #detail_view button:hover, #nav a.active {
-  background: #999;
-  color: #fff;
+    background: #999;
+    color: #fff;
 }
 
 /* DisplayInventory.html specific styles
