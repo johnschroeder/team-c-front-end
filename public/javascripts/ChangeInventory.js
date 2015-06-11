@@ -85,16 +85,16 @@ function submit() {
 
     switch (mode) {
         case "addRun":
-            host = "http://"+window.apiRoute+"/changeInventory/addRun/" + inventoryId + "/" + runDate;
+            host = window.apiRoute+"/changeInventory/addRun/" + inventoryId + "/" + runDate;
             break;
         case "removeRun":
-            host = "http://"+window.apiRoute+"/changeInventory/removeRun/" + runId
+            host = window.apiRoute+"/changeInventory/removeRun/" + runId
             break;
         case "addBatch":
-            host = "http://"+window.apiRoute+"/changeInventory/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            host = window.apiRoute+"/changeInventory/addBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
         case "removeBatch":
-            host = "http://"+window.apiRoute+"/changeInventory/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
+            host = window.apiRoute+"/changeInventory/removeBatch/" + runId + "/" + batchAmount + "/" + batchLocation;
             break;
         default:
             $("#response").text("Error");
