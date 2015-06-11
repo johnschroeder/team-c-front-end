@@ -30,7 +30,7 @@
     </div>
 
     <script>
-
+        var config = require(konfig)();
         (function($){
 
             /**
@@ -38,7 +38,7 @@
              */
             var display_inventory = {
 
-                host: "http://localhost:50001/displayInventory/",
+                host: config.app.api + "http://localhost:50001/displayInventory/",
                 inventory: false,
                 consolidated: false,
 
@@ -46,7 +46,7 @@
                  * Go fetch everything and get it set up
                  */
                 init: function() {
-
+                    console.log(this.host);
                     var self = this;
 
                     $.get( this.host, function( response ) {

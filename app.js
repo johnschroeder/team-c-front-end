@@ -39,6 +39,5 @@ app.use(function(err, req, res, next) {
 
 app.listen(config.app.port);
 
-
 console.log('Express server running on port '+config.app.port);
 

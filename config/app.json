@@ -21,7 +21,7 @@
 
     },
     "john":{
-
+        "api":"http://localhost:50001"
     },
     "mike":{
 
