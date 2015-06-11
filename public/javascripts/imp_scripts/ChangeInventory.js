@@ -2,8 +2,8 @@ define(function() {
 
     var mode = "";
 
+    console.log("this isn't displaying in browser console");
     function init() {
-        console.log("this isn't displaying in browser console");
         processParams();
     }
 

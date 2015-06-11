@@ -3,7 +3,7 @@
  */
 
 requirejs.config({
-    baseUrl: 'public/javascripts',
+    baseUrl: 'javascripts',
     paths: {
         app: './imp_scripts'
     }
