@@ -10,6 +10,7 @@
     <div class="display-inventory-container">
 
         <div class="menu">
+
             <div class="input-row track-inventory-by">
                 <div class="input-label">Track Inventory By</div>
                 <select class="filter track-by">
@@ -38,7 +39,7 @@
              */
             var display_inventory = {
 
-                host: "http://localhost:50001/displayInventory/",
+                host: "http://"+window.apiRoute+"/displayInventory/",
                 inventory: false,
                 consolidated: false,
 

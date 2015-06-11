@@ -28,7 +28,7 @@
 
     var detailView = {
 
-        host: "http://localhost:50001/itemDetail/",
+        host: "http://"+window.apiRoute+"/itemDetail/",
 
         getParameterByName: function(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
