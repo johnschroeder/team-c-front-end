@@ -1,6 +1,7 @@
 {
     "default":{
-        "port":50000
+        "port":50000,
+        "api":"http://localhost:50000"
     },
     "dev":{
         "api":"http://dev.thisisimp.com/api/"
@@ -24,7 +25,7 @@
 
     },
     "mike":{
-
+        "api":"http://dev.thisisimp.com/api/"
     },
     "tim":{
 

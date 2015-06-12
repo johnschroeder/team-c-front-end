@@ -94,7 +94,7 @@
             if( error_message.length )
                 error_message.remove();
 
-            var host = "http://localhost:50001/newProductSubmission/";
+            var host = window.apiRoute+"/newProductSubmission/";
             var customer = $( '.customer').val();
             var product_name = $( '.product-name').val();
             var description = $( '.description').val();
