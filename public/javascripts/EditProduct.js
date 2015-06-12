@@ -1,8 +1,5 @@
 function showProductID(selectedID){
-    //TODO implement getQueryStringParams().inventoryID
-    // I have made selected id as 100 for now for testing purposes until i get the getQueryStringParams().inventoryID
-    //var selectedID = getQueryStringParams().inventoryID;
-   // var selectedID = "100";
+    //TODO use john's breadcrumb loader to load a new page here populated with the data.
     console.log(selectedID);
     var host = "http://localhost:50001/EditProduct/" +selectedID +"/";
 
