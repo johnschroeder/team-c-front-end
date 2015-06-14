@@ -1,10 +1,10 @@
 {
     "default":{
         "port":50000,
-        "api":"http://localhost:50000"
+        "api":"http://localhost:50001"
     },
     "dev":{
-        "api":"http://dev.thisisimp.com/api/"
+        "api":"http://dev.thisisimp.com/api"
     },
     "prod":{
         "api":"http://www.thisisimp.com/api"
