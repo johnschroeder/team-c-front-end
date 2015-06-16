@@ -1,0 +1,9 @@
+<body>
+<script>
+var obj = JSON.parse('<%-JSON.stringify(toPass) %>');
+for(var k in obj){
+    window[k] = obj[k];
+}
+</script>
+<%- include(thisPage) %>
+</body>

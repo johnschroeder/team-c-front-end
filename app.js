@@ -9,6 +9,10 @@ var glob = require('glob');
 app.set('view engine', 'ejs');
 app.engine('.html', ejs.renderFile);
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.static(path.join(__dirname, 'views')));
 
