@@ -7,21 +7,10 @@ var ejs = require('ejs');
 var glob = require('glob');
 
 app.set('view engine', 'ejs');
-
-
-app.get("/", function(req, res){
-    res.render("indexHeader.ejs", {apiRoute: apiRoute});
-});
+app.engine('.html', ejs.renderFile);
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'views')));
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found '+JSON.stringify(req.url));
-    err.status = 404;
-    next(err);
-});
+//app.use(express.static(path.join(__dirname, 'views')));
 
 var path = process.cwd()+'/routes';
 glob.sync('**/*.js',{'cwd':path}).forEach(
@@ -30,6 +19,19 @@ glob.sync('**/*.js',{'cwd':path}).forEach(
         app.use(ns, require(path + ns));
     }
 );
+
+app.get("/", function(req, res){
+    res.render("indexHeader.ejs", {apiRoute: apiRoute});
+});
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found '+JSON.stringify(req.url));
+    err.status = 404;
+    next(err);
+});
+
+
 
 app.use('*', function(req, res){
     console.log("Error trying to display route: "+req.path);
