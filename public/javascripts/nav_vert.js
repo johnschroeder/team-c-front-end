@@ -19,7 +19,8 @@ function preventBehavior(e)
 document.addEventListener("touchmove", preventBehavior, false);
 
 function Home(){
-    $('#main_cont').load('Home.html');
+    navigation.go("","");
+    //$('#main_cont').load('Home.html');
 }
 
 function ChangeIventory(){
