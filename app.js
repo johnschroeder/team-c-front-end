@@ -4,6 +4,7 @@ var config = require('konfig')();
 var app = express();
 var apiRoute = config.app.api;
 var ejs = require('ejs');
+var glob = require('glob');
 
 app.set('view engine', 'ejs');
 
@@ -15,8 +16,6 @@ app.get("/", function(req, res){
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 
-
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found '+JSON.stringify(req.url));
@@ -24,6 +23,18 @@ app.use(function(req, res, next) {
     next(err);
 });
 
+var path = process.cwd()+'/routes';
+glob.sync('**/*.js',{'cwd':path}).forEach(
+    function(file){
+        var ns = '/'+file.replace(/\.js$/,'');
+        app.use(ns, require(path + ns));
+    }
+);
+
+app.use('*', function(req, res){
+    console.log("Error trying to display route: "+req.path);
+    res.status(404).send("Nothing Found");
+});
 
 app.listen(config.app.port);
 
