@@ -10,7 +10,9 @@ app.set('view engine', 'ejs');
 app.engine('.html', ejs.renderFile);
 
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'views')));
+if(config.app.debug){
+    app.use(express.static(path.join(__dirname, 'views')));
+}
 
 var path = process.cwd()+'/routes';
 glob.sync('**/*.js',{'cwd':path}).forEach(
