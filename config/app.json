@@ -22,7 +22,7 @@
 
     },
     "john":{
-
+        "api":"http://dev.thisisimp.com/api/"
     },
     "mike":{
         "api":"http://dev.thisisimp.com/api/"
