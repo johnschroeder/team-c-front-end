@@ -6,7 +6,7 @@ var router = express.Router();
 var Q = require('q');
 
 
-router.route("/home").get(function(req,res){
+router.route("/home").post(function(req,res){
     res.render("Home.html", req.body);
 });
 
