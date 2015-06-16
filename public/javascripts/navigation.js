@@ -24,7 +24,7 @@ var navigation = {
     go:function(targetPage, args) {
         //for(var page in this.pages) {
           //  if(page.toLowerCase() === targetPage.toLowerCase()) {
-                $("#main_cont").load('/home', {foo:"THIS IS A TEST AND ONLY A TEST"});
+                $("#main_cont").load('/load/Home.html', {foo:"THIS IS A TEST AND ONLY A TEST"});
            // }
        // }
     }
