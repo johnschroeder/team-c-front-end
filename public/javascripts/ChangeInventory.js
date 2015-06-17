@@ -9,8 +9,6 @@ function processParams() {
         changeMode(params.mode);
     }
 
-    console.log("HEY STATE: " + $("#state").runId);
-
     if (params.inventoryId) {
         $("#inventoryId").val(parseInt(params.inventoryId));
     }
