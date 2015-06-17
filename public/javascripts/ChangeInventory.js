@@ -9,7 +9,7 @@ function processParams() {
         changeMode(params.mode);
     }
 
-    console.log("HEY STATE: " + $("#state").runId);
+    console.log("HEY STATE: " + window.state.inventoryId);
 
     if (params.inventoryId) {
         $("#inventoryId").val(parseInt(params.inventoryId));
@@ -31,24 +31,24 @@ function processParams() {
         $("#batchLocation").val(params.batchLocation);
     }
 
-    if ($("#state").inventoryId) {
-        $("#inventoryId").val($("#state").inventoryId);
+    if (inventoryId in window.state) {
+        $("#inventoryId").val(parseInt(window.state.inventoryId));
     }
 
-    if ($("#state").runId) {
-        $("#runId").val($("#state").runId);
+    if (runId in window.state) {
+        $("#runId").val(window.state.runId);
     }
 
-    if ($("#state").runDate) {
-        $("#runDate").val($("#state").runDate);
+    if (runDate in window.state) {
+        $("#runDate").val(window.state.runDate);
     }
 
-    if ($("#state").batchAmount) {
-        $("#batchAmount").val($("#state").batchAmount);
+    if (batchAmount in window.state) {
+        $("#batchAmount").val(window.state.batchAmount);
     }
 
-    if ($("#state").batchLocation) {
-        $("#batchLocation").val($("#state").batchLocation);
+    if (batchLocation in window.state) {
+        $("#batchLocation").val(window.state.batchLocation);
     }
 }
 
@@ -102,11 +102,12 @@ function submit() {
     var runDate = $("#runDate").val();
     var batchAmount = parseInt($("#batchAmount").val());
     var batchLocation = $("#batchLocation").val();
-    navigation.saveState({inventoryId:inventoryId,
+    navigation.saveState({inventoryId:$("#inventoryId").val(),
                         runId:runId,
                         runDate:runDate,
                         batchAmount:batchAmount,
-                        batchLocation:batchLocation})
+                        batchLocation:batchLocation});
+
     var host;
 
     switch (mode) {
