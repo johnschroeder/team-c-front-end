@@ -9,6 +9,8 @@ function processParams() {
         changeMode(params.mode);
     }
 
+    console.log("HEY STATE: " + window.state.inventoryId);
+
     if (params.inventoryId) {
         $("#inventoryId").val(parseInt(params.inventoryId));
     }
@@ -27,6 +29,26 @@ function processParams() {
 
     if (params.batchLocation) {
         $("#batchLocation").val(params.batchLocation);
+    }
+
+    if (inventoryId in window.state) {
+        $("#inventoryId").val(parseInt(window.state.inventoryId));
+    }
+
+    if (runId in window.state) {
+        $("#runId").val(window.state.runId);
+    }
+
+    if (runDate in window.state) {
+        $("#runDate").val(window.state.runDate);
+    }
+
+    if (batchAmount in window.state) {
+        $("#batchAmount").val(window.state.batchAmount);
+    }
+
+    if (batchLocation in window.state) {
+        $("#batchLocation").val(window.state.batchLocation);
     }
 }
 
@@ -80,6 +102,11 @@ function submit() {
     var runDate = $("#runDate").val();
     var batchAmount = parseInt($("#batchAmount").val());
     var batchLocation = $("#batchLocation").val();
+    navigation.saveState({inventoryId:$("#inventoryId").val(),
+                        runId:runId,
+                        runDate:runDate,
+                        batchAmount:batchAmount,
+                        batchLocation:batchLocation});
 
     var host;
 

@@ -19,12 +19,11 @@ function preventBehavior(e)
 document.addEventListener("touchmove", preventBehavior, false);
 
 function Home(){
-    navigation.go("","");
-    //$('#main_cont').load('Home.html');
+    navigation.go("home.html");
 }
 
 function ChangeIventory(){
-    $('#main_cont').load('ChangeInventory.html');
+    navigation.go('ChangeInventory.html');
 }
 
 function PullInventory(){

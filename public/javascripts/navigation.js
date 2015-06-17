@@ -1,31 +1,12 @@
 var navigation = {
-    foo:"bar",
-    pages:[
-        "home",
-        "changeInventory",
-        "pullInventory",
-        "editInventory",
-        "addProduct",
-        "editProduct",
-        "deleteProduct",
-        "viewProduct",
-        "displayInventory",
-        "preDefinedReports",
-        "makeMyOwnReport",
-        "audit",
-        "logs",
-        "addUsers",
-        "deleteUsers",
-        "viewUsers"
-        ],
-    bar:function(){
-        console.log("baz");
-    },
+    stateArray:[],
     go:function(targetPage, args) {
-        //for(var page in this.pages) {
-          //  if(page.toLowerCase() === targetPage.toLowerCase()) {
-                $("#main_cont").load('/load/Home.html', {foo:"THIS IS A TEST AND ONLY A TEST"});
-           // }
-       // }
+        console.log("Read from: " + targetPage.toLowerCase().split(".")[0]);
+        console.log("State object: " + this.stateArray);
+        $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateArray[targetPage.toLowerCase().split(".")[0]]});
+    },
+    saveState:function(state) {
+        console.log("Saved to: " + window.thisPage.toLowerCase().split(".")[0]);
+        this.stateArray[window.thisPage.toLowerCase().split(".")[0]] = state;
     }
 }
