@@ -14,7 +14,9 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'views')));
+if(config.app.debug){
+    app.use(express.static(path.join(__dirname, 'views')));
+}
 
 var path = process.cwd()+'/routes';
 glob.sync('**/*.js',{'cwd':path}).forEach(
