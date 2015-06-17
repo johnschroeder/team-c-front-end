@@ -27,12 +27,11 @@ function ChangeIventory(){
 }
 
 function PullInventory(){
-    $('#main_cont').text("PullInvetory");
+    navigation.go("PullInventory.html")
 }
 
-function Carts(){
-    //$('#main_cont').load("Carts.html");
-    navigation.go("Carts.html");
+function ViewCarts(){
+    navigation.go("ViewCarts.html");
 }
 
 function EditInventory(){

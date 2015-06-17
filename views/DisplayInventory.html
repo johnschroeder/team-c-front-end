@@ -2,200 +2,201 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <!-- make title and import links and scripts -->
     <title>Current Inventory</title>
-    <div id="errorMsg" >
-    </div>
-    <link rel="stylesheet" href="stylesheets/display.style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
-    <script src="javascripts/jquery-1.11.3.min.js"></script>
-    <script src="javascripts/bootstrap.min.js"></script>
-    <script src="javascripts/DispInv.js"></script>
-
-
-
-        <div class="menu">
-            <div class="input-row track-inventory-by">
-                <div class="input-label">Track Inventory By</div>
-                <select class="filter track-by">
-                    <option value="Customer">Customer</option>
-                </select>
-            </div>
+</head>
 
 <body>
 
-        <div class="inventory-container"></div>
+<div class="display-inventory-container">
 
+    <div class="menu">
+
+        <div class="input-row track-inventory-by">
+            <div class="input-label">Track Inventory By</div>
+            <select class="filter track-by">
+                <option value="Customer">Customer</option>
+            </select>
+        </div>
+
+        <div class="input-row">
+            <div class="input-label">Filter</div>
+            <select class="filter customer">
+                <option value="0">All</option>
+            </select>
+        </div>
     </div>
 
-    <script>
+    <div class="inventory-container"></div>
 
-        (function($){
+</div>
+
+<script>
+
+    (function($){
+
+        /**
+         * Handles the display-all functionality and filtering
+         */
+        var display_inventory = {
+
+            host: window.apiRoute+"/displayInventory/",
+            inventory: false,
+            consolidated: false,
 
             /**
-             * Handles the display-all functionality and filtering
+             * Go fetch everything and get it set up
              */
-            var display_inventory = {
+            init: function() {
 
-                host: "http://localhost:50001/displayInventory/",
-                inventory: false,
-                consolidated: false,
+                var self = this;
+                $.get( this.host, function( response ) {
 
-                /**
-                 * Go fetch everything and get it set up
-                 */
-                init: function() {
+                    if( response && response.length ){
 
-                    var self = this;
+                        self.inventory = jQuery.parseJSON( response );
+                        self.consolidate_inventory();
+                        self.display_inventory();
 
-                    $.get( this.host, function( response ) {
-
-                        if( response && response.length ){
-
-                            self.inventory = jQuery.parseJSON( response );
-                            self.consolidate_inventory();
-                            self.display_inventory();
-
-                        }
-                        else {
-
-                            self.render_error( "No inventory found" );
-                        }
-
-                    }).fail( function( response ){
-
-                        self.render_error( "Failed to load inventory: " + response );
-
-                    });
-
-                },
-
-                /**
-                 * Consolidate all of the items by product id
-                 */
-                consolidate_inventory: function() {
-
-                    this.consolidated = new Array();
-                    if( !this.inventory || !this.inventory.length )
-                        return;
-
-                    for( var i = 0; i < this.inventory.length; ++i ){
-
-                        var found = false;
-                        for( var j = 0; j < this.consolidated.length; ++j ){
-
-                            if( this.consolidated[j].ProductID == this.inventory[i].ProductID ){
-                                found = true;
-                                this.consolidated[j].Runs.push( this.inventory[i] );
-                                this.consolidated[j].Total += this.inventory[i].Amount;
-                                this.consolidated[j].Runs.sort( function(a, b){ return a.Date.localeCompare( b.Date ) } );
-                                break;
-                            }
-
-                        }
-
-                        if( !found ){
-                            this.consolidated.push({
-                                ProductID: this.inventory[i].ProductID,
-                                Total: this.inventory[i].Amount,
-                                Runs: [ this.inventory[i] ]
-                            });
-                        }
                     }
-                },
+                    else {
 
-                /**
-                 * Output all of the items to the screen
-                 */
-                display_inventory: function() {
-
-                    if( !this.consolidated || !this.consolidated.length )
-                        return;
-
-                    var inventory_container = $( '.inventory-container' );
-                    var customer_filter_container = $( '.filter.customer');
-
-                    for( var i = 0; i < this.consolidated.length; ++i ){
-
-                        var latest_run = this.consolidated[i].Runs[ this.consolidated[i].Runs.length - 1];
-                        var concatenated_customer = this.consolidated[i].Runs[0].Customer.replace(/ /g,"_");
-
-                        var inventory_item = "<div class='inventory-item " + concatenated_customer + "'>";
-                        inventory_item +=
-                                "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.consolidated[i].Runs[0].ProductID + "'>"
-                                + "<div class='thumbnail unimplemented'>Thumbnail</div>"
-                                + "<span class='customer'>" + this.consolidated[i].Runs[0].Customer + ":" + "</span>"
-                                + "<span class='name'>" + this.consolidated[i].Runs[0].Name + "</span>"
-                                + "</a></div>";
-
-                        inventory_item += "<div>Last run: " + latest_run.Date.substr(0,10) + " (+" + latest_run.Amount + ")</div>";
-                        inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
-
-                        inventory_item += "<div class= 'total'>" + this.consolidated[i].Total + "</div>";
-
-                        inventory_item += "</div>";
-
-                        inventory_container.append( inventory_item );
-
-                        customer_filter_container.append(
-                                "<option value='" + concatenated_customer + "'>" +
-                                this.consolidated[i].Runs[0].Customer +
-                                "</option>"
-                        );
+                        self.render_error( "No inventory found" );
                     }
 
-                    this.setup_customer_select_menu();
-                    this.setup_links();
-                },
+                }).fail( function( response ){
 
-                /**
-                 * Spit out an error message at the top of the screen
-                 * @param error
-                 */
-                render_error: function( error ) {
+                    self.render_error( "Failed to load inventory: " + response );
 
-                    $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
+                });
 
-                },
+            },
 
-                /**
-                 * Set up the filter actions for the customer select filter
-                 */
-                setup_customer_select_menu: function() {
-                    var select_menu = $( '.filter.customer' );
+            /**
+             * Consolidate all of the items by product id
+             */
+            consolidate_inventory: function() {
 
-                    select_menu.change( function(){
+                this.consolidated = new Array();
+                if( !this.inventory || !this.inventory.length )
+                    return;
 
-                        var selection = select_menu.val()
+                for( var i = 0; i < this.inventory.length; ++i ){
 
-                        if( selection == "0" ){
-                            $('.inventory-item').show();
-                        } else {
-                            $( '.inventory-item').hide();
-                            $( '.'+selection).show();
+                    var found = false;
+                    for( var j = 0; j < this.consolidated.length; ++j ){
+
+                        if( this.consolidated[j].ProductID == this.inventory[i].ProductID ){
+                            found = true;
+                            this.consolidated[j].Runs.push( this.inventory[i] );
+                            this.consolidated[j].Total += this.inventory[i].Amount;
+                            this.consolidated[j].Runs.sort( function(a, b){ return a.Date.localeCompare( b.Date ) } );
+                            break;
                         }
 
-                    });
-                },
+                    }
 
-                setup_links: function() {
-
-                    $( '.display-inventory-container').find( '.detail-view').on( 'touchend click', function( evt ){
-
-                       evt.preventDefault();
-
-                        var product_id = $( this).data( 'id' );
-                        $('#main_cont').load('ItemDetailView.html', function(){
-                            detailView.init( product_id );
+                    if( !found ){
+                        this.consolidated.push({
+                            ProductID: this.inventory[i].ProductID,
+                            Total: this.inventory[i].Amount,
+                            Runs: [ this.inventory[i] ]
                         });
-
-                    });
+                    }
                 }
-            };
+            },
 
-            display_inventory.init();
+            /**
+             * Output all of the items to the screen
+             */
+            display_inventory: function() {
 
-        })( jQuery );
-    </script>
+                if( !this.consolidated || !this.consolidated.length )
+                    return;
+
+                var inventory_container = $( '.inventory-container' );
+                var customer_filter_container = $( '.filter.customer');
+
+                for( var i = 0; i < this.consolidated.length; ++i ){
+
+                    var latest_run = this.consolidated[i].Runs[ this.consolidated[i].Runs.length - 1];
+                    var concatenated_customer = this.consolidated[i].Runs[0].Customer.replace(/ /g,"_");
+
+                    var inventory_item = "<div class='inventory-item " + concatenated_customer + "'>";
+                    inventory_item +=
+                            "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.consolidated[i].Runs[0].ProductID + "'>"
+                            + "<div class='thumbnail unimplemented'>Thumbnail</div>"
+                            + "<span class='customer'>" + this.consolidated[i].Runs[0].Customer + ":" + "</span>"
+                            + "<span class='name'>" + this.consolidated[i].Runs[0].Name + "</span>"
+                            + "</a></div>";
+
+                    inventory_item += "<div>Last run: " + latest_run.Date.substr(0,10) + " (+" + latest_run.Amount + ")</div>";
+                    inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
+
+                    inventory_item += "<div class= 'total'>" + this.consolidated[i].Total + "</div>";
+
+                    inventory_item += "</div>";
+
+                    inventory_container.append( inventory_item );
+
+                    customer_filter_container.append(
+                            "<option value='" + concatenated_customer + "'>" +
+                            this.consolidated[i].Runs[0].Customer +
+                            "</option>"
+                    );
+                }
+
+                this.setup_customer_select_menu();
+                this.setup_links();
+            },
+
+            /**
+             * Spit out an error message at the top of the screen
+             * @param error
+             */
+            render_error: function( error ) {
+
+                $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
+
+            },
+
+            /**
+             * Set up the filter actions for the customer select filter
+             */
+            setup_customer_select_menu: function() {
+                var select_menu = $( '.filter.customer' );
+
+                select_menu.change( function(){
+
+                    var selection = select_menu.val()
+
+                    if( selection == "0" ){
+                        $('.inventory-item').show();
+                    } else {
+                        $( '.inventory-item').hide();
+                        $( '.'+selection).show();
+                    }
+
+                });
+            },
+
+            setup_links: function() {
+
+                $( '.display-inventory-container').find( '.detail-view').on( 'touchend click', function( evt ){
+
+                    evt.preventDefault();
+
+                    var product_id = $( this).data( 'id' );
+                    $('#main_cont').load('ItemDetailView.html', function(){
+                        detailView.init( product_id );
+                    });
+
+                });
+            }
+        };
+
+        display_inventory.init();
+
+    })( jQuery );
+</script>
 </body>
 </html>
