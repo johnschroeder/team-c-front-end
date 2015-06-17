@@ -19,8 +19,7 @@ function preventBehavior(e)
 document.addEventListener("touchmove", preventBehavior, false);
 
 function Home(){
-    navigation.go("","");
-    //$('#main_cont').load('Home.html');
+    navigation.go("Home.html");
 }
 
 function ChangeIventory(){
@@ -29,6 +28,11 @@ function ChangeIventory(){
 
 function PullInventory(){
     $('#main_cont').text("PullInvetory");
+}
+
+function Carts(){
+    //$('#main_cont').load("Carts.html");
+    navigation.go("Carts.html");
 }
 
 function EditInventory(){

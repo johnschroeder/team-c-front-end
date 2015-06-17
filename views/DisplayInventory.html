@@ -2,15 +2,19 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <!-- make title and import links and scripts -->
     <title>Current Inventory</title>
-</head>
+    <div id="errorMsg" >
+    </div>
+    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/DispInv.js"></script>
 
-<body>
 
-    <div class="display-inventory-container">
 
         <div class="menu">
-
             <div class="input-row track-inventory-by">
                 <div class="input-label">Track Inventory By</div>
                 <select class="filter track-by">
@@ -18,13 +22,7 @@
                 </select>
             </div>
 
-            <div class="input-row">
-                <div class="input-label">Filter</div>
-                <select class="filter customer">
-                    <option value="0">All</option>
-                </select>
-            </div>
-        </div>
+<body>
 
         <div class="inventory-container"></div>
 
@@ -39,7 +37,7 @@
              */
             var display_inventory = {
 
-                host: window.apiRoute+"/displayInventory/",
+                host: "http://localhost:50001/displayInventory/",
                 inventory: false,
                 consolidated: false,
 
