@@ -30,26 +30,6 @@ function processParams() {
     if (params.batchLocation) {
         $("#batchLocation").val(params.batchLocation);
     }
-
-    if ($("#state").inventoryId) {
-        $("#inventoryId").val($("#state").inventoryId);
-    }
-
-    if ($("#state").runId) {
-        $("#runId").val($("#state").runId);
-    }
-
-    if ($("#state").runDate) {
-        $("#runDate").val($("#state").runDate);
-    }
-
-    if ($("#state").batchAmount) {
-        $("#batchAmount").val($("#state").batchAmount);
-    }
-
-    if ($("#state").batchLocation) {
-        $("#batchLocation").val($("#state").batchLocation);
-    }
 }
 
 function changeMode(newMode) {
@@ -102,11 +82,7 @@ function submit() {
     var runDate = $("#runDate").val();
     var batchAmount = parseInt($("#batchAmount").val());
     var batchLocation = $("#batchLocation").val();
-    navigation.saveState({inventoryId:inventoryId,
-                        runId:runId,
-                        runDate:runDate,
-                        batchAmount:batchAmount,
-                        batchLocation:batchLocation})
+
     var host;
 
     switch (mode) {

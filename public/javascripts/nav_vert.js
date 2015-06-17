@@ -39,7 +39,7 @@ function AddProduct(){
 }
 
 function EditProduct(){
-    $('#main_cont').load("EditProduct.html");
+    navigation.go("EditProduct.html");
 }
 
 function DeleteProduct(){
@@ -51,7 +51,7 @@ function ViewProducts(){
 }
 
 function DisplayInventories(){
-    $('#main_cont').load('DisplayInventory.html');
+    navigation.go("DisplayInventory.html");
 }
 
 function PreDefinedReports(){
