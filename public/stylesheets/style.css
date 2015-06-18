@@ -11,7 +11,7 @@ a {
 
 
 h1 {
-  text-allign: center;
+  text-align: center;
   font-size: 40px;
 }
 
@@ -83,7 +83,7 @@ h1 {
 *******************************/
 
 #pgTitle {
-  text-allign: center;
+  text-align: center;
   font-size: 40px;
   color:darkblue;
 }
@@ -93,16 +93,16 @@ h1 {
 }
 #description{
   width: 200px;
-  text-allign: left;
+  text-align: left;
 }
 #joNum{
   width: 200px;
-  text-allign: left;
+  text-align: left;
 }
 
 
 h1 {
-  text-allign: center;
+  text-align: center;
   font-size: 40px;
 }
 
@@ -296,6 +296,14 @@ h1 {
 
 .display-inventory-container span {
   font-size: 18px;
+}
+
+.display-inventory-container .pull-button {
+    position: absolute;
+    right: 20%;
+    top: 0;
+    font-size: 24px;
+    line-height: 35px;
 }
 
 .display-inventory-container .total {

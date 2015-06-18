@@ -127,11 +127,13 @@
                             + "<div class='thumbnail unimplemented'>Thumbnail</div>"
                             + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                             + "</a></div>";
-
+                    inventory_item +="<div class= 'pull-button'><button " +
+                                "onclick=\"navigation.go('PullInventory.html', '{ ProductID:" + this.inventory[i].ProductID.toString() + "}')\" " +
+                                "type=\"button\" style=\"float: right;\">Pull</button></div>";
                     inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                     inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
 
-                    inventory_item += "<div class= 'total'>" + this.inventory[i].TotalQuantity + "</div>";
+                    inventory_item += "<div class= 'total'>" + "<hr>" + this.inventory[i].TotalQuantity + "</div>";
 
                     inventory_item += "</div>";
 
