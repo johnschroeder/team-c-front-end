@@ -19,11 +19,11 @@ function preventBehavior(e)
 document.addEventListener("touchmove", preventBehavior, false);
 
 function Home(){
-    navigation.go("Home.html");
+    navigation.go("home.html");
 }
 
 function ChangeIventory(){
-    $('#main_cont').load('ChangeInventory.html');
+    navigation.go('ChangeInventory.html');
 }
 
 function PullInventory(){
@@ -43,7 +43,7 @@ function AddProduct(){
 }
 
 function EditProduct(){
-    $('#main_cont').load("EditProduct.html");
+    navigation.go("EditProduct.html");
 }
 
 function DeleteProduct(){
@@ -55,7 +55,7 @@ function ViewProducts(){
 }
 
 function DisplayInventories(){
-    $('#main_cont').load('DisplayInventory.html');
+    navigation.go("DisplayInventory.html");
 }
 
 function PreDefinedReports(){
