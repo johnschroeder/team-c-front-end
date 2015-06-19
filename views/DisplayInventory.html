@@ -127,11 +127,13 @@
 
                     //var latest_run = this.inventory[i].LastRunDate;
                     //var concatenated_customer = this.inventory[i].Runs[0].Customer.replace(/ /g,"_");
-
-                    var ProductID = this.inventory[i].ProductID.toString();
-                    var ProductName = this.inventory[i].ProductName.toString();
-                    var TotalQuantity = this.inventory[i].TotalQuantity.toString();
-
+console.log(this.inventory[i]);
+                    var ProductID = this.inventory[i].ProductID;
+                    var ProductName = this.inventory[i].ProductName;
+                    var TotalQuantity = this.inventory[i].TotalQuantity;
+console.log(ProductID);
+console.log(ProductName);
+console.log(TotalQuantity);
 
                     var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
                     inventory_item +=
@@ -140,7 +142,7 @@
                             + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                             + "</a></div>";
                     inventory_item +="<div class= 'pull-button'>" +
-                                        "<button onclick='gotoPullInventory("+ProductID+")' type='button'>Pull</button></div>";
+                                        "<button onclick='gotoPullInventory("+ProductID+","+"\""+ProductName+"\""+","+TotalQuantity+")' type='button'>Pull</button></div>";
                     inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                     inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
 
