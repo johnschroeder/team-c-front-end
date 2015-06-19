@@ -11,7 +11,7 @@ a {
 
 
 h1 {
-  text-allign: center;
+  text-align: center;
   font-size: 40px;
 }
 
@@ -40,7 +40,7 @@ h1 {
 }
 .content-container {
   width: 85%;
-  float: left;
+  float: right;
 }
 
 .input-row {
@@ -83,7 +83,7 @@ h1 {
 *******************************/
 
 #pgTitle {
-  text-allign: center;
+  text-align: center;
   font-size: 40px;
   color:darkblue;
 }
@@ -93,16 +93,16 @@ h1 {
 }
 #description{
   width: 200px;
-  text-allign: left;
+  text-align: left;
 }
 #joNum{
   width: 200px;
-  text-allign: left;
+  text-align: left;
 }
 
 
 h1 {
-  text-allign: center;
+  text-align: center;
   font-size: 40px;
 }
 
@@ -183,7 +183,7 @@ h1 {
   position: fixed;
   top: 100px;
   left: 0;
-  width: 250px;
+  width: 20%;
   min-height: 100%;
   overflow: hidden;
   z-index: 9999;
@@ -201,7 +201,7 @@ h1 {
   border-bottom: 1px solid #999;
   text-decoration: none;
   color: #000;
-  width: 250px;
+  width: 100%;
 }
 #nav_vert li button:hover, #nav li a.active {
   background: #999;
@@ -213,12 +213,12 @@ h1 {
 }
 
 #nav_vert li ul li {
-  width: 250px;
+  width: 100%;
   left:0;
 }
 #nav_vert li ul li button {
   padding: 10px 25px;
-  width: 250px;
+  width: 100%;
   background: #ececec;
   border-bottom: 1px dotted #ccc;
 }
@@ -296,6 +296,14 @@ h1 {
 
 .display-inventory-container span {
   font-size: 18px;
+}
+
+.display-inventory-container .pull-button {
+    position: absolute;
+    right: 20%;
+    top: 0;
+    font-size: 24px;
+    line-height: 35px;
 }
 
 .display-inventory-container .total {
