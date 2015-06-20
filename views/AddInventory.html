@@ -6,14 +6,26 @@
     <link rel="stylesheet" href="stylesheets/display.style.css">
     <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+
+    <style>
+        .float_left {
+            float: left;
+        }
+        .float_right {
+            float: right;
+        }
+    </style>
+
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/AddInventory.js"></script>
 </head>
 
 <body>
-    <h1>Add Inventory</h1>
-    <h3><div id="total">Total: <span id="total_text">0</span></div></h3>
+    <h3><span class="float_left">Add Inventory</span><span class="float_right">Total <span id="total_text">0</span></span></h3>
+    <div style="clear: both;"></div>
+
+    <h3>Item <span id="item_text"></span></h3>
 
     <div id="add_list"></div>
     <button type="button" onclick="addEntry()">Add entry</button>
@@ -22,6 +34,7 @@
     <button type="button" onclick="submitAdd()">Submit</button>
     <br/>
     <br/>
+
     <div>Add New Package Size</div>
     <div id="add_package_size">
         Name: <input id="pkg_name" type="text"></input> Size: <input id="pkg_size" type="text"></input> <button type="button" onclick="submitNewPackageSize()">Submit</button>
