@@ -9,6 +9,7 @@ function addEntry() {
     var entry = $(document.createElement("div"))
     entry.appendTo("#add_list");
 
+    entry.append("Package: ");
     var pkgSelect = document.createElement("select");
     pkgSelect.setAttribute("onchange", "updateTotal()");
 
