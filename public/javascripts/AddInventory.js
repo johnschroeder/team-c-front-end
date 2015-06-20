@@ -27,7 +27,7 @@ function addEntry() {
 
     packageSizes.forEach(function(each) {
         var packageSize = $(document.createElement("option"))
-            .append(each.name + " " + each.size)
+            .text(each.name + " " + each.size)
             .data("name", each.name)
             .data("size", each.size);
 
