@@ -70,45 +70,45 @@ var addInventory = {
 
     // Array of entries (all string)
     getEntries: function() {
-        var a = [];
+        var entries = [];
 
         $("#add_list").children().each(function() {
-            var entry = {};
-            entry.itemName = addInventory.getItemName();
-            entry.productId = addInventory.getProductId();
-            entry.location = addInventory.getSelectedLocation();
-            entry.pileId = addInventory.getSelectedPileId();
-            entry.packageName = $(this).children("select[name='package_input']").children("option:selected").data("name");
-            entry.packageSize = $(this).children("select[name='package_input']").children("option:selected").data("size");
-            entry.amount = $(this).children("input[name='amount_input']").val();
-            entry.count = $(this).children("span[name='count_of_text']").children("span[name='count_text']").text();
-            a.push(entry);
+            entries.push({
+                itemName: addInventory.getItemName(),
+                productId: addInventory.getProductId(),
+                location: addInventory.getSelectedLocation(),
+                pileId: addInventory.getSelectedPileId(),
+                packageName: $(this).children("select[name='package_input']").children("option:selected").data("name"),
+                packageSize: $(this).children("select[name='package_input']").children("option:selected").data("size"),
+                amount: $(this).children("input[name='amount_input']").val(),
+                count: $(this).children("span[name='count_of_text']").children("span[name='count_text']").text()
+            });
         });
 
-        return a;
+        return entries;
     },
 
-    getProductId :function() {
+    getProductId: function() {
         return this.productId;
     },
 
-    getSelectedPileId :function() {
+    getSelectedPileId: function() {
         return $("#location_input").children("option:selected").data("id");
     },
 
-    getSelectedLocation :function() {
+    getSelectedLocation: function() {
         return $("#location_input").children("option:selected").val();
     },
 
-    getItemName :function() {
+    getItemName: function() {
         return this.itemName;
     },
 
-    getPackageTypes :function() {
+    getPackageTypes: function() {
         return this.packageTypes;
     },
 
-    getLocations :function() {
+    getLocations: function() {
         return this.locations;
     },
 
