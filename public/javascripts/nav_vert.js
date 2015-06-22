@@ -19,7 +19,7 @@ function preventBehavior(e)
 document.addEventListener("touchmove", preventBehavior, false);
 
 function Home(){
-    navigation.go("home.html");
+    navigation.go("Home.html");
 }
 
 function ChangeIventory(){
