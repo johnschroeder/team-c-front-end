@@ -20,7 +20,6 @@ function init() {
     });
 
     updatePackageTypes();
-
     updateLocations();
 }
 
@@ -77,7 +76,6 @@ function getEntries() {
 
     $("#add_list").children().each(function() {
         var entry = {};
-
         entry.itemName = itemName;
         entry.productId = productId;
         entry.location = $("#location_input").children("option:selected").val();
@@ -155,7 +153,7 @@ function updateLocations() {
 }
 
 function updateLocationOptions() {
-    select = $("#location_input")
+    var select = $("#location_input")
         .empty();
 
     locations.forEach(function(each) {
