@@ -29,6 +29,7 @@
     var detailView = {
 
         host: "http://localhost:50001/itemDetail/",
+        productID: 0,
 
         getParameterByName: function(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -39,13 +40,13 @@
 
         init: function( inputProdID ) {
             var self = this;
-            var productID = "";
-            if( typeof inputProdID !== 'undefined' )
-                productID = inputProdID;
-            else
-                productID = this.getParameterByName("prodid");
 
-            $.get( this.host.concat(productID).concat('/'), function( response ) {
+            if( typeof inputProdID !== 'undefined' )
+                this.productID = inputProdID;
+            else
+                this.productID = this.getParameterByName("prodid");
+
+            $.get( this.host.concat(this.productID).concat('/'), function( response ) {
 
                 if( response && response.length ){
 

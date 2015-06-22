@@ -1,37 +1,45 @@
+//<script>
+var productId = 0;
 var itemName = "";
-var packageSizes = [];
+var packageTypes = [];
 var locations = [];
 var total = 0;
 
 function init() {
-    // get item name
-    itemName = "CHP #10 Regular Envelopes";
-    $("#item_text").text(itemName);
+    productId = parseInt(window.args.ProductID) || 0;
 
-    // get package sizes
-    packageSizes = [{name:"jumbo box", size:"2000"}, {name:"large box", size:"100"}, {name:"small pack", size:"10"}, {name:"single unit", size:"1"}];
-    updatePackageSizes();
+    $.get(window.apiRoute + "/itemDetail/" + productId, function(res) {
+        if (res && res.length) {
+            itemName = $.parseJSON(res)[0].Name;
+            $("#item_text").text(itemName);
+        } else {
+            $("#response").text("Error: Init.");
+        }
+    }).fail(function(res) {
+        $("#response").text("Error: Init.");
+    });
 
-    // get locations
-    locations = ["A-113", "C-323", "E-009"];
+    updatePackageTypes();
+
+    updateLocations();
 }
 
 function addEntry() {
     var entry = $(document.createElement("div"))
         .appendTo("#add_list");
 
-    // package size input
+    // package type input
     var select = $(document.createElement("select"))
         .attr("name", "package_input")
         .attr("onchange", "updateTotal()");
 
-    packageSizes.forEach(function(each) {
-        var packageSize = $(document.createElement("option"))
+    packageTypes.forEach(function(each) {
+        var packageType = $(document.createElement("option"))
             .text(each.name + " " + each.size)
             .data("name", each.name)
             .data("size", each.size);
 
-        select.append(packageSize);
+        select.append(packageType);
     });
 
     entry.append(select);
@@ -46,22 +54,7 @@ function addEntry() {
 
     entry.append(input);
 
-    entry.append(" Location ");
-
-    // location input
-    select = $(document.createElement("select"))
-        .attr("name", "location_input");
-
-    locations.forEach(function(each) {
-        var location = $(document.createElement("option"))
-            .text(each);
-
-        select.append(location);
-    });
-
-    entry.append(select);
-
-    // count of
+    // count
     var countOf = $(document.createElement("span"))
         .attr("name", "count_of_text")
         .addClass("float_right");
@@ -78,17 +71,20 @@ function addEntry() {
     entry.append("<div style='clear: both;'></div>");
 }
 
-// Array of entries: {packageName, packageSize, amount, location, count}
+// Array of entries (all string)
 function getEntries() {
     var a = [];
 
     $("#add_list").children().each(function() {
         var entry = {};
 
+        entry.itemName = itemName;
+        entry.productId = productId;
+        entry.location = $("#location_input").children("option:selected").val();
+        entry.pileId = $("#location_input").children("option:selected").data("id");
         entry.packageName = $(this).children("select[name='package_input']").children("option:selected").data("name");
         entry.packageSize = $(this).children("select[name='package_input']").children("option:selected").data("size");
         entry.amount = $(this).children("input[name='amount_input']").val();
-        entry.location = $(this).children("select[name='location_input']").children("option:selected").text();
         entry.count = $(this).children("span[name='count_of_text']").children("span[name='count_text']").text();
         a.push(entry);
     });
@@ -96,9 +92,8 @@ function getEntries() {
     return a;
 }
 
-// Array of package sizes: {name:string, size:number}
-function getPackageSizes() {
-    return packageSizes;
+function getPackageTypes() {
+    return packageTypes;
 }
 
 function getLocations() {
@@ -129,48 +124,83 @@ function updateTotal() {
     return total;
 }
 
-function updatePackageSizes() {
-    // retrieve package sizes from backend
-    // update packageSizes
-    updatePackageSizeOptions();
+function updatePackageTypes() {
+    // TODO: retrieve package types from database
+    packageTypes = [{name:"jumbo box", size:2000}, {name:"large box", size:100}, {name:"small pack", size:10}, {name:"single unit", size:1}]; // test data
 
-    updateTotal(); // just in case something got deleted
+    updatePackageTypeOptions();
 }
 
-function updatePackageSizeOptions() {
-    // update options
+function updatePackageTypeOptions() {
     $("#add_list").children().each(function() {
         var select = $(this).children("select[name='package_input']")
             .empty();
 
-        packageSizes.forEach(function(each) {
-            var packageSize = $(document.createElement("option"))
+        packageTypes.forEach(function(each) {
+            var packageType = $(document.createElement("option"))
                 .text(each.name + " " + each.size)
                 .data("name", each.name)
                 .data("size", each.size);
 
-            select.append(packageSize);
+            select.append(packageType);
         });
     });
 }
 
-function submitAdd() {
-    // post to submit route
-    // return to last page
-    console.log("Submit: " + updateTotal());
-    console.log(getEntries());
+function updateLocations() {
+    // TODO: retrieve locations from database
+    locations = [{name:"A-113", id:301}, {name:"C-323", id:302}, {name:"E-009", id:303}]; // test data
+
+    updateLocationOptions();
 }
 
-function submitNewPackageSize() {
-    var name = $("#pkg_name").val();
-    var size = parseInt($("#pkg_size").val()) || -1;
+function updateLocationOptions() {
+    select = $("#location_input")
+        .empty();
 
-    if (name == "" || size == -1) {
-        console.log("Error: Submit new package size.");
+    locations.forEach(function(each) {
+        var location = $(document.createElement("option"))
+            .text(each.name)
+            .data("id", each.id);
+
+        select.append(location);
+    });
+}
+
+function submitAdd() {
+    console.log(getEntries());
+    updateTotal();
+
+    var pileId = $("#location_input").children("option:selected").data("id") || 0;
+
+    if (productId == 0 || pileId == 0 || total == 0) {
+        $("#response").text("Error: Submit add inventory.");
         return;
     }
 
-    console.log("Submit new package size: " + name + ", " + size);
+    // TODO: submit add inventory
+    $.get(window.apiRoute + "/addInventory/" + productId + "/" + pileId + "/" + total, function(res) {
+        $("#response").text("Added inventory.");
+        navigation.go(window.args.PreviousPage, {ProductID:window.args.ProductID});
+    }).fail(function(res) {
+        $("#response").text("Error: Submit add inventory.");
+    });
+}
 
-    // if successful, updatePackageSizes()
+function submitNewPackageType() {
+    var name = $("#pkg_name").val();
+    var size = parseInt($("#pkg_size").val()) || 0;
+
+    if (name == "" || size == 0) {
+        $("#response").text("Error: Submit new package type.");
+        return;
+    }
+
+    // TODO: submit add new package type
+    $.get(window.apiRoute + "/addNewPackageType/" + name + "/" + size, function(res) {
+        $("#response").text("Added new package type: " + name + " " + size);
+        updatePackageTypes();
+    }).fail(function(res) {
+        $("#response").text("Error: Submit new package type.");
+    });
 }

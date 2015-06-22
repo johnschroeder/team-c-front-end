@@ -11,6 +11,7 @@
         .float_left {
             float: left;
         }
+
         .float_right {
             float: right;
         }
@@ -24,21 +25,27 @@
 <body>
     <h3><span class="float_left">Add Inventory</span><span class="float_right">Total <span id="total_text">0</span></span></h3>
     <div style="clear: both;"></div>
-
     <h3>Item <span id="item_text"></span></h3>
-
     <div id="add_list"></div>
-    <button type="button" onclick="addEntry()">Add entry</button>
+    <button type="button" onclick="addEntry()">Add More of this product</button>
     <br/>
     <br/>
-    <button type="button" onclick="submitAdd()">Submit</button>
-    <br/>
-    <br/>
-
-    <div>Add New Package Size</div>
-    <div id="add_package_size">
-        Name: <input id="pkg_name" type="text"></input> Size: <input id="pkg_size" type="text"></input> <button type="button" onclick="submitNewPackageSize()">Submit</button>
+    <div id="add_inventory">
+        Location: <select id="location_input"></select>
+        <br/>
+        <button type="button" onclick="submitAdd()">Add to Inventory</button>
     </div>
+    <br/>
+    <br/>
+    <br/>
+    <div>Add New Package Type</div>
+    <div id="add_package_size">
+        Name: <input id="pkg_name" type="text"></input> Size: <input id="pkg_size" type="text"></input>
+        <br/>
+        <button type="button" onclick="submitNewPackageType()">Add to New Package Type</button>
+    </div>
+    <br/>
+    <div id="response"></div>
 
     <script>init()</script>
 </body>
