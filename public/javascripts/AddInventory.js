@@ -168,7 +168,6 @@ function updateLocationOptions() {
 }
 
 function submitAdd() {
-    console.log(getEntries());
     updateTotal();
 
     var pileId = $("#location_input").children("option:selected").data("id") || 0;
