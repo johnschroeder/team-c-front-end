@@ -1,4 +1,3 @@
-//<script>
 // Input arguments: ProductID, ProductName, PreviousPage
 var addInventory = {
     productId: 0,
@@ -69,7 +68,7 @@ var addInventory = {
         entry.append("<div style='clear: both;'></div>");
     },
 
-    // Array of entries (all string)
+    // Array of entries
     getEntries: function() {
         var entries = [];
 
