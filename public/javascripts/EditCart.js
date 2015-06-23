@@ -31,10 +31,10 @@ function CartEdit(selectedID) {
     //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
 
     var cartID = selectedID;
-    var newCartName = "Carty"; // $(".CartName").val();
-    var newReporter = "don"; // $(".Reporter").val();
-    var newAssignee = "joe"; // $(".Assignee").val();
-    var newDate = "2015-04-03"; //$(".Date").val();
+    var newCartName = $(".CartName").val();
+    var newReporter = $(".Reporter").val();
+    var newAssignee = $(".Assignee").val();
+    var newDate = $(".Date").val();
     var host = 'http://localhost:50001/Carts/EditCart/' + '2' + '/' + '"' + newCartName + '"' + "/" + '"' + newReporter + '"' + "/" + '"' + newAssignee + '"' + "/" + '"' + newDate + '"';
     alert(host);
 
