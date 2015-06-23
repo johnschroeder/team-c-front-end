@@ -10,15 +10,20 @@ var addInventory = {
     init: function() {
         this.productId = parseInt(window.args.ProductID) || 0;
 
-        $.get(window.apiRoute + "/itemDetail/" + this.productId, function(res) {
+        if (this.productId == 0) {
+            $("#response").text("Error: Init: Invalid product ID.");
+            return;
+        }
+
+        $.get(window.apiRoute + "/getItemName/" + this.productId, function(res) {
             if (res && res.length) {
                 addInventory.itemName = $.parseJSON(res)[0].Name;
                 $("#item_text").text(addInventory.itemName);
             } else {
-                $("#response").text("Error: Init.");
+                $("#response").text("Error: Init: No response.");
             }
         }).fail(function(res) {
-            $("#response").text("Error: Init.");
+            $("#response").text("Error: Init: Connection error.");
         });
 
         this.updatePackageTypes();
@@ -36,13 +41,7 @@ var addInventory = {
             .attr("onchange", "addInventory.updateTotal()")
             .appendTo(entry);
 
-        this.packageTypes.forEach(function(each) {
-            var packageType = $(document.createElement("option"))
-                .text(each.name + " " + each.size)
-                .data("name", each.name)
-                .data("size", each.size)
-                .appendTo(select);
-        });
+        this.updateEntryPackageTypeOptions(select);
 
         entry.append(" * ");
 
@@ -134,24 +133,16 @@ var addInventory = {
 
     // Updates the types of package available. Retrieves package types data from the back-end.
     updatePackageTypes: function() {
-        // TODO: retrieve package types from database.
-        /*
-        $.get(window.apiRoute + "/getPackageTypes/", function(res) {
+        $.get(window.apiRoute + "/getPackageTypes/" + this.getProductId(), function(res) {
             if (res && res.length) {
-                $.parseJSON(res).forEach(function(each) {
-
-                });
+                addInventory.packageTypes = $.parseJSON(res);
+                addInventory.updatePackageTypeOptions();
             } else {
-                $("#response").text("Error: Update package types.");
+                $("#response").text("Error: Update package types: No response.");
             }
         }).fail(function(res) {
-            $("#response").text("Error: Update package types.");
+            $("#response").text("Error: Update package types: Connection error.");
         });
-        */
-
-        this.packageTypes = [{name:"jumbo box", size:2000}, {name:"large box", size:100}, {name:"small pack", size:10}, {name:"single unit", size:1}]; // test data
-
-        this.updatePackageTypeOptions();
     },
 
     // Updates the options for the package types.
@@ -160,36 +151,33 @@ var addInventory = {
             var select = $(this).children("select[name='package_input']")
                 .empty();
 
-            this.packageTypes.forEach(function(each) {
-                var packageType = $(document.createElement("option"))
-                    .text(each.name + " " + each.size)
-                    .data("name", each.name)
-                    .data("size", each.size)
-                    .appendTo(select);
-            });
+            addInventory.updateEntryPackageTypeOptions(select);
+        });
+    },
+
+    // Updates the options for the package types of a single entry.
+    updateEntryPackageTypeOptions: function(entry) {
+        this.packageTypes.forEach(function(each) {
+            var packageType = $(document.createElement("option"))
+                .text(each.Name + " " + each.Size)
+                .data("name", each.Name)
+                .data("size", each.Size)
+                .appendTo(entry);
         });
     },
 
     // Updates the locations available. Retrieves locations data from the back-end.
     updateLocations: function() {
-        // TODO: retrieve locations from database.
-        /*
-        $.get(window.apiRoute + "/getLocations/", function(res) {
+        $.get(window.apiRoute + "/getLocations/" + this.getProductId(), function(res) {
             if (res && res.length) {
-                $.parseJSON(res).forEach(function(each) {
-
-                });
+                addInventory.locations = $.parseJSON(res);
+                addInventory.updateLocationOptions();
             } else {
-                $("#response").text("Error: Update locations.");
+                $("#response").text("Error: Update locations: No response.");
             }
         }).fail(function(res) {
-            $("#response").text("Error: Update locations.");
+            $("#response").text("Error: Update locations: Connection error.");
         });
-        */
-
-        this.locations = [{name:"A-113", id:301}, {name:"C-323", id:302}, {name:"E-009", id:303}]; // test data
-
-        this.updateLocationOptions();
     },
 
     // Updates the options for the locations.
@@ -199,8 +187,8 @@ var addInventory = {
 
         this.locations.forEach(function(each) {
             var location = $(document.createElement("option"))
-                .text(each.name)
-                .data("id", each.id)
+                .text(each.Location)
+                .data("id", each.PileID)
                 .appendTo(select);
         });
     },
@@ -212,16 +200,15 @@ var addInventory = {
         var pileId = $("#location_input").children("option:selected").data("id") || 0;
 
         if (this.getProductId() == 0 || this.getSelectedPileId() == 0 || this.getTotal() == 0) {
-            $("#response").text("Error: Submit add inventory.");
+            $("#response").text("Error: Submit add inventory: Invalid input or ID.");
             return;
         }
 
-        // TODO: submit add inventory.
         $.get(window.apiRoute + "/addInventory/" + this.getProductId() + "/" + this.getSelectedPileId() + "/" + this.getTotal(), function(res) {
             $("#response").text("Added inventory: " + addInventory.total + ".");
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
-            $("#response").text("Error: Submit add inventory.");
+            $("#response").text("Error: Submit add inventory: Connection error.");
         });
     },
 
@@ -231,16 +218,15 @@ var addInventory = {
         var size = parseInt($("#pkg_size").val()) || 0;
 
         if (name == "" || size == 0) {
-            $("#response").text("Error: Submit new package type.");
+            $("#response").text("Error: Submit new package type: Invalid input.");
             return;
         }
 
-        // TODO: submit add new package type.
-        $.get(window.apiRoute + "/addNewPackageType/" + name + "/" + size, function(res) {
+        $.get(window.apiRoute + "/addPackageType/" + this.getProductId() + "/" + name + "/" + size, function(res) {
             $("#response").text("Added new package type: " + name + " " + size + ".");
             addInventory.updatePackageTypes();
         }).fail(function(res) {
-            $("#response").text("Error: Submit new package type.");
+            $("#response").text("Error: Submit new package type: Connection error.");
         });
     }
 }
