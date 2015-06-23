@@ -30,6 +30,7 @@
 
         host: "http://localhost:50001/itemDetail/",
         productID: null,
+        productName: "",
 
         getParameterByName: function(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -58,6 +59,7 @@
                     self.item = jQuery.parseJSON( response );
                     console.log(self.item);
                     self.display_item();
+                    detailView.productName = self.item[0].Name;
 
                 }
                 else {

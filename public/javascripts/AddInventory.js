@@ -1,4 +1,5 @@
 //<script>
+// Input arguments: ProductID, ProductName, PreviousPage
 var addInventory = {
     productId: 0,
     itemName: "",
@@ -14,7 +15,10 @@ var addInventory = {
             return;
         }
 
-        $.get(window.apiRoute + "/GetItemName/" + this.productId, function(res) {
+        this.itemName = window.args.ProductName || "";
+        $("#item_text").text(this.itemName);
+
+        /*$.get(window.apiRoute + "/GetItemName/" + this.productId, function(res) {
             if (res && res.length) {
                 addInventory.itemName = $.parseJSON(res)[0].Name;
                 $("#item_text").text(addInventory.itemName);
@@ -23,7 +27,7 @@ var addInventory = {
             }
         }).fail(function(res) {
             $("#response").text("Error: Init: Connection error.");
-        });
+        });*/
 
         this.updatePackageTypes();
     },
@@ -122,7 +126,7 @@ var addInventory = {
 
     // Updates the types of package available. Retrieves package types data from the back-end.
     updatePackageTypes: function() {
-        $.get(window.apiRoute + "/GetPackageTypes/" + this.getProductId(), function(res) {
+        $.get(window.apiRoute + "/GetSizeByProductID/" + this.getProductId(), function(res) {
             if (res && res.length) {
                 addInventory.packageTypes = $.parseJSON(res);
                 addInventory.updatePackageTypeOptions();
@@ -180,7 +184,7 @@ var addInventory = {
             return;
         }
 
-        $.get(window.apiRoute + "/AddPackageType/" + this.getProductId() + "/" + name + "/" + size, function(res) {
+        $.get(window.apiRoute + "/AddProductSize/" + this.getProductId() + "/" + name + "/" + size, function(res) {
             $("#response").text("Added new package type: " + name + " " + size + ".");
             addInventory.updatePackageTypes();
         }).fail(function(res) {

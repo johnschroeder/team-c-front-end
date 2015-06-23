@@ -3,7 +3,7 @@ function Add() {
     //params["inventoryId"] = getInventoryId();
     //TODO refactor this with navigation object
     //window.open("http://localhost:50000/ChangeInventory.html?mode=addRun&" + mapToQueryString(params), "_self");
-    navigation.go("AddInventory.html", {ProductID:detailView.productID, PreviousPage:"ItemDetailView.html"});
+    navigation.go("AddInventory.html", {ProductID:detailView.productID, ProductName:detailView.productName, PreviousPage:"ItemDetailView.html"});
 }
 
 function Pull() {
