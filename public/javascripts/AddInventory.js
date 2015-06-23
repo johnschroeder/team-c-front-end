@@ -3,7 +3,6 @@ var addInventory = {
     productId: 0,
     itemName: "",
     packageTypes: [],
-    locations: [],
     total: 0,
 
     // Initialize the page.
@@ -15,7 +14,7 @@ var addInventory = {
             return;
         }
 
-        $.get(window.apiRoute + "/getItemName/" + this.productId, function(res) {
+        $.get(window.apiRoute + "/GetItemName/" + this.productId, function(res) {
             if (res && res.length) {
                 addInventory.itemName = $.parseJSON(res)[0].Name;
                 $("#item_text").text(addInventory.itemName);
@@ -27,7 +26,6 @@ var addInventory = {
         });
 
         this.updatePackageTypes();
-        this.updateLocations();
     },
 
     // Add a row of add inventory entry.
@@ -75,8 +73,7 @@ var addInventory = {
             entries.push({
                 itemName: addInventory.getItemName(),
                 productId: addInventory.getProductId(),
-                location: addInventory.getSelectedLocation(),
-                pileId: addInventory.getSelectedPileId(),
+                location: addInventory.getLocation(),
                 packageName: $(this).children("select[name='package_input']").children("option:selected").data("name"),
                 packageSize: $(this).children("select[name='package_input']").children("option:selected").data("size"),
                 amount: $(this).children("input[name='amount_input']").val(),
@@ -91,14 +88,6 @@ var addInventory = {
         return this.productId;
     },
 
-    getSelectedPileId: function() {
-        return $("#location_input").children("option:selected").data("id");
-    },
-
-    getSelectedLocation: function() {
-        return $("#location_input").children("option:selected").val();
-    },
-
     getItemName: function() {
         return this.itemName;
     },
@@ -107,8 +96,8 @@ var addInventory = {
         return this.packageTypes;
     },
 
-    getLocations: function() {
-        return this.locations;
+    getLocation: function() {
+        return $("#location_input").val() || "";
     },
 
     getTotal: function () {
@@ -133,7 +122,7 @@ var addInventory = {
 
     // Updates the types of package available. Retrieves package types data from the back-end.
     updatePackageTypes: function() {
-        $.get(window.apiRoute + "/getPackageTypes/" + this.getProductId(), function(res) {
+        $.get(window.apiRoute + "/GetPackageTypes/" + this.getProductId(), function(res) {
             if (res && res.length) {
                 addInventory.packageTypes = $.parseJSON(res);
                 addInventory.updatePackageTypeOptions();
@@ -166,45 +155,14 @@ var addInventory = {
         });
     },
 
-    // Updates the locations available. Retrieves locations data from the back-end.
-    updateLocations: function() {
-        $.get(window.apiRoute + "/getLocations/" + this.getProductId(), function(res) {
-            if (res && res.length) {
-                addInventory.locations = $.parseJSON(res);
-                addInventory.updateLocationOptions();
-            } else {
-                $("#response").text("Error: Update locations: No response.");
-            }
-        }).fail(function(res) {
-            $("#response").text("Error: Update locations: Connection error.");
-        });
-    },
-
-    // Updates the options for the locations.
-    updateLocationOptions: function() {
-        var select = $("#location_input")
-            .empty();
-
-        this.locations.forEach(function(each) {
-            var location = $(document.createElement("option"))
-                .text(each.Location)
-                .data("id", each.PileID)
-                .appendTo(select);
-        });
-    },
-
     // Submit add inventory.
     submitAdd: function() {
-        this.getTotal();
-
-        var pileId = $("#location_input").children("option:selected").data("id") || 0;
-
-        if (this.getProductId() == 0 || this.getSelectedPileId() == 0 || this.getTotal() == 0) {
+        if (this.getProductId() == 0 || this.getLocation() == "" || this.getTotal() == 0) {
             $("#response").text("Error: Submit add inventory: Invalid input or ID.");
             return;
         }
 
-        $.get(window.apiRoute + "/addInventory/" + this.getProductId() + "/" + this.getSelectedPileId() + "/" + this.getTotal(), function(res) {
+        $.get(window.apiRoute + "/AddInventory/" + this.getProductId() + "/" + this.getTotal() + "/" + this.getLocation(), function(res) {
             $("#response").text("Added inventory: " + addInventory.total + ".");
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
@@ -222,7 +180,7 @@ var addInventory = {
             return;
         }
 
-        $.get(window.apiRoute + "/addPackageType/" + this.getProductId() + "/" + name + "/" + size, function(res) {
+        $.get(window.apiRoute + "/AddPackageType/" + this.getProductId() + "/" + name + "/" + size, function(res) {
             $("#response").text("Added new package type: " + name + " " + size + ".");
             addInventory.updatePackageTypes();
         }).fail(function(res) {
