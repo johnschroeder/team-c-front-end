@@ -9,11 +9,13 @@
 
 </head>
 <div class="new-product-form">
-    <h1>Edit Cart</h1>
-    <script>2</script>
+    <h1>Edit Cart <span id="cart_name"></span></h1>
+
     <div>
-        <strong>Editing Cart ID: </strong>
-        <strong class="selectedID"></strong>
+        <strong>Editing Cart ID:
+            <div id="cart_id"></div>
+            <script>getID()</script>
+        </strong>
     </div>
     <div class="input-row">
         <div class="input-label">Cart Name</div>
@@ -36,7 +38,11 @@
     </div>
 
     <div class="input-row">
-        <div class="submit" onclick="CartEdit('2')">Done Editing</div>
+        <div class="submit" onclick="CartEdit(myCartID())">Done Editing</div>
+    </div>
+
+    <div class="input-row">
+        <div class="submit" onclick="CartItemsEdit(myCartID())">Edit Cart Items</div>
     </div>
 
 </div>
