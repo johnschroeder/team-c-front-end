@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <title>Pull Carts</title>
     <script src="javascripts/ViewCarts.js"></script>
+    <style>
+        .float_left {
+            float: left;
+        }
+        .float_right {
+            float: right;
+        }
+    </style>
 
 </head>
 <body>
 <h1>
     <div>Pull Carts</div>
 </h1>
-<div id="selectDropDown" class="input-row track-inventory-by">
-    <div class="input-label"></div>
-    <select class="filter track-by">
-        <option value="0">Choose a pull cart to view</option>
+<div  class="input-row track-inventory-by">
+    <div  class="input-label">Choose a pull cart to view</div>
+    <select id="selectDropDown" class="filter track-by" onChange=displayCartInventory()>
     </select>
 </div>
+<div class="inventory-container">
+</div>
+<div id="response"></div>
 <script>populateByCartId()</script>
 </body>
 </html>
