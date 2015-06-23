@@ -34,6 +34,10 @@ function ViewCarts(){
     navigation.go("ViewCarts.html");
 }
 
+function EditCart() {
+    navigation.go("EditCart.html")
+}
+
 function EditInventory(){
     $('#main_cont').text("EditInvetory");
 }
