@@ -41,7 +41,7 @@ function sendRequest(host, callback) {
     dispReq.onreadystatechange = callback;
 }
 
-function CartEdit(cartID) {
+function CartDataEdit(cartID) {
     //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
 
     var newCartName = $(".CartName").val();
@@ -49,13 +49,13 @@ function CartEdit(cartID) {
     var newAssignee = $(".Assignee").val();
     var newDate = $(".Date").val();
     var host = 'http://localhost:50001/Carts/EditCart/' + cartID + '/' + '"' + newCartName + '"' + "/" + '"' + newReporter + '"' + "/" + '"' + newAssignee + '"' + "/" + '"' + newDate + '"';
-    alert(host);
-
     sendRequest(host, function () {
         if (dispReq.readyState == 4 && dispReq.status == 200) {
             console.log("Success!");
         }
     });
+
+    navigation.go("EditCart.html", {});
 }
 
 function CartItemsEdit(cartID, cartName) {
