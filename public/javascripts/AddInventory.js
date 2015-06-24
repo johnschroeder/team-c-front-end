@@ -34,7 +34,6 @@ var addInventory = {
     // Reset the add inventory entries.
     reset: function() {
         $("#add_list").empty();
-
         this.updateTotal();
     },
 
@@ -57,7 +56,7 @@ var addInventory = {
                 .css("font-size", "150%")
                 .addClass("col-sm-1 text-center")
                 .text("*")
-            ).append($(document.createElement("input")) // amount
+            ).append($(document.createElement("input")) // amount input
                 .addClass("col-sm-2")
                 .attr("name", "amount_input")
                 .attr("type", "text")
@@ -136,7 +135,6 @@ var addInventory = {
             if (res && res.length) {
                 addInventory.packageTypes = $.parseJSON(res);
                 addInventory.updatePackageTypeOptions();
-                //addInventory.reset();
                 addInventory.updateTotal();
             } else {
                 $("#response").text("Error: Update package types: No response.");
@@ -164,7 +162,7 @@ var addInventory = {
     // Updates the options for the package types of a single entry.
     updateEntryPackageTypeOptions: function(entry) {
         this.packageTypes.forEach(function(each) {
-            var packageType = $(document.createElement("option"))
+            $(document.createElement("option"))
                 .text(each.Name + " " + each.Size)
                 .data("name", each.Name)
                 .data("size", each.Size)
@@ -178,7 +176,7 @@ var addInventory = {
         var total = this.getTotal();
         var location = this.getLocation();
 
-        if (productId == 0 || location == "" || total == 0) {
+        if (productId == 0 || total == 0 || location == "") {
             $("#response").text("Error: Submit add inventory: Invalid input or ID.");
             return;
         }
