@@ -9,6 +9,30 @@ $(document).ready(function () {
         }
 
     });
+
+    $( '.show-mobile-menu').on( 'touchend click', function( event ){
+
+        event.preventDefault();
+
+        var nav_vert = $( '#nav_vert' );
+
+        if( nav_vert.css( 'display' ) == 'none' ) {
+            nav_vert.css( 'display', 'block' );
+            $( this).text( "^" );
+        }
+        else{
+            nav_vert.css( 'display', 'none' );
+            $( this).text( "V" );
+        }
+
+    });
+
+    $( '.subbutton' ).on( 'touchend click', function( event ){
+        event.preventDefault();
+
+        if( $('.show-mobile-menu').css( 'display' ) != 'none' && $( '#nav_vert').css( 'display' ) != 'none' )
+            $( '#nav_vert').css( 'display', 'none' );
+    });
 });
 
 function preventBehavior(e)
