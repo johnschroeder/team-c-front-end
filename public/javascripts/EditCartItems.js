@@ -54,7 +54,7 @@ var editCartItems = {
                 .appendTo(cartItem);
             var totalQuantity = $(document.createElement("span"))
                 .text(product[0].totalQuantity)
-                .addClass("float_right")
+                .addClass("float_right total_quantity")
                 .appendTo(cartItem);
             $(document.createElement("br")).appendTo(cartItem);
             var editButton = $(document.createElement("button"))
@@ -63,10 +63,51 @@ var editCartItems = {
             editButton.appendTo(cartItem);
             var optionsContainer = $(document.createElement("div"))
                 .appendTo(cartItem);
+
+
             for(var i = 1; i < product.length; ++i) {
+
+
+                var optionsRow = $(document.createElement("div"))
+                    .appendTo(cartItem);
+
+
                 var size = $(document.createElement("span"))
                     .text(product[i].SizeName)
-                    .appendTo(cartItem);
+                    .addClass("float_left size")
+                    .appendTo(optionsRow);
+                //var quantityBox = $(document.createElement("input"))
+                //    .attr("type", "text")
+                //    .addClass("num_entry");
+                //quantityBox.val(product[i].BatchCount);
+                //quantityBox.appendTo(optionsRow);
+                $(document.createElement("span"))
+                    .text("*")
+                    .addClass("float_left operator")
+                    .appendTo(optionsRow);
+                var quantity = $(document.createElement("span"))
+                    .text(product[i].BatchCount)
+                    .addClass("float_left package_count")
+                    .appendTo(optionsRow);
+
+                $(document.createElement("span"))
+                    .text(" = ")
+                    .addClass("float_left operator")
+                    .appendTo(optionsRow);
+                var rowTotal = $(document.createElement("span"))
+                    .text(product[i].Total)
+                    .addClass("float_left row_total")
+                    .appendTo(optionsRow);
+                var color = $(document.createElement("span"))
+                    .text("Run Color: " + product[i].Marker)
+                    .addClass("float_right run_color")
+                    .appendTo(optionsRow);
+                var location = $(document.createElement("span"))
+                    .text("Location: " + product[i].Location)
+                    .addClass("float_right location")
+                    .appendTo(optionsRow);
+                $(document.createElement("br")).appendTo(optionsRow);
+
             }
             itemList.append(cartItem);
         })
