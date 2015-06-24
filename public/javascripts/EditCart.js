@@ -20,14 +20,18 @@ function showProductID(selectedID) {
 function getID() {
 
     var cartIDDiv = document.getElementById('cart_id');
-    var id = 'replace me'; // window.args.cartID;
+    var id = window.args.CartID;
     cartIDDiv.innerHTML = id;
 }
 
 function myCartID() {
-    return '2';
+    return window.args.CartID;
 }
 
+function myCartName() {
+    alert(window.args.CartName);
+    return window.args.CartName;
+}
 function sendRequest(host, callback) {
     if (window.XMLHttpRequest) {
         dispReq = new XMLHttpRequest();
@@ -54,6 +58,6 @@ function CartEdit(cartID) {
     });
 }
 
-function CartItemsEdit(selectedID) {
-    alert("Navigates to John's page");
+function CartItemsEdit(cartID, cartName) {
+    navigation.go("EditCartItems.html", {CartID: cartID, CartName: cartName});
 }
