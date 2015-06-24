@@ -31,6 +31,13 @@ var addInventory = {
         this.updatePackageTypes();
     },
 
+    // Initialize the page.
+    reset: function() {
+        $("#add_list").empty();
+
+        this.updateTotal();
+    },
+
     // Add a row of add inventory entry.
     addEntry: function() {
         var entry = $(document.createElement("div"))
@@ -129,6 +136,8 @@ var addInventory = {
             if (res && res.length) {
                 addInventory.packageTypes = $.parseJSON(res);
                 addInventory.updatePackageTypeOptions();
+                //addInventory.reset();
+                addInventory.updateTotal();
             } else {
                 $("#response").text("Error: Update package types: No response.");
             }
@@ -140,10 +149,15 @@ var addInventory = {
     // Updates the options for the package types.
     updatePackageTypeOptions: function() {
         $("#add_list").children().each(function() {
+            var lastSelected = $(this).children("select[name='package_input']").children("option:selected").val();
             var select = $(this).children("select[name='package_input']")
                 .empty();
 
             addInventory.updateEntryPackageTypeOptions(select);
+
+            if (lastSelected) {
+                select.children("option:contains('" + lastSelected + "')").prop("selected", true);
+            }
         });
     },
 
@@ -160,17 +174,23 @@ var addInventory = {
 
     // Submit add inventory.
     submitAdd: function() {
-        if (this.getProductId() == 0 || this.getLocation() == "" || this.getTotal() == 0) {
+        var productId = this.getProductId();
+        var total = this.getTotal();
+        var location = this.getLocation();
+
+        if (productId == 0 || location == "" || total == 0) {
             $("#response").text("Error: Submit add inventory: Invalid input or ID.");
             return;
         }
 
-        $.get(window.apiRoute + "/AddInventory/" + this.getProductId() + "/" + this.getTotal() + "/" + this.getLocation(), function(res) {
-            $("#response").text("Added inventory: " + addInventory.total + ".");
+        $.get(window.apiRoute + "/AddInventory/" + productId + "/" + total + "/" + location, function(res) {
+            $("#response").text("Added inventory: " + total + " at " + location + ".");
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
             $("#response").text("Error: Submit add inventory: Connection error.");
         });
+
+        addInventory.reset()
     },
 
     // Submit new package type
