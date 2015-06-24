@@ -60,6 +60,7 @@ function displayCartInventory(){
             for(var i = 0; i < items.length; i++){
                 var name = items[i].ProductName.toString();
                 var total = items[i].Total.toString();
+                var sName  = items[i].SizeName.toString() + " of " + items[i].CountPerBatch.toString() + " * " + items[i].BatchCount.toString();
 
                 var cartItem = $(document.createElement("div"))
                     .appendTo(cartList);
@@ -71,6 +72,11 @@ function displayCartInventory(){
                 var total = $(document.createElement("span"))
                     .text(total)
                     .addClass("float_right")
+                    .appendTo(cartItem);
+                $(document.createElement("br"))
+                    .appendTo(cartItem);
+                var sizeName = $(document.createElement("span"))
+                    .text(sName)
                     .appendTo(cartItem);
                 cartList.append(cartItem);
             }
