@@ -147,7 +147,7 @@ h1 {
 
 /* Vertical nav bar
 *******************************/
-#nav_vert {
+.vertical-nav-bar {
   list-style-type: none;
   background-color: #b0c4de;
   position: absolute;
@@ -162,13 +162,13 @@ h1 {
 }
 
 @media (max-width: 800px) {
-  #nav_vert {
+  .vertical-nav-bar {
     display: none;
     width: 100%;
     top: 130px;
   }
 }
-#nav_vert li button {
+.vertical-nav-bar li button {
   display: block;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -179,22 +179,22 @@ h1 {
   color: #000;
   width: 100%;
 }
-#nav_vert li button:hover, #nav li a.active {
+.vertical-nav-bar li button:hover, #nav li a.active {
   background: #999;
   color: #fff;
 }
-#nav_vert li ul {
+.vertical-nav-bar li ul {
   display: none;
   list-style-type: none;
   padding-left: 0;
   margin-bottom: 0;
 }
 
-#nav_vert li ul li {
+.vertical-nav-bar li ul li {
   width: 100%;
   left:0;
 }
-#nav_vert li ul li button {
+.vertical-nav-bar li ul li button {
   padding: 10px 25px;
   width: 100%;
   background: #ececec;
@@ -206,7 +206,7 @@ h1 {
 
   width: 100%;
   position: absolute;
-  top: 100;
+  top: 100px;
   padding-top: 5px;
   padding-bottom: 5px;
   font-family: monospace;
@@ -223,7 +223,7 @@ h1 {
 }
 /* Nav bar styles
 *******************************/
-#nav_hori {
+.main-horizontal-nav {
   background-color: #b0c4de;
   position: absolute;
   top: 0;
@@ -240,7 +240,7 @@ h1 {
 
 /* Main content container
 *******************************/
-#main_cont {
+.main-content-container {
   position: relative;
   margin-top:100px;
   margin-left: 25%;
@@ -249,7 +249,7 @@ h1 {
 }
 
 @media (max-width: 800px) {
-  #main_cont {
+  .main-content-container {
     margin-left: 0;
     width: 100%;
     margin-top: 130px;
@@ -266,7 +266,7 @@ h1 {
 
 /* ItemDetailView.html specific styles
 *******************************/
-#detail_view button {
+.detail_view button {
   display: block;
   padding: 10px 15px;
   background: #b0c4de;
@@ -274,11 +274,23 @@ h1 {
   border-bottom: 1px solid #999;
   text-decoration: none;
   color: #000;
-  width: 250px;
+  width: 33%;
+  float: left;
 }
-#detail_view button:hover, #nav a.active {
+.detail_view button:hover, #nav a.active {
     background: #999;
     color: #fff;
+}
+
+.detail_view_buttons {
+  width: 100%;
+  height: 80px;
+}
+
+#productName {
+  text-align: center;
+  font-size: 24px;
+  text-decoration: underline;
 }
 
 /* DisplayInventory.html specific styles
@@ -323,15 +335,20 @@ h1 {
 .display-inventory-container .total {
   position: absolute;
   right: 20%;
-  top: 0;
+  bottom: 20px;
   font-size: 24px;
-  line-height: 100px;
+  line-height: 40px;
 }
 
 @media (max-width: 800px) {
   .display-inventory-container .total {
     position: relative;
-    line-height: 40px;
+    right: 0;
+    bottom: 0;
+  }
+
+  .display-inventory-container .pull-button {
+    position: relative;
     right: 0;
   }
 }
