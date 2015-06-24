@@ -49,42 +49,30 @@ var addInventory = {
             .addClass("col-sm-3")
             .attr("name", "package_input")
             .attr("onchange", "addInventory.updateTotal()")
-            .appendTo(entry);
 
         this.updateEntryPackageTypeOptions(select);
 
-        entry.append($(document.createElement("div"))
-            .css("font-size", "150%")
-            .addClass("col-sm-1 text-center")
-            .text("*")
-        );
-
-        // amount input
-        input = $(document.createElement("input"))
-            .addClass("col-sm-2")
-            .attr("name", "amount_input")
-            .attr("type", "text")
-            .attr("onkeyup", "addInventory.updateTotal()")
-            .appendTo(entry);
-
-        // count
-        var equal = $(document.createElement("div"))
-            .addClass("col-sm-2 text-center")
-            .attr("name", "equal")
-            .append("=")
-            .appendTo(entry);
-
-        var countOf = $(document.createElement("div"))
-            .addClass("col-sm-2")
-            .attr("name", "count_of")
-            .append("Count of")
-            .appendTo(entry);
-
-        var count = $(document.createElement("div"))
-            .addClass("col-sm-2")
-            .attr("name", "count_text")
-            .text("0")
-            .appendTo(entry);
+        entry.append(select)
+            .append($(document.createElement("div"))
+                .css("font-size", "150%")
+                .addClass("col-sm-1 text-center")
+                .text("*")
+            ).append($(document.createElement("input")) // amount
+                .addClass("col-sm-2")
+                .attr("name", "amount_input")
+                .attr("type", "text")
+                .attr("onkeyup", "addInventory.updateTotal()")
+            ).append($(document.createElement("div"))
+                .addClass("col-sm-2 text-center")
+                .text("=")
+            ).append($(document.createElement("div"))
+                .addClass("col-sm-2")
+                .text("Count of")
+            ).append($(document.createElement("div")) // count
+                .addClass("col-sm-2")
+                .attr("name", "count_text")
+                .text("0")
+            );
     },
 
     // Array of entries
