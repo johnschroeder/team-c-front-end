@@ -11,12 +11,10 @@
 <div class="new-product-form">
     <h1>Edit Cart <span id="cart_name"></span></h1>
 
-    <div>
-        <strong>Editing Cart ID:
-            <div id="cart_id"></div>
-            <script>getID()</script>
-        </strong>
-    </div>
+    <strong>
+        <div id="original_cart_name">>Editing Cart: ERROR_DID_NOT_LOAD_SCRIPT</div>
+    </strong>
+
     <div class="input-row">
         <div class="input-label">Cart Name</div>
         <textarea class="CartName" rows="1" type="textarea"> </textarea>
@@ -44,6 +42,6 @@
     <div class="input-row">
         <div class="submit" onclick="CartItemsEdit(myCartID(), myCartName())">Edit Cart Items</div>
     </div>
-
+    <script>setCurrentValues()</script>
 </div>
 </html>

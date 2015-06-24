@@ -17,21 +17,33 @@ function showProductID(selectedID) {
     });
 }
 
-function getID() {
 
-    var cartIDDiv = document.getElementById('cart_id');
-    var id = window.args.CartID;
-    cartIDDiv.innerHTML = id;
+function setCurrentValues() {
+
+    var original_name_div = document.getElementById('original_cart_name');
+    var name = window.args.cartName;
+    original_name_div.innerHTML = "Editing Cart: " + name;
+
+    /* var host = 'http://localhost:50001/Carts/GetMyCartData/' + cartID + '/';
+     sendRequest(host, function () {
+     if (dispReq.readyState == 4 && dispReq.status == 200) {
+     console.log("Success!");
+     }
+     });
+     */
+
+
+    var newCartName = $(".CartName").val("orignal_cart");
+    var newReporter = $(".Reporter").val("orignal_reporter");
+    var newAssignee = $(".Assignee").val("original_Assignee");
+    $(".Date").val("orignal_date");
 }
 
 function myCartID() {
-    return window.args.CartID;
+    return window.args.cartID;
 }
 
-function myCartName() {
-    alert(window.args.CartName);
-    return window.args.CartName;
-}
+
 function sendRequest(host, callback) {
     if (window.XMLHttpRequest) {
         dispReq = new XMLHttpRequest();
@@ -48,7 +60,7 @@ function CartDataEdit(cartID) {
     var newReporter = $(".Reporter").val();
     var newAssignee = $(".Assignee").val();
     var newDate = $(".Date").val();
-    var host = 'http://localhost:50001/Carts/EditCart/' + cartID + '/' + '"' + newCartName + '"' + "/" + '"' + newReporter + '"' + "/" + '"' + newAssignee + '"' + "/" + '"' + newDate + '"';
+    var host = 'http://localhost:50001/Carts/EditCart/' + cartID + '/' + '"' + newCartName.trim() + '"' + "/" + '"' + newReporter.trim() + '"' + "/" + '"' + newAssignee.trim() + '"' + "/" + '"' + newDate.trim() + '"';
     sendRequest(host, function () {
         if (dispReq.readyState == 4 && dispReq.status == 200) {
             console.log("Success!");
@@ -59,5 +71,5 @@ function CartDataEdit(cartID) {
 }
 
 function CartItemsEdit(cartID, cartName) {
-    navigation.go("EditCartItems.html", {CartID: cartID, CartName: cartName});
+    navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
 }
