@@ -41,38 +41,50 @@ var addInventory = {
     // Add an add inventory entry.
     addEntry: function() {
         var entry = $(document.createElement("div"))
+            .addClass("row")
             .appendTo("#add_list");
 
         // package type input
         var select = $(document.createElement("select"))
+            .addClass("col-sm-3")
             .attr("name", "package_input")
             .attr("onchange", "addInventory.updateTotal()")
             .appendTo(entry);
 
         this.updateEntryPackageTypeOptions(select);
 
-        entry.append(" * ");
+        entry.append($(document.createElement("div"))
+            .css("font-size", "150%")
+            .addClass("col-sm-1 text-center")
+            .text("*")
+        );
 
         // amount input
         input = $(document.createElement("input"))
+            .addClass("col-sm-2")
             .attr("name", "amount_input")
             .attr("type", "text")
             .attr("onkeyup", "addInventory.updateTotal()")
             .appendTo(entry);
 
         // count
-        var countOf = $(document.createElement("span"))
-            .attr("name", "count_of_text")
-            .addClass("float_right")
-            .append(" = Count of ")
+        var equal = $(document.createElement("div"))
+            .addClass("col-sm-2 text-center")
+            .attr("name", "equal")
+            .append("=")
             .appendTo(entry);
 
-        var count = $(document.createElement("span"))
+        var countOf = $(document.createElement("div"))
+            .addClass("col-sm-2")
+            .attr("name", "count_of")
+            .append("Count of")
+            .appendTo(entry);
+
+        var count = $(document.createElement("div"))
+            .addClass("col-sm-2")
             .attr("name", "count_text")
             .text("0")
-            .appendTo(countOf);
-
-        entry.append("<div style='clear: both;'></div>");
+            .appendTo(entry);
     },
 
     // Array of entries
@@ -87,7 +99,7 @@ var addInventory = {
                 packageName: $(this).children("select[name='package_input']").children("option:selected").data("name"),
                 packageSize: $(this).children("select[name='package_input']").children("option:selected").data("size"),
                 amount: $(this).children("input[name='amount_input']").val(),
-                count: $(this).children("span[name='count_of_text']").children("span[name='count_text']").text()
+                count: $(this).children("div[name='count_text']").text()
             });
         });
 
@@ -123,7 +135,7 @@ var addInventory = {
             var size = parseInt($(this).children("select[name='package_input']").children("option:selected").data("size")) || 0;
             var amount = parseInt($(this).children("input[name='amount_input']").val()) || 0;
             var countOf = size * amount;
-            $(this).children("span[name='count_of_text']").children("span[name='count_text']").text(countOf);
+            $(this).children("div[name='count_text']").text(countOf);
             addInventory.total += countOf;
         });
 
