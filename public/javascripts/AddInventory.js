@@ -79,7 +79,7 @@ var addInventory = {
     getEntries: function() {
         var entries = [];
 
-        $("#add_list").children().each(function() {
+        $("#add_list").children("div").each(function() {
             entries.push({
                 itemName: addInventory.getItemName(),
                 productId: addInventory.getProductId(),
@@ -148,7 +148,7 @@ var addInventory = {
 
     // Updates the options for the package types.
     updatePackageTypeOptions: function() {
-        $("#add_list").children().each(function() {
+        $("#add_list").children("div").each(function() {
             var lastSelected = $(this).children("select[name='package_input']").children("option:selected").val();
             var select = $(this).children("select[name='package_input']")
                 .empty();
