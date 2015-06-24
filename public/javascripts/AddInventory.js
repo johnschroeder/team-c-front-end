@@ -31,14 +31,14 @@ var addInventory = {
         this.updatePackageTypes();
     },
 
-    // Initialize the page.
+    // Reset the add inventory entries.
     reset: function() {
         $("#add_list").empty();
 
         this.updateTotal();
     },
 
-    // Add a row of add inventory entry.
+    // Add an add inventory entry.
     addEntry: function() {
         var entry = $(document.createElement("div"))
             .appendTo("#add_list");
