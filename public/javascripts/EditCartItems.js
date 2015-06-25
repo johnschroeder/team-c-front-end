@@ -101,9 +101,6 @@ var editCartItems = {
     populateList: function() {
         var productTable = editCartItems.model.products;
 
-        console.log("model @ 104: ");
-        console.log(editCartItems.model);
-
         var inventory_container = $('.inventory-container');
         inventory_container.empty();
 
@@ -278,7 +275,7 @@ var editCartItems = {
                     + runID + '/'
                     ,function (res) {
                         if (res && res.length) {
-                            console.log("RESULTS: ");
+                            console.log("Results of submitting changed values: ");
                             console.log(JSON.parse(res));
                         } else {
                             $("#response").text("Error: EditCartItems.init: No response.");
