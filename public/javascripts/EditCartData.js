@@ -24,7 +24,7 @@ function setCurrentValues() {
     var original_date = "original_date";
 
 
-    $.get(host, function (data, status) {
+    $.get(host, function (data) {
         carts = jQuery.parseJSON(data);
         for (var i = 0; i < carts.length; i++) {
             if (carts[i].CartID == window.args.cartID) {
@@ -37,13 +37,13 @@ function setCurrentValues() {
         original_assignee = carts[cartIndex].Assignee;
         original_date = carts[cartIndex].DateToDelete;
 
-        var newCartName = $(".CartName").val(original_cart);
-        var newReporter = $(".Reporter").val(original_reporter);
-        var newAssignee = $(".Assignee").val(original_assignee);
-        var newDate = $(".Date").val(original_date.split("T")[0]);
+        $(".CartName").val(original_cart);
+        $(".Reporter").val(original_reporter);
+        $(".Assignee").val(original_assignee);
+        $(".Date").val(original_date.split("T")[0]);
     });
 
-
+    $(".CartName").focus();
 }
 
 function myCartID() {
