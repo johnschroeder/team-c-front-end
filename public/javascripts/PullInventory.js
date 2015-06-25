@@ -261,15 +261,44 @@ function SubmitNewCart()
 
 }
 
-function AddOneItemToCart() {
-    //CREATE PROCEDURE AddItemToCart
-    //(IN _CartID int, IN _SizeMapID int, IN _Quantity int, IN _RunID int, OUT _Msg varchar(512))
+function AddOneItemToCart(cID,smID,qty) {
+    host: window.apiRoute+"/Carts/AddItemToCartGeneral/"+cID+"/"+smID+"/"+qty;
+    $.get(window.apiRoute +"/Carts/AddItemToCartGeneral/"+cID+"/"+smID+"/"+qty, function(resp) {
+        if (resp && resp.length) {
+            var msg = resp.split('####', 2)[0];
+            if(msg.trim()=='Success')
+                return;
+            else{
+                $("#response").text(msg);
+            }
+        } else {
+            $("#response").text("Error: Init: No response.");
+        }
+    }).fail(function(res) {
+        $("#response").text("Error: Init: Connection error.");
+    });
+
 
 }
 
 
 function ChooseExistingCart(){
+    $('#InputDiv').children('.InputChild').each(function () {
+        var subtotal = 0;
+        var sizeMapID = $(this).find('.Size').find('option:selected').val();
+        var cartID = $('#slCart').find('option:selected').val();
+        if(sizeMapID>0)
+        {
+            var count = $(this).find('.Count').val();
+            console.log(sizeMapID);
+            console.log(count);
+            console.log(cartID);
+            AddOneItemToCart(cartID,sizeMapID,count);
+        }
+
+    });
+
     $('#slCart').empty();
     $("#divSelectCart").hide();
-    AddOneItemToCart();
+
 }
