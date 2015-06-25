@@ -62,9 +62,6 @@ var editCartItems = {
             }
             productTable[index].rows.push(row);
         }
-        //TODO: Delete these two lines
-        console.log("cart items: ");
-        console.log(editCartItems.cartItems);
         editCartItems.getSizeByProductID(0);
     },
     getSizeByProductID: function(i) {
