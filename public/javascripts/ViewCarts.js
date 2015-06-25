@@ -73,6 +73,7 @@ function gotoEditItems(){
     var idSelected = $("#selectDropDown :selected").val();
     navigation.go('EditCartItems.html',{cartID: idSelected, previousPage: "ViewCarts.html"});
 }
+
 function populateCartContainer(items){
     $(".inventory-container").empty();
     var cartContainer = $(".inventory-container");
@@ -89,6 +90,19 @@ function populateCartContainer(items){
             .appendTo(cartList);
         $(document.createElement("hr"))
             .appendTo(cartItem);
+        var pulledText = $(document.createElement("span"))
+            .text("Pulled")
+            .appendTo(cartItem);
+        var unPull = $(document.createElement("button"))
+            .text("Unpull Item")
+            .attr("onclick", "unPullButton(unPull,pulledText,cartItem)")
+            .addClass("float_right pull-button")
+            .appendTo(cartItem);
+        $(document.createElement("br"))
+            .appendTo(cartItem);
+        $(document.createElement("br"))
+            .appendTo(cartItem);
+
         var productName = $(document.createElement("span"))
             .text(name)
             .addClass("productName")
