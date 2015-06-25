@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/nav_vert.js"></script>
+    <script src="javascripts/EditCartData.js"></script>
+
+</head>
+<div class="new-product-form">
+    <h1>Edit Cart <span id="cart_name"></span></h1>
+
+    <div id="original_cart_name">Editing Cart: ERROR_DID_NOT_LOAD_SCRIPT</div>
+
+
+    <div class="input-row">
+        <div class="input-label">Cart Name</div>
+        <textarea class="CartName" rows="1" type="textarea"> </textarea>
+    </div>
+
+    <div class="input-row">
+        <div class="input-label">Reporter</div>
+        <textarea class="Reporter" type="textarea" rows="1"></textarea>
+    </div>
+
+    <div class="input-row">
+        <div class="input-label">Assignee</div>
+        <textarea class="Assignee" rows="1" cols="50"></textarea>
+    </div>
+
+    <div class="input-row">
+        <div class="input-label">Delete Date</div>
+        <textarea class="Date" rows="1" cols="50"></textarea>
+    </div>
+
+    <div class="input-row">
+        <div class="submit" onclick="CartDataEdit(myCartID())">Done Editing</div>
+    </div>
+
+    <div class="input-row">
+        <div class="submit" onclick="CartItemsEdit(myCartID(), myCartName())">Edit Cart Items</div>
+    </div>
+    <script>setCurrentValues()</script>
+</div>
+</html>

@@ -1,7 +1,6 @@
 /* sitewide styles
 	*******************************/
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -9,40 +8,25 @@ a {
   color: #00B7FF;
 }
 
-
 h1 {
   text-align: center;
   font-size: 40px;
 }
 
-/* TODO: Actually style + implement title banner */
-.title-banner {
-  width: 100%;
-  background-color: #0055aa;
-  font-size: 24px;
-  color: white;
-  line-height: 80px;
-  padding-left: 5%;
+/* unimplemented class - put on things that haven't been implemented yet */
+.unimplemented {
+  color: red;
 }
 
-/* TODO: Actually style + implement sidebar menu */
-.navigation-menu {
-  width: 15%;
-  float: left;
-  background-color: #0086b3;
-  padding-bottom: 500px;
+/* Generic error message style
+*******************************/
+.error-message {
+  color: red;
+  font-size: 18px;
 }
 
-@media (max-width: 800px) {
-  .navigation-menu {
-    display: none;
-  }
-}
-.content-container {
-  width: 85%;
-  float: right;
-}
-
+/* Generic input row
+*******************************/
 .input-row {
   margin-left: 5%;
   margin-top: 30px;
@@ -63,48 +47,170 @@ h1 {
   margin-right: 10px;
 }
 
+/* On mobile devices make the input the full width */
 @media (max-width: 800px) {
   .input-row input[type=text],
   .input-row textarea {
     width: 100%;
   }
 }
-/* unimplemented class - put on things that haven't been implemented yet */
-.unimplemented {
-  color: red;
-}
 
-.error-message {
-  color: red;
-  font-size: 18px;
-}
-
-/* form.html specific styles
+/* Vertical nav bar
 *******************************/
+.vertical-nav-bar {
+  list-style-type: none; /* Don't put bullet points on the list */
+  background-color: #b0c4de;
 
-#pgTitle {
+  /* Remove the nav bar from the natural flow and stick it at position 100px down, 0px left. */
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 25%; /* Make it take up 25% of the full screen */
+
+  border-top: 1px solid #999;
+  border-right: 1px solid #999;
+  border-left: 1px solid #999;
+
+  padding-bottom: 20px;
+}
+
+.vertical-nav-bar::before {
+  content: "";
+  background-color: #b0c4de;
+  width: 25%;
+  height: 100%;
+  position: fixed;
+  left:0;
+  top:0;
+  z-index: -2;
+}
+/*Hide the nav bar on mobile so we can show it on demand*/
+@media (max-width: 800px) {
+  .vertical-nav-bar {
+    display: none;
+
+    z-index: 100;
+    width: 100%;
+    top: 130px; /*Stick it at 130px down instead of 100px*/
+  }
+
+  .vertical-nav-bar::before {
+    display: none;
+  }
+}
+
+.vertical-nav-bar li button {
+  display: block; /*Display the buttons like a div instead of a button or list item */
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background: #b0c4de;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #999;
+  text-decoration: none;
+  color: #000;
+  width: 100%;
+}
+
+/* Change the color/bg color when the button is hovered or clicked */
+.vertical-nav-bar li button:hover, #nav li a.active {
+  background: #999;
+  color: #fff;
+}
+
+.vertical-nav-bar li ul {
+  display: none; /* Hide the sub-menu options until we need them */
+
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.vertical-nav-bar li ul li {
+  width: 100%;
+  left: 0;
+}
+
+.vertical-nav-bar li ul li button {
+  padding: 10px 25px;
+  width: 100%;
+  background: #ececec;
+  border-bottom: 1px dotted #ccc;
+}
+
+.show-mobile-menu {
+  display: none; /* Hide the mobile menu selector on default displays */
+
+  /* Remove the selector from the normal flow of elements and stick it 100px down from the top */
+  position: absolute;
+  top: 100px;
+
+  font-family: monospace;
   text-align: center;
-  font-size: 40px;
-  color:darkblue;
-}
-#user{
-  width: 200px;
-  text-align: left;
-}
-#description{
-  width: 200px;
-  text-align: left;
-}
-#joNum{
-  width: 200px;
-  text-align: left;
+  cursor: pointer; /* Make it look clickable when it's hovered */
+
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  background-color: #6785DE;
+  color: #FFFFFF;
 }
 
-
-h1 {
-  text-align: center;
-  font-size: 40px;
+/* Show the mobile menu selector on mobile displays */
+@media (max-width: 800px) {
+  .show-mobile-menu {
+    display: block;
+  }
 }
+
+/* Nav bar styles
+*******************************/
+/* Put the horizontal nav at the very top of the screen at position 0,0 */
+.main-horizontal-nav {
+  background-color: #b0c4de;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+}
+
+/* StevensIS logo
+*******************************/
+.si-logo {
+  margin: 20px;
+}
+
+/* Main content container
+*******************************/
+.main-content-container {
+  position: relative;
+
+  /* Make sure the content happens outside the nav bars */
+  margin-top: 100px;
+  margin-left: 25%;
+  width: 75%;
+
+}
+
+/* On mobile, make the content use the full screen width available */
+@media (max-width: 800px) {
+  .main-content-container {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 130px;
+  }
+}
+
+/* Top right links
+*******************************/
+/* Stick the login/about links flush right and 70px down from the top */
+.header-menu-right {
+  position: absolute;
+  right: 0;
+  top: 70px;
+}
+
 
 /* NewProduct.html specific styles
 *******************************/
@@ -114,6 +220,7 @@ h1 {
   line-height: 30px;
 }
 
+/* Upload and submit button will get the same general styles */
 .new-product-form .upload-button,
 .new-product-form .submit {
   text-align: center;
@@ -129,27 +236,34 @@ h1 {
   background-color: #0086b3;
 }
 
+/* Change submit button background on hover */
 .new-product-form .submit:hover {
   background-color: #0055aa;
 }
 
+/* Change upload button background on hover */
 .new-product-form .upload-button:hover {
   background-color: #843534;
 }
 
+/* On mobile, make the buttons take up the full width */
 @media (max-width: 800px) {
   .new-product-form .upload-button,
   .new-product-form .submit {
     width: 100%;
   }
 }
+
+/* Unimplemented feature */
 .new-product-form .external-id-input .input-label {
   color: red;
 }
+
 .new-product-form .external-id-input input {
   width: 25%;
 }
 
+/* Style error and success messages generally the same */
 .new-product-form .error-message,
 .new-product-form .success {
   background-color: #990000;
@@ -161,39 +275,21 @@ h1 {
   width: 80%;
 }
 
+/* Except override the background color to be green for success */
 .new-product-form .success {
   background-color: #009926;
 }
 
 .new-product-form .date {
-  float: right;
+  float: right; /* Make the date find a spot where it can on the far right of the container */
   margin-right: 20%;
   color: #080808;
   font-size: 14px;
 }
 
-
-
-
-#nav_vert {
-  list-style-type: none;
-  background-color: #b0c4de;
-  float:left;
-  display: block;
-  position: fixed;
-  top: 100px;
-  left: 0;
-  width: 20%;
-  min-height: 100%;
-  overflow: hidden;
-  z-index: 9999;
-
-  border-top: 1px solid #999;
-  border-right: 1px solid #999;
-  border-left: 1px solid #999;
-}
-
-#nav_vert li button {
+/* ItemDetailView.html specific styles
+*******************************/
+.detail_view button {
   display: block;
   padding: 10px 15px;
   background: #b0c4de;
@@ -201,71 +297,29 @@ h1 {
   border-bottom: 1px solid #999;
   text-decoration: none;
   color: #000;
-  width: 100%;
+
+  /* Each button will take up 1/3 of the screen and slide up against any other left floated elements.
+  This serves to make the buttons just take up one row */
+  width: 33%;
+  float: left;
 }
-#nav_vert li button:hover, #nav li a.active {
+
+.detail_view button:hover, #nav a.active {
   background: #999;
   color: #fff;
 }
-#nav_vert li ul {
-  display: none; // used to hide sub-menus
-  list-style-type: none;
-}
 
-#nav_vert li ul li {
+.detail_view_buttons {
   width: 100%;
-  left:0;
-}
-#nav_vert li ul li button {
-  padding: 10px 25px;
-  width: 100%;
-  background: #ececec;
-  border-bottom: 1px dotted #ccc;
+  height: 80px;
 }
 
-
-#nav_hori {
-  background-color: #b0c4de;
-  top: 0;
-  left: 0;
-  position: fixed;
-  width: 100%;
-  height:100px;
-  z-index: 10000;
+#productName {
+  text-align: center;
+  font-size: 24px;
+  text-decoration: underline;
 }
 
-
-#main_cont {
-
-  position: relative;
-  padding-top:100px;
-  padding-left:250px;
-  width: 100%;
-}
-
-.main_cont {
-
-  position: relative;
-  padding-top:1000px;
-  padding-left:500px;
-}
-
-/* ItemDetailView.html specific styles
-*******************************/
-#detail_view button {
-  display: block;
-  padding: 10px 15px;
-  background: #b0c4de;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #999;
-  text-decoration: none;
-  color: #000;
-  width: 250px;
-}
-#detail_view button:hover, #nav a.active {
-    background: #999;
-    color: #fff;
-}
 
 /* DisplayInventory.html specific styles
 *******************************/
@@ -274,9 +328,11 @@ h1 {
   height: 100px;
   background-color: red;
   float: left;
-  clear: both;
+  clear: both; /* Fully clear the previous element */
   margin-right: 20px;
 }
+
+/* Hide the thumbnails on mobile */
 @media (max-width: 800px) {
   .display-inventory-container .thumbnail {
     display: none;
@@ -299,25 +355,37 @@ h1 {
 }
 
 .display-inventory-container .pull-button {
-    position: absolute;
-    right: 20%;
-    top: 0;
-    font-size: 24px;
-    line-height: 35px;
-}
 
-.display-inventory-container .total {
+  /* Stick the pull button 20% off the parent container size and flush with the top of the parent element */
   position: absolute;
   right: 20%;
   top: 0;
+
   font-size: 24px;
-  line-height: 50px;
+  line-height: 35px;
 }
 
+.display-inventory-container .total {
+
+  /* Stick the total 20% off the parent container size off the far right and 20px off the bottom */
+  position: absolute;
+  right: 20%;
+  bottom: 20px;
+
+  font-size: 24px;
+  line-height: 40px;
+}
+
+/* On mobile, bring the total count and pull button back into the regular flow of elements */
 @media (max-width: 800px) {
   .display-inventory-container .total {
     position: relative;
-    line-height: 40px;
+    right: 0;
+    bottom: 0;
+  }
+
+  .display-inventory-container .pull-button {
+    position: relative;
     right: 0;
   }
 }
@@ -346,6 +414,3 @@ h1 {
   float: left;
   margin-bottom: 25px;
 }
-
-
-

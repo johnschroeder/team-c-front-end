@@ -8,16 +8,23 @@
 </head>
 
 <body>
-    <div>
-        <div id="detail_view">
+<div class="item-detail-view-container">
+
+    <div class="detail_view_buttons">
+
+        <div class="detail_view">
             <button id="Add" onclick="Add()">Add</button>
         </div>
-        <div id="detail_view">
+
+        <div class="detail_view">
             <button id="Pull" onclick="Pull()">Pull</button>
         </div>
-        <div id="detail_view">
+
+        <div class="detail_view">
             <button id="Edit" onclick="Edit()">Edit</button>
         </div>
+
+    </div>
 
         <div class="item-container"></div>
     </div>
@@ -29,6 +36,8 @@
     var detailView = {
 
         host: "http://localhost:50001/itemDetail/",
+        productID: null,
+        productName: "",
 
         getParameterByName: function(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -39,19 +48,25 @@
 
         init: function( inputProdID ) {
             var self = this;
-            var productID = "";
-            if( typeof inputProdID !== 'undefined' )
-                productID = inputProdID;
-            else
-                productID = this.getParameterByName("prodid");
 
-            $.get( this.host.concat(productID).concat('/'), function( response ) {
+            this.productID = inputProdID || this.getParameterByName("prodid") || null;
+
+            if (this.productID === null) {
+                if (window.args && window.args.ProductID) {
+                    this.productID = window.args.ProductID;
+                }
+            }
+
+            if (this.productID === null) return;
+
+            $.get( this.host.concat(this.productID).concat('/'), function( response ) {
 
                 if( response && response.length ){
 
                     self.item = jQuery.parseJSON( response );
                     console.log(self.item);
                     self.display_item();
+                    self.productName = self.item[0].Name;
 
                 }
                 else {
@@ -73,7 +88,7 @@
             var item = this.item[0];
             var inventory_item = "<div class='inventory-item'>";
 
-            inventory_item += "<div id=\"productName\">Product Name: <span id=\'productNameSpan\'>"
+            inventory_item += "<div id=\"productName\"><span id=\'productNameSpan\'>"
                                 + item.Name + "</span></div>";
             inventory_item += "<div id=\"totalQuantity\">Total Quantity: <span id=\'totalQuantitySpan\'>"
                                 + item.total + "</span></div>";
@@ -91,6 +106,9 @@
         }
     };
 
+    if (detailView.productID === null) {
+        detailView.init();
+    }
 </script>
 </body>
 </html>
