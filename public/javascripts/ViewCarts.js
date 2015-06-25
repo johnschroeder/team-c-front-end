@@ -57,10 +57,14 @@ function pullAll(){
     var cartName = prompt("Please confirm that -- " + name + " -- is the cart you want to pull by typing in the cart name.");
 
     if(cartName == name){
-        //TODO do something here
+        $("#pullAllButton").text("Ship Cart!");
+        $("#pullAllButton").prop("onclick",null).off("click");
     }
 }
-
+function doNothing(){
+    $("#response").text("Shipment sent!")
+        .addClass("float_middle");
+}
 function gotoEditCarts(){
         state.nameSelected =$("#selectDropDown :selected").text();
         navigation.saveState(state);
@@ -102,7 +106,6 @@ function populateCartContainer(items){
             .appendTo(cartItem);
         $(document.createElement("br"))
             .appendTo(cartItem);
-
         var productName = $(document.createElement("span"))
             .text(name)
             .addClass("productName")
