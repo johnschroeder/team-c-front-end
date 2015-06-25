@@ -193,15 +193,16 @@ var addInventory = {
 
     // Submit new package type
     submitNewPackageType: function() {
+        var productId = this.getProductId();
         var name = $("#pkg_name").val() || "";
         var size = parseInt($("#pkg_size").val()) || 0;
 
-        if (name == "" || size == 0) {
+        if (productId == 0 || name == "" || size == 0) {
             $("#response").text("Error: Submit new package type: Invalid input.");
             return;
         }
 
-        $.get(window.apiRoute + "/AddProductSize/" + this.getProductId() + "/" + name + "/" + size, function(res) {
+        $.get(window.apiRoute + "/AddProductSize/" + productId + "/" + name + "/" + size, function(res) {
             $("#response").text("Added new package type: " + name + " " + size + ".");
             addInventory.updatePackageTypes();
         }).fail(function(res) {
