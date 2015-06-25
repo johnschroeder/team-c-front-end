@@ -22,9 +22,20 @@
     <div  class="input-label">Choose a pull cart to view</div>
     <select id="selectDropDown" class="filter track-by" onChange=displayCartInventory()>
     </select>
-</div>
+        <div class="detail-view float_right">
+            <button class="float_right pull-button" onclick="gotoEditCarts()">Edit Cart</button>
+            <button class="float_right pull-button">Edit Items</button>
+            <br>
+            <div id="notSelected"></div>
+        </div>
+    </div>
 <div class="inventory-container">
 </div>
+<p></p>
+<div class="detail-view">
+    <button>Pull All</button>
+</div>
+
 <div id="response"></div>
 <script>populateByCartId()</script>
 </body>
