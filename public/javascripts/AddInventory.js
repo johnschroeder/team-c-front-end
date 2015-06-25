@@ -47,7 +47,7 @@ var addInventory = {
         var select = $(document.createElement("select"))
             .addClass("col-sm-3")
             .attr("name", "package_input")
-            .attr("onchange", "addInventory.updateTotal()")
+            .attr("onchange", "addInventory.updateTotal()");
 
         this.updateEntryPackageTypeOptions(select);
 
@@ -209,4 +209,4 @@ var addInventory = {
             $("#response").text("Error: Submit new package type: Connection error.");
         });
     }
-}
+};
