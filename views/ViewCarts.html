@@ -2,9 +2,49 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Pull Carts</title>
+    <script src="javascripts/ViewCarts.js"></script>
+    <style>
+        .float_left {
+            float: left;
+        }
+        .float_right {
+            float: right;
+        }
+        .seperate {
+            padding-right: 5%;
+        }
+        .float_middle {
+           float: right;
+            padding-right: 30%;
+        }
+    </style>
+
 </head>
 <body>
-.........view carts.....................................................
+<h1>
+    <div>Pull Carts</div>
+</h1>
+<div  class="input-row track-inventory-by">
+    <div  class="input-label">Choose a pull cart to view</div>
+    <select id="selectDropDown" class="filter track-by" onChange=displayCartInventory()>
+    </select>
+        <div class="detail-view float_right">
+            <button class="float_right pull-button" onclick="gotoEditCarts()">Edit Cart</button>
+
+            <button class="float_right pull-button " onclick="gotoEditItems()">Edit Items</button>
+            <br>
+            <div id="notSelected"></div>
+        </div>
+    </div>
+<div class="inventory-container">
+</div>
+<p></p>
+<div class="detail-view">
+    <button id="pullAllButton" onclick="pullAll()">Pull All</button>
+</div>
+
+<div id="response"></div>
+<script>populateByCartId()</script>
 </body>
 </html>
