@@ -3,11 +3,11 @@
  */
 
 var editCartItems = {
+    model: {productIDList: []},
     cartID: parseInt(window.args.cartID),
     cartName: window.args.cartName,
     carts: [],
     productTable: [],
-    sizeTable: [],
     init: function() {
         $.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(res) {
             if (res && res.length) {
@@ -24,17 +24,20 @@ var editCartItems = {
     //TODO: any fucking comments
     buildProductIDList: function() {
         $("#cart_name").text(this.cartName);
-        console.log("Cart items: " + this.cartItems);
 
-        var k = 0;
         for (var i = 0; i < this.cartItems.length; ++i) {
             var index = this.cartItems[i].ProductID;
-            console.log("index: " + index);
-
+            var m = editCartItems.model;
             if (typeof editCartItems.productTable[index] === 'undefined') {
+                m[index] = {};
+                m[index].productID = index;
+                m.productIDList.push(index);
+                m[index].productName = this.cartItems[i].ProductName;
+                m[index].editing = false;
+                m[index].rows = [];
+                m[index].sizes = [];
+
                 editCartItems.productTable[index] = [];
-                editCartItems.sizeTable[k] = [];
-                editCartItems.sizeTable[k].push(index);
                 editCartItems.productTable[index].push({
                     name: this.cartItems[i].ProductName,
                     totalQuantity: 0,
@@ -43,22 +46,37 @@ var editCartItems = {
             }
             editCartItems.productTable[index].push(this.cartItems[i]);
             editCartItems.productTable[index][0].totalQuantity += this.cartItems[i].Total;
+            var size;
+
+            var row = {
+                initialSize: this.cartItems[i].SizeMapID,
+                packageQuantity: this.cartItems[i].BatchCount,
+                dirty: false
+            }
+            m[index].rows.push(row);
         }
-        console.log("size table: " + editCartItems.sizeTable);
         editCartItems.getSizeByProductID(0);
     },
     getSizeByProductID: function(i) {
-        console.log("I: " + i);
-        console.log("sizeTable.length: " + editCartItems.sizeTable.length);
-        $.get(window.apiRoute + "/GetSizeByProductID/" + editCartItems.sizeTable[i], function(res) {
+        var m = editCartItems.model;
+
+        $.get(window.apiRoute + "/GetSizeByProductID/" + m.productIDList[i], function(res) {
             if (res && res.length) {
-                console.log("i in the callback: " + i);
-                console.log("res.length: " + res.length);
+                var m = editCartItems.model;
+                var index = m.productIDList[i];
                 for(var j = 0; j < JSON.parse(res).length; ++j)
                 {
-                    editCartItems.sizeTable[i].push(JSON.parse(res)[j]);
+                    m[index].sizes.push(JSON.parse(res)[j]);
                 }
-                if(i < editCartItems.sizeTable.length - 1) {
+                m[index].rows.forEach(function(row) {
+                    for(var h = 0; h < m[index].sizes.length; ++h) {
+                        if(m[index].sizes[h].SizeMapID == row.initialSize) {
+                            row.currentSize = m[index].sizes[h];
+                        }
+                    }
+                });
+
+                if(i < m[m.productIDList[i]].sizes.length - 1) {
                     editCartItems.getSizeByProductID(i + 1);
                 } else {
                     editCartItems.populateList();
@@ -74,10 +92,13 @@ var editCartItems = {
     },
 
     populateList: function() {
+        var m = editCartItems.model;
 
-        console.log(editCartItems.productTable);
-        console.log(editCartItems.sizeTable);
+        console.log("model @ 104: ");
+        console.log(m);
+
         var inventory_container = $('.inventory-container');
+        inventory_container.empty();
 
         var itemList = $(document.createElement("div"))
             .appendTo(inventory_container);
@@ -109,6 +130,7 @@ var editCartItems = {
 
             cart.itemRows = [];
             cart.editRows = [];
+
             for(var i = 1; i < product.length; ++i) {
                 var row = {};
                 var editRow = {};
@@ -125,16 +147,13 @@ var editCartItems = {
                 editRow.size = $(document.createElement("select"))
                     .attr("id", "select" + i)
                     .addClass("float_left size");
-                var sizes;
-                for(var k = 0; k < editCartItems.sizeTable.length; ++k) {
-                    if(editCartItems.sizeTable[k][0] == product[0].productID)
-                        sizes = editCartItems.sizeTable[k];
-                }
-                for(var k = 1; k < sizes.length; ++k) {
+                var szs = m[product[0].productID].sizes;
+                //TODO: This is broken because size isn't good.  use model
+                for(var k = 1; k < szs.length; ++k) {
                     var option = $(document.createElement("option"))
-                        .attr("size", sizes[k].Size)
-                        .attr("name", sizes[k].Name)
-                        .text(sizes[k].Name);
+                        .attr("size", szs[k].Size)
+                        .attr("name", szs[k].Name)
+                        .text(szs[k].Name);
                     editRow.size.append(option);
                 }
                 editRow.size.val(product[i].SizeName);
@@ -233,5 +252,6 @@ var editCartItems = {
                 row.optionsRow.hide();
             })
         }
+        editCartItems.populateList();
     }
 }
