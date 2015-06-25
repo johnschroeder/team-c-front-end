@@ -38,7 +38,7 @@ function displayCartInventory(){
 
     state.nameSelected =$("#selectDropDown :selected").text();
     navigation.saveState(state);
-    var idSelected = $("#selectDropDown :selected").value;
+    var idSelected = $("#selectDropDown :selected").val();
 
     $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function(res) {
         if (res && res.length) {
@@ -52,21 +52,27 @@ function displayCartInventory(){
         $("#response").text("Error: Init: Connection error.");
     });
 }
+function pullAll(){
+    var name = $("#selectDropDown :selected").text();
+    var cartName = prompt("Please confirm that -- " + name + " -- is the cart you want to pull by typing in the cart name.");
 
-function gotoEditCarts(){
-    if(typeof state === 'undefined'){
-        $('#notSelected').text("Please choose a cart first!")
-    }
-    else{
-        var cartSelected = $("#selectDropDown :selected").text();
-        state.nameSelected =$("#selectDropDown :selected").text();
-        navigation.saveState(state);
-        var idSelected = $("#selectDropDown :selected").value;
-        navigation.go('EditCartData.html',{cartID:idSelected, cartName:cartSelected});
-
+    if(cartName == name){
+        //TODO do something here
     }
 }
 
+function gotoEditCarts(){
+        state.nameSelected =$("#selectDropDown :selected").text();
+        navigation.saveState(state);
+        var idSelected = $("#selectDropDown :selected").val();
+        navigation.go('EditCartData.html',{cartID: idSelected, cartName: state.nameSelected});
+}
+function gotoEditItems(){
+    state.nameSelected =$("#selectDropDown :selected").text();
+    navigation.saveState(state);
+    var idSelected = $("#selectDropDown :selected").val();
+    navigation.go('EditCartItems.html',{cartID: idSelected, previousPage: "ViewCarts.html"});
+}
 function populateCartContainer(items){
     $(".inventory-container").empty();
     var cartContainer = $(".inventory-container");
@@ -76,7 +82,7 @@ function populateCartContainer(items){
         var name = items[i].ProductName.toString();
         var total = items[i].Total.toString();
         var sName  = items[i].SizeName.toString() + " of " + items[i].CountPerBatch.toString() + " * " + items[i].BatchCount.toString()+  " = " + total;
-        var color = "Run Color/Marker  " + items[i].Marker.toString();
+        var color = " Run Color/Marker  " + items[i].Marker.toString();
         var location = "Location:  "+ items[i].Location.toString();
 
         var cartItem = $(document.createElement("div"))
@@ -96,12 +102,13 @@ function populateCartContainer(items){
         var sizeName = $(document.createElement("span"))
             .text(sName)
             .appendTo(cartItem);
-        var runMarker = $(document.createElement("span"))
-            .text(color)
-            .appendTo(cartItem);
         var ilocation = $(document.createElement("span"))
             .text(location)
             .addClass("float_right")
+            .appendTo(cartItem);
+        var runMarker = $(document.createElement("span"))
+            .text(color)
+            .addClass("float_middle")
             .appendTo(cartItem);
         cartList.append(cartItem);
     }

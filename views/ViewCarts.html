@@ -11,6 +11,13 @@
         .float_right {
             float: right;
         }
+        .seperate {
+            padding-right: 5%;
+        }
+        .float_middle {
+           float: right;
+            padding-right: 30%;
+        }
     </style>
 
 </head>
@@ -24,7 +31,8 @@
     </select>
         <div class="detail-view float_right">
             <button class="float_right pull-button" onclick="gotoEditCarts()">Edit Cart</button>
-            <button class="float_right pull-button">Edit Items</button>
+
+            <button class="float_right pull-button " onclick="gotoEditItems()">Edit Items</button>
             <br>
             <div id="notSelected"></div>
         </div>
@@ -33,7 +41,7 @@
 </div>
 <p></p>
 <div class="detail-view">
-    <button>Pull All</button>
+    <button onclick="pullAll()">Pull All</button>
 </div>
 
 <div id="response"></div>
