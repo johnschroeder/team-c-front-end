@@ -177,7 +177,7 @@ var addInventory = {
         var location = this.getLocation();
 
         if (productId == 0 || total == 0 || location == "") {
-            $("#response").text("Error: Submit add inventory: Invalid input or ID.");
+            $("#response").text("Error: Submit add inventory: Invalid input or product ID.");
             return;
         }
 
@@ -198,7 +198,7 @@ var addInventory = {
         var size = parseInt($("#pkg_size").val()) || 0;
 
         if (productId == 0 || name == "" || size == 0) {
-            $("#response").text("Error: Submit new package type: Invalid input.");
+            $("#response").text("Error: Submit new package type: Invalid input or product ID.");
             return;
         }
 
