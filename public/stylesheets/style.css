@@ -74,13 +74,28 @@ h1 {
   padding-bottom: 20px;
 }
 
+.vertical-nav-bar::before {
+  content: "";
+  background-color: #b0c4de;
+  width: 25%;
+  height: 100%;
+  position: fixed;
+  left:0;
+  top:0;
+  z-index: -2;
+}
 /*Hide the nav bar on mobile so we can show it on demand*/
 @media (max-width: 800px) {
   .vertical-nav-bar {
     display: none;
 
+    z-index: 100;
     width: 100%;
     top: 130px; /*Stick it at 130px down instead of 100px*/
+  }
+
+  .vertical-nav-bar::before {
+    display: none;
   }
 }
 
@@ -176,8 +191,6 @@ h1 {
   margin-left: 25%;
   width: 75%;
 
-  /* Make sure the mobile menu will go on top of the content instead of under it */
-  z-index: -1;
 }
 
 /* On mobile, make the content use the full screen width available */
@@ -344,12 +357,12 @@ h1 {
 .display-inventory-container .pull-button {
 
   /* Stick the pull button 20% off the parent container size and flush with the top of the parent element */
-    position: absolute;
-    right: 20%;
-    top: 0;
+  position: absolute;
+  right: 20%;
+  top: 0;
 
-    font-size: 24px;
-    line-height: 35px;
+  font-size: 24px;
+  line-height: 35px;
 }
 
 .display-inventory-container .total {
