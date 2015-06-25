@@ -180,20 +180,18 @@ function BindNewOption(n,s)
 function AddToExistingCart(){
     $("#divSelectCart").show();
     $("#divNewCart").hide();
-}
+    $('#slCart').empty();
 
-function AddToNewCart(){
-    $("#divSelectCart").hide();
-    $("#divNewCart").show();
+    var username = 'don';//this needs to be swap out for real username
 
-    host: window.apiRoute+"/Carts/GetPossibleAssignees/";
-    $.get(window.apiRoute + "/Carts/GetPossibleAssignees/", function(resp) {
+    host: window.apiRoute+"/Carts/GetCartsByUser/"+username;
+    $.get(window.apiRoute + "/Carts/GetCartsByUser/"+username, function(resp) {
         if (resp && resp.length) {
             var temp = $.parseJSON(resp);
             for(var i = 0; i < temp.length; i++) {
                 var obj = temp[i];
-                var assOption = new Option(obj.Assignee);
-                $('#sltAssignee').append($(assOption));
+                var cartoption = new Option(obj.CartName, obj.CartID);
+                $('#slCart').append($(cartoption));
             }
 
         } else {
@@ -203,28 +201,63 @@ function AddToNewCart(){
         $("#response").text("Error: Init: Connection error.");
     });
 
+}
 
-
-    //call AddToExistingCart()
-
+function AddToNewCart(){
+    $("#divSelectCart").hide();
+    $("#divNewCart").show();
+    $('#sltAssignee').empty();
+    $('#iptCartName').val('');
+    $('#iptDaysToSave').val('');
+    host: window.apiRoute+"/Carts/GetPossibleAssignees/";
+    $.get(window.apiRoute + "/Carts/GetPossibleAssignees/", function(resp) {
+        if (resp && resp.length) {
+            var temp = $.parseJSON(resp);
+            for(var i = 0; i < temp.length; i++) {
+                var obj = temp[i];
+                var assOption = new Option(obj.Assignee);
+                $('#sltAssignee').append($(assOption));
+            }
+        } else {
+            $("#response").text("Error: Init: No response.");
+        }
+    }).fail(function(res) {
+        $("#response").text("Error: Init: Connection error.");
+    });
 }
 
 function SubmitNewCart()
 {
-    var keepdays = parseInt($("#iptDaysToSave").val());
+    var assignee = $("#sltAssignee option:selected").text();
+    var reporter="don";///////////////////////This need to be swap out for real username
+    var cartName=$("#iptCartName").val();
+    var keepdays =$("#iptDaysToSave").val();
     var today = new Date();
     var deleteDate = new Date(today);
     if($("#iptCartName").val()=='') {
         alert("Cart Name/Order Number is required field");
         return;
     }
-    if(keepdays>0) {
-        deleteDate.setDate(today.getDate()+keepdays);
+    if(keepdays<=0) {
+        keepdays=1;
     }
-    else {
-        deleteDate.setDate(today.getDate()+1);
-    }
-    
+
+    var host = window.apiRoute + "/Carts/CreateCart/"+cartName+"/"+reporter+"/"+assignee+"/"+keepdays;
+    sendRequest(host, function() {
+        if (dispReq.readyState == 4 && dispReq.status == 200) {
+            alert("New Cart "+ cartName +" Added!");
+            //clear inputs
+            //delete options in assignee
+            $('#iptCartName').val('');
+            $('#iptDaysToSave').val('');
+            $('#sltAssignee').empty();
+            $('#divNewCart').hide();
+            AddToExistingCart();
+            $("#slCart option").filter(function() {
+                return $(this).text() == cartName;
+            }).attr('selected', true);
+        }
+    });
 
 }
 
@@ -232,4 +265,11 @@ function AddOneItemToCart() {
     //CREATE PROCEDURE AddItemToCart
     //(IN _CartID int, IN _SizeMapID int, IN _Quantity int, IN _RunID int, OUT _Msg varchar(512))
 
+}
+
+
+function ChooseExistingCart(){
+    $('#slCart').empty();
+    $("#divSelectCart").hide();
+    AddOneItemToCart();
 }
