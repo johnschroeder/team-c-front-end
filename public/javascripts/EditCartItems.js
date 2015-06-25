@@ -2,8 +2,10 @@
  * Created by johnschroeder on 6/23/15.
  */
 
+//TODO: make sure the database hit works once stored procedures stop timing out.
+//TODO: comment!
 var editCartItems = {
-    model: {products: {}, productIDList: []},
+    model: {products: [], productIDList: []},
     cartID: parseInt(window.args.cartID),
     cartName: window.args.cartName,
     carts: [],
@@ -21,7 +23,6 @@ var editCartItems = {
         });
     },
 
-    //TODO: any fucking comments
     buildProductIDList: function() {
         $("#cart_name").text(this.cartName);
 
@@ -48,38 +49,44 @@ var editCartItems = {
             editCartItems.productTable[index].push(this.cartItems[i]);
             editCartItems.productTable[index][0].totalQuantity += this.cartItems[i].Total;
 
+
             var row = {
-                location: this.cartItems[i].location,
-                color: this.cartItems[i].color,
+                cartItemID: this.cartItems[i].CartItemID,
+                runID: this.cartItems[i].RunID,
+                location: this.cartItems[i].Location,
+                color: this.cartItems[i].Marker,
                 initialSize: this.cartItems[i].SizeMapID,
-                packageQuantity: this.cartItems[i].BatchCount,
+                unitsPerPackage: this.cartItems[i].CountPerBatch,
+                quantity: this.cartItems[i].BatchCount,
                 dirty: false
             }
             productTable[index].rows.push(row);
         }
+        //TODO: Delete these two lines
+        console.log("cart items: ");
+        console.log(editCartItems.cartItems);
         editCartItems.getSizeByProductID(0);
     },
     getSizeByProductID: function(i) {
         var model = editCartItems.model;
-        var productTable = editCartItems.model.products;
 
         $.get(window.apiRoute + "/GetSizeByProductID/" + model.productIDList[i], function(res) {
             if (res && res.length) {
                 var productTable = editCartItems.model.products;
                 var index = model.productIDList[i];
-                for(var j = 0; j < JSON.parse(res).length; ++j)
-                {
+                for(var j = 0; j < JSON.parse(res).length; ++j) {
                     productTable[index].sizes.push(JSON.parse(res)[j]);
                 }
-                productTable[index].rows.forEach(function(row) {
-                    for(var h = 0; h < productTable[index].sizes.length; ++h) {
-                        if(productTable[index].sizes[h].SizeMapID == row.initialSize) {
-                            row.currentSize = productTable[index].sizes[h];
+                productTable[index].rows.forEach(function (row) {
+                    if(row.initialSize) {
+                        for (var h = 0; h < productTable[index].sizes.length; ++h) {
+                            if (productTable[index].sizes[h].SizeMapID == row.initialSize) {
+                                row.currentSize = productTable[index].sizes[h];
+                            }
                         }
                     }
                 });
-
-                if(i < productTable[model.productIDList[i]].sizes.length - 1) {
+                if(i < productTable[model.productIDList[i]].sizes.length) {
                     editCartItems.getSizeByProductID(i + 1);
                 } else {
                     editCartItems.populateList();
@@ -107,6 +114,7 @@ var editCartItems = {
             .appendTo(inventory_container);
 
         var j = 0;
+
         productTable.forEach(function(product) {
 
             editCartItems.carts = [];
@@ -117,16 +125,16 @@ var editCartItems = {
                 .appendTo(itemList);
             $(document.createElement("hr")).appendTo(cart.cartItem);
             cart.productName = $(document.createElement("span"))
-                .text(product[0].name)
+                .text(product.productName)
                 .appendTo(cart.cartItem);
             cart.totalQuantity = $(document.createElement("span"))
-                .text(product[0].totalQuantity)
+                .text(product.totalQuantity)
                 .addClass("float_right total_quantity")
                 .appendTo(cart.cartItem);
             $(document.createElement("br")).appendTo(cart.cartItem);
             cart.editButton = $(document.createElement("button"))
-                .text("Edit")
-                .attr("onclick", 'editCartItems.editItem(' + j + ')');
+                .text(product.editing ? "Done" : "Edit")
+                .attr("onclick", 'editCartItems.editItem(' + product.productID + ')');
             cart.editButton.appendTo(cart.cartItem);
             cart.optionsContainer = $(document.createElement("div"))
                 .appendTo(cart.cartItem);
@@ -134,7 +142,7 @@ var editCartItems = {
             cart.itemRows = [];
             cart.editRows = [];
 
-            for(var i = 1; i < product.length; ++i) {
+            for(var i = 0; i < product.rows.length; ++i) {
                 var row = {};
                 var editRow = {};
                 row.optionsRow = $(document.createElement("div"))
@@ -144,28 +152,27 @@ var editCartItems = {
                     .appendTo(cart.cartItem);
 
                 row.size = $(document.createElement("span"))
-                    .text(product[i].SizeName)
+                    .text(product.rows[i].currentSize.Name)
                     .addClass("float_left size")
                     .appendTo(row.optionsRow);
                 editRow.size = $(document.createElement("select"))
-                    .attr("id", "select" + i)
                     .addClass("float_left size");
-                var szs = productTable[product[0].productID].sizes;
-                //TODO: This is broken because size isn't good.  use model
-                for(var k = 1; k < szs.length; ++k) {
+                var sizes = productTable[product.productID].sizes;
+                for(var k = 0; k < sizes.length; ++k) {
                     var option = $(document.createElement("option"))
-                        .attr("size", szs[k].Size)
-                        .attr("name", szs[k].Name)
-                        .text(szs[k].Name);
+                        .data("size", sizes[k])
+                        .attr("name", sizes[k].Name)
+                        .text(sizes[k].Name);
                     editRow.size.append(option);
                 }
-                editRow.size.val(product[i].SizeName);
-                console.log(product[i].SizeName);
+                editRow.size.val(product.rows[i].currentSize.Name);
                 editRow.size.appendTo(editRow.optionsRow);
-                editRow.size.change(editRow.rowTotal, function(event) {
-                    console.log($("#select1 option:selected").attr("size"));
-                    //TODO: use this to set rowTotal
-
+                editRow.size.change({row: product.rows[i], newSize: editRow.size}, function(event) {
+                    var size = $(this).find('option:selected').data().size;
+                    event.data.row.currentSize = size;
+                    event.data.row.initialSize = false;
+                    event.data.row.dirty = true;
+                    editCartItems.populateList();
                 });
 
                 $(document.createElement("span"))
@@ -178,13 +185,19 @@ var editCartItems = {
                     .appendTo(editRow.optionsRow);
 
                 row.quantity = $(document.createElement("span"))
-                    .text(product[i].BatchCount)
+                    .text(product.rows[i].quantity)
                     .addClass("float_left package_count")
                     .appendTo(row.optionsRow);
                 editRow.quantityBox = $(document.createElement("input"))
                     .attr("type", "text")
                     .addClass("float_left num_entry")
-                    .val(product[i].BatchCount)
+                    .val(product.rows[i].quantity)
+                    .change({row: product.rows[i]}, function(event) {
+                        var newVal = $(this).val();
+                        event.data.row.quantity = newVal;
+                        event.data.row.dirty = true;
+                        editCartItems.populateList();
+                    })
                     .appendTo(editRow.optionsRow);
 
                 $(document.createElement("span"))
@@ -197,64 +210,87 @@ var editCartItems = {
                     .appendTo(editRow.optionsRow);
 
                 row.rowTotal = $(document.createElement("span"))
-                    .text(product[i].Total)
+                    .text(product.rows[i].currentSize.Size * product.rows[i].quantity)
                     .addClass("float_left row_total")
                     .appendTo(row.optionsRow);
                 editRow.rowTotal = $(document.createElement("span"))
-                    .text(product[i].Total)
+                    .text(product.rows[i].currentSize.Size * product.rows[i].quantity)
                     .addClass("float_left row_total")
                     .appendTo(editRow.optionsRow);
 
                 row.color = $(document.createElement("span"))
-                    .text("Run Color: " + product[i].Marker)
+                    .text("Run Color: " + product.rows[i].color)
                     .addClass("float_right run_color")
                     .appendTo(row.optionsRow);
                 editRow.color = $(document.createElement("span"))
-                    .text("Run Color: " + product[i].Marker)
+                    .text("Run Color: " + product.rows[i].color)
                     .addClass("float_right run_color unimplemented")
                     .appendTo(editRow.optionsRow);
 
 
                 row.location = $(document.createElement("span"))
-                    .text("Location: " + product[i].Location)
+                    .text("Location: " + product.rows[i].location)
                     .addClass("float_right location")
                     .appendTo(row.optionsRow);
                 editRow.location = $(document.createElement("span"))
-                    .text("Location: " + product[i].Location)
+                    .text("Location: " + product.rows[i].location)
                     .addClass("float_right location unimplemented")
                     .appendTo(editRow.optionsRow);
                 $(document.createElement("br")).appendTo(row.optionsRow);
+
+                if(product.editing) {
+                    row.optionsRow.hide();
+                    editRow.optionsRow.show();
+                } else {
+                    row.optionsRow.show();
+                    editRow.optionsRow.hide();
+                }
                 cart.itemRows.push(row);
                 cart.editRows.push(editRow);
             }
             itemList.append(cart.cartItem);
-            console.log("in method cart: " + cart);
-        })
+        });
         inventory_container.append(itemList);
     },
 
-    //updateTotals: function
-
     editItem: function(index) {
-        var cart = this.carts[index];
 
-        if(cart.editButton.text() == "Done") {
-            cart.editButton.text("Edit");
-            cart.itemRows.forEach(function(row) {
-                row.optionsRow.show();
-            })
-            cart.editRows.forEach(function(editRow){
-                editRow.optionsRow.hide();
-            })
-        } else {
-            cart.editButton.text("Done");
-            cart.editRows.forEach(function(editRow){
-                editRow.optionsRow.show();
-            })
-            cart.itemRows.forEach(function(row) {
-                row.optionsRow.hide();
-            })
+        var product = editCartItems.model.products[index];
+        product.editing = !product.editing;
+
+        if(!product.editing) {
+            editCartItems.submitDirtyItems(product);
         }
         editCartItems.populateList();
+    },
+
+    submitDirtyItems: function(product) {
+        for(var i = 0; i < product.rows.length; ++i) {
+            if (product.rows[i].dirty) {
+                var row = product.rows[i];
+                var cartID = editCartItems.cartID;
+                var cartItemID = row.cartItemID;
+                var sizeMapID = row.currentSize.SizeMapID;
+                var quantity = row.quantity;
+                var runID = row.runID;
+                $.get(window.apiRoute + "/Carts/EditCartItem/"
+                    + cartID + '/'
+                    + cartItemID + '/'
+                    + sizeMapID + '/'
+                    + quantity + '/'
+                    + runID + '/'
+                    ,function (res) {
+                        if (res && res.length) {
+                            console.log("RESULTS: ");
+                            console.log(JSON.parse(res));
+                        } else {
+                            $("#response").text("Error: EditCartItems.init: No response.");
+                        }
+                    }).fail(function (res) {
+                        $("#response").text("Error: EditCartItems.init: Connection error.");
+                    });
+
+            }
+        }
     }
 }
