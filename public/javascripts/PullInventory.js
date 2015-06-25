@@ -90,8 +90,8 @@ function SelectOnchange(dropdown)
     }
     else
     {
-        var sizeDiv = document.getElementById("AddNewSize")
-        sizeDiv.style.visibility = "collapse";
+        $("#AddNewSize").hide();
+
     }
 
     ReCalculate();
