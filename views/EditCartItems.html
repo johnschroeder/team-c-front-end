@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Add Inventory</title>
+    <link rel="stylesheet" href="stylesheets/display.style.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/EditCartItems.js"></script>
+    <style>
+        .float_left {
+            display: inline-block;
+            padding-top: 5px;
+            float: left;
+        }
+        .float_right {
+            display: inline-block;
+            padding-top: 5px;
+            float: right;
+        }
+        .size {
+            white-space: nowrap;
+            width: 20%;
+        }
+        .operator{
+            text-align: center;
+            width: 10px;
+            white-space: nowrap;
+        }
+        .package_count {
+            white-space: nowrap;
+            text-align: center;
+            width: 8%;
+        }
+        .row_total {
+            white-space: nowrap;
+            text-align: center;
+            width: 40px;
+        }
+        .run_color {
+            white-space: nowrap;
+            text-align: right;
+            width: 30%;
+        }
+        .location {
+            white-space: nowrap;
+            text-align: right;
+            width: 30%;
+        }
+        .hider {
+            visibility:hidden;
+        }
+        .shower {
+            visibility:visible;
+        }
+        .num_entry {
+            text-align: center;
+            height:25px;
+            white-space: nowrap;
+            width: 8%;
+        }
+    </style>
+</head>
+
+<body>
+<h3>Edit Cart: <span id="cart_name"></span></h3>
+</div>
+
+<div class="inventory-container"></div>
+<div id="response"></div>
+<script>editCartItems.init()</script>
+</body>
+</html>
