@@ -10,28 +10,28 @@ $(document).ready(function () {
 
     });
 
-    $( '.show-mobile-menu').on( 'touchend click', function( event ){
+    $('.show-mobile-menu').on('touchend click', function (event) {
 
         event.preventDefault();
 
-        var nav_vert = $( '#nav_vert' );
+        var nav_vert = $('#nav_vert');
 
-        if( nav_vert.css( 'display' ) == 'none' ) {
-            nav_vert.css( 'display', 'block' );
-            $( this).text( "^" );
+        if (nav_vert.css('display') == 'none') {
+            nav_vert.css('display', 'block');
+            $(this).text("^");
         }
-        else{
-            nav_vert.css( 'display', 'none' );
-            $( this).text( "V" );
+        else {
+            nav_vert.css('display', 'none');
+            $(this).text("V");
         }
 
     });
 
-    $( '.subbutton' ).on( 'touchend click', function( event ){
+    $('.subbutton').on('touchend click', function (event) {
         event.preventDefault();
 
-        if( $('.show-mobile-menu').css( 'display' ) != 'none' && $( '#nav_vert').css( 'display' ) != 'none' )
-            $( '#nav_vert').css( 'display', 'none' );
+        if ($('.show-mobile-menu').css('display') != 'none' && $('#nav_vert').css('display') != 'none')
+            $('#nav_vert').css('display', 'none');
     });
 });
 
@@ -56,6 +56,10 @@ function PullInventory(){
 
 function ViewCarts(){
     navigation.go("ViewCarts.html");
+}
+
+function EditCart() {
+    navigation.go("EditCart.html")
 }
 
 function EditInventory(){
