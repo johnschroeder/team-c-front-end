@@ -15,6 +15,8 @@ function init() {
     //console.log("Total Quantity: " + totalQuantity);
     //console.log("Previous Page" + previousPage);
     $('#ProductName').text(productName);
+    $('#AvailableAmout').text(totalQuantity);
+
 
     //add dropdown options to select
     var selectEle = document.getElementById("InputDiv").firstElementChild.childNodes[1];
@@ -79,6 +81,10 @@ function ReCalculate()
         $(this).find('.Subtotal').text(subtotal);
     });
     $('#TotalInventory').text(total);
+
+    var productTotal = window.args.TotalQuantity;
+    if(total>productTotal)
+        alert("There is not enough inventory to fullfill this pull. Current total inventory is "+productTotal);
 }
 
 function SelectOnchange(dropdown)
@@ -300,5 +306,6 @@ function ChooseExistingCart(){
 
     $('#slCart').empty();
     $("#divSelectCart").hide();
+    alert("Items added to cart ");
 
 }
