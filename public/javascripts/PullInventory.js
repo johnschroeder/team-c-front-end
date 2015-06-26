@@ -259,9 +259,6 @@ function SubmitNewCart()
             $('#sltAssignee').empty();
             $('#divNewCart').hide();
             AddToExistingCart();
-            $("#slCart option").filter(function() {
-                return $(this).text() == cartName;
-            }).attr('selected', true);
         }
     });
 
@@ -273,15 +270,20 @@ function AddOneItemToCart(cID,smID,qty) {
         if (resp && resp.length) {
             var msg = resp.split('####', 2)[0];
             if(msg.trim()=='Success')
-                return;
+                return msg;
             else{
                 $("#response").text(msg);
+                return msg;
             }
         } else {
+            var msg="Error: Init: No response.";
             $("#response").text("Error: Init: No response.");
+            return msg;
         }
     }).fail(function(res) {
+        var msg="Error: Init: Connection error.";
         $("#response").text("Error: Init: Connection error.");
+        return msg;
     });
 
 
@@ -289,6 +291,13 @@ function AddOneItemToCart(cID,smID,qty) {
 
 
 function ChooseExistingCart(){
+    var availableAmount =parseInt($('#AvailableAmout').text());
+    var currentTotal = parseInt($('#TotalInventory').text());
+    if(availableAmount<currentTotal) {
+        alert("There is not enough inventory to pull. Please Update Pull Amount");
+        return;
+    }
+
     $('#InputDiv').children('.InputChild').each(function () {
         var subtotal = 0;
         var sizeMapID = $(this).find('.Size').find('option:selected').val();
@@ -296,10 +305,12 @@ function ChooseExistingCart(){
         if(sizeMapID>0)
         {
             var count = $(this).find('.Count').val();
-            console.log(sizeMapID);
-            console.log(count);
-            console.log(cartID);
-            AddOneItemToCart(cartID,sizeMapID,count);
+            var message = AddOneItemToCart(cartID,sizeMapID,count);
+            console.log(message);
+            if(message !='Success'){
+                alert(message);
+                return;
+            }
         }
 
     });
@@ -307,5 +318,7 @@ function ChooseExistingCart(){
     $('#slCart').empty();
     $("#divSelectCart").hide();
     alert("Items added to cart ");
+    navigation.go("DisplayInventory.html",
+        { PreviousPage: "PullInventory.html"});
 
 }
