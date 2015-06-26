@@ -14,7 +14,7 @@ function setCurrentValues() {
     var original_name_div = document.getElementById('original_cart_name');
     var name = window.args.cartName;
     original_name_div.innerHTML = "Editing Cart: " + name;
-    var host = "http://localhost:50001/Carts/GetAllCarts/"
+    var host = window.apiRoute + "/Carts/GetAllCarts/";
     var carts;
     var cartIndex = 0;
 
