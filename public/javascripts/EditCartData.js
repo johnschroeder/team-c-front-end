@@ -58,7 +58,7 @@ function CartDataEdit(cartID) {
     var newReporter = $(".Reporter").val();
     var newAssignee = $(".Assignee").val();
     var newDate = $(".Date").val();
-    var host = 'http://localhost:50001/Carts/EditCart/' + cartID + '/' + '"' + newCartName.trim() + '"' + "/" + '"' + newReporter.trim() + '"' + "/" + '"' + newAssignee.trim() + '"' + "/" + '"' + newDate.trim() + '"';
+    var host = windows.apiRoute + '/Carts/EditCart/' + cartID + '/' + '"' + newCartName.trim() + '"' + "/" + '"' + newReporter.trim() + '"' + "/" + '"' + newAssignee.trim() + '"' + "/" + '"' + newDate.trim() + '"';
     sendRequest(host, function () {
         if (dispReq.readyState == 4 && dispReq.status == 200) {
             console.log("Success!");
