@@ -5,10 +5,11 @@ var state = window.state;
 function populateByCartId(){
     //TODO when function runs we need to make sure that if there is a state.nameSelected that it is put in the selected option on run.
     //TODO when users is able to be gotten dynamicly, change "don" to + userid; so it grabs the carts for the user
-    $.get(window.apiRoute + "/Carts/GetCartsByUser/don", function(res) {
+    var user = 'don';
+    $.get(window.apiRoute + "/Carts/GetCartsByUser/" + user, function(res) {
         if(res && res.length) {
             var dropSelect = document.getElementById("selectDropDown");
-            var results = JSON.parse(res)[0];
+            var results = JSON.parse(res);
 
             for(var i = 0; i < results.length; i++ ) {
                 var option = document.createElement("option");
