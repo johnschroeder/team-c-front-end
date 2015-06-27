@@ -3,113 +3,97 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Current Inventory</title>
-    <script src="javascripts/QueryStringHelper.js"></script>
-    <script src="javascripts/DetailViewButtons.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <style>
+        .thumbnail {
+            width: 128px;
+            height: 128px;
+            background-color: red;
+            margin-right: 24px;
+        }
+    </style>
 </head>
 
 <body>
-<div class="item-detail-view-container">
-
-    <div class="detail_view_buttons">
-
-        <div class="detail_view">
-            <button id="Add" onclick="Add()">Add</button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="thumbnail unimplemented">Thumbnail</div>
         </div>
 
-        <div class="detail_view">
-            <button id="Pull" onclick="Pull()">Pull</button>
+        <div id="details" class="col-sm-8">
         </div>
-
-        <div class="detail_view">
-            <button id="Edit" onclick="Edit()">Edit</button>
-        </div>
-
+    </div>
+    <br/>
+    <div id="buttons" class="row">
+        <button class="col-sm-2" onclick="itemDetailView.add()">Add</button>
+        <button class="col-sm-2" onclick="itemDetailView.pull()">Pull</button>
+        <button class="col-sm-2" onclick="itemDetailView.edit()">Edit</button>
     </div>
 
-        <div class="item-container"></div>
+    <br/><hr/><br/>
+
+    <div id="history" class="row">
+        History
     </div>
 
-
+    <div id="error_message"></div>
+</div>
 <script>
-    var $ = jQuery;
-
-    var detailView = {
-
-        host: "http://localhost:50001/itemDetail/",
+    var itemDetailView = {
         productID: null,
         productName: "",
+        item: null,
 
-        getParameterByName: function(name) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                    results = regex.exec(location.search);
-            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        },
+        init: function() {
+            this.productID = window.args.ProductID;
 
-        init: function( inputProdID ) {
             var self = this;
 
-            this.productID = inputProdID || this.getParameterByName("prodid") || null;
-
-            if (this.productID === null) {
-                if (window.args && window.args.ProductID) {
-                    this.productID = window.args.ProductID;
+            $.get(window.apiRoute + "/itemDetail/" + this.productID, function(response) {
+                if(response && response.length) {
+                    self.item = jQuery.parseJSON(response)[0];
+                    //console.log(self.item);
+                    self.displayItem();
+                    self.productName = self.item.Name;
+                } else {
+                    self.renderError("No inventory found");
                 }
-            }
-
-            if (this.productID === null) return;
-
-            $.get( this.host.concat(this.productID).concat('/'), function( response ) {
-
-                if( response && response.length ){
-
-                    self.item = jQuery.parseJSON( response );
-                    console.log(self.item);
-                    self.display_item();
-                    self.productName = self.item[0].Name;
-
-                }
-                else {
-
-                    self.render_error( "No inventory found" );
-                }
-
-            }).fail( function( response ){
-
-                self.render_error( "Failed to load inventory: " + response );
-
+            }).fail(function(response) {
+                self.renderError("Failed to load inventory: " + response );
             });
-
         },
 
-        display_item: function() {
-            var productID = this.getParameterByName("prodid");
-            var item_container = $( '.item-container' );
-            var item = this.item[0];
-            var inventory_item = "<div class='inventory-item'>";
-
-            inventory_item += "<div id=\"productName\"><span id=\'productNameSpan\'>"
-                                + item.Name + "</span></div>";
-            inventory_item += "<div id=\"totalQuantity\">Total Quantity: <span id=\'totalQuantitySpan\'>"
-                                + item.total + "</span></div>";
-            inventory_item += "<div id=\"mostRecentRun\">Last run: <span id=\'totalQuantitySpan\'>"
-                                + item.mostRecent + "</span></div>";
-            inventory_item += "<div id=\"productID\" style=\"display: none;\"><span id=\'productIDSpan\'>"
-                                + productID + "</span></div>";
-            inventory_item += "</div>";
-
-            item_container.append( inventory_item );
+        displayItem: function() {
+            $("#details").append("<div><h1>" + this.item.Name + "</h1></div>" +
+                    "<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
+                    "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
+                    "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
         },
 
-        render_error: function( error ) {
-            $( 'body').prepend( "<div class='error-message'>" + error + "</div>" );
+        renderError: function(error) {
+            $("#error_message").text(error);
+        },
+
+        add: function() {
+            navigation.go("AddInventory.html", {ProductID:itemDetailView.productID, ProductName:itemDetailView.productName, PreviousPage:"ItemDetailView.html"});
+        },
+
+        pull: function() {
+            navigation.go("PullInventory.html", {ProductID:itemDetailView.productID, ProductName:itemDetailView.productName, PreviousPage:"ItemDetailView.html"});
+        },
+
+        edit: function() {
+            navigation.go("EditProduct.html", {ProductID:itemDetailView.productID, ProductName:itemDetailView.productName, PreviousPage:"ItemDetailView.html"});
         }
     };
 
-    if (detailView.productID === null) {
-        detailView.init();
-    }
+    $(function() {
+        itemDetailView.init();
+    });
 </script>
 </body>
 </html>
->

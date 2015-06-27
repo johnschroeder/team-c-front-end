@@ -197,9 +197,12 @@
                     evt.preventDefault();
 
                     var product_id = $( this).data( 'id' );
-                    $('#main_cont').load('ItemDetailView.html', function(){
+
+                    navigation.go("ItemDetailView.html", {ProductID:product_id, PreviousPage:"DisplayInventory.html"});
+
+                    /*$('#main_cont').load('ItemDetailView.html', function(){
                         detailView.init( product_id );
-                    });
+                    });*/
 
                 });
             }
