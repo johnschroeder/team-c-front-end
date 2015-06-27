@@ -46,7 +46,11 @@ function Home(){
     navigation.go("Home.html");
 }
 
-function ChangeIventory(){
+function loginPage() {
+    navigation.go("loginForm.html");
+}
+
+function ChangeInventory() {
     navigation.go('ChangeInventory.html');
 }
 
