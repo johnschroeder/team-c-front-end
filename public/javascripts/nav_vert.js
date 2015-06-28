@@ -46,46 +46,20 @@ function Home(){
     navigation.go("Home.html");
 }
 
-function ChangeIventory(){
-    navigation.go('ChangeInventory.html');
-}
-
-function PullInventory(){
-    navigation.go("PullInventory.html")
-}
-
+//
 function ViewCarts(){
     navigation.go("ViewCarts.html");
 }
 
-function EditCart() {
-    navigation.go("EditCart.html")
-}
-
-function EditInventory(){
-    $('#main_cont').text("EditInvetory");
-}
-
 function AddProduct(){
-    $('#main_cont').text("AddProduct");
-}
-
-function EditProduct(){
-    navigation.go("EditProduct.html");
-}
-
-function DeleteProduct(){
-    $('#main_cont').text("DeleteProduct");
-}
-
-function ViewProducts(){
-    $('#main_cont').text("ViewProducts");
+    navigation.go("NewProduct.html");
 }
 
 function DisplayInventories(){
     navigation.go("DisplayInventory.html");
 }
 
+// Reports
 function PreDefinedReports(){
     $('#main_cont').text("PreDefinedReports");
 }
@@ -94,6 +68,7 @@ function MakeMyOwnReport(){
     $('#main_cont').text("MakeMyOwnReport");
 }
 
+// Administrator
 function Audit(){
     $('#main_cont').text("Audit");
 }
