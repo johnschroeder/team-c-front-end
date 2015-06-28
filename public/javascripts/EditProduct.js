@@ -2,12 +2,12 @@ var editProduct = {
     product: null,
     editing: false,
     ready: false,
+
     init: function() {
         //TODO use john's breadcrumb loader to load a new page here populated with the data.
+        $("#item_name").text(window.args.ProductName);
 
         var self = this;
-
-        $("#item_name").text(window.args.ProductName);
 
         $.get(window.apiRoute + "/EditProduct/" + window.args.ProductID , function(res) {
             self.product = $.parseJSON(res)[0];
@@ -25,8 +25,6 @@ var editProduct = {
     edit: function() {
         if (!this.ready) return;
 
-        var self = this;
-
         $("#customer_text").addClass("hidden");
         $("#product_name_text").addClass("hidden");
         $("#description_text").addClass("hidden");
@@ -35,7 +33,8 @@ var editProduct = {
         $("#product_name_input").removeClass("hidden");
         $("#description_input").removeClass("hidden");
 
-        $("#edit_button").text("Done").attr("onclick", "editProduct.done()");
+        $("#edit_button").text("Done")
+            .attr("onclick", "editProduct.done()");
     },
 
     done: function() {
@@ -43,10 +42,9 @@ var editProduct = {
         var newProdName  = $("#product_name_input").val();
         var newDescript  = $("#description_input").val();
 
-        $("#customer_text").addClass("hidden");
-        $("#product_name_text").addClass("hidden");
-        $("#description_text").addClass("hidden");
+        $("#edit_button").prop("disabled", true);
 
+        // Temporarily disabled
         //$.get(window.apiRoute + "/reSubmit/" + self.product.ProductId + "/" + newCustName +"/" + newProdName + "/" + newDescript, function() {
             console.log("Success!");
 
@@ -54,11 +52,18 @@ var editProduct = {
             $("#product_name_input").addClass("hidden");
             $("#description_input").addClass("hidden");
 
-            $("#customer_text").text(newCustName).removeClass("hidden");
-            $("#product_name_text").text(newProdName).removeClass("hidden");
-            $("#description_text").text(newDescript).removeClass("hidden");
+            $("#customer_text").text(newCustName)
+                .removeClass("hidden");
 
-            $("#edit_button").text("Edit").attr("onclick", "editProduct.edit()");
+            $("#product_name_text").text(newProdName)
+                .removeClass("hidden");
+
+            $("#description_text").text(newDescript)
+                .removeClass("hidden");
+
+            $("#edit_button").text("Edit")
+                .attr("onclick", "editProduct.edit()")
+                .prop("disabled", false);
         //});
     }
 };
