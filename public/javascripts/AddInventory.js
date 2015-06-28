@@ -28,6 +28,7 @@ var addInventory = {
             $("#response").text("Error: Init: Connection error.");
         });*/
 
+        this.addEntry();
         this.updatePackageTypes();
     },
 
@@ -45,7 +46,7 @@ var addInventory = {
 
         // package type input
         var select = $(document.createElement("select"))
-            .addClass("col-sm-3")
+            .addClass("col-sm-4")
             .attr("name", "package_input")
             .attr("onchange", "addInventory.updateTotal()");
 
@@ -62,7 +63,7 @@ var addInventory = {
                 .attr("type", "text")
                 .attr("onkeyup", "addInventory.updateTotal()")
             ).append($(document.createElement("div"))
-                .addClass("col-sm-2 text-center")
+                .addClass("col-sm-1 text-center")
                 .text("=")
             ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
@@ -181,14 +182,16 @@ var addInventory = {
             return;
         }
 
+        $("#inventory_add_button").prop("disabled", true);
+
         $.get(window.apiRoute + "/AddInventory/" + productId + "/" + total + "/" + location, function(res) {
+            addInventory.reset();
             $("#response").text("Added inventory: " + total + " at " + location + ".");
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
             $("#response").text("Error: Submit add inventory: Connection error.");
+            $("#inventory_add_button").prop("disabled", false);
         });
-
-        addInventory.reset()
     },
 
     // Submit new package type
@@ -202,11 +205,17 @@ var addInventory = {
             return;
         }
 
+        $("#pkg_add_button").prop("disabled", true);
+
         $.get(window.apiRoute + "/AddProductSize/" + productId + "/" + name + "/" + size, function(res) {
             $("#response").text("Added new package type: " + name + " " + size + ".");
             addInventory.updatePackageTypes();
+            $("#pkg_name").val("");
+            $("#pkg_size").val("");
+            $("#pkg_add_button").prop("disabled", false);
         }).fail(function(res) {
             $("#response").text("Error: Submit new package type: Connection error.");
+            $("#pkg_add_button").prop("disabled", false);
         });
     }
 };
