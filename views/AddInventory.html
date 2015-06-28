@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Add Inventory</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/AddInventory.js"></script>
 </head>
-
 <body>
     <div class="container-fluid">
-        <div class="row">
-            <h1 class="col-sm-12">Add Inventory</h1>
-        </div>
-
-        <div class="row">
-            <h2 class="col-sm-12">Item: <span id="item_text"></span></h2>
-        </div>
-
-        <div id="add_list">
-        </div>
+        <h1>Add Inventory</h1>
+        <h2>Item: <span id="item_name"></span></h2>
+        <hr/>
+        <div id="add_list"></div>
 
         <div class="row">
             <div class="col-sm-offset-8 col-sm-2">Total</div>
@@ -38,9 +31,8 @@
         <br/>
 
         <div class="row">
-            <div class="col-sm-4">
-                Location <input id="location_input"></input>
-            </div>
+            <div>Location:</div>
+            <input id="location_input" class="col-sm-4"></input>
         </div>
 
         <br/>
@@ -55,10 +47,10 @@
 
         <div class="row">
             <div class="col-sm-4">
-                Name <input id="pkg_name" type="text"></input>
+                Name: <input id="pkg_name" type="text"></input>
             </div>
             <div class="col-sm-4">
-                Size <input id="pkg_size" type="text"></input>
+                Size: <input id="pkg_size" type="text"></input>
             </div>
         </div>
 

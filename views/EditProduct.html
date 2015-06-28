@@ -1,58 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Edit Product</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/EditProduct.js"></script>
+    <style>
+        .thumbnail {
+            width: 128px;
+            height: 128px;
+            background-color: red;
+        }
+    </style>
 </head>
-<div class="new-product-form">
-    <h1>Edit Product</h1>
+<body>
+    <div class="container-fluid">
+        <h1>Edit Product</h1>
+        <h2>Item: <span id="item_name"></span></h2>
+        <hr/>
+        <div id="customer" class="row">
+            <div>Customer:</div>
+            <div id="customer_text" class="col-sm-12"></div>
+            <input id="customer_input" class="col-sm-12 hidden" type="text"/>
+        </div>
 
-    <div>
-        <strong>Editing ProductID: </strong>
-        <strong class="selectedID"></strong>
-    </div>
-    <div class="input-row">
-        <div class="input-label">Customer</div>
-        <textarea class="customer" rows="1" type="textarea"> </textarea>
-    </div>
+        <br/>
 
-    <div class="input-row">
-        <div class="input-label">Item Name</div>
-        <textarea class="product-name" type="textarea" rows="1"></textarea>
-    </div>
+        <div id="product_name" class="row">
+            <div>Item Name:</div>
+            <div id="product_name_text" class="col-sm-12"></div>
+            <input id="product_name_input" class="col-sm-12 hidden" type="text"/>
+        </div>
 
-    <div class="input-row">
-        <div class="input-label">Description</div>
-        <textarea class="description" rows="4" cols="50"></textarea>
-    </div>
+        <br/>
 
-    <!-- TODO add api route to store the image that is uploaded into s3 -->
-    <div class="input-row">
-        <div class="input-label">Image</div>
-        <div class="upload-button">Upload Different Image</div>
-    </div>
+        <div id="description" class="row">
+            <div>Description:</div>
+            <div id="description_text" class="col-sm-12"></div>
+            <textarea id="description_input" class="col-sm-12 hidden" rows="4"/>
+        </div>
 
-    <div class="input-row external-id-input unimplemented">
-        <span class="input-label">External ID</span>
-        <input type="text">
-        <span class="input-label">External System</span>
-        <input type="text">
-    </div>
+        <br/>
 
-    <div class="input-row external-id-input">
-        <span class="input-label">External ID</span>
-        <input type="text">
-        <span class="input-label">External System</span>
-        <input type="text">
-    </div>
+        <!-- TODO add api route to store the image that is uploaded into s3 -->
+        <div class="row">
+            <div>Image:</div>
+            <div class="col-sm-3">
+                <div class="thumbnail unimplemented">Thumbnail</div>
+            </div>
+            <button class="col-sm-4">Upload Different Image</button>
+        </div>
 
-    <div class="input-row">
-        <div class="submit" onclick="editProduct.reSubmit()">Done Editing</div>
+        <br/>
+
+        <div class="row unimplemented">
+            <div>External ID:</div>
+            <input class="col-sm-12" type="text"/>
+        </div>
+
+        <br/>
+
+        <div class="row unimplemented">
+            <div>External System:</div>
+            <input class="col-sm-12" type="text"/>
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <div>External ID:</div>
+            <input class="col-sm-12" type="text"/>
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <div>External System:</div>
+            <input class="col-sm-12" type="text"/>
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <button id="edit_button" class="col-sm-4" onclick="editProduct.edit()">Edit</button>
+        </div>
     </div>
 
     <script>
@@ -60,6 +94,5 @@
             editProduct.init();
         });
     </script>
-
-</div>
+</body>
 </html>

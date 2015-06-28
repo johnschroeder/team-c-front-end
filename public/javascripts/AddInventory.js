@@ -15,12 +15,12 @@ var addInventory = {
         }
 
         this.itemName = window.args.ProductName || "";
-        $("#item_text").text(this.itemName);
+        $("#item_name").text(this.itemName);
 
         /*$.get(window.apiRoute + "/GetItemName/" + this.productId, function(res) {
             if (res && res.length) {
                 addInventory.itemName = $.parseJSON(res)[0].Name;
-                $("#item_text").text(addInventory.itemName);
+                $("#item_name").text(addInventory.itemName);
             } else {
                 $("#response").text("Error: Init: No response.");
             }

@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<p>
+<html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>
-        Pull Inventory
-    </title>
+    <title>Pull Inventory</title>
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/PullInventory.js"></script>
 </head>
 <body>
+    <h1>Pull Inventory</h1>
+    <h2>Item: <span id="ProductName"></span></h2>
+    <hr/>
+    <span>Available Amount</span>
+    <label id="AvailableAmout"></label>
 
-    <p>
-        <label>Pull Inventory</label>
-        <div id="ProductName"></div>
-        <span>Available Amount</span>
-        <label id="AvailableAmout"></label>
-        </p>
-        <span>Total quantity in this Pull</span>
-        <label id="TotalInventory"></label>
-    </h1>
+    <br/>
+
+    <span>Total quantity in this Pull</span>
+    <label id="TotalInventory"></label>
+
     <div id="response"></div>
 
     <div id="InputDiv">
