@@ -12,7 +12,6 @@
             width: 128px;
             height: 128px;
             background-color: red;
-            margin-right: 24px;
         }
     </style>
 </head>
@@ -20,8 +19,8 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <br/>
-        <div class="col-sm-4">
+        <h1 id="product_name" class="col-sm-12"></h1>
+        <div class="col-sm-3">
             <div class="thumbnail unimplemented">Thumbnail</div>
         </div>
 
@@ -35,10 +34,19 @@
         <button class="col-sm-2" onclick="itemDetailView.edit()">Edit</button>
     </div>
 
-    <br/><hr/><br/>
+    <br/><hr/>
 
-    <div id="history" class="row">
-        History
+    <div class="row">
+        <h2>Timeline</h2>
+    </div>
+
+    <div class="row">
+        <select class="col-sm-2">
+            <option>All</option>
+            <option>Runs</option>
+            <option>Pulls</option>
+            <option>Changes</option>
+        </select>
     </div>
 
     <div id="error_message"></div>
@@ -69,8 +77,8 @@
         },
 
         displayItem: function() {
-            $("#details").append("<div><h1>" + this.item.Name + "</h1></div>" +
-                    "<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
+            $("#product_name").text(this.item.Name);
+            $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
                     "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
                     "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
         },
