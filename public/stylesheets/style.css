@@ -112,7 +112,7 @@ h1 {
 }
 
 /* Change the color/bg color when the button is hovered or clicked */
-.vertical-nav-bar li button:hover, #nav li a.active {
+li button.active {
   background: #999;
   color: #fff;
 }

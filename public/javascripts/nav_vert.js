@@ -27,7 +27,7 @@ $(document).ready(function () {
 
     });
 
-    $('.subbutton').on('touchend click', function (event) {
+    $('#nav_vert .action-button').on('touchend click', function (event) {
         event.preventDefault();
 
         if ($('.show-mobile-menu').css('display') != 'none' && $('#nav_vert').css('display') != 'none')
