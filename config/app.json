@@ -5,7 +5,7 @@
         "debug": true
     },
     "dev":{
-        "api":"http://dev.thisisimp.com/api/",
+        "api":"http://dev.thisisimp.com/api",
         "debug": true
     },
     "prod":{
@@ -27,7 +27,7 @@
     "john":{
     },
     "mike":{
-        "api":"http://dev.thisisimp.com/api/"
+        "api":"http://localhost:50001"
     },
     "tim":{
 

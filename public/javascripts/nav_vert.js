@@ -46,12 +46,16 @@ function Home(){
     navigation.go("Home.html");
 }
 
+function CreateUser(){
+    navigation.go("CreateUser.html");
+}
+
 function ChangeIventory(){
     navigation.go('ChangeInventory.html');
 }
 
 function PullInventory(){
-    navigation.go("PullInventory.html")
+    navigation.go("PullInventory.html");
 }
 
 function ViewCarts(){
