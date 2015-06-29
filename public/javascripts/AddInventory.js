@@ -36,6 +36,7 @@ var addInventory = {
     // Reset the add inventory entries.
     reset: function() {
         $("#add_list").empty();
+        this.addEntry();
         this.updateTotal();
     },
 
