@@ -104,8 +104,18 @@ function populateCartContainer(items) {
     var cartList = $("<div/>")
         .appendTo(cartContainer);
 
+    var cartTitle = null;
+
     for (var i = 0; i < items.length; ++i) {
-        cartList.append(createItemEntry(items[i]));
+        if (!cartTitle || (cartTitle && cartTitle.text() != items[i].ProductName)) {
+            var separator = $("<hr/>");
+            cartTitle = $("<h2/>").text(items[i].ProductName);
+            cartList.append(separator);
+            separator.after(cartTitle);
+        }
+
+        var entry = createItemEntry(items[i])
+        cartList.append(entry);
     }
 }
 
@@ -120,7 +130,7 @@ function createItemEntry(item) {
 
     var cartItem = $("<div/>")
         .addClass("form-group")
-        .append($("<hr/>"))
+        //.append($("<hr/>"))
         .append($("<div/>")
             .addClass("row")
             .append($("<div/>")
@@ -154,6 +164,8 @@ function createItemEntry(item) {
                             .find(".done-button")
                                 .removeClass("hidden")
                             .end();
+
+                        updateEntryPackageTypeOptions(inputDiv.find(".package-select"), item.ProductID, inputDiv)
                     })
                     .text("Edit")
                 )
@@ -194,7 +206,7 @@ function createItemEntry(item) {
                 )
             )
         )
-        .append($("<div/>")
+        /*.append($("<div/>")
             .addClass("row")
             .append($("<div/>")
                 .addClass("col-sm-6 productName")
@@ -204,7 +216,7 @@ function createItemEntry(item) {
                 .addClass("col-sm-6 text-right")
                 .text(total)
             )
-        )
+        )*/
         .append($("<div/>")
             .addClass("row")
             .append(inputDiv
@@ -214,11 +226,19 @@ function createItemEntry(item) {
                     .append($("<div/>")
                         .addClass("package-text")
                         .text(item.PackageName + " of " + item.UnitsPerPackage)
+                        .attr("name", item.PackageName)
+                        .data("size", item.UnitsPerPackage)
                     )
                     .append($("<select/>")
                         .addClass("form-control hidden package-select")
                         .change(function() {
-                            // TODO update total
+                            var selected = inputDiv.find(".package-select option:selected");
+                            cartItem.find(".total-text").text(parseInt(selected.data("size")) * parseInt(inputDiv.find(".amount-input").val()));
+                            inputDiv.find(".package-text")
+                                .attr("name", selected.attr("name"))
+                                .data("size", selected.data("size"))
+                                .text(selected.val());
+
                             inputDiv.data("dirty", true);
                         })
                     )
@@ -238,7 +258,13 @@ function createItemEntry(item) {
                         .attr("type", "number")
                         .val(parseInt(item.NumPackages))
                         .change(function() {
-                            // TODO update total
+                            var selected = inputDiv.find(".package-select option:selected");
+                            cartItem.find(".total-text").text(parseInt(selected.data("size")) * parseInt(inputDiv.find(".amount-input").val()));
+                            inputDiv.find(".package-text")
+                                .attr("name", selected.attr("name"))
+                                .data("size", selected.data("size"))
+                                .text(selected.val());
+
                             inputDiv.data("dirty", true);
                         })
                     )
@@ -270,4 +296,33 @@ function handleDirtyInput(input) {
 
     // TODO post to route to update item
     console.log("Input is dirty.")
+}
+
+//Updates the options for the package types of a single entry.
+function updateEntryPackageTypeOptions(entry, productId, input) {
+    var packageTypes = null;
+    entry.empty();
+
+    $.get(window.apiRoute + "/GetSizeByProductID/" + productId, function(res) {
+        if (res && res.length) {
+            packageTypes = $.parseJSON(res);
+
+            packageTypes.forEach(function(each) {
+                $("<option/>")
+                    .text(each.Name + " of " + each.Size)
+                    .attr("name", each.Name)
+                    .data("size", each.Size)
+                    .appendTo(entry);
+            });
+
+            // Select the correct package type
+            var name = input.find(".package-text").attr("name");
+
+            input.find(".package-select option[name='" + name + "']").prop("selected", true);
+        } else {
+            $("#response").text("Error: Update package types: No response.");
+        }
+    }).fail(function(res) {
+        $("#response").text("Error: Update package types: Connection error.");
+    });
 }
