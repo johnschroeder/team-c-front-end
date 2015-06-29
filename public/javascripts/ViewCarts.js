@@ -24,21 +24,22 @@ function populateByCartId(){
             }
         }
         else {
-                $("#response").text("Error: Init: No response.");
-            }
-        }).fail(function(res) {
-             $("#response").text("Error: Init: Connection error.");
-        });
+            $("#response").text("Error: Init: No response.");
+        }
+    }).fail(function(res) {
+        $("#response").text("Error: Init: Connection error.");
+    });
 }
 
 function displayCartInventory(){
-    $(".inventory-container").empty();
-    var cartContainer = $(".inventory-container");
+    $("#inventory-container").empty();
+    var cartContainer = $("#inventory-container");
     var cartList = $(document.createElement("div"))
         .appendTo(cartContainer);
+
     console.log("nameselected:" + $("#selectDropDown :selected").text());
 
-    state.nameSelected =$("#selectDropDown :selected").text();
+    state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
 
@@ -58,21 +59,24 @@ function pullAll(){
     var name = $("#selectDropDown :selected").text();
     var cartName = prompt("Please confirm that -- " + name + " -- is the cart you want to pull by typing in the cart name.");
 
-    if(cartName == name){
-        $("#pullAllButton").text("Ship Cart!");
-        $("#pullAllButton").prop("onclick",null).off("click");
+    if(cartName == name) {
+        $("#pullAllButton")
+            .text("Ship Cart!")
+            .prop("onclick", null)
+            .off("click");
     }
 }
 function doNothing(){
-    $("#response").text("Shipment sent!")
-        .addClass("float_middle");
+    $("#response").text("Shipment sent!");
 }
+
 function gotoEditCarts(){
         state.nameSelected = $("#selectDropDown :selected").text();
         navigation.saveState(state);
         var idSelected = $("#selectDropDown :selected").val();
         navigation.go('EditCartData.html',{cartID: idSelected, cartName: state.nameSelected});
 }
+
 function gotoEditItems(){
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
@@ -81,55 +85,63 @@ function gotoEditItems(){
 }
 
 function populateCartContainer(items){
-    $(".inventory-container").empty();
-    var cartContainer = $(".inventory-container");
-    var cartList = $(document.createElement("div"))
+    var cartContainer = $("#inventory-container")
+        .empty();
+
+    var cartList = $("<div/>")
         .appendTo(cartContainer);
-    for(var i = 0; i < items.length; i++){
+
+    for(var i = 0; i < items.length; ++i) {
         var name = items[i].ProductName.toString();
         var total = items[i].Total.toString();
         var sName  = items[i].SizeName.toString() + " of " + items[i].CountPerBatch.toString() + " * " + items[i].BatchCount.toString()+  " = " + total;
-        var color = " Run Color/Marker  " + items[i].Marker.toString();
-        var location = "Location:  "+ items[i].Location.toString();
+        var color = "Run Color/Marker: " + items[i].Marker.toString();
+        var location = "Location: "+ items[i].Location.toString();
 
-        var cartItem = $(document.createElement("div"))
-            .appendTo(cartList);
-        $(document.createElement("hr"))
-            .appendTo(cartItem);
-        var pulledText = $(document.createElement("span"))
-            .text("Pulled")
-            .appendTo(cartItem);
-        var unPull = $(document.createElement("button"))
-            .text("Unpull Item")
-            .attr("onclick", "unPullButton(unPull,pulledText,cartItem)")
-            .addClass("float_right pull-button")
-            .appendTo(cartItem);
-        $(document.createElement("br"))
-            .appendTo(cartItem);
-        $(document.createElement("br"))
-            .appendTo(cartItem);
-        var productName = $(document.createElement("span"))
-            .text(name)
-            .addClass("productName")
-            .appendTo(cartItem);
-        var total = $(document.createElement("span"))
-            .text(total)
-            .addClass("float_right")
-            .appendTo(cartItem);
-        $(document.createElement("br"))
-            .appendTo(cartItem);
-        var sizeName = $(document.createElement("span"))
-            .text(sName)
-            .appendTo(cartItem);
-        var ilocation = $(document.createElement("span"))
-            .text(location)
-            .addClass("float_right")
-            .appendTo(cartItem);
-        var runMarker = $(document.createElement("span"))
-            .text(color)
-            .addClass("float_middle")
-            .appendTo(cartItem);
-        cartList.append(cartItem);
+        var cartItem = $("<div/>")
+            .append($("<hr/>"))
+            .append($("<div/>")
+                .addClass("row")
+                .append($("<div/>")
+                    .addClass("col-sm-6")
+                    .text("Pulled")
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-6")
+                    .append($("<button/>")
+                        .addClass("btn btn-default pull-right")
+                        .attr("onclick", "unPullButton(unPull, pulledText, cartItem)")
+                        // Tip: Don't use onclick attribute. Use .click(function() { /* javascript implementation */ })
+                        .text("Unpull Item")
+                    )
+                )
+            )
+            .append($("<div/>")
+                .addClass("row")
+                .append($("<div/>")
+                    .addClass("col-sm-6 productName")
+                    .text(name)
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-6 text-right")
+                    .text(total)
+                )
+            )
+            .append($("<div/>")
+                .addClass("row")
+                .append($("<div/>")
+                    .addClass("col-sm-4")
+                    .text(sName)
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-4 text-center")
+                    .text(color)
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-4 text-right")
+                    .text(location)
+                )
+            )
+            .appendTo(cartList)
     }
-    cartContainer.append(cartList);
 }

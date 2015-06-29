@@ -17,54 +17,60 @@
     </style>
 </head>
 <body>
-<h1>Edit Product</h1>
-<h2>Item: <span id="item_name"></span></h2>
-<hr/>
 <div class="container-fluid">
-    <div id="customer" class="row">
-        <div>Customer:</div>
-        <div id="customer_text" class="col-sm-12"></div>
-        <input id="customer_input" class="col-sm-12 hidden" type="text"/>
+    <h1>Edit Product</h1>
+    <h2>Item: <span id="item_name"></span></h2>
+    <hr/>
+
+    <div id="customer" class="row form-group">
+        <div class="col-sm-12">
+            <label for="customer_input">Customer</label>
+            <p id="customer_text" class="form-control-static"></p>
+            <input id="customer_input" class="form-control hidden" type="text"/>
+        </div>
     </div>
 
-    <br/>
-
-    <div id="product_name" class="row">
-        <div>Item Name:</div>
-        <div id="product_name_text" class="col-sm-12"></div>
-        <input id="product_name_input" class="col-sm-12 hidden" type="text"/>
+    <div id="product_name" class="row form-group">
+        <div class="col-sm-12">
+            <label for="product_name_input">Item Name</label>
+            <p id="product_name_text" class="form-control-static"></p>
+            <input id="product_name_input" class="form-control hidden" type="text"/>
+        </div>
     </div>
 
-    <br/>
-
-    <div id="description" class="row">
-        <div>Description:</div>
-        <div id="description_text" class="col-sm-12"></div>
-        <textarea id="description_input" class="col-sm-12 hidden" rows="4"/>
+    <div id="description" class="row form-group">
+        <div class="col-sm-12">
+            <label for="description_input">Description</label>
+            <p id="description_text" class="form-control-static"></p>
+            <textarea id="description_input" class="form-control hidden" rows="3"/>
+        </div>
     </div>
-
-    <br/>
 
     <!-- TODO add api route to store the image that is uploaded into s3 -->
     <div class="row">
-        <div>Image:</div>
         <div class="col-sm-3">
-            <div class="thumbnail unimplemented">Thumbnail</div>
+            <label>Image</label>
+            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
         </div>
-        <button class="col-sm-4">Upload Different Image</button>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <button id="new_thumbnail_button" class="btn btn-default hidden">Upload Different Image</button>
+        </div>
     </div>
 
     <br/>
 
     <div class="row">
-        <button id="edit_button" class="col-sm-4" onclick="editProduct.edit()">Edit</button>
+        <div class="col-sm-4">
+            <button id="edit_button" class="btn btn-default" onclick="editProduct.edit()">Edit</button>
+        </div>
     </div>
 </div>
 
 <script>
-    $(function() {
-        editProduct.init();
-    });
+    $(function() {editProduct.init();});
 </script>
 </body>
 </html>

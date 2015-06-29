@@ -10,10 +10,12 @@
     <script src="javascripts/PullInventory.js"></script>
 </head>
 <body>
-<h1>Pull Inventory</h1>
-<h2>Item: <span id="ProductName"></span></h2>
-<hr/>
+
 <div class="container-fluid">
+    <h1>Pull Inventory</h1>
+    <h2>Item: <span id="ProductName"></span></h2>
+    <hr/>
+
     <span>Amount Available: </span>
     <label id="AvailableAmout"></label>
 
@@ -24,37 +26,50 @@
     <br/>
 
     <div id="InputDiv">
-        <div class="InputChild row">
-            <select onchange="SelectOnchange(this)" class="col-sm-4 Size">
-                <option value="0">Please Select Package Size---</option>
-            </select>
-            <div class="col-sm-1 text-center" style="font-size: 150%;">*</div>
-            <input type="number" onchange="ReCalculate()" class="col-sm-2 Count">
-            <div class="col-sm-1 text-center">=</div>
-            <div class="col-sm-2">Subtotal of</div>
-            <label class="col-sm-2 Subtotal">0</label>
+        <div class="InputChild row form-group">
+            <div class="col-sm-4">
+                <select onchange="SelectOnchange(this)" class="form-control Size">
+                    <option value="0">Please Select Package Size---</option>
+                </select>
+            </div>
+            <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+
+            <div class="col-sm-2">
+                <input type="number" onchange="ReCalculate()" class="form-control Count">
+            </div>
+
+            <div class="col-sm-1">
+                <p class="form-control-static text-center">=</p>
+            </div>
+
+            <div class="col-sm-2"><p class="form-control-static">Subtotal of</p></div>
+            <div class="col-sm-2"><p class="form-control-static Subtotal">0</p></div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-offset-8 col-sm-2">Total quantity in this Pull: </div>
-        <label id="TotalInventory" class="col-sm-2">0</label>
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <button id="AddMore" class="btn btn-default" onclick="AddMore()">+ Add Entry</button>
+        </div>
+        <div class="col-sm-offset-4 col-sm-2"><p class="form-control-static">Total</p></div>
+        <div class="col-sm-2"><p id="TotalInventory" class="form-control-static">0</p></div>
     </div>
 
     <div class="row">
-        <button id="AddMore" class="col-sm-4" onclick="AddMore()">Pull More</button>
+
     </div>
 
     <br/>
 
     <div id="AddNewSize" hidden="hidden">
         <label>Add New Size</label>
-        <div id="divNewSize">
-            <div>Size Name: </div><input type="text" id="SizeName"/>
-            <div>Size: </div><input type="number" id="SizeNumber"/>
-            <button id="SubmitNewSize" onclick="SubmitNewSize()">Submit This Size</button>
+        <div class="row form-group form-inline">
+            <div id="divNewSize" class="col-sm-12">
+                <label for="SizeName">Size Name</label><input class="form-control" type="text" id="SizeName"/>
+                <label for="SizeNumber">Size</label><input class="form-control" type="number" id="SizeNumber"/>
+                <button id="SubmitNewSize" class="btn btn-default" onclick="SubmitNewSize()">Submit This Size</button>
+            </div>
         </div>
-        <br/>
     </div>
 
     <div id="divAddtoCart">
@@ -66,19 +81,19 @@
 
         <br/><br/>
 
-        <div id="divNewCart" hidden="hidden">
-            <label>Cart Name/Order Number: </label><input type="text" id="iptCartName">
+        <div id="divNewCart" class="form-group form-inline" hidden="hidden">
+            <label for="iptCartName">Cart Name/Order Number</label><input id="iptCartName" class="form-control" type="text">
             <br/>
-            <label>Save cart for: </label><input type="number" id="iptDaysToSave"><label> days</label>
+            <label for="iptDaysToSave">Save cart for</label><input id="iptDaysToSave" class="form-control" type="number"><label> days</label>
             <br/>
-            <label>Assignee: </label><select id="sltAssignee"></select>
+            <label for="sltAssignee">Assignee</label><select id="sltAssignee" class="form-control"></select>
             <br/>
-            <button id="btnAddNewCart" onclick="SubmitNewCart()">Submit New Cart</button>
+            <button id="btnAddNewCart" class="btn btn-default" onclick="SubmitNewCart()">Submit New Cart</button>
         </div>
 
-        <div id="divSelectCart" hidden="hidden">
-            <select id="slCart"></select>
-            <button id="btnAddToExistingCart" onclick="ChooseExistingCart()">Add To This Cart</button>
+        <div id="divSelectCart" class="form-group form-inline" hidden="hidden">
+            <select id="slCart" class="form-control"></select>
+            <button id="btnAddToExistingCart" class="btn btn-default" onclick="ChooseExistingCart()">Add To This Cart</button>
         </div>
     </div>
 </div>

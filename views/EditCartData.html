@@ -8,50 +8,63 @@
 
 </head>
 <body>
-<h1>Edit Cart Data</h1>
-<h2>Cart: <span id="cart_name"></span></h2>
-<hr/>
 <div class="container-fluid">
-    <div class="row">
-        <div>Cart Name:</div>
-        <div id="CartName_text" class="col-sm-12"></div>
-        <input id="CartName" class="col-sm-12 hidden" type="text"></input>
+    <h1>Edit Cart Data</h1>
+    <h2>Cart: <span id="cart_name"></span></h2>
+    <hr/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="CartName">Cart Name</label>
+            <p id="CartName_text" class="form-control-static"></p>
+            <input id="CartName" class="form-control hidden" type="text"></input>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="Reporter">Reporter</label>
+            <p id="Reporter_text" class="form-control-static"></p>
+            <input id="Reporter" class="form-control hidden" type="text"></input>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="Assignee">Assignee</label>
+            <p id="Assignee_text" class="form-control-static"></p>
+            <input id="Assignee" class="form-control hidden" type="text"></input>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="Date">Delete Date</label>
+            <p id="Date_text" class="form-control-static"></p>
+            <input id="Date" class="form-control hidden" type="text"></input>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <button id="edit_button" class="btn btn-default" onclick="editCartData.edit()">Edit</button>
+        </div>
     </div>
 
     <br/>
 
     <div class="row">
-        <div>Reporter:</div>
-        <div id="Reporter_text" class="col-sm-12"></div>
-        <input id="Reporter" class="col-sm-12 hidden" type="text"></input>
-    </div>
-
-    <br/>
-
-    <div class="row">
-        <div>Assignee:</div>
-        <div id="Assignee_text" class="col-sm-12"></div>
-        <input id="Assignee" class="col-sm-12 hidden" type="text"></input>
-    </div>
-
-    <br/>
-
-    <div class="row">
-        <div>Delete Date:</div>
-        <div id="Date_text" class="col-sm-12"></div>
-        <input id="Date" class="col-sm-12 hidden" type="text"></input>
-    </div>
-
-    <br/>
-
-    <div class="row">
-        <button id="edit_button" class="col-sm-4" onclick="editCartData.edit()">Edit</button>
-    </div>
-
-    <br/>
-
-    <div class="row">
-        <button class="col-sm-4" onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart Items</button>
+        <div class="col-sm-4">
+            <button class="btn btn-default" onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart Items</button>
+        </div>
     </div>
 
     <div id="response"></div>

@@ -102,7 +102,7 @@ var editCartData = {
                 .attr("onclick", "editCartData.edit()")
                 .prop("disabled", false);
 
-            navigation.go("EditCart.html");
+            navigation.go(window.args.previousPage);
         });
     },
 

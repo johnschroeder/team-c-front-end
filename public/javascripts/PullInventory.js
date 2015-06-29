@@ -17,7 +17,7 @@ function init() {
     $('#AvailableAmout').text(totalQuantity);
 
     //add dropdown options to select
-    var selectEle = document.getElementById("InputDiv").firstElementChild.childNodes[1];
+    var selectEle = $("#InputDiv").children().find(".size");
     PopulateOptions(selectEle, productID);
 }
 
@@ -31,9 +31,9 @@ function PopulateOptions(dropdown, pID) {
 
             for(var i = 0; i < temp.length; i++) {
                 var obj = temp[i];
-                var optionname=obj.Name + "---" +obj.Size;
+                var optionname = obj.Name + "---" + obj.Size;
                 var option = new Option(optionname, obj.SizeMapID);
-                var exist=0;
+                var exist = 0;
                 $(dropdown).append($(option));
             }
         } else {
@@ -146,9 +146,9 @@ function BindNewOption(n, s) {
             var smID = temp[0].SizeMapID;
 
             $('#InputDiv').children('.InputChild').each(function() {
-                var option = new Option(n + "---" +s,smID);
-                var dropdown = $(this).find('.Size');
-                $(dropdown).append(option);
+                var option = new Option(n + "---" +s, smID);
+                var dropdown = $(this).find('.Size')
+                    .append(option);
 
                 if ($(dropdown).val() == -1) {
                     $(dropdown).val(smID);

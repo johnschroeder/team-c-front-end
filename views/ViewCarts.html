@@ -8,46 +8,37 @@
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/ViewCarts.js"></script>
-    <style>
-        .float_left {
-            float: left;
-        }
-        .float_right {
-            float: right;
-        }
-        .seperate {
-            padding-right: 5%;
-        }
-        .float_middle {
-           float: right;
-            padding-right: 30%;
-        }
-    </style>
 </head>
 <body>
-<h1>Pull Carts</h1>
-<hr/>
+<div class="container-fluid">
+    <h1>Pull Carts</h1>
+    <hr/>
 
-<div  class="input-row track-inventory-by">
-    <div  class="input-label">Choose a pull cart to view</div>
-    <select id="selectDropDown" class="filter track-by" onChange=displayCartInventory()>
-    </select>
-        <div class="detail-view float_right">
-            <button class="float_right pull-button" onclick="gotoEditCarts()">Edit Cart</button>
-
-            <button class="float_right pull-button " onclick="gotoEditItems()">Edit Items</button>
-            <br>
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <label for="selectDropDown">Choose a pull cart to view</label>
+            <select id="selectDropDown" class="form-control filter track-by" onChange=displayCartInventory()></select>
+        </div>
+        <div class="col-sm-offset-4 col-sm-4">
+            <button class="btn btn-default pull-right" onclick="gotoEditCarts()">Edit Cart</button>
+            <button class="btn btn-default pull-right" onclick="gotoEditItems()">Edit Items</button>
+            <br/>
             <div id="notSelected"></div>
         </div>
     </div>
-<div class="inventory-container">
-</div>
-<p></p>
-<div class="detail-view">
-    <button id="pullAllButton" onclick="pullAll()">Pull All</button>
-</div>
 
-<div id="response"></div>
+    <div id="inventory-container"></div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <button id="pullAllButton" class="btn btn-default" onclick="pullAll()">Pull All</button>
+        </div>
+    </div>
+
+    <div id="response"></div>
+</div>
 <script>populateByCartId()</script>
 </body>
 </html>

@@ -32,6 +32,7 @@ var editProduct = {
         $("#customer_input").removeClass("hidden");
         $("#product_name_input").removeClass("hidden");
         $("#description_input").removeClass("hidden");
+        $("#new_thumbnail_button").removeClass("hidden");
 
         $("#edit_button").text("Done")
             .attr("onclick", "editProduct.done()");
@@ -51,6 +52,7 @@ var editProduct = {
             $("#customer_input").addClass("hidden");
             $("#product_name_input").addClass("hidden");
             $("#description_input").addClass("hidden");
+            $("#new_thumbnail_button").addClass("hidden");
 
             $("#customer_text").text(newCustName)
                 .removeClass("hidden");
