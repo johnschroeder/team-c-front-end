@@ -56,8 +56,8 @@ var editCartItems = {
                 location: this.cartItems[i].Location,
                 color: this.cartItems[i].Marker,
                 initialSize: this.cartItems[i].SizeMapID,
-                unitsPerPackage: this.cartItems[i].CountPerBatch,
-                numberOfPackages: this.cartItems[i].BatchCount,
+                unitsPerPackage: this.cartItems[i].UnitsPerPackage,
+                numberOfPackages: this.cartItems[i].NumPackages,
                 dirty: false
             }
             productTable[index].rows.push(row);
