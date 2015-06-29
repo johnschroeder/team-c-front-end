@@ -60,8 +60,9 @@ var addInventory = {
             ).append($(document.createElement("input")) // amount input
                 .addClass("col-sm-2")
                 .attr("name", "amount_input")
-                .attr("type", "text")
+                .attr("type", "number")
                 .attr("onkeyup", "addInventory.updateTotal()")
+                .attr("onchange", "addInventory.updateTotal()")
             ).append($(document.createElement("div"))
                 .addClass("col-sm-1 text-center")
                 .text("=")
