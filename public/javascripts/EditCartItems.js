@@ -9,12 +9,13 @@ var editCartItems = {
     cartID: parseInt(window.args.cartID),
     cartName: window.args.cartName,
     carts: [],
-    productTable: [],
+    //productTable: [],
     init: function() {
         $.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(res) {
             if (res && res.length) {
                 editCartItems.cartItems = JSON.parse(res)[0];
                 editCartItems.buildProductIDList();
+                console.log(editCartItems);
             } else {
                 $("#response").text("Error: EditCartItems.init: No response.");
             }
@@ -30,7 +31,7 @@ var editCartItems = {
             var index = this.cartItems[i].ProductID;
             var model = editCartItems.model;
             var productTable = editCartItems.model.products;
-            if (typeof editCartItems.productTable[index] === 'undefined') {
+            if (typeof productTable[index] === 'undefined') {
                 productTable[index] = {};
                 productTable[index].productID = index;
                 model.productIDList.push(index);
@@ -39,25 +40,24 @@ var editCartItems = {
                 productTable[index].rows = [];
                 productTable[index].sizes = [];
 
-                editCartItems.productTable[index] = [];
+                /*editCartItems.productTable[index] = [];
                 editCartItems.productTable[index].push({
                     name: this.cartItems[i].ProductName,
                     totalQuantity: 0,
                     productID: index
-                });
+                });*/
             }
-            editCartItems.productTable[index].push(this.cartItems[i]);
-            editCartItems.productTable[index][0].totalQuantity += this.cartItems[i].Total;
+            //editCartItems.productTable[index].push(this.cartItems[i]);
+            //editCartItems.productTable[index][0].totalQuantity += this.cartItems[i].Total;
 
 
             var row = {
                 cartItemID: this.cartItems[i].CartItemID,
-                runID: this.cartItems[i].RunID,
                 location: this.cartItems[i].Location,
                 color: this.cartItems[i].Marker,
                 initialSize: this.cartItems[i].SizeMapID,
                 unitsPerPackage: this.cartItems[i].CountPerBatch,
-                quantity: this.cartItems[i].BatchCount,
+                numberOfPackages: this.cartItems[i].BatchCount,
                 dirty: false
             }
             productTable[index].rows.push(row);
@@ -66,7 +66,10 @@ var editCartItems = {
     },
     getSizeByProductID: function(i) {
         var model = editCartItems.model;
-
+        console.log("product id list at" + i);
+        console.log(model.productIDList[i]);
+        console.log("model.productIDList.length");
+        console.log(model.productIDList.length);
         $.get(window.apiRoute + "/GetSizeByProductID/" + model.productIDList[i], function(res) {
             if (res && res.length) {
                 var productTable = editCartItems.model.products;
@@ -83,7 +86,8 @@ var editCartItems = {
                         }
                     }
                 });
-                if(i < productTable[model.productIDList[i]].sizes.length) {
+
+                if(i < model.productIDList.length - 1) {
                     editCartItems.getSizeByProductID(i + 1);
                 } else {
                     editCartItems.populateList();
@@ -178,17 +182,17 @@ var editCartItems = {
                     .addClass("float_left operator")
                     .appendTo(editRow.optionsRow);
 
-                row.quantity = $(document.createElement("span"))
-                    .text(product.rows[i].quantity)
+                row.numberOfPackages = $(document.createElement("span"))
+                    .text(product.rows[i].numberOfPackages)
                     .addClass("float_left package_count")
                     .appendTo(row.optionsRow);
                 editRow.quantityBox = $(document.createElement("input"))
                     .attr("type", "text")
                     .addClass("float_left num_entry")
-                    .val(product.rows[i].quantity)
+                    .val(product.rows[i].numberOfPackages)
                     .change({row: product.rows[i]}, function(event) {
                         var newVal = $(this).val();
-                        event.data.row.quantity = newVal;
+                        event.data.row.numberOfPackages = newVal;
                         event.data.row.dirty = true;
                         editCartItems.populateList();
                     })
@@ -204,11 +208,11 @@ var editCartItems = {
                     .appendTo(editRow.optionsRow);
 
                 row.rowTotal = $(document.createElement("span"))
-                    .text(product.rows[i].currentSize.Size * product.rows[i].quantity)
+                    .text(product.rows[i].currentSize.Size * product.rows[i].numberOfPackages)
                     .addClass("float_left row_total")
                     .appendTo(row.optionsRow);
                 editRow.rowTotal = $(document.createElement("span"))
-                    .text(product.rows[i].currentSize.Size * product.rows[i].quantity)
+                    .text(product.rows[i].currentSize.Size * product.rows[i].numberOfPackages)
                     .addClass("float_left row_total")
                     .appendTo(editRow.optionsRow);
 
@@ -265,7 +269,7 @@ var editCartItems = {
                 var cartID = editCartItems.cartID;
                 var cartItemID = row.cartItemID;
                 var sizeMapID = row.currentSize.SizeMapID;
-                var quantity = row.quantity;
+                var quantity = row.numberOfPackages;
                 var runID = row.runID;
                 $.get(window.apiRoute + "/Carts/EditCartItem/"
                     + cartID + '/'

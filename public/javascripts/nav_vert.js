@@ -43,7 +43,8 @@ function preventBehavior(e)
 document.addEventListener("touchmove", preventBehavior, false);
 
 function Home(){
-    navigation.go("Home.html");
+    navigation.go("EditCartItems.html",{cartID: 3, cartName: "testCART"});
+    //navigation.go("Home.html");
 }
 
 function ChangeIventory(){
