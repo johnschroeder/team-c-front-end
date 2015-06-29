@@ -108,46 +108,58 @@ var editCartItems = {
         var inventory_container = $('.inventory-container');
         inventory_container.empty();
 
-        var itemList = $(document.createElement("div"))
-            .appendTo(inventory_container);
+        productTable.forEach(function(product) {
+            var productSuperRow =
+               // "<div class='row'>" +
 
-        var j = 0;
+
+               // "</div>"
+        })
+
+        /*
+        var inventory_container = $('.inventory-container');
+        inventory_container.empty();
+
+        var productList = $(document.createElement("div"))
+            .appendTo(inventory_container);
 
         productTable.forEach(function(product) {
 
-            editCartItems.carts = [];
-            editCartItems.carts[j] = {};
-            var cart = editCartItems.carts[j];
-
-            cart.cartItem = $(document.createElement("div"))
-                .appendTo(itemList);
-            $(document.createElement("hr")).appendTo(cart.cartItem);
-            cart.productName = $(document.createElement("span"))
+            var superRow = {};
+            superRow.format = $(document.createElement("div"))
+                .addClass("row")
+                .attr('id',"superRow" + product.productID.toString())
+                .appendTo(productList);
+            $(document.createElement("hr")).appendTo(superRow.format);
+            superRow.productName = $(document.createElement("span"))
                 .text(product.productName)
-                .appendTo(cart.cartItem);
-            cart.totalQuantity = $(document.createElement("span"))
+                .appendTo(superRow.format);
+            superRow.totalQuantity = $(document.createElement("span"))
                 .text(product.totalQuantity)
-                .addClass("float_right total_quantity")
-                .appendTo(cart.cartItem);
-            $(document.createElement("br")).appendTo(cart.cartItem);
-            cart.editButton = $(document.createElement("button"))
+                .addClass("col-xs-0")
+                .appendTo(superRow.format);
+            superRow.editButtonDiv = $(document.createElement("div"))
+                .addClass("row")
+                .appendTo(superRow.format);
+            superRow.editButton = $(document.createElement("button"))
                 .text(product.editing ? "Done" : "Edit")
-                .attr("onclick", 'editCartItems.editItem(' + product.productID + ')');
-            cart.editButton.appendTo(cart.cartItem);
-            cart.optionsContainer = $(document.createElement("div"))
-                .appendTo(cart.cartItem);
+                .attr("onclick", 'editCartItems.editItem(' + product.productID + ')')
+                .addClass("col-xs-2");
+            superRow.editButton.appendTo(superRow.editButtonDiv);
+            superRow.optionsContainer = $(document.createElement("div"))
+                .appendTo(superRow.format);
 
-            cart.itemRows = [];
-            cart.editRows = [];
+            superRow.itemRows = [];
+            superRow.editRows = [];
 
             for(var i = 0; i < product.rows.length; ++i) {
                 var row = {};
                 var editRow = {};
                 row.optionsRow = $(document.createElement("div"))
-                    .appendTo(cart.cartItem);
+                    .appendTo(superRow.format);
                 editRow.optionsRow = $(document.createElement("div"))
                     .hide()
-                    .appendTo(cart.cartItem);
+                    .appendTo(superRow.format);
 
                 row.size = $(document.createElement("span"))
                     .text(product.rows[i].currentSize.Name)
@@ -243,12 +255,13 @@ var editCartItems = {
                     row.optionsRow.show();
                     editRow.optionsRow.hide();
                 }
-                cart.itemRows.push(row);
-                cart.editRows.push(editRow);
+                superRow.itemRows.push(row);
+                superRow.editRows.push(editRow);
             }
-            itemList.append(cart.cartItem);
+            productList.append(superRow.cartItem);
         });
-        inventory_container.append(itemList);
+        inventory_container.append(productList);
+        */
     },
 
     editItem: function(index) {
