@@ -1,43 +1,54 @@
 /**
  * Created by elijah on 6/21/15.
  */
+
 var state = window.state;
-function populateByCartId(){
+
+function populateByCartId() {
     //TODO when function runs we need to make sure that if there is a state.nameSelected that it is put in the selected option on run.
     //TODO when users is able to be gotten dynamicly, change "don" to + userid; so it grabs the carts for the user
     var user = 'don';
     $.get(window.apiRoute + "/Carts/GetCartsByUser/" + user, function(res) {
-        if(res && res.length) {
-            var dropSelect = document.getElementById("selectDropDown");
+        if (res && res.length) {
+            var dropSelect = $("#selectDropDown");
             var results = JSON.parse(res);
 
-            for(var i = 0; i < results.length; i++ ) {
-                var option = document.createElement("option");
-                option.value = results[i].CartID;
-                if(!(typeof state === 'undefined')) {
-                    if (results[i].CartName == state.nameSelected) {
-                        option.attr = ("selected");
-                    }
+            dropSelect
+                .append($("<option/>")
+                    .val(-1)
+                    .text("-- Select a Cart --")
+                );
+
+            for (var i = 0; i < results.length; ++i) {
+                var option = $("<option/>")
+                    .val(results[i].CartID)
+                    .text(results[i].CartName)
+                    .appendTo(dropSelect);
+
+                if (state && state.nameSelected == results[i].CartName) {
+                    option.prop("selected", true);
+                    displayCartInventory();
                 }
-                option.text = results[i].CartName;
-                dropSelect.add(option);
             }
         }
         else {
-            $("#response").text("Error: Init: No response.");
+            $("#response").text("Error: populateByCartId: No response.");
         }
     }).fail(function(res) {
-        $("#response").text("Error: Init: Connection error.");
+        $("#response").text("Error: populateByCartId: Connection error.");
     });
 }
 
-function displayCartInventory(){
-    $("#inventory-container").empty();
-    var cartContainer = $("#inventory-container");
-    var cartList = $(document.createElement("div"))
+function displayCartInventory() {
+    var cartContainer = $("#inventory-container")
+        .empty();
+
+    if ($("#selectDropDown :selected").val() == -1) return;
+
+    var cartList = $("<div/>")
         .appendTo(cartContainer);
 
-    console.log("nameselected:" + $("#selectDropDown :selected").text());
+    console.log("Selected: " + $("#selectDropDown :selected").text());
 
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
@@ -49,49 +60,51 @@ function displayCartInventory(){
             populateCartContainer(items);
         }
         else {
-            $("#response").text("Error: Init: No response.");
+            $("#response").text("Error: displayCartInventory: No response.");
         }
     }).fail(function(res) {
-        $("#response").text("Error: Init: Connection error.");
+        $("#response").text("Error: displayCartInventory: Connection error.");
     });
 }
-function pullAll(){
+
+function pullAll() {
     var name = $("#selectDropDown :selected").text();
     var cartName = prompt("Please confirm that -- " + name + " -- is the cart you want to pull by typing in the cart name.");
 
-    if(cartName == name) {
+    if (cartName == name) {
         $("#pullAllButton")
             .text("Ship Cart!")
             .prop("onclick", null)
             .off("click");
     }
 }
-function doNothing(){
+
+function doNothing() {
     $("#response").text("Shipment sent!");
 }
 
-function gotoEditCarts(){
+function gotoEditCarts() {
         state.nameSelected = $("#selectDropDown :selected").text();
         navigation.saveState(state);
         var idSelected = $("#selectDropDown :selected").val();
         navigation.go('EditCartData.html',{cartID: idSelected, cartName: state.nameSelected});
 }
 
-function gotoEditItems(){
+function gotoEditItems() {
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
     navigation.go('EditCartItems.html',{cartID: idSelected, cartName: state.nameSelected, previousPage: "ViewCarts.html"});
 }
 
-function populateCartContainer(items){
+function populateCartContainer(items) {
     var cartContainer = $("#inventory-container")
         .empty();
 
     var cartList = $("<div/>")
         .appendTo(cartContainer);
 
-    for(var i = 0; i < items.length; ++i) {
+    for (var i = 0; i < items.length; ++i) {
         var name = items[i].ProductName.toString();
         var total = items[i].Total.toString();
         var sName  = items[i].SizeName.toString() + " of " + items[i].CountPerBatch.toString() + " * " + items[i].BatchCount.toString()+  " = " + total;
@@ -142,6 +155,6 @@ function populateCartContainer(items){
                     .text(location)
                 )
             )
-            .appendTo(cartList)
+            .appendTo(cartList);
     }
 }
