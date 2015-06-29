@@ -114,14 +114,14 @@ hr {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #999;
   text-decoration: none;
-  color: #000;
+  color: #000 !important;
   width: 100%;
 }
 
 /* Change the color/bg color when the button is hovered or clicked */
 li button.active {
-  background: #999;
-  color: #fff;
+  background: #999 !important;
+  color: #fff !important;
 }
 
 .vertical-nav-bar li ul {
@@ -140,7 +140,7 @@ li button.active {
 .vertical-nav-bar li ul li button {
   padding: 10px 25px;
   width: 100%;
-  background: #ececec;
+  background: #ececec !important;
   border-bottom: 1px dotted #ccc;
 }
 
