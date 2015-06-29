@@ -234,6 +234,7 @@ function createItemEntry(item) {
                         .change(function() {
                             var selected = inputDiv.find(".package-select option:selected");
                             cartItem.find(".total-text").text(parseInt(selected.data("size")) * parseInt(inputDiv.find(".amount-input").val()));
+
                             inputDiv.find(".package-text")
                                 .attr("name", selected.attr("name"))
                                 .data("size", selected.data("size"))
@@ -260,10 +261,9 @@ function createItemEntry(item) {
                         .change(function() {
                             var selected = inputDiv.find(".package-select option:selected");
                             cartItem.find(".total-text").text(parseInt(selected.data("size")) * parseInt(inputDiv.find(".amount-input").val()));
-                            inputDiv.find(".package-text")
-                                .attr("name", selected.attr("name"))
-                                .data("size", selected.data("size"))
-                                .text(selected.val());
+
+                            inputDiv.find(".amount-text")
+                                .text(inputDiv.find(".amount-input").val());
 
                             inputDiv.data("dirty", true);
                         })
