@@ -50,12 +50,11 @@
         </select>
     </div>
 
-    <div id="error_message"></div>
+    <div id="response"></div>
 </div>
 <script>
     var itemDetailView = {
         productID: null,
-        productName: "",
         item: null,
 
         init: function() {
@@ -67,8 +66,8 @@
                 if(response && response.length) {
                     self.item = jQuery.parseJSON(response)[0];
                     //console.log(self.item);
-                    self.displayItem();
                     self.productName = self.item.Name;
+                    self.displayItem();
                 } else {
                     self.renderError("No inventory found");
                 }
@@ -85,19 +84,22 @@
         },
 
         renderError: function(error) {
-            $("#error_message").text(error);
+            $("#response").text("Error: " + error);
         },
 
         add: function() {
-            navigation.go("AddInventory.html", {ProductID:itemDetailView.productID, ProductName:itemDetailView.productName, PreviousPage:"ItemDetailView.html"});
+            if (!this.productID || !this.item) return;
+            navigation.go("AddInventory.html", {ProductID:this.productID, ProductName:this.item.Name || "", PreviousPage:"ItemDetailView.html"});
         },
 
         pull: function() {
-            navigation.go("PullInventory.html", {ProductID:itemDetailView.productID, ProductName:itemDetailView.productName, PreviousPage:"ItemDetailView.html"});
+            if (!this.productID || !this.item) return;
+            navigation.go("PullInventory.html", {ProductID:this.productID, ProductName:this.item.Name || "", TotalQuantity:this.item.TotalAvailable, PreviousPage:"ItemDetailView.html"});
         },
 
         edit: function() {
-            navigation.go("EditProduct.html", {ProductID:itemDetailView.productID, ProductName:itemDetailView.productName, PreviousPage:"ItemDetailView.html"});
+            if (!this.productID || !this.item) return;
+            navigation.go("EditProduct.html", {ProductID:this.productID, ProductName:this.item.Name || "", PreviousPage:"ItemDetailView.html"});
         }
     };
 

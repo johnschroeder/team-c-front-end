@@ -3,12 +3,10 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Current Inventory</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
-    <script src="javascripts/QueryStringHelper.js"></script>
-    <script src="javascripts/DisplayInventory.js"></script>
 </head>
 
 <body>
@@ -206,11 +204,25 @@
 
                 });
             }
+
         };
 
         display_inventory.init();
 
     })( jQuery );
+
+    /**
+     * Created by Kun on 6/18/2015.
+     */
+
+    var gotoPullInventory = function(pid, pname, tlq) {
+        navigation.go("PullInventory.html",{
+            ProductID: pid,
+            ProductName: pname,
+            TotalQuantity: tlq,
+            PreviousPage: "DisplayInventory.html"
+        });
+    };
 </script>
 </body>
 </html>
