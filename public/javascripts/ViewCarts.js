@@ -105,56 +105,169 @@ function populateCartContainer(items) {
         .appendTo(cartContainer);
 
     for (var i = 0; i < items.length; ++i) {
-        var name = items[i].ProductName.toString();
-        var total = items[i].Total.toString();
-        var sName  = items[i].SizeName.toString() + " of " + items[i].CountPerBatch.toString() + " * " + items[i].BatchCount.toString()+  " = " + total;
-        var color = "Run Color/Marker: " + items[i].Marker.toString();
-        var location = "Location: "+ items[i].Location.toString();
+        cartList.append(createItemEntry(items[i]));
+    }
+}
 
-        var cartItem = $("<div/>")
-            .append($("<hr/>"))
+function createItemEntry(item) {
+    var name = item.ProductName;
+    var total = parseInt(item.UnitsPerPackage) * parseInt(item.NumPackages);
+    var sName  = item.PackageName + " of " + item.UnitsPerPackage + " * " + item.NumPackages + " = " + total;
+    var color = "Run Color/Marker: " + item.Marker;
+    var location = "Location: "+ item.Location;
+
+    var inputDiv = $("<div/>");
+
+    var cartItem = $("<div/>")
+        .addClass("form-group")
+        .append($("<hr/>"))
+        .append($("<div/>")
+            .addClass("row")
             .append($("<div/>")
-                .addClass("row")
-                .append($("<div/>")
-                    .addClass("col-sm-6")
-                    .text("Pulled")
-                )
-                .append($("<div/>")
-                    .addClass("col-sm-6")
-                    .append($("<button/>")
-                        .addClass("btn btn-default pull-right")
-                        .attr("onclick", "unPullButton(unPull, pulledText, cartItem)")
-                        // Tip: Don't use onclick attribute. Use .click(function() { /* javascript implementation */ })
-                        .text("Unpull Item")
-                    )
-                )
+                .addClass("col-sm-6")
+                .text("Pulled")
             )
             .append($("<div/>")
-                .addClass("row")
+                .addClass("col-sm-6")
+                .append($("<button/>")
+                    .addClass("btn btn-default pull-right edit-button")
+                    .click(function() {
+                        inputDiv
+                            .data("dirty", false)
+                            .find(".package-text")
+                               .addClass("hidden")
+                            .end()
+                            .find(".amount-text")
+                               .addClass("hidden")
+                            .end()
+                            .find(".package-select")
+                                .removeClass("hidden")
+                            .end()
+                            .find(".amount-input")
+                                .removeClass("hidden")
+                            .end();
+
+                        cartItem
+                            .find(".edit-button")
+                               .addClass("hidden")
+                            .end()
+                            .find(".done-button")
+                                .removeClass("hidden")
+                            .end();
+                    })
+                    .text("Edit")
+                )
+                .append($("<button/>")
+                    .addClass("btn btn-default pull-right hidden done-button")
+                    .click(function() {
+                        inputDiv
+                            .find(".package-text")
+                               .removeClass("hidden")
+                            .end()
+                            .find(".amount-text")
+                               .removeClass("hidden")
+                            .end()
+                            .find(".package-select")
+                                .addClass("hidden")
+                            .end()
+                            .find(".amount-input")
+                                .addClass("hidden")
+                            .end();
+
+                        cartItem
+                            .find(".edit-button")
+                               .removeClass("hidden")
+                            .end()
+                            .find(".done-button")
+                                .addClass("hidden")
+                            .end();
+
+                            handleDirtyInput(inputDiv);
+                    })
+                    .text("Done")
+                )
+                .append($("<button/>")
+                    .addClass("btn btn-default pull-right")
+                    .attr("onclick", "unPullButton(unPull, pulledText, cartItem)")
+                    // Tip: Don't use onclick attribute. Use .click(function() { /* javascript implementation */ })
+                    .text("Unpull Item")
+                )
+            )
+        )
+        .append($("<div/>")
+            .addClass("row")
+            .append($("<div/>")
+                .addClass("col-sm-6 productName")
+                .text(name)
+            )
+            .append($("<div/>")
+                .addClass("col-sm-6 text-right")
+                .text(total)
+            )
+        )
+        .append($("<div/>")
+            .addClass("row")
+            .append(inputDiv
+                .addClass("col-sm-6 input-div")
                 .append($("<div/>")
-                    .addClass("col-sm-6 productName")
-                    .text(name)
+                    .addClass("col-sm-4")
+                    .append($("<div/>")
+                        .addClass("package-text")
+                        .text(item.PackageName + " of " + item.UnitsPerPackage)
+                    )
+                    .append($("<select/>")
+                        .addClass("form-control hidden package-select")
+                        .change(function() {
+                            // TODO update total
+                            inputDiv.data("dirty", true);
+                        })
+                    )
                 )
                 .append($("<div/>")
-                    .addClass("col-sm-6 text-right")
+                    .addClass("col-sm-1")
+                    .text(" * ")
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-4")
+                    .append($("<div/>")
+                        .addClass("amount-text")
+                        .text(item.NumPackages)
+                    )
+                    .append($("<input/>")
+                        .addClass("form-control hidden amount-input")
+                        .attr("type", "number")
+                        .val(parseInt(item.NumPackages))
+                        .change(function() {
+                            // TODO update total
+                            inputDiv.data("dirty", true);
+                        })
+                    )
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-1")
+                    .text(" = ")
+                )
+                .append($("<div/>")
+                    .addClass("col-sm-2 total-text")
                     .text(total)
                 )
             )
             .append($("<div/>")
-                .addClass("row")
-                .append($("<div/>")
-                    .addClass("col-sm-4")
-                    .text(sName)
-                )
-                .append($("<div/>")
-                    .addClass("col-sm-4 text-center")
-                    .text(color)
-                )
-                .append($("<div/>")
-                    .addClass("col-sm-4 text-right")
-                    .text(location)
-                )
+                .addClass("col-sm-3 text-center")
+                .text(color)
             )
-            .appendTo(cartList);
-    }
+            .append($("<div/>")
+                .addClass("col-sm-3 text-right")
+                .text(location)
+            )
+        )
+
+    return cartItem;
+}
+
+function handleDirtyInput(input) {
+    if (!input.data("dirty")) return;
+
+    // TODO post to route to update item
+    console.log("Input is dirty.")
 }
