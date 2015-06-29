@@ -12,17 +12,19 @@
 <body>
 
 <div class="container-fluid display-inventory-container">
+    <h1>Track Inventory</h1>
+    <hr/>
 
-    <div class="row menu">
+    <div class="row">
 
-        <div class="col-sm-6 input-row track-inventory-by">
+        <div class="col-sm-6 track-inventory-by">
             <label for="track_by" class="input-label">Track Inventory By</label>
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
             </select>
         </div>
 
-        <div class="col-sm-6 input-row">
+        <div class="col-sm-6">
             <label for="customer" class="input-label">Filter</label>
             <select id="customer" class="form-control filter customer">
                 <option value="0">All</option>
@@ -137,8 +139,7 @@
                         + "</a></div>";
 
                     inventory_item +="<div class='pull-button'>" +
-                        "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "'" + ProductName + "'" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
-
+                        "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
                     inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                     inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
                     inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
