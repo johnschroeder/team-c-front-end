@@ -1,45 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <script src="javascripts/nav_vert.js"></script>
     <script src="javascripts/EditCartData.js"></script>
 
 </head>
-<div class="new-product-form">
-    <h1>Edit Cart <span id="cart_name"></span></h1>
-
-    <div id="original_cart_name">Editing Cart: ERROR_DID_NOT_LOAD_SCRIPT</div>
-
-
-    <div class="input-row">
-        <div class="input-label">Cart Name</div>
-        <textarea class="CartName" rows="1" type="textarea"> </textarea>
+<body>
+<h1>Edit Cart Data</h1>
+<h2>Cart: <span id="cart_name"></span></h2>
+<hr/>
+<div class="container-fluid">
+    <div class="row">
+        <div>Cart Name:</div>
+        <div id="CartName_text" class="col-sm-12"></div>
+        <input id="CartName" class="col-sm-12 hidden" type="text"></input>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Reporter</div>
-        <textarea class="Reporter" type="textarea" rows="1"></textarea>
+    <br/>
+
+    <div class="row">
+        <div>Reporter:</div>
+        <div id="Reporter_text" class="col-sm-12"></div>
+        <input id="Reporter" class="col-sm-12 hidden" type="text"></input>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Assignee</div>
-        <textarea class="Assignee" rows="1" cols="50"></textarea>
+    <br/>
+
+    <div class="row">
+        <div>Assignee:</div>
+        <div id="Assignee_text" class="col-sm-12"></div>
+        <input id="Assignee" class="col-sm-12 hidden" type="text"></input>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Delete Date</div>
-        <textarea class="Date" rows="1" cols="50"></textarea>
+    <br/>
+
+    <div class="row">
+        <div>Delete Date:</div>
+        <div id="Date_text" class="col-sm-12"></div>
+        <input id="Date" class="col-sm-12 hidden" type="text"></input>
     </div>
 
-    <div class="input-row">
-        <div class="submit" onclick="CartDataEdit(myCartID())">Done Editing</div>
+    <br/>
+
+    <div class="row">
+        <button id="edit_button" class="col-sm-4" onclick="editCartData.edit()">Edit</button>
     </div>
 
-    <div class="input-row">
-        <div class="submit" onclick="CartItemsEdit(myCartID(), myCartName())">Edit Cart Items</div>
+    <br/>
+
+    <div class="row">
+        <button class="col-sm-4" onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart Items</button>
     </div>
-    <script>setCurrentValues()</script>
+
+    <div id="response"></div>
 </div>
+<script>
+    $(function() {
+        editCartData.init();
+    });
+</script>
+</body>
 </html>

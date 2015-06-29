@@ -3,6 +3,10 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Pull Carts</title>
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
+    <script src="javascripts/jquery-1.11.3.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
     <script src="javascripts/ViewCarts.js"></script>
     <style>
         .float_left {
@@ -19,12 +23,11 @@
             padding-right: 30%;
         }
     </style>
-
 </head>
 <body>
-<h1>
-    <div>Pull Carts</div>
-</h1>
+<h1>Pull Carts</h1>
+<hr/>
+
 <div  class="input-row track-inventory-by">
     <div  class="input-label">Choose a pull cart to view</div>
     <select id="selectDropDown" class="filter track-by" onChange=displayCartInventory()>

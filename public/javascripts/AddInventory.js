@@ -122,9 +122,9 @@ var addInventory = {
         $("#add_list").children("div").each(function() { // each entry
             var size = parseInt($(this).children("select[name='package_input']").children("option:selected").data("size")) || 0;
             var amount = parseInt($(this).children("input[name='amount_input']").val()) || 0;
-            var countOf = size * amount;
-            $(this).children("div[name='count_text']").text(countOf);
-            addInventory.total += countOf;
+            var count = size * amount;
+            $(this).children("div[name='count_text']").text(count);
+            addInventory.total += count;
         });
 
         $("#total_text").text(this.total);

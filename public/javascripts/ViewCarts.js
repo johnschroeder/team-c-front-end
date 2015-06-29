@@ -68,16 +68,16 @@ function doNothing(){
         .addClass("float_middle");
 }
 function gotoEditCarts(){
-        state.nameSelected =$("#selectDropDown :selected").text();
+        state.nameSelected = $("#selectDropDown :selected").text();
         navigation.saveState(state);
         var idSelected = $("#selectDropDown :selected").val();
         navigation.go('EditCartData.html',{cartID: idSelected, cartName: state.nameSelected});
 }
 function gotoEditItems(){
-    state.nameSelected =$("#selectDropDown :selected").text();
+    state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
-    navigation.go('EditCartItems.html',{cartID: idSelected, previousPage: "ViewCarts.html"});
+    navigation.go('EditCartItems.html',{cartID: idSelected, cartName: state.nameSelected, previousPage: "ViewCarts.html"});
 }
 
 function populateCartContainer(items){

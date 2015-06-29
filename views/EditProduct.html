@@ -17,55 +17,54 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <h1>Edit Product</h1>
-        <h2>Item: <span id="item_name"></span></h2>
-        <hr/>
-
-        <div id="customer" class="row">
-            <div>Customer:</div>
-            <div id="customer_text" class="col-sm-12"></div>
-            <input id="customer_input" class="col-sm-12 hidden" type="text"/>
-        </div>
-
-        <br/>
-
-        <div id="product_name" class="row">
-            <div>Item Name:</div>
-            <div id="product_name_text" class="col-sm-12"></div>
-            <input id="product_name_input" class="col-sm-12 hidden" type="text"/>
-        </div>
-
-        <br/>
-
-        <div id="description" class="row">
-            <div>Description:</div>
-            <div id="description_text" class="col-sm-12"></div>
-            <textarea id="description_input" class="col-sm-12 hidden" rows="4"/>
-        </div>
-
-        <br/>
-
-        <!-- TODO add api route to store the image that is uploaded into s3 -->
-        <div class="row">
-            <div>Image:</div>
-            <div class="col-sm-3">
-                <div class="thumbnail unimplemented">Thumbnail</div>
-            </div>
-            <button class="col-sm-4">Upload Different Image</button>
-        </div>
-
-        <br/>
-
-        <div class="row">
-            <button id="edit_button" class="col-sm-4" onclick="editProduct.edit()">Edit</button>
-        </div>
+<h1>Edit Product</h1>
+<h2>Item: <span id="item_name"></span></h2>
+<hr/>
+<div class="container-fluid">
+    <div id="customer" class="row">
+        <div>Customer:</div>
+        <div id="customer_text" class="col-sm-12"></div>
+        <input id="customer_input" class="col-sm-12 hidden" type="text"/>
     </div>
 
-    <script>
-        $(function() {
-            editProduct.init();
-        });
-    </script>
+    <br/>
+
+    <div id="product_name" class="row">
+        <div>Item Name:</div>
+        <div id="product_name_text" class="col-sm-12"></div>
+        <input id="product_name_input" class="col-sm-12 hidden" type="text"/>
+    </div>
+
+    <br/>
+
+    <div id="description" class="row">
+        <div>Description:</div>
+        <div id="description_text" class="col-sm-12"></div>
+        <textarea id="description_input" class="col-sm-12 hidden" rows="4"/>
+    </div>
+
+    <br/>
+
+    <!-- TODO add api route to store the image that is uploaded into s3 -->
+    <div class="row">
+        <div>Image:</div>
+        <div class="col-sm-3">
+            <div class="thumbnail unimplemented">Thumbnail</div>
+        </div>
+        <button class="col-sm-4">Upload Different Image</button>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <button id="edit_button" class="col-sm-4" onclick="editProduct.edit()">Edit</button>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        editProduct.init();
+    });
+</script>
 </body>
 </html>

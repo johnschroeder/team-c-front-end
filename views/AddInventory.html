@@ -10,66 +10,66 @@
     <script src="javascripts/AddInventory.js"></script>
 </head>
 <body>
-    <div class="container-fluid">
-        <h1>Add Inventory</h1>
-        <h2>Item: <span id="item_name"></span></h2>
-        <hr/>
-        <div id="add_list"></div>
+<h1>Add Inventory</h1>
+<h2>Item: <span id="item_name"></span></h2>
+<hr/>
+<div class="container-fluid">
+    <div id="add_list"></div>
 
-        <div class="row">
-            <div class="col-sm-offset-8 col-sm-2">Total</div>
-            <div id="total_text" class="col-sm-2">0</div>
-        </div>
-
-        <br/>
-
-        <div class="row">
-            <button class="col-sm-4" type="button" onclick="addInventory.addEntry()">Add More of this product</button>
-            <button class="col-sm-4" type="button" onclick="addInventory.reset()">Reset</button>
-        </div>
-
-        <br/>
-
-        <div class="row">
-            <div>Location:</div>
-            <input id="location_input" class="col-sm-4"></input>
-        </div>
-
-        <br/>
-
-        <div class="row">
-            <button id="inventory_add_button" class="col-sm-4" type="button" onclick="addInventory.submitAdd()">Add to Inventory</button>
-        </div>
-
-        <br/><hr/>
-
-        <div class="row"><h2 class="col-sm-12">Add New Package Type</h2></div>
-
-        <div class="row">
-            <div class="col-sm-4">
-                Name: <input id="pkg_name" type="text"></input>
-            </div>
-            <div class="col-sm-4">
-                Size: <input id="pkg_size" type="text"></input>
-            </div>
-        </div>
-
-        <br/>
-
-        <div class="row">
-            <button id="pkg_add_button" class="col-sm-4" type="button" onclick="addInventory.submitNewPackageType()">Add New Package Type</button>
-        </div>
-
-        <br/>
-
-        <div class="row">
-            <div id="response" class="col-sm-12"></div>
-         </div>
+    <div class="row">
+        <div class="col-sm-offset-8 col-sm-2">Total</div>
+        <div id="total_text" class="col-sm-2">0</div>
     </div>
-    <script>
-        $(function() {
-            addInventory.init();
-        });
-    </script>
+
+    <br/>
+
+    <div class="row">
+        <button class="col-sm-4" type="button" onclick="addInventory.addEntry()">Add More of this product</button>
+        <button class="col-sm-4" type="button" onclick="addInventory.reset()">Reset</button>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div>Location:</div>
+        <input id="location_input" class="col-sm-4"></input>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <button id="inventory_add_button" class="col-sm-4" type="button" onclick="addInventory.submitAdd()">Add to Inventory</button>
+    </div>
+
+    <br/><hr/>
+
+    <div class="row"><h2 class="col-sm-12">Add New Package Type</h2></div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            Name: <input id="pkg_name" type="text"></input>
+        </div>
+        <div class="col-sm-4">
+            Size: <input id="pkg_size" type="text"></input>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <button id="pkg_add_button" class="col-sm-4" type="button" onclick="addInventory.submitNewPackageType()">Add New Package Type</button>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div id="response" class="col-sm-12"></div>
+     </div>
+</div>
+<script>
+    $(function() {
+        addInventory.init();
+    });
+</script>
 </body>
 </html>
