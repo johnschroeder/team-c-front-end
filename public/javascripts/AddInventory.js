@@ -70,6 +70,7 @@ var addInventory = {
                     .addClass("form-control")
                     .attr("name", "amount_input")
                     .attr("type", "number")
+                    .attr("min", 0)
                     .attr("onkeyup", "addInventory.updateTotal()")
                     .attr("onchange", "addInventory.updateTotal()")
                 )

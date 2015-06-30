@@ -105,13 +105,25 @@ function populateCartContainer(items) {
 
     for (var i = 0; i < items.length; ++i) {
         if (!cartItem || cartItem.find(".item-name").text() != items[i].ProductName) {
-
             cartItem = $("<div/>")
                 .addClass("cart-item")
                 .append($("<hr/>"))
-                .append($("<h2/>")
-                    .addClass("item-name")
-                    .text(items[i].ProductName)
+                .append($("<div/>")
+                    .addClass("row")
+                    .append($("<div/>")
+                        .addClass("col-sm-8")
+                        .append($("<h2/>")
+                            .addClass("item-name")
+                            .text(items[i].ProductName)
+                        )
+                    )
+                    .append($("<div/>")
+                        .addClass("col-sm-4")
+                        .append($("<h2/>")
+                            .addClass("item-total-text text-center")
+                            .text("0")
+                        )
+                    )
                 )
                 .append($("<div/>")
                     .addClass("row")
@@ -128,15 +140,18 @@ function populateCartContainer(items) {
                         )
                     )
                 )
+                .append($("<br/>"))
                 .appendTo(cartContainer);
         }
 
-        var entry = createItemEntry(items[i])
+        var entry = createItemEntry(items[i], cartItem)
         cartItem.append(entry);
+
+        updateTotal(cartItem);
     }
 }
 
-function createItemEntry(item) {
+function createItemEntry(item, parent) {
     var name = item.ProductName;
     var total = parseInt(item.UnitsPerPackage) * parseInt(item.NumPackages);
     var sName  = item.PackageName + " of " + item.UnitsPerPackage + " * " + item.NumPackages + " = " + total;
@@ -170,6 +185,7 @@ function createItemEntry(item) {
                                 .data("size", selected.data("size"))
                                 .text(selected.val());
 
+                            updateTotal(parent);
                             inputDiv.data("dirty", true);
                         })
                     )
@@ -187,6 +203,7 @@ function createItemEntry(item) {
                     .append($("<input/>")
                         .addClass("form-control hidden amount-input")
                         .attr("type", "number")
+                        .attr("min", 0)
                         .val(parseInt(item.NumPackages))
                         .change(function() {
                             var selected = inputDiv.find(".package-select option:selected");
@@ -195,6 +212,7 @@ function createItemEntry(item) {
                             inputDiv.find(".amount-text")
                                 .text(inputDiv.find(".amount-input").val());
 
+                            updateTotal(parent);
                             inputDiv.data("dirty", true);
                         })
                     )
@@ -287,7 +305,9 @@ function handleDirtyInput(input) {
     if (!input.data("dirty")) return;
 
     // TODO post to route to update item
-    console.log("Input is dirty.")
+    console.log("Input is dirty.");
+
+    displayCartInventory(); //refresh after done calling route
 }
 
 //Updates the options for the package types of a single entry.
@@ -317,4 +337,14 @@ function updateEntryPackageTypeOptions(entry, productId, input) {
     }).fail(function(res) {
         $("#response").text("Error: Update package types: Connection error.");
     });
+}
+
+function updateTotal(cartItem) {
+    var total = 0;
+
+    cartItem.find(".total-text").each(function() {
+        total += parseInt($(this).text()) || 0;
+    });
+
+    cartItem.find(".item-total-text").text(total);
 }

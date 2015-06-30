@@ -35,7 +35,7 @@
             <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
 
             <div class="col-sm-2">
-                <input type="number" onchange="ReCalculate()" class="form-control Count">
+                <input type="number" class="form-control Count" onchange="ReCalculate()" min="0">
             </div>
 
             <div class="col-sm-1">
@@ -65,8 +65,8 @@
         <label>Add New Size</label>
         <div class="row form-group form-inline">
             <div id="divNewSize" class="col-sm-12">
-                <label for="SizeName">Size Name</label><input class="form-control" type="text" id="SizeName"/>
-                <label for="SizeNumber">Size</label><input class="form-control" type="number" id="SizeNumber"/>
+                <label for="SizeName">Size Name</label><input id="SizeName" class="form-control" type="text"/>
+                <label for="SizeNumber">Size</label><input id="SizeNumber" class="form-control" type="number" min="0"/>
                 <button id="SubmitNewSize" class="btn btn-default" onclick="SubmitNewSize()">Submit This Size</button>
             </div>
         </div>
@@ -84,7 +84,7 @@
         <div id="divNewCart" class="form-group form-inline" hidden="hidden">
             <label for="iptCartName">Cart Name/Order Number</label><input id="iptCartName" class="form-control" type="text">
             <br/>
-            <label for="iptDaysToSave">Save cart for</label><input id="iptDaysToSave" class="form-control" type="number"><label> days</label>
+            <label for="iptDaysToSave">Save cart for</label><input id="iptDaysToSave" class="form-control" type="number" min="0"><label> days</label>
             <br/>
             <label for="sltAssignee">Assignee</label><select id="sltAssignee" class="form-control"></select>
             <br/>
