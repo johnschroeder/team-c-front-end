@@ -3,7 +3,7 @@
  */
 
 var state = window.state;
-
+//<script>
 function populateByCartId() {
     //TODO when function runs we need to make sure that if there is a state.nameSelected that it is put in the selected option on run.
     //TODO when users is able to be gotten dynamicly, change "don" to + userid; so it grabs the carts for the user
@@ -101,21 +101,38 @@ function populateCartContainer(items) {
     var cartContainer = $("#inventory-container")
         .empty();
 
-    var cartList = $("<div/>")
-        .appendTo(cartContainer);
-
-    var cartTitle = null;
+    var cartItem = null
 
     for (var i = 0; i < items.length; ++i) {
-        if (!cartTitle || (cartTitle && cartTitle.text() != items[i].ProductName)) {
-            var separator = $("<hr/>");
-            cartTitle = $("<h2/>").text(items[i].ProductName);
-            cartList.append(separator);
-            separator.after(cartTitle);
+        if (!cartItem || cartItem.find(".item-name").text() != items[i].ProductName) {
+
+            cartItem = $("<div/>")
+                .addClass("cart-item")
+                .append($("<hr/>"))
+                .append($("<h2/>")
+                    .addClass("item-name")
+                    .text(items[i].ProductName)
+                )
+                .append($("<div/>")
+                    .addClass("row")
+                    .append($("<div/>")
+                        .addClass("col-sm-6")
+                        .text("Pulled")
+                    )
+                    .append($("<div/>")
+                        .addClass("col-sm-6")
+                        .append($("<button/>")
+                            .addClass("btn btn-default pull-right")
+                            .click(function() { /* TODO Unpull() */ })
+                            .text("Unpull")
+                        )
+                    )
+                )
+                .appendTo(cartContainer);
         }
 
         var entry = createItemEntry(items[i])
-        cartList.append(entry);
+        cartItem.append(entry);
     }
 }
 
@@ -129,100 +146,13 @@ function createItemEntry(item) {
     var inputDiv = $("<div/>");
 
     var cartItem = $("<div/>")
-        .addClass("form-group")
-        //.append($("<hr/>"))
-        .append($("<div/>")
-            .addClass("row")
+        .addClass("row")
+        .append(inputDiv
+            .addClass("col-sm-7 form-group input-div")
             .append($("<div/>")
-                .addClass("col-sm-6")
-                .text("Pulled")
-            )
-            .append($("<div/>")
-                .addClass("col-sm-6")
-                .append($("<button/>")
-                    .addClass("btn btn-default pull-right edit-button")
-                    .click(function() {
-                        inputDiv
-                            .data("dirty", false)
-                            .find(".package-text")
-                               .addClass("hidden")
-                            .end()
-                            .find(".amount-text")
-                               .addClass("hidden")
-                            .end()
-                            .find(".package-select")
-                                .removeClass("hidden")
-                            .end()
-                            .find(".amount-input")
-                                .removeClass("hidden")
-                            .end();
-
-                        cartItem
-                            .find(".edit-button")
-                               .addClass("hidden")
-                            .end()
-                            .find(".done-button")
-                                .removeClass("hidden")
-                            .end();
-
-                        updateEntryPackageTypeOptions(inputDiv.find(".package-select"), item.ProductID, inputDiv)
-                    })
-                    .text("Edit")
-                )
-                .append($("<button/>")
-                    .addClass("btn btn-default pull-right hidden done-button")
-                    .click(function() {
-                        inputDiv
-                            .find(".package-text")
-                               .removeClass("hidden")
-                            .end()
-                            .find(".amount-text")
-                               .removeClass("hidden")
-                            .end()
-                            .find(".package-select")
-                                .addClass("hidden")
-                            .end()
-                            .find(".amount-input")
-                                .addClass("hidden")
-                            .end();
-
-                        cartItem
-                            .find(".edit-button")
-                               .removeClass("hidden")
-                            .end()
-                            .find(".done-button")
-                                .addClass("hidden")
-                            .end();
-
-                            handleDirtyInput(inputDiv);
-                    })
-                    .text("Done")
-                )
-                .append($("<button/>")
-                    .addClass("btn btn-default pull-right")
-                    .attr("onclick", "unPullButton(unPull, pulledText, cartItem)")
-                    // Tip: Don't use onclick attribute. Use .click(function() { /* javascript implementation */ })
-                    .text("Unpull Item")
-                )
-            )
-        )
-        /*.append($("<div/>")
-            .addClass("row")
-            .append($("<div/>")
-                .addClass("col-sm-6 productName")
-                .text(name)
-            )
-            .append($("<div/>")
-                .addClass("col-sm-6 text-right")
-                .text(total)
-            )
-        )*/
-        .append($("<div/>")
-            .addClass("row")
-            .append(inputDiv
-                .addClass("col-sm-6 input-div")
+                .addClass("row")
                 .append($("<div/>")
-                    .addClass("col-sm-4")
+                    .addClass("col-sm-5")
                     .append($("<div/>")
                         .addClass("package-text")
                         .text(item.PackageName + " of " + item.UnitsPerPackage)
@@ -249,7 +179,7 @@ function createItemEntry(item) {
                     .text(" * ")
                 )
                 .append($("<div/>")
-                    .addClass("col-sm-4")
+                    .addClass("col-sm-3")
                     .append($("<div/>")
                         .addClass("amount-text")
                         .text(item.NumPackages)
@@ -270,21 +200,83 @@ function createItemEntry(item) {
                     )
                 )
                 .append($("<div/>")
-                    .addClass("col-sm-1")
+                    .addClass("col-sm-3")
                     .text(" = ")
-                )
-                .append($("<div/>")
-                    .addClass("col-sm-2 total-text")
-                    .text(total)
+                    .append($("<span/>")
+                        .addClass("total-text")
+                        .text(total)
+                    )
                 )
             )
-            .append($("<div/>")
-                .addClass("col-sm-3 text-center")
-                .text(color)
+        )
+        .append($("<div/>")
+            .addClass("col-sm-2")
+            .text(color)
+        )
+        .append($("<div/>")
+            .addClass("col-sm-2")
+            .text(location)
+        )
+        .append($("<div/>")
+            .addClass("col-sm-1")
+            .append($("<button/>")
+                .addClass("btn btn-default pull-right edit-button")
+                .click(function() {
+                    inputDiv
+                        .data("dirty", false)
+                        .find(".package-text")
+                           .addClass("hidden")
+                        .end()
+                        .find(".amount-text")
+                           .addClass("hidden")
+                        .end()
+                        .find(".package-select")
+                            .removeClass("hidden")
+                        .end()
+                        .find(".amount-input")
+                            .removeClass("hidden")
+                        .end();
+
+                    cartItem
+                        .find(".edit-button")
+                           .addClass("hidden")
+                        .end()
+                        .find(".done-button")
+                            .removeClass("hidden")
+                        .end();
+
+                    updateEntryPackageTypeOptions(inputDiv.find(".package-select"), item.ProductID, inputDiv)
+                })
+                .text("Edit")
             )
-            .append($("<div/>")
-                .addClass("col-sm-3 text-right")
-                .text(location)
+            .append($("<button/>")
+                .addClass("btn btn-default pull-right hidden done-button")
+                .click(function() {
+                    inputDiv
+                        .find(".package-text")
+                           .removeClass("hidden")
+                        .end()
+                        .find(".amount-text")
+                           .removeClass("hidden")
+                        .end()
+                        .find(".package-select")
+                            .addClass("hidden")
+                        .end()
+                        .find(".amount-input")
+                            .addClass("hidden")
+                        .end();
+
+                    cartItem
+                        .find(".edit-button")
+                           .removeClass("hidden")
+                        .end()
+                        .find(".done-button")
+                            .addClass("hidden")
+                        .end();
+
+                        handleDirtyInput(inputDiv);
+                })
+                .text("Done")
             )
         )
 
