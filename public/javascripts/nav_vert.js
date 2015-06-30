@@ -46,6 +46,10 @@ function Home(){
     navigation.go("Home.html");
 }
 
+function resetPassword(){
+    navigation.go('ResetPassword.html');
+}
+
 function ChangeIventory(){
     navigation.go('ChangeInventory.html');
 }
