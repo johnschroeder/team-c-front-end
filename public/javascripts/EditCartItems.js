@@ -39,6 +39,7 @@ var editCartItems = {
                 productTable[index].editing = false;
                 productTable[index].rows = [];
                 productTable[index].sizes = [];
+                productTable[index].totalQuantity = 0;
 
                 /*editCartItems.productTable[index] = [];
                 editCartItems.productTable[index].push({
@@ -54,12 +55,14 @@ var editCartItems = {
             var row = {
                 cartItemID: this.cartItems[i].CartItemID,
                 location: this.cartItems[i].Location,
+                runID: this.cartItems[i].RunID,
                 color: this.cartItems[i].Marker,
                 initialSize: this.cartItems[i].SizeMapID,
                 unitsPerPackage: this.cartItems[i].UnitsPerPackage,
                 numberOfPackages: this.cartItems[i].NumPackages,
                 dirty: false
             }
+            productTable[index].totalQuantity += row.unitsPerPackage * row.numberOfPackages;
             productTable[index].rows.push(row);
         }
         editCartItems.getSizeByProductID(0);
@@ -105,23 +108,9 @@ var editCartItems = {
     populateList: function() {
         var productTable = editCartItems.model.products;
 
-        var inventory_container = $('.inventory-container');
-        inventory_container.empty();
+        var productList = $('.inventory-container');
+        productList.empty();
 
-        productTable.forEach(function(product) {
-            var productSuperRow =
-               // "<div class='row'>" +
-
-
-               // "</div>"
-        })
-
-        /*
-        var inventory_container = $('.inventory-container');
-        inventory_container.empty();
-
-        var productList = $(document.createElement("div"))
-            .appendTo(inventory_container);
 
         productTable.forEach(function(product) {
 
@@ -131,23 +120,43 @@ var editCartItems = {
                 .attr('id',"superRow" + product.productID.toString())
                 .appendTo(productList);
             $(document.createElement("hr")).appendTo(superRow.format);
-            superRow.productName = $(document.createElement("span"))
-                .text(product.productName)
-                .appendTo(superRow.format);
-            superRow.totalQuantity = $(document.createElement("span"))
-                .text(product.totalQuantity)
-                .addClass("col-xs-0")
-                .appendTo(superRow.format);
-            superRow.editButtonDiv = $(document.createElement("div"))
+            superRow.nameRow = $(document.createElement("div"))
                 .addClass("row")
                 .appendTo(superRow.format);
+            superRow.nameDiv = $(document.createElement("div"))
+                .addClass("col-xs-6")
+                .appendTo(superRow.nameRow);
+            superRow.productName = $(document.createElement("div"))
+                .text(product.productName)
+                .appendTo(superRow.nameDiv);
+            superRow.deleteProductButtonDiv = $(document.createElement("div"))
+                .addClass("col-xs-4")
+                .appendTo(superRow.nameRow);
+            superRow.deleteButton = $(document.createElement("button"))
+                .text("Delete product")
+                .attr("onclick", 'editCartItems.deleteProduct(' + product.productID + ')');
+            if(product.editing) {
+                superRow.deleteButton.show();
+            } else {
+                superRow.deleteButton.hide();
+            }
+            superRow.deleteButton.appendTo(superRow.deleteProductButtonDiv);
+            superRow.quantityDiv = $(document.createElement("div"))
+                .addClass("col-xs-2")
+                .appendTo(superRow.nameRow);
+            superRow.totalQuantity = $(document.createElement("div"))
+                .text(product.totalQuantity)
+                .appendTo(superRow.quantityDiv);
+            superRow.buttonRow = $(document.createElement("div"))
+                .addClass("row")
+                .appendTo(superRow.format);
+            superRow.editButtonDiv = $(document.createElement("div"))
+                .addClass("col-xs-10")
+                .appendTo(superRow.buttonRow);
             superRow.editButton = $(document.createElement("button"))
                 .text(product.editing ? "Done" : "Edit")
-                .attr("onclick", 'editCartItems.editItem(' + product.productID + ')')
-                .addClass("col-xs-2");
+                .attr("onclick", 'editCartItems.editItem(' + product.productID + ')');
             superRow.editButton.appendTo(superRow.editButtonDiv);
-            superRow.optionsContainer = $(document.createElement("div"))
-                .appendTo(superRow.format);
 
             superRow.itemRows = [];
             superRow.editRows = [];
@@ -156,17 +165,33 @@ var editCartItems = {
                 var row = {};
                 var editRow = {};
                 row.optionsRow = $(document.createElement("div"))
+                    .addClass("row")
                     .appendTo(superRow.format);
                 editRow.optionsRow = $(document.createElement("div"))
+                    .addClass("row")
                     .hide()
                     .appendTo(superRow.format);
 
+                row.left = $(document.createElement("div"))
+                    .addClass("row col-xs-10")
+                    .appendTo(row.optionsRow);
+                row.right = $(document.createElement("div"))
+                    .addClass("row col-xs-10")
+                    .appendTo(row.optionsRow);
+
+                editRow.left = $(document.createElement("div"))
+                    .addClass("row col-xs-10")
+                    .appendTo(editRow.optionsRow);
+                editRow.right = $(document.createElement("div"))
+                    .addClass("row col-xs-10")
+                    .appendTo(editRow.optionsRow);
+
                 row.size = $(document.createElement("span"))
                     .text(product.rows[i].currentSize.Name)
-                    .addClass("float_left size")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-3")
+                    .appendTo(row.left);
                 editRow.size = $(document.createElement("select"))
-                    .addClass("float_left size");
+                    .addClass("col-xs-3");
                 var sizes = productTable[product.productID].sizes;
                 for(var k = 0; k < sizes.length; ++k) {
                     var option = $(document.createElement("option"))
@@ -176,31 +201,32 @@ var editCartItems = {
                     editRow.size.append(option);
                 }
                 editRow.size.val(product.rows[i].currentSize.Name);
-                editRow.size.appendTo(editRow.optionsRow);
+                editRow.size.appendTo(editRow.left);
                 editRow.size.change({row: product.rows[i], newSize: editRow.size}, function(event) {
                     var size = $(this).find('option:selected').data().size;
                     event.data.row.currentSize = size;
                     event.data.row.initialSize = false;
                     event.data.row.dirty = true;
+                    event.data.row.unitsPerPackage = size.Size;
                     editCartItems.populateList();
                 });
 
                 $(document.createElement("span"))
                     .text("*")
-                    .addClass("float_left operator")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-1")
+                    .appendTo(row.left);
                 $(document.createElement("span"))
                     .text("*")
-                    .addClass("float_left operator")
-                    .appendTo(editRow.optionsRow);
+                    .addClass("col-xs-1")
+                    .appendTo(editRow.left);
 
                 row.numberOfPackages = $(document.createElement("span"))
                     .text(product.rows[i].numberOfPackages)
-                    .addClass("float_left package_count")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-2")
+                    .appendTo(row.left);
                 editRow.quantityBox = $(document.createElement("input"))
                     .attr("type", "text")
-                    .addClass("float_left num_entry")
+                    .addClass("col-xs-2")
                     .val(product.rows[i].numberOfPackages)
                     .change({row: product.rows[i]}, function(event) {
                         var newVal = $(this).val();
@@ -208,46 +234,62 @@ var editCartItems = {
                         event.data.row.dirty = true;
                         editCartItems.populateList();
                     })
-                    .appendTo(editRow.optionsRow);
+                    .appendTo(editRow.left);
 
                 $(document.createElement("span"))
                     .text(" = ")
-                    .addClass("float_left operator")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-1")
+                    .appendTo(row.left);
                 $(document.createElement("span"))
                     .text(" = ")
-                    .addClass("float_left operator")
-                    .appendTo(editRow.optionsRow);
+                    .addClass("col-xs-1")
+                    .appendTo(editRow.left);
 
                 row.rowTotal = $(document.createElement("span"))
                     .text(product.rows[i].currentSize.Size * product.rows[i].numberOfPackages)
-                    .addClass("float_left row_total")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-3")
+                    .appendTo(row.left);
                 editRow.rowTotal = $(document.createElement("span"))
                     .text(product.rows[i].currentSize.Size * product.rows[i].numberOfPackages)
-                    .addClass("float_left row_total")
-                    .appendTo(editRow.optionsRow);
+                    .addClass("col-xs-3")
+                    .appendTo(editRow.left);
+
+
 
                 row.color = $(document.createElement("span"))
                     .text("Run Color: " + product.rows[i].color)
-                    .addClass("float_right run_color")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-5")
+                    .appendTo(row.right);
                 editRow.color = $(document.createElement("span"))
                     .text("Run Color: " + product.rows[i].color)
-                    .addClass("float_right run_color unimplemented")
-                    .appendTo(editRow.optionsRow);
+                    .addClass("col-xs-5 unimplemented")
+                    .appendTo(editRow.right);
 
 
                 row.location = $(document.createElement("span"))
                     .text("Location: " + product.rows[i].location)
-                    .addClass("float_right location")
-                    .appendTo(row.optionsRow);
+                    .addClass("col-xs-5")
+                    .appendTo(row.right);
                 editRow.location = $(document.createElement("span"))
                     .text("Location: " + product.rows[i].location)
-                    .addClass("float_right location unimplemented")
+                    .addClass("col-xs-5 unimplemented")
+                    .appendTo(editRow.right);
+                $(document.createElement("hr"))
+                    .addClass("col-xs-12")
+                    .appendTo(row.optionsRow);
+                $(document.createElement("hr"))
+                    .addClass("col-xs-12")
                     .appendTo(editRow.optionsRow);
-                $(document.createElement("br")).appendTo(row.optionsRow);
-
+                editRow.deleteButton = $(document.createElement("button"))
+                    .text("Delete")
+                    .addClass("col-xs-2")
+                    .attr("onclick", 'editCartItems.deleteRow(' + product.productID + ',' + i + ')')
+                    .appendTo(editRow.right);
+                if(product.editing) {
+                    superRow.deleteButton.show();
+                } else {
+                    superRow.deleteButton.hide();
+                }
                 if(product.editing) {
                     row.optionsRow.hide();
                     editRow.optionsRow.show();
@@ -260,19 +302,59 @@ var editCartItems = {
             }
             productList.append(superRow.cartItem);
         });
-        inventory_container.append(productList);
-        */
+        //inventory_container.append(productList);
+    },
+
+    deleteRow: function(productIndex, rowIndex) {
+        $.get(window.apiRoute + "/Carts/DeleteItemInCart/" +
+            editCartItems.model.products[productIndex].rows[rowIndex].cartItemID
+            , function(res) {
+                if (res && res.length) {
+                    console.log("Successfully deleted item product from cart.");
+                    editCartItems.model.products[productIndex].rows.splice(rowIndex, 1);
+                    editCartItems.populateList();
+                } else {
+                    $("#response").text("Error: EditCartItems.deleteProduct db response: " + JSON.parse(res));
+                }
+            }
+        )
     },
 
     editItem: function(index) {
 
+        var productTable = editCartItems.model.products;
         var product = editCartItems.model.products[index];
         product.editing = !product.editing;
 
         if(!product.editing) {
+            productTable[index].totalQuantity = 0;
+            productTable[index].rows.forEach(function(row){
+                productTable[index].totalQuantity += row.numberOfPackages * row.unitsPerPackage;
+                console.log(productTable[index].totalQuantity);
+            });
             editCartItems.submitDirtyItems(product);
         }
         editCartItems.populateList();
+    },
+
+    deleteProduct: function(index) {
+        var productTable = editCartItems.model.products;
+        productTable[index].rows.forEach(function(row) {
+            $.get(window.apiRoute + "/Carts/DeleteItemInCart/" + row.cartItemID,
+                function(res) {
+                    if (res && res.length) {
+                        console.log("Successfully deleted item product from cart.");
+                        delete productTable[index];
+                        editCartItems.populateList();
+                    } else {
+                        $("#response").text("Error: EditCartItems.deleteProduct db response: " + JSON.parse(res));
+                    }
+
+                }).fail(function(res) {
+                    $("#response").text("Error: EditCartItems.deleteProduct db connection");
+
+                })
+        });
     },
 
     submitDirtyItems: function(product) {
@@ -295,10 +377,10 @@ var editCartItems = {
                             console.log("Results of submitting changed values: ");
                             console.log(JSON.parse(res));
                         } else {
-                            $("#response").text("Error: EditCartItems.init: No response.");
+                            $("#response").text("Error: EditCartItems db response: " + JSON.parse(res));
                         }
                     }).fail(function (res) {
-                        $("#response").text("Error: EditCartItems.init: Connection error.");
+                        $("#response").text("Error: EditCartItems submission: " + JSON.parse(res));
                     });
 
             }
