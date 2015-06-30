@@ -10,13 +10,20 @@ function sendAuth() {
         pass = $("#password").val();
         var host = window.apiRoute + "/login/";
 
-        $.post('http://localhost:50001/login', {user: user, password: pass},
+        $.post(host, {user: user, password: pass},
             function (data) {
-                alert(data);
-                if (data == 'yes') {
+                var cookie = data; //req.cookies.auth
+
+                if (data != "Invalid Credentials!") {
+                    var redisInput = window.apiRoute + '/redis/SetState/' + cookie + '/' + user + '/' + "login.html";
+                    $.get(redisInput,
+                        function (redisData) { /* alert(redisData); */
+                        });
+
                     alert("login success");
                 }
-                else if (data == "Invalid Credentials!") {
+
+                if (data == "Invalid Credentials!") {
                     alert("Invalid Credentials!");
                 }
             }
