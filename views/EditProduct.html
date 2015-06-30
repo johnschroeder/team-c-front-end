@@ -16,6 +16,7 @@
 <div class="container-fluid">
     <h1>Edit Product</h1>
     <h2>Item: <span id="item_name"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="editProduct.back()">Back</button>
     <hr/>
 
     <div id="customer" class="row form-group">
@@ -51,7 +52,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
             <button id="new_thumbnail_button" class="btn btn-default hidden">Upload Different Image</button>
         </div>
     </div>
@@ -59,8 +60,9 @@
     <br/>
 
     <div class="row">
-        <div class="col-sm-4">
-            <button id="edit_button" class="btn btn-default" onclick="editProduct.edit()">Edit</button>
+        <div class="col-sm-12">
+            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editProduct.edit()">Edit</button>
+            <button id="delete_button" class="btn btn-default hidden pull-right">Delete</button>
         </div>
     </div>
 </div>

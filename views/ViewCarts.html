@@ -11,13 +11,13 @@
     <hr/>
 
     <div class="row form-group">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <label for="selectDropDown">Select a cart to view</label>
             <select id="selectDropDown" class="form-control filter track-by" onChange=displayCartInventory()></select>
         </div>
-        <div class="col-sm-offset-4 col-sm-4">
-            <button class="btn btn-default pull-right" onclick="gotoEditCarts()">Edit Cart</button>
-            <button class="btn btn-default pull-right" onclick="gotoEditItems()">Edit Items</button>
+        <div class="col-sm-6">
+            <button class="btn btn-default pull-right" title="View or edit the details of the selected cart." onclick="gotoEditCarts()">View/Edit Cart</button>
+            <button class="btn btn-default pull-right" title="Edit the items in the selected cart." onclick="gotoEditItems()">Edit Items</button>
             <br/>
             <div id="notSelected"></div>
         </div>

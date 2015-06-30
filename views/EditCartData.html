@@ -8,6 +8,7 @@
 <div class="container-fluid">
     <h1>Edit Cart Data</h1>
     <h2>Cart: <span id="cart_name"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="editCartData.back()">Back</button>
     <hr/>
 
     <div class="row form-group">
@@ -51,15 +52,16 @@
     <br/>
 
     <div class="row form-group">
-        <div class="col-sm-4">
-            <button id="edit_button" class="btn btn-default" onclick="editCartData.edit()">Edit</button>
+        <div class="col-sm-12">
+            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editCartData.edit()">Edit</button>
+            <button id="delete_button" class="btn btn-default hidden pull-right">Delete</button>
         </div>
     </div>
 
     <br/>
 
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
             <button class="btn btn-default" onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart Items</button>
         </div>
     </div>

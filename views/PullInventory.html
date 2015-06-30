@@ -10,6 +10,7 @@
 <div class="container-fluid">
     <h1>Pull Inventory</h1>
     <h2>Item: <span id="ProductName"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="back()">Back</button>
     <hr/>
 
     <span>Amount Available: </span>
@@ -45,7 +46,7 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <button id="AddMore" class="btn btn-default" onclick="AddMore()">+ Add Entry</button>
+            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="AddMore()">+ Add Entry</button>
         </div>
         <div class="col-sm-offset-4 col-sm-2"><p class="form-control-static">Total</p></div>
         <div class="col-sm-2"><p id="TotalInventory" class="form-control-static">0</p></div>
@@ -61,8 +62,10 @@
         <label>Add New Size</label>
         <div class="row form-group form-inline">
             <div id="divNewSize" class="col-sm-12">
-                <label for="SizeName">Size Name</label><input id="SizeName" class="form-control" type="text"/>
-                <label for="SizeNumber">Size</label><input id="SizeNumber" class="form-control" type="number" min="0"/>
+                <label for="SizeName">Size Name</label>
+                <input id="SizeName" class="form-control" type="text" title="Name of the package."/>
+                <label for="SizeNumber">Size</label>
+                <input id="SizeNumber" class="form-control" type="number" title="Size of the package." min="0"/>
                 <button id="SubmitNewSize" class="btn btn-default" onclick="SubmitNewSize()">Submit This Size</button>
             </div>
         </div>
@@ -78,11 +81,14 @@
         <br/><br/>
 
         <div id="divNewCart" class="form-group form-inline" hidden="hidden">
-            <label for="iptCartName">Cart Name/Order Number</label><input id="iptCartName" class="form-control" type="text">
+            <label for="iptCartName">Cart Name/Order Number</label>
+            <input id="iptCartName" class="form-control" type="text">
             <br/>
-            <label for="iptDaysToSave">Save cart for</label><input id="iptDaysToSave" class="form-control" type="number" min="0"><label> days</label>
+            <label for="iptDaysToSave">Save cart for</label>
+            <input id="iptDaysToSave" class="form-control" type="number" min="0"><label> days</label>
             <br/>
-            <label for="sltAssignee">Assignee</label><select id="sltAssignee" class="form-control"></select>
+            <label for="sltAssignee">Assignee</label>
+            <select id="sltAssignee" class="form-control"></select>
             <br/>
             <button id="btnAddNewCart" class="btn btn-default" onclick="SubmitNewCart()">Submit New Cart</button>
         </div>

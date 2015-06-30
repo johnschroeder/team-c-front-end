@@ -15,6 +15,7 @@
 <div class="container-fluid">
     <h1>Item Details</h1>
     <h2 id="product_name"></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="itemDetailView.back()">Back</button>
     <hr/>
 
     <div class="row">
@@ -28,11 +29,11 @@
     <br/>
 
     <div id="buttons" class="row">
-        <div class="col-sm-8">
-            <button class="btn btn-default" onclick="itemDetailView.add()">Add</button>
-            <button class="btn btn-default" onclick="itemDetailView.pull()">Pull</button>
-            <button class="btn btn-default" onclick="itemDetailView.edit()">Edit</button>
-            <button class="btn btn-default">Delete</button>
+        <div class="col-sm-12">
+            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">Add Inventory</button>
+            <button class="btn btn-default" title="Pull inventory from this product." onclick="itemDetailView.pull()">Pull Inventory</button>
+            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">View/Edit Product</button>
+            <button class="btn btn-default pull-right" title="Delete this product.">Delete Product</button>
         </div>
     </div>
 
@@ -101,6 +102,10 @@
         edit: function() {
             if (!this.productID || !this.item) return;
             navigation.go("EditProduct.html", {ProductID:this.productID, ProductName:this.item.Name || "", PreviousPage:"ItemDetailView.html"});
+        },
+
+        back: function() {
+            navigation.go("DisplayInventory.html", {ProductID: window.args.ProductID});
         }
     };
 

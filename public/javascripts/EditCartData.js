@@ -37,6 +37,8 @@ var editCartData = {
             $("#Reporter").val(original_reporter);
             $("#Assignee").val(original_assignee);
             $("#Date").val(original_date.split("T")[0]);
+
+            $("#edit_button").prop("disabled", false);
         });
 
         //$("#CartName").focus();
@@ -60,53 +62,59 @@ var editCartData = {
         $("#Reporter").removeClass("hidden");
         $("#Assignee").removeClass("hidden");
         $("#Date").removeClass("hidden");
+        $("#delete_button").removeClass("hidden");
 
-        $("#edit_button").text("Done")
-            .attr("onclick", "editCartData.CartDataEdit(editCartData.getCartId())");
+        $("#edit_button")
+            .attr("onclick", "editCartData.CartDataEdit(editCartData.getCartId())")
+            .text("Done");
     },
 
     CartDataEdit: function(cartID) {
         //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
-        // var prodID = window.args.ProductID
+        //var prodID = window.args.ProductID
 
         var newCartName = $("#CartName").val();
         var newReporter = $("#Reporter").val();
         var newAssignee = $("#Assignee").val();
         var newDate = $("#Date").val();
 
-        $("#CartName").addClass("hidden");
-        $("#Reporter").addClass("hidden");
-        $("#Assignee").addClass("hidden");
-        $("#Date").addClass("hidden");
-
-        $("#CartName_text").text(newCartName)
-            .removeClass("hidden");
-
-        $("#Reporter_text").text(newReporter)
-            .removeClass("hidden");
-
-        $("#Assignee_text").text(newAssignee)
-            .removeClass("hidden");
-
-        $("#Date_text").text(newDate)
-            .removeClass("hidden");
-
         $("#edit_button").prop("disabled", true);
 
         var host = window.apiRoute + '/Carts/EditCart/' + cartID + '/' + '"' + newCartName.trim() + '"' + "/" + '"' + newReporter.trim() + '"' + "/" + '"' + newAssignee.trim() + '"' + "/" + '"' + newDate.trim() + '"';
 
         $.get(host, function (res) {
-            console.log("Success!");
+            $("#CartName").addClass("hidden");
+            $("#Reporter").addClass("hidden");
+            $("#Assignee").addClass("hidden");
+            $("#Date").addClass("hidden");
+            $("#delete_button").addClass("hidden");
+
+            $("#CartName_text").text(newCartName)
+                .removeClass("hidden");
+
+            $("#Reporter_text").text(newReporter)
+                .removeClass("hidden");
+
+            $("#Assignee_text").text(newAssignee)
+                .removeClass("hidden");
+
+            $("#Date_text").text(newDate)
+                .removeClass("hidden");
 
             $("#edit_button")
                 .attr("onclick", "editCartData.edit()")
-                .prop("disabled", false);
+                .prop("disabled", false)
+                .text("Edit");
 
-            navigation.go(window.args.previousPage);
+            //navigation.go(window.args.previousPage);
         });
     },
 
     CartItemsEdit: function(cartID, cartName) {
         navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
+    },
+
+    back: function() {
+        navigation.go(window.args.previousPage);
     }
 };

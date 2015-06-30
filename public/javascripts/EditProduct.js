@@ -1,7 +1,5 @@
 var editProduct = {
     product: null,
-    editing: false,
-    ready: false,
 
     init: function() {
         //TODO use john's breadcrumb loader to load a new page here populated with the data.
@@ -18,13 +16,12 @@ var editProduct = {
             $("#customer_input").val(self.product.Customer); //fill Customer
             $("#product_name_input").val(self.product.Name); //fill Item Name
             $("#description_input").val(self.product.Description); //fill Description
-            self.ready = true;
+
+            $("#edit_button").prop("disabled", false);
         });
     },
 
     edit: function() {
-        if (!this.ready) return;
-
         $("#customer_text").addClass("hidden");
         $("#product_name_text").addClass("hidden");
         $("#description_text").addClass("hidden");
@@ -33,6 +30,7 @@ var editProduct = {
         $("#product_name_input").removeClass("hidden");
         $("#description_input").removeClass("hidden");
         $("#new_thumbnail_button").removeClass("hidden");
+        $("#delete_button").removeClass("hidden");
 
         $("#edit_button").text("Done")
             .attr("onclick", "editProduct.done()");
@@ -53,6 +51,7 @@ var editProduct = {
             $("#product_name_input").addClass("hidden");
             $("#description_input").addClass("hidden");
             $("#new_thumbnail_button").addClass("hidden");
+            $("#delete_button").addClass("hidden");
 
             $("#customer_text").text(newCustName)
                 .removeClass("hidden");
@@ -67,6 +66,10 @@ var editProduct = {
                 .attr("onclick", "editProduct.edit()")
                 .prop("disabled", false);
         //});
+    },
+
+    back: function() {
+        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };
 

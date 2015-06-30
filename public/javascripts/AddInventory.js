@@ -18,17 +18,6 @@ var addInventory = {
         this.itemName = window.args.ProductName || "";
         $("#item_name").text(this.itemName);
 
-        /*$.get(window.apiRoute + "/GetItemName/" + this.productId, function(res) {
-            if (res && res.length) {
-                addInventory.itemName = $.parseJSON(res)[0].Name;
-                $("#item_name").text(addInventory.itemName);
-            } else {
-                $("#response").text("Error: Init: No response.");
-            }
-        }).fail(function(res) {
-            $("#response").text("Error: Init: Connection error.");
-        });*/
-
         this.addEntry();
         this.updatePackageTypes();
     },
@@ -154,13 +143,9 @@ var addInventory = {
     // Updates the types of package available. Retrieves package types data from the back-end.
     updatePackageTypes: function() {
         $.get(window.apiRoute + "/GetSizeByProductID/" + this.getProductId(), function(res) {
-            if (res && res.length) {
-                addInventory.packageTypes = $.parseJSON(res);
-                addInventory.updatePackageTypeOptions();
-                addInventory.updateTotal();
-            } else {
-                $("#response").text("Error: Update package types: No response.");
-            }
+            addInventory.packageTypes = $.parseJSON(res);
+            addInventory.updatePackageTypeOptions();
+            addInventory.updateTotal();
         }).fail(function(res) {
             $("#response").text("Error: Update package types: Connection error.");
         });
@@ -238,5 +223,10 @@ var addInventory = {
             $("#response").text("Error: Submit new package type: Connection error.");
             $("#pkg_add_button").prop("disabled", false);
         });
+    },
+
+    // Go back to the last page.
+    back: function() {
+        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };
