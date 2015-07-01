@@ -1,0 +1,21 @@
+<body>
+<script>
+window.apiRoute = "<%= apiRoute %>";
+window.lookup = "<%= lookup %>";
+</script>
+<% include indexBody.html %>
+<script>
+jQuery.get(window.apiRoute+"/Login/TestsIdentifier/"+window.lookup, function(){
+if(lookup.type == "reset"){
+navigation.go('ResetPassword.html');
+}
+else if(lookup.type == "create"){
+navigation.go('confirmUser.html');
+}
+else{
+navigation.go('Home.html');
+}
+});
+
+</script>
+</body>
