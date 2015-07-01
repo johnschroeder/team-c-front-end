@@ -1,81 +1,104 @@
 <!DOCTYPE html>
-<p>
+<html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>
-        Pull Inventory
-    </title>
-    <script src="javascripts/jquery-1.11.3.min.js"></script>
-    <script src="javascripts/bootstrap.min.js"></script>
+    <title>Pull Inventory</title>
     <script src="javascripts/PullInventory.js"></script>
 </head>
 <body>
 
-    <p>
-        <label>Pull Inventory</label>
-        <div id="ProductName"></div>
-        <span>Available Amount</span>
-        <label id="AvailableAmout"></label>
-        </p>
-        <span>Total quantity in this Pull</span>
-        <label id="TotalInventory"></label>
-    </h1>
+<div class="container-fluid">
+    <h1>Pull Inventory</h1>
+    <h2>Item: <span id="ProductName"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="back()">Back</button>
+    <hr/>
+
+    <span>Amount Available: </span>
+    <label id="AvailableAmout"></label>
+
+    <br/>
+
     <div id="response"></div>
 
+    <br/>
+
     <div id="InputDiv">
-        <div class="InputChild">
-            <select onchange="SelectOnchange(this)" class="Size">
-                <option value= 0 >Please Select Package Size---</option>>
-            </select>
-            *
-            <input type="number" onchange="ReCalculate()" class="Count">
-            = Subtotal of <label class="Subtotal"></label>
+        <div class="InputChild row form-group">
+            <div class="col-sm-4">
+                <select onchange="SelectOnchange(this)" class="form-control Size">
+                    <option value="0">Please Select Package Size---</option>
+                </select>
+            </div>
+            <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+
+            <div class="col-sm-2">
+                <input type="number" class="form-control Count" onchange="ReCalculate()" min="0">
+            </div>
+
+            <div class="col-sm-1">
+                <p class="form-control-static text-center">=</p>
+            </div>
+
+            <div class="col-sm-2"><p class="form-control-static">Subtotal of</p></div>
+            <div class="col-sm-2"><p class="form-control-static Subtotal">0</p></div>
         </div>
     </div>
-    <button id="AddMore" onclick="AddMore()">Pull More</button>
-    <div id="AddNewSize">
-        </p>
-        </p>
-        <label>add new size</label>
-        <div id="divNewSize">
-            <div>Size Name</div> <input type="text" id="SizeName">
-            <div>Size</div> <input type="number" id="SizeNumber">
-            <button id="SubmitNewSize" onclick="SubmitNewSize()">Submit This Size</button>
+
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="AddMore()">+ Add Entry</button>
         </div>
-        </p>
-        </p>
+        <div class="col-sm-offset-4 col-sm-2"><p class="form-control-static">Total</p></div>
+        <div class="col-sm-2"><p id="TotalInventory" class="form-control-static">0</p></div>
+    </div>
+
+    <div class="row">
+
+    </div>
+
+    <br/>
+
+    <div id="AddNewSize" hidden="hidden">
+        <label>Add New Size</label>
+        <div class="row form-group form-inline">
+            <div id="divNewSize" class="col-sm-12">
+                <label for="SizeName">Size Name</label>
+                <input id="SizeName" class="form-control" type="text" title="Name of the package."/>
+                <label for="SizeNumber">Size</label>
+                <input id="SizeNumber" class="form-control" type="number" title="Size of the package." min="0"/>
+                <button id="SubmitNewSize" class="btn btn-default" onclick="SubmitNewSize()">Submit This Size</button>
+            </div>
+        </div>
     </div>
 
     <div id="divAddtoCart">
-        </p>
-        </p>
-
         <input type="radio" name="Cart" value="true" id="rbExistingCart" onclick="AddToExistingCart()"/>
         <label for="rbExistingCart">Add to Existing Cart</label>
-        </p>
+        <br/>
         <input type="radio" name="Cart" value="false" id="rbNewCart" onclick="AddToNewCart()"/>
         <label for="rbNewCart">Create a New Cart</label>
 
-        </p>
-        </p>
-        <div id="divNewCart" >
-            <label>Cart Name/Order Number</label><input type="text" id="iptCartName">
-            </p>
-            <label>Save cart for</label><input type="number" id="iptDaysToSave"><label>Days</label>
-            </p>
-            <label>Assignee</label><select id="sltAssignee"></select>
-            </p>
-            <button id="btnAddNewCart" onclick="SubmitNewCart()">Submit New Cart</button>
+        <br/><br/>
+
+        <div id="divNewCart" class="form-group form-inline" hidden="hidden">
+            <label for="iptCartName">Cart Name/Order Number</label>
+            <input id="iptCartName" class="form-control" type="text">
+            <br/>
+            <label for="iptDaysToSave">Save cart for</label>
+            <input id="iptDaysToSave" class="form-control" type="number" min="0"><label> days</label>
+            <br/>
+            <label for="sltAssignee">Assignee</label>
+            <select id="sltAssignee" class="form-control"></select>
+            <br/>
+            <button id="btnAddNewCart" class="btn btn-default" onclick="SubmitNewCart()">Submit New Cart</button>
         </div>
 
-
-        <div id="divSelectCart">
-            <select id="slCart"></select>
-            <button id="btnAddToExistingCart" onclick="ChooseExistingCart()">Add To This Cart</button>
+        <div id="divSelectCart" class="form-group form-inline" hidden="hidden">
+            <select id="slCart" class="form-control"></select>
+            <button id="btnAddToExistingCart" class="btn btn-default" onclick="ChooseExistingCart()">Add To This Cart</button>
         </div>
     </div>
-
-
-    <script>init()</script>
+</div>
+<script>$(init.bind(this))</script>
 </body>
 </html>

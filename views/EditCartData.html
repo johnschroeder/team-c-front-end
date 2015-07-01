@@ -1,45 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
-    <script src="javascripts/nav_vert.js"></script>
+<head lang="en">
+    <meta charset="UTF-8"/>
     <script src="javascripts/EditCartData.js"></script>
-
 </head>
-<div class="new-product-form">
-    <h1>Edit Cart <span id="cart_name"></span></h1>
+<body>
+<div class="container-fluid">
+    <h1>Edit Cart Data</h1>
+    <h2>Cart: <span id="cart_name"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="editCartData.back()">Back</button>
+    <hr/>
 
-    <div id="original_cart_name">Editing Cart: ERROR_DID_NOT_LOAD_SCRIPT</div>
-
-
-    <div class="input-row">
-        <div class="input-label">Cart Name</div>
-        <textarea class="CartName" rows="1" type="textarea"> </textarea>
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="CartName">Cart Name</label>
+            <p id="CartName_text" class="form-control-static"></p>
+            <input id="CartName" class="form-control hidden" type="text"></input>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Reporter</div>
-        <textarea class="Reporter" type="textarea" rows="1"></textarea>
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="Reporter">Reporter</label>
+            <p id="Reporter_text" class="form-control-static"></p>
+            <input id="Reporter" class="form-control hidden" type="text"></input>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Assignee</div>
-        <textarea class="Assignee" rows="1" cols="50"></textarea>
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="Assignee">Assignee</label>
+            <p id="Assignee_text" class="form-control-static"></p>
+            <input id="Assignee" class="form-control hidden" type="text"></input>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Delete Date</div>
-        <textarea class="Date" rows="1" cols="50"></textarea>
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="Date">Delete Date</label>
+            <p id="Date_text" class="form-control-static"></p>
+            <input id="Date" class="form-control hidden" type="text"></input>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="submit" onclick="CartDataEdit(myCartID())">Done Editing</div>
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editCartData.edit()">Edit</button>
+            <button id="delete_button" class="btn btn-default hidden pull-right">Delete</button>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="submit" onclick="CartItemsEdit(myCartID(), myCartName())">Edit Cart Items</div>
+    <br/>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-default" onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart Items</button>
+        </div>
     </div>
-    <script>setCurrentValues()</script>
+
+    <div id="response"></div>
 </div>
+<script>
+    $(function() {
+        editCartData.init();
+    });
+</script>
+</body>
 </html>
