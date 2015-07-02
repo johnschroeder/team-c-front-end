@@ -1,3 +1,4 @@
+//<script>
 // Input arguments: ProductID, ProductName, PreviousPage
 var addInventory = {
     productId: 0,
@@ -15,62 +16,72 @@ var addInventory = {
         }
 
         this.itemName = window.args.ProductName || "";
-        $("#item_text").text(this.itemName);
+        $("#item_name").text(this.itemName);
 
-        /*$.get(window.apiRoute + "/GetItemName/" + this.productId, function(res) {
-            if (res && res.length) {
-                addInventory.itemName = $.parseJSON(res)[0].Name;
-                $("#item_text").text(addInventory.itemName);
-            } else {
-                $("#response").text("Error: Init: No response.");
-            }
-        }).fail(function(res) {
-            $("#response").text("Error: Init: Connection error.");
-        });*/
-
+        this.addEntry();
         this.updatePackageTypes();
     },
 
     // Reset the add inventory entries.
     reset: function() {
         $("#add_list").empty();
+        this.addEntry();
         this.updateTotal();
     },
 
     // Add an add inventory entry.
     addEntry: function() {
         var entry = $(document.createElement("div"))
-            .addClass("row")
+            .addClass("row form-group")
             .appendTo("#add_list");
 
         // package type input
         var select = $(document.createElement("select"))
-            .addClass("col-sm-3")
+            .addClass("form-control")
             .attr("name", "package_input")
             .attr("onchange", "addInventory.updateTotal()");
 
         this.updateEntryPackageTypeOptions(select);
 
-        entry.append(select)
-            .append($(document.createElement("div"))
-                .css("font-size", "150%")
-                .addClass("col-sm-1 text-center")
-                .text("*")
-            ).append($(document.createElement("input")) // amount input
-                .addClass("col-sm-2")
-                .attr("name", "amount_input")
-                .attr("type", "text")
-                .attr("onkeyup", "addInventory.updateTotal()")
+        entry.append($(document.createElement("div"))
+                .addClass("col-sm-4")
+                .append(select)
             ).append($(document.createElement("div"))
-                .addClass("col-sm-2 text-center")
-                .text("=")
+                .addClass("col-sm-1")
+                .append($(document.createElement("p"))
+                    .addClass("form-control-static text-center")
+                    .css("font-size", "150%")
+                    .text("*")
+                )
             ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
-                .text("Count of")
-            ).append($(document.createElement("div")) // count
+                .append($(document.createElement("input")) // amount input
+                    .addClass("form-control")
+                    .attr("name", "amount_input")
+                    .attr("type", "number")
+                    .attr("min", 0)
+                    .attr("onkeyup", "addInventory.updateTotal()")
+                    .attr("onchange", "addInventory.updateTotal()")
+                )
+            ).append($(document.createElement("div"))
+                .addClass("col-sm-1")
+                .append($(document.createElement("p"))
+                    .addClass("form-control-static text-center")
+                    .text("=")
+                )
+            ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
-                .attr("name", "count_text")
-                .text("0")
+                .append($(document.createElement("p"))
+                    .addClass("form-control-static")
+                    .text("Count of")
+                )
+            ).append($(document.createElement("div"))
+                .addClass("col-sm-2")
+                .append($(document.createElement("p"))
+                    .addClass("form-control-static")
+                    .attr("name", "count_text")
+                    .text("0")
+                )
             );
     },
 
@@ -83,10 +94,10 @@ var addInventory = {
                 itemName: addInventory.getItemName(),
                 productId: addInventory.getProductId(),
                 location: addInventory.getLocation(),
-                packageName: $(this).children("select[name='package_input']").children("option:selected").data("name"),
-                packageSize: $(this).children("select[name='package_input']").children("option:selected").data("size"),
-                amount: $(this).children("input[name='amount_input']").val(),
-                count: $(this).children("div[name='count_text']").text()
+                packageName: $(this).find("select[name='package_input']").children("option:selected").data("name"),
+                packageSize: $(this).find("select[name='package_input']").children("option:selected").data("size"),
+                amount: $(this).find("input[name='amount_input']").val(),
+                count: $(this).find("p[name='count_text']").text()
             });
         });
 
@@ -119,11 +130,11 @@ var addInventory = {
         this.total = 0;
 
         $("#add_list").children("div").each(function() { // each entry
-            var size = parseInt($(this).children("select[name='package_input']").children("option:selected").data("size")) || 0;
-            var amount = parseInt($(this).children("input[name='amount_input']").val()) || 0;
-            var countOf = size * amount;
-            $(this).children("div[name='count_text']").text(countOf);
-            addInventory.total += countOf;
+            var size = parseInt($(this).find("select[name='package_input']").children("option:selected").data("size")) || 0;
+            var amount = parseInt($(this).find("input[name='amount_input']").val()) || 0;
+            var count = size * amount;
+            $(this).find("p[name='count_text']").text(count);
+            addInventory.total += count;
         });
 
         $("#total_text").text(this.total);
@@ -132,13 +143,9 @@ var addInventory = {
     // Updates the types of package available. Retrieves package types data from the back-end.
     updatePackageTypes: function() {
         $.get(window.apiRoute + "/GetSizeByProductID/" + this.getProductId(), function(res) {
-            if (res && res.length) {
-                addInventory.packageTypes = $.parseJSON(res);
-                addInventory.updatePackageTypeOptions();
-                addInventory.updateTotal();
-            } else {
-                $("#response").text("Error: Update package types: No response.");
-            }
+            addInventory.packageTypes = $.parseJSON(res);
+            addInventory.updatePackageTypeOptions();
+            addInventory.updateTotal();
         }).fail(function(res) {
             $("#response").text("Error: Update package types: Connection error.");
         });
@@ -147,8 +154,8 @@ var addInventory = {
     // Updates the options for the package types.
     updatePackageTypeOptions: function() {
         $("#add_list").children("div").each(function() {
-            var lastSelected = $(this).children("select[name='package_input']").children("option:selected").val();
-            var select = $(this).children("select[name='package_input']")
+            var lastSelected = $(this).find("select[name='package_input']").children("option:selected").val();
+            var select = $(this).find("select[name='package_input']")
                 .empty();
 
             addInventory.updateEntryPackageTypeOptions(select);
@@ -181,14 +188,16 @@ var addInventory = {
             return;
         }
 
+        $("#inventory_add_button").prop("disabled", true);
+
         $.get(window.apiRoute + "/AddInventory/" + productId + "/" + total + "/" + location, function(res) {
+            addInventory.reset();
             $("#response").text("Added inventory: " + total + " at " + location + ".");
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
             $("#response").text("Error: Submit add inventory: Connection error.");
+            $("#inventory_add_button").prop("disabled", false);
         });
-
-        addInventory.reset()
     },
 
     // Submit new package type
@@ -202,11 +211,22 @@ var addInventory = {
             return;
         }
 
+        $("#pkg_add_button").prop("disabled", true);
+
         $.get(window.apiRoute + "/AddProductSize/" + productId + "/" + name + "/" + size, function(res) {
             $("#response").text("Added new package type: " + name + " " + size + ".");
             addInventory.updatePackageTypes();
+            $("#pkg_name").val("");
+            $("#pkg_size").val("");
+            $("#pkg_add_button").prop("disabled", false);
         }).fail(function(res) {
             $("#response").text("Error: Submit new package type: Connection error.");
+            $("#pkg_add_button").prop("disabled", false);
         });
+    },
+
+    // Go back to the last page.
+    back: function() {
+        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };
