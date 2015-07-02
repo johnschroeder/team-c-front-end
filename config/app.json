@@ -33,5 +33,6 @@
 
     },
     "trevor":{
+      "api": "http://dev.thisisimp.com/api/"
     }
 }
