@@ -92,3 +92,7 @@ function DeleteUsers(){
 function ViewUsers(){
     $('#main_cont').text("ViewUsers");
 }
+
+function loginPage() {
+    navigation.go("loginForm.html");
+}

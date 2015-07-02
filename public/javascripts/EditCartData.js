@@ -1,5 +1,5 @@
 var editCartData = {
-    init: function() {
+    init: function () {
         $("#cart_name").text(window.args.cartName);
 
         var host = window.apiRoute + "/Carts/GetAllCarts/";
@@ -12,7 +12,7 @@ var editCartData = {
         $.get(host, function (data) {
             var carts = $.parseJSON(data);
 
-            var cartsFound = carts.filter(function(each) {
+            var cartsFound = carts.filter(function (each) {
                 if (each.CartID == window.args.cartID) return true;
             });
 
@@ -44,15 +44,15 @@ var editCartData = {
         //$("#CartName").focus();
     },
 
-    getCartId: function() {
+    getCartId: function () {
         return window.args.cartID;
     },
 
-    getCartName: function() {
+    getCartName: function () {
         return $("#CartName_text").text();
     },
 
-    edit: function() {
+    edit: function () {
         $("#CartName_text").addClass("hidden");
         $("#Reporter_text").addClass("hidden");
         $("#Assignee_text").addClass("hidden");
@@ -69,7 +69,7 @@ var editCartData = {
             .text("Done");
     },
 
-    CartDataEdit: function(cartID) {
+    CartDataEdit: function (cartID) {
         //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
         //var prodID = window.args.ProductID
 
@@ -110,11 +110,11 @@ var editCartData = {
         });
     },
 
-    CartItemsEdit: function(cartID, cartName) {
+    CartItemsEdit: function (cartID, cartName) {
         navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
     },
 
-    back: function() {
+    back: function () {
         navigation.go(window.args.previousPage);
     }
 };

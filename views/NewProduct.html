@@ -46,6 +46,7 @@
     <div class="row">
         <div class="col-sm-3">
             <label>Image</label>
+
             <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
         </div>
     </div>
@@ -130,7 +131,7 @@
 
             submit_button.prop("disabled", true);
 
-            $.get( host, function( response ) {
+            $.get(host, function (response) {
                 if( response == "Success" ){
                     $("#message").text("Successfully created product");
                     submit_button.prop("disabled", false);
@@ -139,7 +140,7 @@
                     $("#message").text("Error: " + response);
                     submit_button.prop("disabled", false);
                 }
-            }).fail( function( err ){
+            }).fail(function (err) {
                 $("#message").text("Error: " + err.responseText);
                 submit_button.prop("disabled", false);
             });

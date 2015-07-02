@@ -7,6 +7,7 @@
 <body>
 <div class="container-fluid">
     <h1>Edit Cart Data</h1>
+
     <h2>Cart: <span id="cart_name"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="editCartData.back()">Back</button>
     <hr/>
@@ -14,6 +15,7 @@
     <div class="row form-group">
         <div class="col-sm-12">
             <label for="CartName">Cart Name</label>
+
             <p id="CartName_text" class="form-control-static"></p>
             <input id="CartName" class="form-control hidden" type="text"></input>
         </div>
@@ -24,6 +26,7 @@
     <div class="row form-group">
         <div class="col-sm-12">
             <label for="Reporter">Reporter</label>
+
             <p id="Reporter_text" class="form-control-static"></p>
             <input id="Reporter" class="form-control hidden" type="text"></input>
         </div>
@@ -34,6 +37,7 @@
     <div class="row form-group">
         <div class="col-sm-12">
             <label for="Assignee">Assignee</label>
+
             <p id="Assignee_text" class="form-control-static"></p>
             <input id="Assignee" class="form-control hidden" type="text"></input>
         </div>
@@ -44,6 +48,7 @@
     <div class="row form-group">
         <div class="col-sm-12">
             <label for="Date">Delete Date</label>
+
             <p id="Date_text" class="form-control-static"></p>
             <input id="Date" class="form-control hidden" type="text"></input>
         </div>
@@ -53,7 +58,8 @@
 
     <div class="row form-group">
         <div class="col-sm-12">
-            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editCartData.edit()">Edit</button>
+            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editCartData.edit()">Edit
+            </button>
             <button id="delete_button" class="btn btn-default hidden pull-right">Delete</button>
         </div>
     </div>
@@ -62,14 +68,17 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <button class="btn btn-default" onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart Items</button>
+            <button class="btn btn-default"
+                    onclick="editCartData.CartItemsEdit(editCartData.getCartId(), editCartData.getCartName())">Edit Cart
+                Items
+            </button>
         </div>
     </div>
 
     <div id="response"></div>
 </div>
 <script>
-    $(function() {
+    $(function () {
         editCartData.init();
     });
 </script>

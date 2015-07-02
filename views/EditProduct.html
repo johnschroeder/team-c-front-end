@@ -15,6 +15,7 @@
 <body>
 <div class="container-fluid">
     <h1>Edit Product</h1>
+
     <h2>Item: <span id="item_name"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="editProduct.back()">Back</button>
     <hr/>
@@ -22,6 +23,7 @@
     <div id="customer" class="row form-group">
         <div class="col-sm-12">
             <label for="customer_input">Customer</label>
+
             <p id="customer_text" class="form-control-static"></p>
             <input id="customer_input" class="form-control hidden" type="text"/>
         </div>
@@ -30,6 +32,7 @@
     <div id="product_name" class="row form-group">
         <div class="col-sm-12">
             <label for="product_name_input">Item Name</label>
+
             <p id="product_name_text" class="form-control-static"></p>
             <input id="product_name_input" class="form-control hidden" type="text"/>
         </div>
@@ -38,6 +41,7 @@
     <div id="description" class="row form-group">
         <div class="col-sm-12">
             <label for="description_input">Description</label>
+
             <p id="description_text" class="form-control-static"></p>
             <textarea id="description_input" class="form-control hidden" rows="3"/>
         </div>
@@ -47,6 +51,7 @@
     <div class="row">
         <div class="col-sm-3">
             <label>Image</label>
+
             <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
         </div>
     </div>
@@ -61,14 +66,17 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editProduct.edit()">Edit</button>
+            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editProduct.edit()">Edit
+            </button>
             <button id="delete_button" class="btn btn-default hidden pull-right">Delete</button>
         </div>
     </div>
 </div>
 
 <script>
-    $(function() {editProduct.init();});
+    $(function () {
+        editProduct.init();
+    });
 </script>
 </body>
 </html>

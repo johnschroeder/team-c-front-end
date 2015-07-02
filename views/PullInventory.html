@@ -9,6 +9,7 @@
 
 <div class="container-fluid">
     <h1>Pull Inventory</h1>
+
     <h2>Item: <span id="ProductName"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="back()">Back</button>
     <hr/>
@@ -46,7 +47,9 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="AddMore()">+ Add Entry</button>
+            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="AddMore()">+ Add
+                Entry
+            </button>
         </div>
         <div class="col-sm-offset-4 col-sm-2"><p class="form-control-static">Total</p></div>
         <div class="col-sm-2"><p id="TotalInventory" class="form-control-static">0</p></div>
@@ -60,6 +63,7 @@
 
     <div id="AddNewSize" hidden="hidden">
         <label>Add New Size</label>
+
         <div class="row form-group form-inline">
             <div id="divNewSize" class="col-sm-12">
                 <label for="SizeName">Size Name</label>
@@ -95,7 +99,8 @@
 
         <div id="divSelectCart" class="form-group form-inline" hidden="hidden">
             <select id="slCart" class="form-control"></select>
-            <button id="btnAddToExistingCart" class="btn btn-default" onclick="ChooseExistingCart()">Add To This Cart</button>
+            <button id="btnAddToExistingCart" class="btn btn-default" onclick="ChooseExistingCart()">Add To This Cart
+            </button>
         </div>
     </div>
 </div>
