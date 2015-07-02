@@ -5,11 +5,11 @@
         "debug": true
     },
     "dev":{
-        "api": "http://dev.thisisimp.com/",
+        "api": "http://dev.thisisimp.com/api/",
         "debug": true
     },
     "prod":{
-        "api": "http://www.thisisimp.com/",
+        "api": "http://www.thisisimp.com/api/",
         "debug": false
     },
     "kun":{
