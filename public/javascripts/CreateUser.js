@@ -13,7 +13,7 @@ jQuery('#createUser').submit(function(){
         data: toPass,
         dataType: 'json',
         success: function(){
-            window.alert("User Added");
+            window.alert("Please check your email for an account creation confirmation.");
         }
     });
 });
