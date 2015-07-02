@@ -26,6 +26,10 @@ glob.sync('**/*.js',{'cwd':path}).forEach(
     }
 );
 
+app.get("/:lookup", function(req, res){
+    res.render("Confirm.ejs", {apiRoute: apiRoute, lookup:req.params.lookup});
+});
+
 app.get("/", function(req, res){
     res.render("indexHeader.ejs", {apiRoute: apiRoute});
 });

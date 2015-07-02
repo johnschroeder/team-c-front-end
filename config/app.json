@@ -1,15 +1,15 @@
 {
     "default":{
         "port":50000,
-        "api": "http://local.thisisimp.com/",
+        "api": "http://local.thisisimp.com/api",
         "debug": true
     },
     "dev":{
-        "api": "http://dev.thisisimp.com/api/",
+        "api":"http://dev.thisisimp.com/api/",
         "debug": true
     },
     "prod":{
-        "api": "http://www.thisisimp.com/api/",
+        "api":"http://www.thisisimp.com/api",
         "debug": false
     },
     "kun":{
@@ -27,7 +27,6 @@
     "john":{
     },
     "mike":{
-        "api":"http://dev.thisisimp.com/api/"
     },
     "tim":{
 

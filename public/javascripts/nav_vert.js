@@ -47,6 +47,10 @@ function Home(){
 }
 
 //
+function CreateUser(){
+    navigation.go("CreateUser.html");
+}
+
 function ViewCarts(){
     navigation.go("ViewCarts.html");
 }
