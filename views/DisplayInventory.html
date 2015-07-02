@@ -3,30 +3,26 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Current Inventory</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
-    <script src="javascripts/jquery-1.11.3.min.js"></script>
-    <script src="javascripts/bootstrap.min.js"></script>
-    <script src="javascripts/QueryStringHelper.js"></script>
-    <script src="javascripts/DisplayInventory.js"></script>
 </head>
 
 <body>
 
-<div class="display-inventory-container">
+<div class="container-fluid display-inventory-container">
+    <h1>Track Inventory</h1>
+    <hr/>
 
-    <div class="menu">
+    <div class="row">
 
-        <div class="input-row track-inventory-by">
-            <div class="input-label">Track Inventory By</div>
-            <select class="filter track-by">
+        <div class="col-sm-6 track-inventory-by">
+            <label for="track_by" class="input-label">Track Inventory By</label>
+            <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
             </select>
         </div>
 
-        <div class="input-row">
-            <div class="input-label">Filter</div>
-            <select class="filter customer">
+        <div class="col-sm-6">
+            <label for="customer" class="input-label">Filter</label>
+            <select id="customer" class="form-control filter customer">
                 <option value="0">All</option>
             </select>
         </div>
@@ -131,29 +127,26 @@
                     var ProductName = this.inventory[i].ProductName;
                     var TotalQuantity = this.inventory[i].TotalQuantity;
 
-
                     var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
                     inventory_item +=
-                            "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
-                            + "<div class='thumbnail unimplemented'>Thumbnail</div>"
-                            + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
-                            + "</a></div>";
-                    inventory_item +="<div class= 'pull-button'>" +
-                                        "<button onclick='gotoPullInventory("+ProductID+","+"\""+ProductName+"\""+","+TotalQuantity+")' type='button'>Pull</button></div>";
+                        "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
+                        + "<div class='thumbnail unimplemented'>Thumbnail</div>"
+                        + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
+                        + "</a></div>";
+
+                    inventory_item +="<div class='pull-button'>" +
+                        "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
                     inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                     inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
-
-                    inventory_item += "<div class= 'total'>" + this.inventory[i].TotalQuantity + "</div>";
-
+                    inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
                     inventory_item += "</div>";
 
                     inventory_container.append( inventory_item );
 
-
                     /*customer_filter_container.append(
-                            "<option value='" + concatenated_customer + "'>" +
-                            this.inventory[i].Runs[0].Customer +
-                            "</option>"*/
+                        "<option value='" + concatenated_customer + "'>" +
+                        this.inventory[i].Runs[0].Customer +
+                        "</option>"*/
                 }
 
                 //this.setup_customer_select_menu();
@@ -197,17 +190,34 @@
                     evt.preventDefault();
 
                     var product_id = $( this).data( 'id' );
-                    $('#main_cont').load('ItemDetailView.html', function(){
+
+                    navigation.go("ItemDetailView.html", {ProductID:product_id, PreviousPage:"DisplayInventory.html"});
+
+                    /*$('#main_cont').load('ItemDetailView.html', function(){
                         detailView.init( product_id );
-                    });
+                    });*/
 
                 });
             }
+
         };
 
         display_inventory.init();
 
     })( jQuery );
+
+    /**
+     * Created by Kun on 6/18/2015.
+     */
+
+    var gotoPullInventory = function(pid, pname, tlq) {
+        navigation.go("PullInventory.html",{
+            ProductID: pid,
+            ProductName: pname,
+            TotalQuantity: tlq,
+            PreviousPage: "DisplayInventory.html"
+        });
+    };
 </script>
 </body>
 </html>
