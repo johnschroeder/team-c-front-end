@@ -15,10 +15,6 @@ function sendAuth() {
                 var cookie = data; //req.cookies.auth
 
                 if (data != "Invalid Credentials!") {
-                    var redisInput = window.apiRoute + '/redis/SetState/' + cookie + '/' + user + '/' + "login.html";
-                    $.get(redisInput,
-                        function (redisData) { /* alert(redisData); */
-                        });
 
                     alert("login success");
                 }

@@ -46,14 +46,14 @@ var addInventory = {
         entry.append($(document.createElement("div"))
                 .addClass("col-sm-4")
                 .append(select)
-            ).append($(document.createElement("div"))
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static text-center")
                     .css("font-size", "150%")
                     .text("*")
-                )
-            ).append($(document.createElement("div"))
+            )
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
                 .append($(document.createElement("input")) // amount input
                     .addClass("form-control")
@@ -62,26 +62,26 @@ var addInventory = {
                     .attr("min", 0)
                     .attr("onkeyup", "addInventory.updateTotal()")
                     .attr("onchange", "addInventory.updateTotal()")
-                )
+            )
             ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static text-center")
                     .text("=")
-                )
+            )
             ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static")
                     .text("Count of")
-                )
-            ).append($(document.createElement("div"))
+            )
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static")
                     .attr("name", "count_text")
                     .text("0")
-                )
+            )
             );
     },
 
@@ -226,7 +226,7 @@ var addInventory = {
     },
 
     // Go back to the last page.
-    back: function() {
+    back: function () {
         navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };

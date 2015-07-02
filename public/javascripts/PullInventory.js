@@ -28,7 +28,7 @@ function PopulateOptions(dropdown, pID) {
     $.get(window.apiRoute + "/GetSizeByProductID/" + pID, function(res) {
         var temp = $.parseJSON(res);
 
-        for(var i = 0; i < temp.length; i++) {
+        for (var i = 0; i < temp.length; i++) {
             var obj = temp[i];
             var optionname = obj.Name + "---" + obj.Size;
             var option = new Option(optionname, obj.SizeMapID);
@@ -55,7 +55,7 @@ function AddMore() {
 function ReCalculate() {
     var total = 0;
 
-    $('#InputDiv').children('.InputChild').each(function() {
+    $('#InputDiv').children('.InputChild').each(function () {
         var subtotal = 0;
         var size = $(this).find('.Size').find('option:selected').text().split('---', 2)[1];
 
@@ -126,9 +126,9 @@ function submitAddNewSize() {
     var productID = window.args.ProductID;
     var productName = window.args.ProductName;
 
-    $.get(window.apiRoute + "/addProductSize/" + productID + "/" + sizeName+"/" + size, function(res) {
-        alert("New Size "+ sizeName + " for product " + productName + " Added!");
-        BindNewOption(sizeName,size);
+    $.get(window.apiRoute + "/addProductSize/" + productID + "/" + sizeName + "/" + size, function (res) {
+        alert("New Size " + sizeName + " for product " + productName + " Added!");
+        BindNewOption(sizeName, size);
     });
 }
 
@@ -136,12 +136,12 @@ function BindNewOption(n, s) {
     var productID = window.args.ProductID;
     var productName = window.args.ProductName;
 
-    $.get(window.apiRoute + "/GetSizeMapID/" + productID + "/" + n + "/" + s, function(resp) {
+    $.get(window.apiRoute + "/GetSizeMapID/" + productID + "/" + n + "/" + s, function (resp) {
         var temp = $.parseJSON(resp);
         var smID = temp[0].SizeMapID;
 
-        $('#InputDiv').children('.InputChild').each(function() {
-            var option = new Option(n + "---" +s, smID);
+        $('#InputDiv').children('.InputChild').each(function () {
+            var option = new Option(n + "---" + s, smID);
             var dropdown = $(this).find('.Size')
                 .append(option);
 
@@ -165,7 +165,7 @@ function AddToExistingCart() {
 
     var username = 'don';//this needs to be swap out for real username
 
-    $.get(window.apiRoute + "/Carts/GetCartsByUser/" + username, function(resp) {
+    $.get(window.apiRoute + "/Carts/GetCartsByUser/" + username, function (resp) {
         var temp = $.parseJSON(resp);
 
         for (var i = 0; i < temp.length; i++) {
@@ -206,14 +206,14 @@ function SubmitNewCart() {
     var today = new Date();
     var deleteDate = new Date(today);
 
-    if ($("#iptCartName").val()=='') {
+    if ($("#iptCartName").val() == '') {
         alert("Cart Name/Order Number is required field");
         return;
     }
 
-    if (keepdays <= 0) keepdays=1;
+    if (keepdays <= 0) keepdays = 1;
 
-    $.get(window.apiRoute + "/Carts/CreateCart/" + cartName + "/" + reporter + "/" + assignee + "/" + keepdays, function() {
+    $.get(window.apiRoute + "/Carts/CreateCart/" + cartName + "/" + reporter + "/" + assignee + "/" + keepdays, function () {
         alert("New Cart " + cartName + " Added!");
         //clear inputs
         //delete options in assignee
@@ -226,7 +226,7 @@ function SubmitNewCart() {
 }
 
 function AddOneItemToCart(cID, smID, qty) {
-    $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cID + "/" + smID + "/" + qty, function(resp) {
+    $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cID + "/" + smID + "/" + qty, function (resp) {
         var msg = "";
 
         msg = resp.split('####', 2)[0];
@@ -252,7 +252,7 @@ function ChooseExistingCart() {
         return;
     }
 
-    $('#InputDiv').children('.InputChild').each(function() {
+    $('#InputDiv').children('.InputChild').each(function () {
         var subtotal = 0;
         var sizeMapID = $(this).find('.Size').find('option:selected').val();
         var cartID = $('#slCart').find('option:selected').val();

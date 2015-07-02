@@ -16,7 +16,7 @@ function populateByCartId() {
             .append($("<option/>")
                 .val(-1)
                 .text("-- Select a Cart --")
-            );
+        );
 
         for (var i = 0; i < results.length; ++i) {
             var option = $("<option/>")
@@ -29,7 +29,7 @@ function populateByCartId() {
                 displayCartInventory();
             }
         }
-    }).fail(function(res) {
+    }).fail(function (res) {
         $("#response").text("Error: populateByCartId: Connection error.");
     });
 }
@@ -75,7 +75,11 @@ function gotoEditCarts() {
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
-    navigation.go('EditCartData.html',{cartID: idSelected, cartName: state.nameSelected, previousPage: "ViewCarts.html"});
+    navigation.go('EditCartData.html', {
+        cartID: idSelected,
+        cartName: state.nameSelected,
+        previousPage: "ViewCarts.html"
+    });
 }
 
 function gotoEditItems() {
@@ -83,7 +87,11 @@ function gotoEditItems() {
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
-    navigation.go('EditCartItems.html',{cartID: idSelected, cartName: state.nameSelected, previousPage: "ViewCarts.html"});
+    navigation.go('EditCartItems.html', {
+        cartID: idSelected,
+        cartName: state.nameSelected,
+        previousPage: "ViewCarts.html"
+    });
 }
 
 function populateCartContainer(items) {
@@ -120,87 +128,89 @@ function createCartEntry(item) {
                 .append($("<h2/>")
                     .addClass("item-name")
                     .text(item.ProductName)
-                )
             )
+        )
             .append($("<div/>")
                 .addClass("col-sm-4")
                 .append($("<h2/>")
                     .addClass("item-total-text text-center")
                     .text("0")
-                )
             )
         )
+    )
         .append($("<div/>")
             .addClass("row")
             .append($("<div/>")
                 .addClass("col-sm-6")
                 .text("Pulled")
-            )
+        )
             .append($("<div/>")
                 .addClass("col-sm-6")
                 .append($("<div/>")
                     .addClass("pull-right")
                     .append($("<button/>")
                         .addClass("btn btn-default hidden edit-button")
-                        .click(function() {
+                        .click(function () {
                             cartItem
                                 .find(".package-text, .amount-text, .edit-button, .unpull-button")
-                                    .each(function() {
-                                        $(this).addClass("hidden");
-                                    })
+                                .each(function () {
+                                    $(this).addClass("hidden");
+                                })
                                 .end()
                                 .find(".package-select, .amount-input, .done-button, .delete-button")
-                                    .each(function() {
-                                        $(this).removeClass("hidden");
-                                    })
+                                .each(function () {
+                                    $(this).removeClass("hidden");
+                                })
                                 .end()
 
                             updateEntryPackageTypeOptions(cartItem.find(".item-input"), item.ProductID)
                         })
                         .text("Edit")
-                    )
+                )
                     .append($("<button/>")
                         .addClass("btn btn-default hidden done-button")
-                        .click(function() {
+                        .click(function () {
                             cartItem
                                 .find(".package-text, .amount-text, .edit-button, .unpull-button")
-                                    .each(function() {
-                                        $(this).removeClass("hidden");
-                                    })
+                                .each(function () {
+                                    $(this).removeClass("hidden");
+                                })
                                 .end()
                                 .find(".package-select, .amount-input, .done-button, .delete-button")
-                                    .each(function() {
-                                        $(this).addClass("hidden");
-                                    })
+                                .each(function () {
+                                    $(this).addClass("hidden");
+                                })
                                 .end()
 
                             handleDirtyItems(cartItem);
                         })
                         .text("Done")
-                    )
+                )
                     .append($("<button/>")
                         .addClass("btn btn-default hidden delete-button")
-                        .click(function() {})
+                        .click(function () {
+                        })
                         .text("Delete")
-                    )
+                )
                     .append($("<button/>")
                         .addClass("btn btn-default unpull-button")
-                        .click(function() { /* TODO Unpull() */ })
+                        .click(function () { /* TODO Unpull() */
+                        })
                         .text("Unpull")
-                    )
                 )
             )
         )
+    )
         .append($("<br/>"))
 
-        return cartItem;
+    return cartItem;
 }
 
 function createItemEntry(item, parent) {
     var total = parseInt(item.UnitsPerPackage) * parseInt(item.NumPackages);
-    var sName  = item.PackageName + " of " + item.UnitsPerPackage + " * " + item.NumPackages + " = " + total;
+    var sName = item.PackageName + " of " + item.UnitsPerPackage + " * " + item.NumPackages + " = " + total;
     var color = "Marker: " + (item.Marker || "");
-    var location = "Location: "+ (item.Location || "");
+    var location = "Location: " + (item.Location || "");
 
     var cartItemEntry = $("<div/>")
         .addClass("row item-entry")
@@ -216,10 +226,10 @@ function createItemEntry(item, parent) {
                         .text(item.PackageName + " of " + item.UnitsPerPackage)
                         .attr("name", item.PackageName)
                         .data("size", item.UnitsPerPackage)
-                    )
+                )
                     .append($("<select/>")
                         .addClass("form-control hidden package-select")
-                        .change(function() {
+                        .change(function () {
                             var selected = cartItemEntry.find(".package-select option:selected");
                             cartItemEntry.find(".total-text").text(parseInt(selected.data("size")) * parseInt(cartItemEntry.find(".amount-input").val()));
 
@@ -231,25 +241,25 @@ function createItemEntry(item, parent) {
                             updateTotal(parent);
                             cartItemEntry.data("dirty", true);
                         })
-                    )
                 )
+            )
                 .append($("<div/>")
                     .addClass("col-sm-1 text-center")
                     .css("font-size", "150%")
                     .text("*")
-                )
+            )
                 .append($("<div/>")
                     .addClass("col-sm-3")
                     .append($("<div/>")
                         .addClass("amount-text")
                         .text(item.NumPackages)
-                    )
+                )
                     .append($("<input/>")
                         .addClass("form-control hidden amount-input")
                         .attr("type", "number")
                         .attr("min", 0)
                         .val(parseInt(item.NumPackages))
-                        .change(function() {
+                        .change(function () {
                             var selected = cartItemEntry.find(".package-select option:selected");
                             cartItemEntry.find(".total-text").text(parseInt(selected.data("size")) * parseInt(cartItemEntry.find(".amount-input").val()));
 
@@ -259,27 +269,26 @@ function createItemEntry(item, parent) {
                             updateTotal(parent);
                             cartItemEntry.data("dirty", true);
                         })
-                    )
                 )
+            )
                 .append($("<div/>")
                     .addClass("col-sm-1 text-center")
                     .text("=")
-
-                )
+            )
                 .append($("<div/>")
                     .addClass("col-sm-2 total-text")
                     .text(total)
-                )
             )
         )
+    )
         .append($("<div/>")
             .addClass("col-sm-2")
             .text(color)
-        )
+    )
         .append($("<div/>")
             .addClass("col-sm-2")
             .text(location)
-        )
+    )
 
     return cartItemEntry;
 }
@@ -287,7 +296,7 @@ function createItemEntry(item, parent) {
 function updateTotal(cartItem) {
     var total = 0;
 
-    cartItem.find(".total-text").each(function() {
+    cartItem.find(".total-text").each(function () {
         total += parseInt($(this).text()) || 0;
     });
 
@@ -299,11 +308,11 @@ function handleDirtyItems(cartItem) {
     // TODO post to route to update item
     var refresh = false;
 
-    cartItem.find(".item-entry").each(function() {
+    cartItem.find(".item-entry").each(function () {
         if ($(this).data("dirty")) {
             console.log("Dirty: Package: " + $(this).find(".package-select option:selected").text() + ", Amount: " + $(this).find(".amount-input").val());
             refresh = true;
-            $(this).data("dirty". false);
+            $(this).data("dirty".false);
         }
     });
 
@@ -311,14 +320,16 @@ function handleDirtyItems(cartItem) {
 }
 
 function refreshCartEntry(cartEntry) {
-    cartEntry.find(".item-entry").each(function() {$(this).remove();})
+    cartEntry.find(".item-entry").each(function () {
+        $(this).remove();
+    })
 
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function(res) {
+    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (res) {
         var items = JSON.parse(res)[0];
 
-        items.forEach(function(item) {
+        items.forEach(function (item) {
             if (cartEntry.find(".item-name").text() != item.ProductName) {
                 return;
             }
@@ -328,20 +339,20 @@ function refreshCartEntry(cartEntry) {
 
             updateTotal(cartEntry);
         });
-    }).fail(function(res) {
+    }).fail(function (res) {
         $("#response").text("Error: displayCartInventory: Connection error.");
     });
 }
 
 //Updates the options for the package types of a single entry.
 function updateEntryPackageTypeOptions(input, productId) {
-    $.get(window.apiRoute + "/GetSizeByProductID/" + productId, function(res) {
+    $.get(window.apiRoute + "/GetSizeByProductID/" + productId, function (res) {
         var packageTypes = $.parseJSON(res);
 
-        input.each(function() {
+        input.each(function () {
             var select = $(this).find(".package-select").empty();
 
-            packageTypes.forEach(function(each) {
+            packageTypes.forEach(function (each) {
                 $("<option/>")
                     .text(each.Name + " of " + each.Size)
                     .attr("name", each.Name)
@@ -354,7 +365,7 @@ function updateEntryPackageTypeOptions(input, productId) {
             var name = $(this).find(".package-text").attr("name");
             select.find("option[name='" + name + "']").prop("selected", true);
         });
-    }).fail(function(res) {
+    }).fail(function (res) {
         $("#response").text("Error: Update package types: Connection error.");
     });
 }
@@ -369,11 +380,11 @@ function showPrototypeButtons() {
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function(res) {
+    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (res) {
         var items = JSON.parse(res)[0];
         populateCartContainer(items);
         $("#inventory-container .edit-button").removeClass("hidden");
-    }).fail(function(res) {
+    }).fail(function (res) {
         $("#response").text("Error: displayCartInventory: Connection error.");
     });
 }

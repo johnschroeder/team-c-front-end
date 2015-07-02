@@ -14,6 +14,7 @@
 <body>
 <div class="container-fluid">
     <h1>Item Details</h1>
+
     <h2 id="product_name"></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="itemDetailView.back()">Back</button>
     <hr/>
@@ -30,14 +31,21 @@
 
     <div id="buttons" class="row">
         <div class="col-sm-12">
-            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">Add Inventory</button>
-            <button class="btn btn-default" title="Pull inventory from this product." onclick="itemDetailView.pull()">Pull Inventory</button>
-            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">View/Edit Product</button>
+            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">Add
+                Inventory
+            </button>
+            <button class="btn btn-default" title="Pull inventory from this product." onclick="itemDetailView.pull()">
+                Pull Inventory
+            </button>
+            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">View/Edit
+                Product
+            </button>
             <button class="btn btn-default pull-right" title="Delete this product.">Delete Product</button>
         </div>
     </div>
 
-    <br/><hr/>
+    <br/>
+    <hr/>
 
     <h2>Timeline</h2>
 
@@ -59,13 +67,13 @@
         productID: null,
         item: null,
 
-        init: function() {
+        init: function () {
             this.productID = window.args.ProductID;
 
             var self = this;
 
-            $.get(window.apiRoute + "/itemDetail/" + this.productID, function(response) {
-                if(response && response.length) {
+            $.get(window.apiRoute + "/itemDetail/" + this.productID, function (response) {
+                if (response && response.length) {
                     self.item = jQuery.parseJSON(response)[0];
                     //console.log(self.item);
                     self.productName = self.item.Name;
@@ -73,43 +81,58 @@
                 } else {
                     self.renderError("No inventory found");
                 }
-            }).fail(function(response) {
-                self.renderError("Failed to load inventory: " + response );
+            }).fail(function (response) {
+                self.renderError("Failed to load inventory: " + response);
             });
         },
 
-        displayItem: function() {
+        displayItem: function () {
             $("#product_name").text(this.item.Name);
             $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
                     "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
                     "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
         },
 
-        renderError: function(error) {
+        renderError: function (error) {
             $("#response").text("Error: " + error);
         },
 
-        add: function() {
+        add: function () {
             if (!this.productID || !this.item) return;
-            navigation.go("AddInventory.html", {ProductID:this.productID, ProductName:this.item.Name || "", PreviousPage:"ItemDetailView.html"});
+            navigation.go("AddInventory.html", {
+                ProductID: this.productID,
+                ProductName: this.item.Name || "",
+                PreviousPage: "ItemDetailView.html"
+            });
         },
 
-        pull: function() {
+        pull: function () {
             if (!this.productID || !this.item) return;
-            navigation.go("PullInventory.html", {ProductID:this.productID, ProductName:this.item.Name || "", TotalQuantity:this.item.TotalAvailable, PreviousPage:"ItemDetailView.html"});
+            navigation.go("PullInventory.html", {
+                ProductID: this.productID,
+                ProductName: this.item.Name || "",
+                TotalQuantity: this.item.TotalAvailable,
+                PreviousPage: "ItemDetailView.html"
+            });
         },
 
-        edit: function() {
+        edit: function () {
             if (!this.productID || !this.item) return;
-            navigation.go("EditProduct.html", {ProductID:this.productID, ProductName:this.item.Name || "", PreviousPage:"ItemDetailView.html"});
+            navigation.go("EditProduct.html", {
+                ProductID: this.productID,
+                ProductName: this.item.Name || "",
+                PreviousPage: "ItemDetailView.html"
+            });
         },
 
-        back: function() {
+        back: function () {
             navigation.go("DisplayInventory.html", {ProductID: window.args.ProductID});
         }
     };
 
-    $(function() {itemDetailView.init();});
+    $(function () {
+        itemDetailView.init();
+    });
 </script>
 </body>
 </html>

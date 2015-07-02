@@ -129,13 +129,13 @@
 
                     var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
                     inventory_item +=
-                        "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
-                        + "<div class='thumbnail unimplemented'>Thumbnail</div>"
-                        + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
-                        + "</a></div>";
+                            "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
+                            + "<div class='thumbnail unimplemented'>Thumbnail</div>"
+                            + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
+                            + "</a></div>";
 
-                    inventory_item +="<div class='pull-button'>" +
-                        "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
+                    inventory_item += "<div class='pull-button'>" +
+                            "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
                     inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                     inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
                     inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
@@ -144,9 +144,9 @@
                     inventory_container.append( inventory_item );
 
                     /*customer_filter_container.append(
-                        "<option value='" + concatenated_customer + "'>" +
-                        this.inventory[i].Runs[0].Customer +
-                        "</option>"*/
+                     "<option value='" + concatenated_customer + "'>" +
+                     this.inventory[i].Runs[0].Customer +
+                     "</option>"*/
                 }
 
                 //this.setup_customer_select_menu();
@@ -191,11 +191,14 @@
 
                     var product_id = $( this).data( 'id' );
 
-                    navigation.go("ItemDetailView.html", {ProductID:product_id, PreviousPage:"DisplayInventory.html"});
+                    navigation.go("ItemDetailView.html", {
+                        ProductID: product_id,
+                        PreviousPage: "DisplayInventory.html"
+                    });
 
                     /*$('#main_cont').load('ItemDetailView.html', function(){
-                        detailView.init( product_id );
-                    });*/
+                     detailView.init( product_id );
+                     });*/
 
                 });
             }
@@ -210,8 +213,8 @@
      * Created by Kun on 6/18/2015.
      */
 
-    var gotoPullInventory = function(pid, pname, tlq) {
-        navigation.go("PullInventory.html",{
+    var gotoPullInventory = function (pid, pname, tlq) {
+        navigation.go("PullInventory.html", {
             ProductID: pid,
             ProductName: pname,
             TotalQuantity: tlq,
