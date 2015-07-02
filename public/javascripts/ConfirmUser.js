@@ -1,11 +1,3 @@
-jQuery.ajax({
-    type: "POST",
-    url: window.apiRoute + '/login/confirmUser/',
-    data: {
-        lookup:window.lookup
-    },
-    dataType: 'json',
-    success: function () {
-        window.alert("User Added");
-    }
-});
+jQuery.get(window.apiRoute + '/login/confirmUser/'+window.lookup, function () {
+        jQuery('#confirm').text("Thank you for confirming your account!");
+    }).fail(function(){jQuery('#confirm').text("An error occured! Please contact your admin!");});

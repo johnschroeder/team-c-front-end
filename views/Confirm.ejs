@@ -5,7 +5,7 @@ window.lookup = "<%= lookup %>";
 </script>
 <% include indexBody.html %>
 <script>
-jQuery.get(window.apiRoute+"/Login/TestsIdentifier/"+window.lookup, function(){
+jQuery.get(window.apiRoute+"/Login/testLookup/"+window.lookup, function(lookup){
 if(lookup.type == "reset"){
 navigation.go('ResetPassword.html');
 }
@@ -15,6 +15,10 @@ navigation.go('confirmUser.html');
 else{
 navigation.go('Home.html');
 }
+})
+.fail(function(){
+window.alert("Not a valid key!");
+navigation.go('Home.html');
 });
 
 </script>
