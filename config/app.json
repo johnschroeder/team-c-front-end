@@ -1,15 +1,15 @@
 {
     "default":{
         "port":50000,
-        "api":"http://localhost:50001",
+        "api": "http://local.thisisimp.com/",
         "debug": true
     },
     "dev":{
-        "api":"http://dev.thisisimp.com/api/",
+        "api": "http://local.thisisimp.com/",
         "debug": true
     },
     "prod":{
-        "api":"http://www.thisisimp.com/api",
+        "api": "http://www.thisisimp.com/",
         "debug": false
     },
     "kun":{
