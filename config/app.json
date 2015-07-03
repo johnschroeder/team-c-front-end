@@ -5,7 +5,7 @@
         "debug": true
     },
     "dev":{
-        "api":"http://dev.thisisimp.com/api/",
+        "api":"http://dev.thisisimp.com/api",
         "debug": true
     },
     "prod":{
