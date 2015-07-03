@@ -111,7 +111,7 @@ var editCartData = {
     },
 
     CartItemsEdit: function (cartID, cartName) {
-        navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
+        //navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
     },
 
     back: function () {
