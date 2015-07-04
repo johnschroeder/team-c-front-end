@@ -5,6 +5,24 @@
  * Add another row to the pull menu through cloning
  */
 
+var counter = 0; // I know, I know
+function DisplayNext(log) {
+
+    var rowToCopy = $('.InputChild').first(); //Grab the first InputChild row to duplicate
+    var rowsContainer = '#InputDiv';
+
+    var clonedRow = rowToCopy.clone();
+
+    if (counter == 0) {
+        alert(counter);
+        counter++;
+    }
+
+    clonedRow.appendTo(rowsContainer);
+    document.getElementById("logLabel").innerHTML = log;
+
+}
+
 var DisplayAll =
 {
     Now: function () {
@@ -20,17 +38,11 @@ var DisplayAll =
             for (var i = 0; i < logs.length; i++) {
                 var log = logs[i].value;
                 alert(log);
+                DisplayNext(logs[i].value);
                 //this.DisplayNext(logs[i].value);
             }
 
         });
     },
-    DisplayNext: function (logText) {
 
-        var rowToCopy = $('.InputChild').first(); //Grab the first InputChild row to duplicate
-        var rowsContainer = '#InputDiv';
-        // rowToCopy.text(logText);
-
-        rowToCopy.clone().appendTo(rowsContainer);
-    }
 };
