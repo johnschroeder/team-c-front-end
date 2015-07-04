@@ -17,14 +17,22 @@
             <label for="track_by" class="input-label">Track Inventory By</label>
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
+                <option value="Item">Item</option>
             </select>
         </div>
 
         <div class="col-sm-6">
-            <label for="customer" class="input-label">Filter</label>
-            <select id="customer" class="form-control filter customer">
-                <option value="0">All</option>
-            </select>
+            <div id="customer-filter" class="form-group">
+                <label for="customer" class="input-label">Filter</label><br/>
+                <select id="customer" class="form-control filter customer"/>
+            </div>
+            <div id="item-filter" class="form-group" hidden="hidden">
+                <label for="item" class="input-label">Search</label>
+                <div class="input-group">
+                    <input id="item" class="form-control" label="Enter search for an item." type="text"></input>
+                    <span class="input-group-btn"><button id="search_item_button" class="btn btn-default">Search</button></span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -41,7 +49,7 @@
          */
         var display_inventory = {
 
-            host: window.apiRoute+"/displayInventory/",
+            host: window.apiRoute + "/displayInventory/",
             inventory: false,
             consolidated: false,
 
@@ -49,8 +57,74 @@
              * Go fetch everything and get it set up
              */
             init: function() {
-
                 var self = this;
+
+                $("#track_by").change(function() {
+                    $("#customer-filter").hide();
+                    $("#item-filter").hide();
+
+                    switch($("#track_by option:selected").val()) {
+                        case "Customer":
+                            $("#customer-filter").show();
+                            break;
+                        case "Item":
+                            $("#item-filter").show();
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                $("#customer").selectize({
+                    valueField: "name",
+                    labelField: "name",
+                    searchField: "name",
+                    create: false,
+                    render: {
+                        option: function(item, escape) {
+                            return "<div>" + item.name + "</div>";
+                        }
+                    },
+                    load: function(query, callback) {
+                        if (!query.length) return callback();
+
+                        /*$.getJSON(window.apiRoute + "/customerAutoComplete/" + query, function(data) {
+                            callback(data);
+                        });*/
+
+                        callback([{name: "All"}, {name: "customer a"}, {name: "customer c"}, {name: "customer b"}]);
+                    }
+                });
+
+                $("#customer").change(function() {
+                    self.searchCustomer($("#customer option:selected").text());
+                });
+
+                // Item search bar.
+                // TODO should we use the same combobox as customer?
+                $("#item").autocomplete({
+                    minLength: 1,
+                    source: ["item a", "item d", "item c"]
+                    /*function(request, response) {
+                        $.getJSON(window.apiRoute + "/itemAutoComplete/" + request.term, response);
+                    }*/,
+                    select: function(event, ui) {
+                        // ui { label, value }
+                        self.searchItem(ui.item.label);
+                    }
+                });
+
+                $("#item").keypress(function(e) {
+                    if (e.which == 13) {
+                        self.searchItem($("#item").val());
+                    }
+                });
+
+                $("#search_item_button").click(function() {
+                    self.searchItem($("#item").val());
+                });
+
+                // TODO remove
                 $.get( this.host, function( response ) {
 
                     if( response && response.length ){
@@ -71,6 +145,34 @@
 
                 });
 
+            },
+
+            searchItem: function(keyword) {
+                if (!keyword) return;
+
+                console.log("Search item: " + keyword); return;
+
+                var self = this;
+                $.getJSON(window.apiRoute + "/searchItem/" + keyword, function(data) {
+                    self.inventory = data;
+                    display_inventory();
+                }).fail(function() {
+                    self.render_error("Search failed.");
+                });
+            },
+
+            searchCustomer: function(keyword) {
+                if (!keyword) return;
+
+                console.log("Search customer: " + keyword); return;
+
+                var self = this;
+                $.getJSON(window.apiRoute + "/searchCustomer/" + keyword, function(data) {
+                    self.inventory = data;
+                    display_inventory();
+                }).fail(function() {
+                    self.render_error("Search failed.");
+                });
             },
 
             /**
@@ -117,6 +219,9 @@
 
                 var inventory_container = $( '.inventory-container' );
                 var customer_filter_container = $( '.filter.customer');
+
+                inventory_container.empty();
+                customer_filter_container.empty();
 
                 for( var i = 0; i < this.inventory.length; ++i ){
 
