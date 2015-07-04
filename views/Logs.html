@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Logs</title>
+    <script src="javascripts/Logs.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <h1>Logs</h1>
+
+    <h2>Item: <span id="ProductName"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="pullInventory.back()">Back</button>
+    <hr/>
+
+    <div id="InputDiv">
+
+        <!-- Template for one row -->
+        <div class="InputChild row form-group">
+            <div class="col-sm-4">
+                <input type="checkbox" name="ignoreLog" id="ignoreLog" value="ignoreLog">
+                <label for="ignoreLog">A log goes here!</label>
+                <br>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="DisplayAll.Now()">
+                Add
+                Entry
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+
+    </div>
+
+    <br/>
+
+</div>
+<script>pullInventory.init()</script>
+</body>
+</html>
