@@ -13,7 +13,7 @@
         "debug": false
     },
     "kun":{
-
+        "api":"http://localhost:50001"
     },
     "hinyun":{
 
