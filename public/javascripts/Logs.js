@@ -15,7 +15,6 @@ function DisplayNext(log) {
 
     if (counter != 0) {
         clonedRow.appendTo(rowsContainer);
-        alert(counter);
     }
 
 
@@ -28,20 +27,16 @@ var DisplayAll =
     Now: function () {
         var username = "don";
         var host = window.apiRoute + "/getLogs/" + username + "/";
-        //alert(host);
         $.get(host, function (logsForUsername) {
-            alert(logsForUsername);
-            var logs = JSON.parse(logsForUsername);
-            //alert(logs);
-            //alert("Logs length " + logs.length);
+            var logsObj = JSON.parse(logsForUsername);
+            var logs = logsObj.logs;
 
             for (var i = 0; i < logs.length; i++) {
-                var log = logs[i].value;
+                var log = logs[i];
                 alert(log);
-                DisplayNext(logs[i].value);
+                DisplayNext(logs[i]);
             }
 
         });
-    },
-
+    }
 };
