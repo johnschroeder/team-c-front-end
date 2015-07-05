@@ -1,11 +1,11 @@
 {
     "default":{
         "port":50000,
-        "api":"http://localhost:50001",
+        "api": "http://local.thisisimp.com/api",
         "debug": true
     },
     "dev":{
-        "api":"http://dev.thisisimp.com/api/",
+        "api":"http://dev.thisisimp.com/api",
         "debug": true
     },
     "prod":{
@@ -27,12 +27,11 @@
     "john":{
     },
     "mike":{
-        "api":"http://dev.thisisimp.com/api/"
     },
     "tim":{
 
     },
     "trevor":{
-
+      "api": "http://dev.thisisimp.com/api/"
     }
 }

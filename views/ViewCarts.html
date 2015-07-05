@@ -4,47 +4,44 @@
     <meta charset="UTF-8">
     <title>Pull Carts</title>
     <script src="javascripts/ViewCarts.js"></script>
-    <style>
-        .float_left {
-            float: left;
-        }
-        .float_right {
-            float: right;
-        }
-        .seperate {
-            padding-right: 5%;
-        }
-        .float_middle {
-           float: right;
-            padding-right: 30%;
-        }
-    </style>
-
 </head>
 <body>
-<h1>
-    <div>Pull Carts</div>
-</h1>
-<div  class="input-row track-inventory-by">
-    <div  class="input-label">Choose a pull cart to view</div>
-    <select id="selectDropDown" class="filter track-by" onChange=displayCartInventory()>
-    </select>
-        <div class="detail-view float_right">
-            <button class="float_right pull-button" onclick="gotoEditCarts()">Edit Cart</button>
+<div class="container-fluid">
+    <h1>Pull Carts</h1>
+    <hr/>
 
-            <button class="float_right pull-button " onclick="gotoEditItems()">Edit Items</button>
-            <br>
+    <div class="row form-group">
+        <div class="col-sm-6">
+            <label for="selectDropDown">Select a cart to view</label>
+            <select id="selectDropDown" class="form-control filter track-by" onChange=displayCartInventory()></select>
+        </div>
+        <div class="col-sm-6">
+            <button class="btn btn-default pull-right" title="View or edit the details of the selected cart."
+                    onclick="gotoEditCarts()">View/Edit Cart
+            </button>
+            <button class="btn btn-default pull-right" title="Edit the items in the selected cart."
+                    onclick="gotoEditItems()">Edit Items
+            </button>
+            <br/>
             <div id="notSelected"></div>
         </div>
     </div>
-<div class="inventory-container">
-</div>
-<p></p>
-<div class="detail-view">
-    <button id="pullAllButton" onclick="pullAll()">Pull All</button>
-</div>
 
-<div id="response"></div>
-<script>populateByCartId()</script>
+    <div id="inventory-container"></div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <button id="pullAllButton" class="btn btn-default" onclick="pullAll()">Pull All</button>
+        </div>
+    </div>
+
+    <div id="response"></div>
+</div>
+<script>
+    $(function () {
+        populateByCartId();
+    })</script>
 </body>
 </html>

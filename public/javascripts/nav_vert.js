@@ -27,7 +27,7 @@ $(document).ready(function () {
 
     });
 
-    $('.subbutton').on('touchend click', function (event) {
+    $('#nav_vert .action-button').on('touchend click', function (event) {
         event.preventDefault();
 
         if ($('.show-mobile-menu').css('display') != 'none' && $('#nav_vert').css('display') != 'none')
@@ -46,50 +46,27 @@ function Home(){
     navigation.go("Home.html");
 }
 
+//
+function CreateUser() {
+    navigation.go("CreateUser.html");
+}
 function resetPassword(){
     navigation.go('ResetPassword.html');
-}
-
-function ChangeIventory(){
-    navigation.go('ChangeInventory.html');
-}
-
-function PullInventory(){
-    navigation.go("PullInventory.html")
 }
 
 function ViewCarts(){
     navigation.go("ViewCarts.html");
 }
 
-function EditCart() {
-    navigation.go("EditCart.html")
-}
-
-function EditInventory(){
-    $('#main_cont').text("EditInvetory");
-}
-
 function AddProduct(){
-    $('#main_cont').text("AddProduct");
-}
-
-function EditProduct(){
-    navigation.go("EditProduct.html");
-}
-
-function DeleteProduct(){
-    $('#main_cont').text("DeleteProduct");
-}
-
-function ViewProducts(){
-    $('#main_cont').text("ViewProducts");
+    navigation.go("NewProduct.html");
 }
 
 function DisplayInventories(){
     navigation.go("DisplayInventory.html");
 }
 
+// Reports
 function PreDefinedReports(){
     $('#main_cont').text("PreDefinedReports");
 }
@@ -98,6 +75,7 @@ function MakeMyOwnReport(){
     $('#main_cont').text("MakeMyOwnReport");
 }
 
+// Administrator
 function Audit(){
     $('#main_cont').text("Audit");
 }
@@ -116,4 +94,8 @@ function DeleteUsers(){
 
 function ViewUsers(){
     $('#main_cont').text("ViewUsers");
+}
+
+function loginPage() {
+    navigation.go("loginForm.html");
 }

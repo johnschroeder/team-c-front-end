@@ -1,66 +1,82 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
-    <script type="text/javascript" src="js/lib/jquery-1.11.1.min.js" ></script>
-    <script src="javascripts/jquery-1.11.3.min.js"></script>
-    <script src="javascripts/bootstrap.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
-    <script src="app.js"></script>
-    <script src="javascripts/nav_vert.js"></script>
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Edit Product</title>
     <script src="javascripts/EditProduct.js"></script>
-    <script src="javascripts/QueryStringHelper.js"></script>
-
-    <script src="javascripts/DetailViewButtons.js"></script>
+    <style>
+        .thumbnail {
+            width: 128px;
+            height: 128px;
+            background-color: red;
+        }
+    </style>
 </head>
-<div class="new-product-form">
+<body>
+<div class="container-fluid">
     <h1>Edit Product</h1>
-    <script>Edit()</script>
-    <div>
-        <strong>Editing ProductID: </strong>
-        <strong class="selectedID"></strong>
-    </div>
-    <div class="input-row">
-        <div class="input-label">Customer</div>
-        <textarea class="customer" rows="1" type="textarea"> </textarea>
+
+    <h2>Item: <span id="item_name"></span></h2>
+    <button class="btn btn-default" title="Go back to the last page." onclick="editProduct.back()">Back</button>
+    <hr/>
+
+    <div id="customer" class="row form-group">
+        <div class="col-sm-12">
+            <label for="customer_input">Customer</label>
+
+            <p id="customer_text" class="form-control-static"></p>
+            <input id="customer_input" class="form-control hidden" type="text"/>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Item Name</div>
-        <textarea class="product-name" type="textarea" rows="1"></textarea>
+    <div id="product_name" class="row form-group">
+        <div class="col-sm-12">
+            <label for="product_name_input">Item Name</label>
+
+            <p id="product_name_text" class="form-control-static"></p>
+            <input id="product_name_input" class="form-control hidden" type="text"/>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="input-label">Description</div>
-        <textarea class="description" rows="4" cols="50"></textarea>
+    <div id="description" class="row form-group">
+        <div class="col-sm-12">
+            <label for="description_input">Description</label>
+
+            <p id="description_text" class="form-control-static"></p>
+            <textarea id="description_input" class="form-control hidden" rows="3"/>
+        </div>
     </div>
 
     <!-- TODO add api route to store the image that is uploaded into s3 -->
-    <div class="input-row">
-        <div class="input-label">Image</div>
-        <div class="upload-button">Upload Different Image</div>
-    </div>
-    <script>showProductID(getQueryStringParams().inventoryId)</script>
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Image</label>
 
-    <div class="input-row external-id-input unimplemented">
-        <span class="input-label">External ID</span>
-        <input type="text">
-        <span class="input-label">External System</span>
-        <input type="text">
+            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
+        </div>
     </div>
 
-    <div class="input-row external-id-input">
-        <span class="input-label">External ID</span>
-        <input type="text">
-        <span class="input-label">External System</span>
-        <input type="text">
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="new_thumbnail_button" class="btn btn-default hidden">Upload Different Image</button>
+        </div>
     </div>
 
-    <div class="input-row">
-        <div class="submit" onclick="reSubmit(/*getQueryStringParams().inventoryId*/)">Done Editing</div>
-    </div>
+    <br/>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="edit_button" class="btn btn-default" disabled="disabled" onclick="editProduct.edit()">Edit
+            </button>
+            <button id="delete_button" class="btn btn-default hidden pull-right">Delete</button>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(function () {
+        editProduct.init();
+    });
+</script>
+</body>
 </html>

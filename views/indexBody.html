@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
     <title>Welcome to IMP for StevensIS</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css"/>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
     <script src="javascripts/nav_vert.js"></script>
     <script src="javascripts/navigation.js"></script>
-    <script src="javascripts/EditProduct.js"></script>
-
 </head>
 <body>
 <div id="nav_hori" class="row-fluid main-horizontal-nav">
-    <div aligh="left"><img class="si-logo" src="image/stevensis_logo.gif"></div>
+    <div aligh="left"><a href="javascript:void(0);" class="header-logo" onclick="Home()" ><img class="si-logo" src="image/stevensis_logo.gif"></a></div>
     <div class="header-menu-right" align="right">
-        <a href="#login">Log in &nbsp</a>
+        <button type="button" onclick="loginPage()">Login</button>
+        <a onclick="CreateUser()">Create Account &nbsp</a>
         <a onclick="resetPassword()">Reset Password</a>
         <a href="#about">About &nbsp</a>
     </div>
@@ -26,76 +26,37 @@
 </div>
 
 <div id="nav_vert" class="vertical-nav-bar">
-    <li><button id="Home" onclick="Home()">Home</button>
+    <li><button class="btn btn-default action-button" id="DisplayInventory" onclick="DisplayInventories()">Track Inventory</button></li>
+    <li><button class="btn btn-default action-button" id="ViewCarts" onclick="ViewCarts()">View Carts</button></li>
+    <li><button class="btn btn-default action-button" id="AddProduct" onclick="AddProduct()">New Product</button></li>
 
-    </li>
-    <li><button>Manage Inventory</button>
+    <li><button class="btn btn-default">Reports</button>
         <ul>
             <li>
-                <button class="subbutton" id="ChangeInventory" onclick="ChangeIventory()">Add Inventory</button>
+                <button class="btn btn-default action-button subbutton" id="PreDefined" onclick="PreDefinedReports()">Pre-defined</button>
             </li>
             <li>
-                <button class="subbutton" id="PullInventory" onclick="PullInventory()">Pull Inventory</button>
-            </li>
-            <li>
-                <button class="subbutton" id="ViewCarts" onclick="ViewCarts()">Carts</button>
-            </li>
-            <li>
-                <button class="subbutton" id="EditInventory" onclick="EditInventory()">Edit Inventory</button>
-            </li>
-        </ul>
-    </li>
-    <li><button>Manage Product</button>
-        <ul>
-            <li>
-                <button class="subbutton" id="AddProduct" onclick="AddProduct()">Add Product</button>
-            </li>
-            <li>
-                <button class="subbutton" id="EditProducts" onclick="EditProduct()">Edit Products</button>
-            </li>
-            <li>
-                <button class="subbutton" id="DeleteProduct" onclick="DeleteProduct()">Delete Product</button>
-            </li>
-            <li>
-                <button class="subbutton" id="ViewProducts" onclick="ViewProducts()">View Products</button>
-            </li>
-        </ul>
-    </li>
-    <li><button>Track</button>
-        <ul>
-            <li>
-                <button class="subbutton" id="DisplayInventory" onclick="DisplayInventories()">Track Inventory</button>
+                <button class="btn btn-default action-button subbutton" id="MakeMyOwn" onclick="MakeMyOwnReport()">Make My Own</button>
             </li>
         </ul>
     </li>
 
-    <li><button>Reports</button>
+    <li><button class="btn btn-default">Administrator</button>
         <ul>
             <li>
-                <button class="subbutton" id="PreDefined" onclick="PreDefinedReports()">Pre-defined</button>
+                <button class="btn btn-default action-button subbutton" id="Audit" onclick="Audit()">Audit</button>
             </li>
             <li>
-                <button class="subbutton" id="MakeMyOwn" onclick="MakeMyOwnReport()">Make My Own</button>
-            </li>
-        </ul>
-    </li>
-
-    <li><button>Administrator</button>
-        <ul>
-            <li>
-                <button class="subbutton" id="Audit" onclick="Audit()">Audit</button>
+                <button class="btn btn-default action-button subbutton" id="Logs" onclick="Logs()">Logs</button>
             </li>
             <li>
-                <button class="subbutton" id="Logs" onclick="Logs()">Logs</button>
+                <button class="btn btn-default action-button subbutton" id="AddUsers" Onclick="AddUsers()">Add Users</button>
             </li>
             <li>
-                <button class="subbutton" id="AddUsers" Onclick="AddUsers()">Add Users</button>
+                <button class="btn btn-default action-button subbutton" id="DeleteUsers" Onclick="DeleteUsers()">Delete Users</button>
             </li>
             <li>
-                <button class="subbutton" id="DeleteUsers" Onclick="DeleteUsers()">Delete Users</button>
-            </li>
-            <li>
-                <button class="subbutton" id="ViewUsers" Onclick="ViewUsers()">View Users</button>
+                <button class="btn btn-default action-button subbutton" id="ViewUsers" Onclick="ViewUsers()">View Users</button>
             </li>
         </ul>
     </li>
