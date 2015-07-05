@@ -6,25 +6,23 @@ else{
 }
 
 jQuery('#complete').submit(function(){
-    jQuery.get(window.apiRoute+"/Login/TestLookup/"+window.lookup, function(result){
-        if(jQuery('#newpw').val() == jQuery('#confirm').val()) {
-            var toPass = {
-                "email": result.email,
-                "password": jQuery('#newpw').val()
-            };
-            jQuery.ajax({
-                type: "POST",
-                url: window.apiRoute + '/login/completepasswordreset/',
-                data: toPass,
-                dataType: 'json',
-                success: function(){ window.alert("Your password was reset.")},
-                error: function(){window.alert("Something went wrong please contact the site admin.")}
-            })
-        }
-        else{
-            window.alert("Please try again, the passwords did not match");
-        }
-    });
+    if(jQuery('#newpw').val() == jQuery('#confirm').val()) {
+        var toPass = {
+            "lookup": window.lookup,
+            "password": jQuery('#newpw').val()
+        };
+        jQuery.ajax({
+            type: "POST",
+            url: window.apiRoute + '/login/completepasswordreset/',
+            data: toPass,
+            dataType: 'json',
+            success: function(){ window.alert("Your password was reset.")},
+            error: function(){window.alert("Something went wrong please contact the site admin.")}
+        })
+    }
+    else{
+        window.alert("Please try again, the passwords did not match");
+    }
 });
 
 jQuery('#start').submit(function(){
