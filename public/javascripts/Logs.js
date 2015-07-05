@@ -13,14 +13,14 @@ function DisplayNext(log) {
 
     var clonedRow = rowToCopy.clone();
 
-    if (counter == 0) {
+    if (counter != 0) {
+        clonedRow.appendTo(rowsContainer);
         alert(counter);
-        counter++;
     }
 
-    clonedRow.appendTo(rowsContainer);
-    document.getElementById("logLabel").innerHTML = log;
 
+    document.getElementById("logLabel").innerHTML = log;
+    counter++;
 }
 
 var DisplayAll =
@@ -33,13 +33,12 @@ var DisplayAll =
             alert(logsForUsername);
             var logs = JSON.parse(logsForUsername);
             //alert(logs);
-            alert("Logs length " + logs.length);
+            //alert("Logs length " + logs.length);
 
             for (var i = 0; i < logs.length; i++) {
                 var log = logs[i].value;
                 alert(log);
                 DisplayNext(logs[i].value);
-                //this.DisplayNext(logs[i].value);
             }
 
         });
