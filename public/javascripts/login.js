@@ -8,7 +8,7 @@ function sendAuth() {
 
         user = $("#username").val();
         pass = $("#password").val();
-        var host = window.apiRoute + "/login/";
+        var host = window.apiRoute + "/login/login/";
 
         $.post(host, {user: user, password: pass},
             function (data) {
