@@ -33,7 +33,7 @@ var DisplayAll =
 
             for (var i = 0; i < logs.length; i++) {
                 var log = logs[i];
-                alert(log);
+                //alert(log);
                 DisplayNext(logs[i]);
             }
 
