@@ -25,19 +25,22 @@ function DisplayNext(log) {
 var DisplayAll =
 {
     Now: function () {
-        var username = "don"; //  -- This will need to be replaced with a redis call.
-        var host = window.apiRoute + "/getLogs/" + username + "/";
-        $.get(host, function (logsForUsername) {
-            var logsObj = JSON.parse(logsForUsername);
-            var logs = logsObj.logs;
+        var host = window.apiRoute + "/redis/GetState/";
 
-            for (var i = 0; i < logs.length; i++) {
-                var log = logs[i];
-                //alert(log);
-                DisplayNext(logs[i]);
-            }
+        $.get(host, function cookieUser(username) {
+            var host = window.apiRoute + "/getLogs/" + username + "/";
+            $.get(host, function (logsForUsername) {
+                var logsObj = JSON.parse(logsForUsername);
+                var logs = logsObj.logs;
 
-        });
+                for (var i = 0; i < logs.length; i++) {
+                    var log = logs[i];
+                    //alert(log);
+                    DisplayNext(logs[i]);
+                }
+
+            });
+        })
     },
 
     Ignore: function () {
