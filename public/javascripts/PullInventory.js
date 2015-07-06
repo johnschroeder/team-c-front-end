@@ -8,7 +8,7 @@ var pullInventory = {
         productID: null,
         productName: null,
         previousPage: null,
-        totalQuantity: null,
+        totalQuantity: null
     },
 
 
@@ -18,17 +18,17 @@ var pullInventory = {
     init: function(){
 
         //grab and save navigation object arguments
-        this.navigationArgs.productID = window.args.ProductID;
-        this.navigationArgs.productName = window.args.ProductName;
-        this.navigationArgs.previousPage = window.args.PreviousPage;
-        this.navigationArgs.totalQuantity = window.args.TotalQuantity;
+        this.navigationArgs.ProductID = window.args.ProductID;
+        this.navigationArgs.ProductName = window.args.ProductName;
+        this.navigationArgs.PreviousPage = window.args.PreviousPage;
+        this.navigationArgs.TotalQuantity = window.args.TotalQuantity;
 
-        $('#ProductName').text(this.navigationArgs.productName);
-        $('#AvailableAmout').text(this.navigationArgs.totalQuantity);
+        $('#ProductName').text(this.navigationArgs.ProductName);
+        $('#AvailableAmout').text(this.navigationArgs.TotalQuantity);
 
         //add dropdown options to select
         var selectEle = $("#InputDiv").children().find(".size");
-        this.PopulateOptions( selectEle, this.navigationArgs.productID );
+        this.PopulateOptions( selectEle, this.navigationArgs.ProductID );
 
     },
 
@@ -183,8 +183,9 @@ var pullInventory = {
 
     /**
      * I don't know what this does or what the arguments are
-     * @param n
-     * @param s
+     * @param n : sizeName of the newly added size
+     * @param s : size of the newly added size
+     * Answer: This function bind newly created size to the dorpdown in the input child row
      */
     BindNewOption: function( n, s ) {
 
@@ -310,7 +311,6 @@ var pullInventory = {
             var msg = "";
 
             msg = resp.split('####', 2)[0];
-
             if (msg.trim() != 'Success') {
                 $("#response").text(msg);
             }
@@ -366,7 +366,6 @@ var pullInventory = {
      * Go back to the previous page
      */
     back: function(){
-
         navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
     }
 
