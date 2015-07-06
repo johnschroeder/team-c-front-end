@@ -29,9 +29,12 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="DisplayAll.Now()">
-                Add
-                Entry
+            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="DisplayAll.Now()">
+                Refresh Logs
+            </button>
+            <button id="DeleteSelected" class="btn btn-default" title="Delete Selected Logs"
+                    onclick="DisplayAll.Ignore()">
+                Ignore Selected Logs
             </button>
         </div>
     </div>
@@ -43,6 +46,6 @@
     <br/>
 
 </div>
-<script>pullInventory.init()</script>
+<script>DisplayAll.Now()</script>
 </body>
 </html>

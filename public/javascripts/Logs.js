@@ -25,7 +25,7 @@ function DisplayNext(log) {
 var DisplayAll =
 {
     Now: function () {
-        var username = "don";
+        var username = "don"; //  -- This will need to be replaced with a redis call.
         var host = window.apiRoute + "/getLogs/" + username + "/";
         $.get(host, function (logsForUsername) {
             var logsObj = JSON.parse(logsForUsername);
@@ -38,5 +38,9 @@ var DisplayAll =
             }
 
         });
+    },
+
+    Ignore: function () {
+        alert("Not Yet Implemented");
     }
 };
