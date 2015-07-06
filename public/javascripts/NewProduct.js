@@ -43,14 +43,13 @@ var newProduct = {
         var description = $("#description_input").val();
         var date = newProduct.getDate();
 
-        if( !customer.length || !product_name.length || !description.length ){
+        if( !product_name.length || !description.length ){
             $("#message").text("Error: One or more required fields isn't filled out");
             return;
         }
 
         host = host
             + product_name + "/"
-            + customer + "/"
             + description + "/"
             + date + "/";
 
