@@ -33,6 +33,12 @@ $(document).ready(function () {
         if ($('.show-mobile-menu').css('display') != 'none' && $('#nav_vert').css('display') != 'none')
             $('#nav_vert').css('display', 'none');
     });
+
+    jQuery.get(window.apiRoute+"/getUserInfo", function(result){
+        $('#usersName').text=result.username;
+    });
+
+
 });
 
 function preventBehavior(e)

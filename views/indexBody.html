@@ -17,8 +17,13 @@
 <div id="nav_hori" class="row-fluid main-horizontal-nav">
     <div aligh="left"><a href="javascript:void(0);" class="header-logo" onclick="Home()" ><img class="si-logo" src="image/stevensis_logo.gif"></a></div>
     <div class="header-menu-right" align="right">
-        <button type="button" onclick="loginPage()">Login</button>
-        <a onclick="CreateUser()">Create Account &nbsp</a>
+        <button id="login" type="button" onclick="loginPage()" hidden>Login</button>
+        <div id="loggedIn" hidden>
+            <a href="#">
+                <span class="glyphicon glyphicon-user"></span>
+                <span id="usersName"></span>
+            </a>
+        </div>
         <a href="#about">About &nbsp</a>
     </div>
     <div class="show-mobile-menu">V</div>
