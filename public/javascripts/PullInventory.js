@@ -324,8 +324,8 @@ var pullInventory = {
     },
 
     /**
-     * Send one row to the back end for saving
-     * @param entry - The jQuery object containing the item entry
+     * Send every row recursively to the back end for saving
+     * @param entry - The jQuery object containing the list of row entries
      */
     AddOneItemToCartRecursively: function(entry){
 
@@ -341,10 +341,11 @@ var pullInventory = {
 
         var sizeMapID = $(nextEntry).find('.Size').find('option:selected').val();
         var cartID = $('#slCart').find('option:selected').val();
+        var quantity = $(nextEntry).find('.Count').val();
 
         var self = this;
 
-        $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cartID + "/" + sizeMapID + "/" + $(nextEntry).find('.Count').val(), function (resp) {
+        $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cartID + "/" + sizeMapID + "/" + quantity, function (resp) {
             var msg = "";
 
             msg = resp.split('####', 2)[0];
@@ -370,7 +371,7 @@ var pullInventory = {
                 navigation.go(self.navigationArgs.previousPage, {ProductID: self.navigationArgs.productID});
             }
         }).fail(function(res) {
-            var msg = "Error: AddOneItemToCart: Connection error.";
+            var msg = "Error: AddOneItemToCartRecursively: Connection error.";
             $("#response").text(msg);
             alert(msg);
         });
