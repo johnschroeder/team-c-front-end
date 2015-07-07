@@ -3,6 +3,7 @@
  */
 var newProduct = {
 
+    customers:false,
     /**
      * Generates the current date and returns it as a string
      * @returns {string}
@@ -27,13 +28,43 @@ var newProduct = {
 
     //Tack the date on in the upper-right corner
     init:function() {
+        newProduct.getCustomers();
         $("#date").text(newProduct.getDate());
 
     },
+
+    getCustomers:function() {
+        var host = window.apiRoute + "/getCustomers/";
+        $.get(host, function(response) {
+            if(response && response.length) {
+                newProduct.customers = JSON.parse(response);
+                console.log("Customers: " );
+                console.log(newProduct.customers);
+                newProduct.populateCustomers();
+            } else {
+                console.log("There was an error retrieving customers.");
+            }
+        })
+    },
+    stupidCounter: 0,
+    populateCustomers: function() {
+        if(newProduct.customers) {
+            var rowToCopy = $("#customer_checkbox").first();
+            var rowsContainer = $("#checkbox_cont");
+            rowsContainer.empty();
+
+            newProduct.customers.forEach(function(customer) {
+                var newRow = rowToCopy.clone();
+                newRow.find(".checkbox_label").text(customer.Name);
+                newRow.removeClass("hidden");
+                newRow.appendTo( rowsContainer );
+            });
+        }
+    },
+
     //Submit the form when the submit button is clicked
     //submit_button.on( 'click',
     submit:function(){
-        console.log("ASDFASDFASDFASDFASDFASDFASDFASD");
         var submit_button = $("#submit");
         $("#message").text("");
 

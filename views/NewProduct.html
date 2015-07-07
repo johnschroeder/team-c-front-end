@@ -13,11 +13,23 @@
     </style>
 </head>
 <body>
-<div class="container-fluid">
+<b class="container-fluid">
     <h1>New Product</h1>
     <hr/>
 
     <div>Date: <span id="date"></span></div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Create a new run of this item when finished</input>
+                </label>
+            </div>
+        </div>
+    </div>
 
     <br/>
 
@@ -34,6 +46,27 @@
             <textarea id="description_input" class="form-control" rows="3"/>
         </div>
     </div>
+
+    <div id="checkbox_cont" class="row">
+        <div class="col-sm-12">
+            <label>Select customers to associate:</label>
+        </div>
+
+        <div id="customer_checkbox" class="col-sm-12 hidden">
+            <div class="checkbox col-sm-12">
+                <input id="checkbox_input" type="checkbox">
+                <label class="checkbox_label"></label>
+            </div>
+        </div>
+    </div>
+
+    <div id="add_customer" class="row">
+        <div class="col-sm-4">
+            <button id="add_customer_button" class="btn btn-default" onclick="newProduct.populateCustomers()">Add Customer</button>
+        </div>
+    </div>
+
+    <br/>
 
     <!-- TODO add api route to store the image that is uploaded into s3 -->
     <div class="row">
@@ -55,16 +88,6 @@
     <div class="row">
         <div class="col-sm-4">
             <button id="submit" class="btn btn-default" onclick="newProduct.submit()">Create</button>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"> Create a new run of this item when finished</input>
-                </label>
-            </div>
         </div>
     </div>
 
