@@ -18,6 +18,7 @@
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
                 <option value="Item">Item</option>
+                <option value="All">All</option>
             </select>
         </div>
 
@@ -70,6 +71,9 @@
                         case "Item":
                             $("#item-filter").show();
                             break;
+                        case "All":
+                            self.showAllItems();
+                            break;
                         default:
                             break;
                     }
@@ -121,12 +125,53 @@
                     self.searchItem($("#item").val());
                 });
 
-                // TODO remove
-                $.get( this.host, function( response ) {
+            },
 
-                    if( response && response.length ){
+            searchItem: function(keyword) {
+                if (!keyword) return;
 
-                        self.inventory = jQuery.parseJSON( response );
+                //console.log("Search item: " + keyword); return;
+
+                var self = this;
+                $.getJSON(window.apiRoute + "/searchItem/" + encodeURIComponent(keyword), function(data) {
+                    if (!data.length || data[0] === null) {
+                        self.render_error("No inventory found.");
+                        return;
+                    }
+
+                    self.inventory = data;
+                    self.display_inventory();
+                }).fail(function() {
+                    self.render_error("Item: Search failed.");
+                });
+            },
+
+            searchCustomer: function(keyword) {
+                if (!keyword) return;
+
+                //console.log("Search customer: " + keyword); return;
+
+                var self = this;
+                $.getJSON(window.apiRoute + "/searchCustomer/" + encodeURIComponent(keyword), function(data) {
+                    if (!data.length || data[0] === null) {
+                        self.render_error("No inventory found.");
+                        return;
+                    }
+
+                    self.inventory = data;
+                    self.display_inventory();
+                }).fail(function() {
+                    self.render_error("Customer: Search failed.");
+                });
+            },
+
+            showAllItems: function() {
+                var self = this;
+                $.getJSON( this.host, function( data ) {
+
+                    if( data && data.length && data[0] !== null){
+
+                        self.inventory = data;
                         //self.consolidate_inventory();
                         self.display_inventory();
 
@@ -140,45 +185,6 @@
 
                     self.render_error( "Failed to load inventory: " + response );
 
-                });
-
-            },
-
-            searchItem: function(keyword) {
-                if (!keyword) return;
-
-                //console.log("Search item: " + keyword); return;
-
-                var self = this;
-                $.getJSON(window.apiRoute + "/searchItem/" + encodeURIComponent(keyword), function(data) {
-                    if (!data.length) {
-                        self.render_error("No inventory found.");
-                        return;
-                    }
-
-                    self.inventory = data;
-                    display_inventory();
-                }).fail(function() {
-                    self.render_error("Item: Search failed.");
-                });
-            },
-
-            searchCustomer: function(keyword) {
-                if (!keyword) return;
-
-                //console.log("Search customer: " + keyword); return;
-
-                var self = this;
-                $.getJSON(window.apiRoute + "/searchCustomer/" + encodeURIComponent(keyword), function(data) {
-                    if (!data.length) {
-                        self.render_error("No inventory found.");
-                        return;
-                    }
-
-                    self.inventory = data;
-                    display_inventory();
-                }).fail(function() {
-                    self.render_error("Customer: Search failed.");
                 });
             },
 
@@ -225,10 +231,10 @@
                 //    return;
 
                 var inventory_container = $( '.inventory-container' );
-                var customer_filter_container = $( '.filter.customer');
+                //var customer_filter_container = $( '.filter.customer');
 
                 inventory_container.empty();
-                customer_filter_container.empty();
+                //customer_filter_container.empty();
 
                 for( var i = 0; i < this.inventory.length; ++i ){
 
