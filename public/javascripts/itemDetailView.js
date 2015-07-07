@@ -7,6 +7,7 @@ var itemDetailView = {
     item: null,
 
     init: function () {
+        $("#response").text("");
         this.productID = window.args.ProductID;
 
         var self = this;
@@ -26,6 +27,7 @@ var itemDetailView = {
     },
 
     displayItem: function () {
+        $("#response").text("");
         $("#product_name").text(this.item.Name);
         $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
         "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
@@ -73,10 +75,10 @@ var itemDetailView = {
             }
             else {
                 alert(r[0].message);
-                $("#response").append("<br/>" + "Deleting Product is only available to system admin.");
-                $("#response").append("<br/>" + "Please go through the following checklist before deleting product.");
-                $("#response").append("<br/>" + "1. Inventory of the product is 0.");
-                $("#response").append("<br/>" + "2. De-associate all customers from the product");
+                //$("#response").append("<br/>" + "Deleting Product is only available to system admin.");
+                //$("#response").append("<br/>" + "Please go through the following checklist before deleting product.");
+                //$("#response").append("<br/>" + "1. Inventory of the product is 0.");
+                //$("#response").append("<br/>" + "2. De-associate all customers from the product");
             }
         }).fail(function (res) {
             $("#response").text( "Fail to delete product: Error --- " + res );
