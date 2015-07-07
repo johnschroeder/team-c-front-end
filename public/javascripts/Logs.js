@@ -28,6 +28,7 @@ var DisplayAll =
         var host = window.apiRoute + "/redis/GetState/";
 
         $.get(host, function cookieUser(username) {
+            alert(username);
             var host = window.apiRoute + "/getLogs/" + username + "/";
             $.get(host, function (logsForUsername) {
                 var logsObj = JSON.parse(logsForUsername);
