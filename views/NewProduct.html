@@ -25,7 +25,7 @@
         <div class="col-sm-12">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox"> Create a new run of this item when finished</input>
+                    <input id="new_run_checkbox" type="checkbox"> Create a new run of this item when finished</input>
                 </label>
             </div>
         </div>
@@ -52,9 +52,9 @@
             <label>Select customers to associate:</label>
         </div>
 
-        <div id="customer_checkbox" class="col-sm-12 hidden">
+        <div class="customer_checkbox col-sm-12 hidden">
             <div class="checkbox col-sm-12">
-                <input id="checkbox_input" type="checkbox">
+                <input class="checkbox_input" type="checkbox">
                 <label class="checkbox_label"></label>
             </div>
         </div>
@@ -62,7 +62,19 @@
 
     <div id="add_customer" class="row">
         <div class="col-sm-4">
-            <button id="add_customer_button" class="btn btn-default" onclick="newProduct.populateCustomers()">Add Customer</button>
+            <button id="add_customer_button" class="btn btn-default" onclick="newProduct.addCustomer()">Add Customer</button>
+        </div>
+    </div>
+
+    <div id="add_customer_text" class="row hidden">
+        <div class="col-sm-4">
+            <input id="new_customer_text" type="text" placeholder="New customer">
+        </div>
+    </div>
+    <br/>
+    <div id="submit_customer" class="row hidden">
+        <div class="col-sm-4">
+            <button id="submit_customer_button" class="btn btn-default" onclick="newProduct.submitCustomer()">Submit New Customer</button>
         </div>
     </div>
 
