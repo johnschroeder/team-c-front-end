@@ -323,6 +323,60 @@ var pullInventory = {
         });
     },
 
+    /**
+     * Send every row recursively to the back end for saving
+     * @param entry - The jQuery object containing the list of row entries
+     */
+    AddOneItemToCartRecursively: function(entry){
+
+        var nextEntry = entry;
+
+        while (nextEntry.length && !(nextEntry.find('option:selected').val() > 0)) {
+            nextEntry = nextEntry.next();
+        }
+
+        if (!nextEntry.length) {
+            return;
+        }
+
+        var sizeMapID = $(nextEntry).find('.Size').find('option:selected').val();
+        var cartID = $('#slCart').find('option:selected').val();
+        var quantity = $(nextEntry).find('.Count').val();
+
+        var self = this;
+
+        $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cartID + "/" + sizeMapID + "/" + quantity, function (resp) {
+            var msg = "";
+
+            msg = resp.split('####', 2)[0];
+
+            if (msg.trim() != 'Success') {
+                $("#response").text(msg);
+            }
+
+            console.log(msg);
+        }).then(function() {
+            nextEntry = nextEntry.next();
+
+            while (nextEntry.length && !(nextEntry.find('option:selected').val() > 0)) {
+                nextEntry = nextEntry.next();
+            }
+
+            if (nextEntry.length) {
+                self.AddOneItemToCartRecursively(nextEntry);
+            } else {
+                $('#slCart').empty();
+                $("#divSelectCart").hide();
+                alert("Items added to cart ");
+                navigation.go(self.navigationArgs.previousPage, {ProductID: self.navigationArgs.productID});
+            }
+        }).fail(function(res) {
+            var msg = "Error: AddOneItemToCartRecursively: Connection error.";
+            $("#response").text(msg);
+            alert(msg);
+        });
+    },
+
 
     /**
      * Handle submission of adding a product to an existing cart
@@ -331,34 +385,13 @@ var pullInventory = {
 
         var availableAmount = parseInt($('#AvailableAmout').text());
         var currentTotal = parseInt($('#TotalInventory').text());
-        var self = this;
 
         if (availableAmount < currentTotal) {
             alert("There is not enough inventory to pull. Please Update Pull Amount");
             return;
         }
 
-        $('#InputDiv').children('.InputChild').each(function () {
-            var subtotal = 0;
-            var sizeMapID = $(this).find('.Size').find('option:selected').val();
-            var cartID = $('#slCart').find('option:selected').val();
-
-            if (sizeMapID > 0) {
-                var count = $(this).find('.Count').val();
-                var message = self.AddOneItemToCart(cartID, sizeMapID, count);
-                console.log(message);
-
-                if (message != 'Success') {
-                    alert(message);
-                    return;
-                }
-            }
-        });
-
-        $('#slCart').empty();
-        $("#divSelectCart").hide();
-        alert("Items added to cart ");
-        navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
+        this.AddOneItemToCartRecursively($('#InputDiv').children('.InputChild').first());
     },
 
 
