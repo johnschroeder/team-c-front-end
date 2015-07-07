@@ -25,11 +25,8 @@ function DisplayNext(log) {
 var DisplayAll =
 {
     Now: function () {
-        var host = window.apiRoute + "/redis/GetState/";
-
-        $.get(host, function cookieUser(username) {
-            alert(username);
-            var host = window.apiRoute + "/getLogs/" + username + "/";
+        var host = window.apiRoute + "/getLogs/";
+        // alert(host);
             $.get(host, function (logsForUsername) {
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
@@ -41,7 +38,6 @@ var DisplayAll =
                 }
 
             });
-        })
     },
 
     Ignore: function () {
