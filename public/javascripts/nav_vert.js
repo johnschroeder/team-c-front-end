@@ -47,11 +47,8 @@ function Home(){
 }
 
 //
-function CreateUser() {
+function CreateUser(){
     navigation.go("CreateUser.html");
-}
-function resetPassword(){
-    navigation.go('ResetPassword.html');
 }
 
 function ViewCarts(){
