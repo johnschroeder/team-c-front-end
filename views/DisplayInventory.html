@@ -163,6 +163,7 @@
 
                     self.inventory = data;
                     self.display_inventory();
+                    $("#item").val("");
                 }).fail(function() {
                     self.render_error("Customer: Search failed.");
                 });
@@ -178,6 +179,7 @@
                         //self.consolidate_inventory();
                         self.display_inventory();
                         self.customerSelector[0].selectize.clear();
+                        $("#item").val("");
                     }
                     else {
 
