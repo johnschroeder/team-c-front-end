@@ -35,7 +35,10 @@ $(document).ready(function () {
     });
 
     jQuery.get(window.apiRoute+"/getUserInfo", function(result){
+        jQuery('#loggedIn').toggle();
         jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
+    }).fail(function(){
+        jQuery('#login').toggle();
     });
 
 
