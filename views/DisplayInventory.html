@@ -52,6 +52,7 @@
 
             host: window.apiRoute + "/displayInventory/",
             inventory: false,
+            customerSelector: null,
             consolidated: false,
 
             /**
@@ -79,17 +80,18 @@
                     }
                 });
 
-                $("#customer").selectize({
-                    valueField: "value",
+                this.customerSelector = $("#customer").selectize({
+                    valueField: "label",
                     labelField: "label",
-                    searchField: "search",
-                    create: false,
+                    searchField: ["label"],
                     render: {
                         option: function(item, escape) {
                             return "<div>" + escape(item.label) + "</div>";
                         }
                     },
                     load: function(query, callback) {
+                        this.clearOptions();
+
                         if (!query.length) return callback();
 
                         $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(query), function(data) {
@@ -141,6 +143,7 @@
 
                     self.inventory = data;
                     self.display_inventory();
+                    self.customerSelector[0].selectize.clear();
                 }).fail(function() {
                     self.render_error("Item: Search failed.");
                 });
@@ -174,7 +177,7 @@
                         self.inventory = data;
                         //self.consolidate_inventory();
                         self.display_inventory();
-
+                        self.customerSelector[0].selectize.clear();
                     }
                     else {
 
