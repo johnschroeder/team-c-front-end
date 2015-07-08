@@ -14,8 +14,6 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 app.use(express.static(path.join(__dirname, 'public')));
-//Dont delete this line, its here for allowing the route lookup to exist
-app.use("/lookup",express.static(path.join(__dirname, 'public')));
 if(config.app.debug){
     app.use(express.static(path.join(__dirname, 'views')));
 }
@@ -27,6 +25,10 @@ glob.sync('**/*.js',{'cwd':path}).forEach(
         app.use(ns, require(path + ns));
     }
 );
+
+app.get("/:lookup", function(req, res){
+    res.render("Confirm.ejs", {apiRoute: apiRoute, lookup:req.params.lookup});
+});
 
 app.get("/", function(req, res){
     res.render("indexHeader.ejs", {apiRoute: apiRoute});

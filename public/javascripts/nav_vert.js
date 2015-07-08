@@ -50,9 +50,6 @@ function Home(){
 function CreateUser() {
     navigation.go("CreateUser.html");
 }
-function resetPassword(){
-    navigation.go('ResetPassword.html');
-}
 
 function ViewCarts(){
     navigation.go("ViewCarts.html");
