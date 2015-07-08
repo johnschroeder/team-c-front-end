@@ -82,10 +82,29 @@ var editProduct = {
             }
         });
     },
+
+    breakAssociations: function() {
+        var host = window.apiRoute
+            + "/removeCustomersByProductID/"
+            + window.args.ProductID;
+        $.get(host,function(response){
+            if( response == "Success" ){
+                editProduct.submit();
+            } else {
+                $("#message").text("Error: " + response);
+            }
+        }).fail(function(err) {
+            $("#message").text("Error: " + err.responseText);
+        })
+
+    },
+
     submit: function(){
         //get new item Name and description
-        var name = $("#product_name_text").val();
-        var description = $("#description_text").val();
+        var name = $("#product_name_input").val();
+        var description = $("#description_input").val();
+        console.log("name: " + name);
+        console.log("description: " + description);
 
         //get and submit checked boxes:
         var customerContainer = $("#checkbox_cont").children();
@@ -110,56 +129,10 @@ var editProduct = {
             if( response != "Success" ){
                 $("#message").text("Error: " + response);
             }
+            navigation.go("DisplayInventory.html");
         }).fail(function(err) {
             $("#message").text("Error: " + err.responseText);
         })
-    },
-
-    edit: function() {
-        $("#customer_text").addClass("hidden");
-        $("#product_name_text").addClass("hidden");
-        $("#description_text").addClass("hidden");
-
-        $("#customer_input").removeClass("hidden");
-        $("#product_name_input").removeClass("hidden");
-        $("#description_input").removeClass("hidden");
-        $("#new_thumbnail_button").removeClass("hidden");
-        $("#delete_button").removeClass("hidden");
-
-        $("#edit_button").text("Done")
-            .attr("onclick", "editProduct.done()");
-    },
-
-    done: function () {
-        var newCustName = $("#customer_input").val();
-        var newProdName = $("#product_name_input").val();
-        var newDescript = $("#description_input").val();
-
-        $("#edit_button").prop("disabled", true);
-
-        // Temporarily disabled
-        //$.get(window.apiRoute + "/reSubmit/" + self.product.ProductId + "/" + newCustName +"/" + newProdName + "/" + newDescript, function() {
-            console.log("Success!");
-
-        $("#customer_input").addClass("hidden");
-        $("#product_name_input").addClass("hidden");
-        $("#description_input").addClass("hidden");
-        $("#new_thumbnail_button").addClass("hidden");
-        $("#delete_button").addClass("hidden");
-
-        $("#customer_text").text(newCustName)
-            .removeClass("hidden");
-
-        $("#product_name_text").text(newProdName)
-            .removeClass("hidden");
-
-        $("#description_text").text(newDescript)
-            .removeClass("hidden");
-
-        $("#edit_button").text("Edit")
-            .attr("onclick", "editProduct.edit()")
-            .prop("disabled", false);
-        //});
     },
 
     back: function () {
