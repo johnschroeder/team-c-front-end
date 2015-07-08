@@ -33,15 +33,6 @@ $(document).ready(function () {
         if ($('.show-mobile-menu').css('display') != 'none' && $('#nav_vert').css('display') != 'none')
             $('#nav_vert').css('display', 'none');
     });
-
-    jQuery.get(window.apiRoute+"/getUserInfo", function(result){
-        jQuery('#loggedIn').toggle();
-        jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
-    }).fail(function(){
-        jQuery('#login').toggle();
-    });
-
-
 });
 
 function preventBehavior(e)
