@@ -35,7 +35,7 @@ $(document).ready(function () {
     });
 
     jQuery.get(window.apiRoute+"/getUserInfo", function(result){
-        $('#usersName').text=result.username;
+        jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
     });
 
 
