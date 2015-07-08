@@ -40,15 +40,12 @@ function displayCartInventory() {
 
     if ($("#selectDropDown :selected").val() == -1) return;
 
-    //console.log("Selected: " + $("#selectDropDown :selected").text());
-
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function(res) {
-        var items = JSON.parse(res)[0];
-        populateCartContainer(items);
+    $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (data) {
+        populateCartContainer(data[0]);
     }).fail(function(res) {
         $("#response").text("Error: displayCartInventory: Connection error.");
     });
@@ -114,93 +111,69 @@ function populateCartContainer(items) {
 }
 
 function createCartEntry(item) {
-    var cartItem = $("<div/>");
-
-    cartItem
-        .addClass("cart-entry")
+    var cartItem = $("<div class='cart-entry'/>")
         .attr("name", item.ProductName)
         .data("productId", item.ProductID)
         .append($("<hr/>"))
-        .append($("<div/>")
-            .addClass("row")
-            .append($("<div/>")
-                .addClass("col-sm-8")
-                .append($("<h2/>")
-                    .addClass("item-name")
+        .append($("<div class='row'/>")
+            .append($("<div class='col-sm-8'/>")
+                .append($("<h2 class='item-name'/>")
                     .text(item.ProductName)
+                )
             )
-        )
-            .append($("<div/>")
-                .addClass("col-sm-4")
-                .append($("<h2/>")
-                    .addClass("item-total-text text-center")
+            .append($("<div class='col-sm-4'/>")
+                .append($("<h2 class='item-total-text text-center'/>")
                     .text("0")
+                )
             )
         )
-    )
-        .append($("<div/>")
-            .addClass("row")
-            .append($("<div/>")
-                .addClass("col-sm-6")
+        .append($("<div class='row'/>")
+            .append($("<div class='col-sm-6'/>")
                 .text("Pulled")
-        )
-            .append($("<div/>")
-                .addClass("col-sm-6")
-                .append($("<div/>")
-                    .addClass("pull-right")
-                    .append($("<button/>")
-                        .addClass("btn btn-default hidden edit-button")
+            )
+            .append($("<div class='col-sm-6'/>")
+                .append($("<div class='pull-right'/>")
+                    .append($("<button class='btn btn-default edit-button'/>")
                         .click(function () {
                             cartItem
                                 .find(".package-text, .amount-text, .edit-button, .unpull-button")
-                                .each(function () {
-                                    $(this).addClass("hidden");
-                                })
+                                    .addClass("hidden")
                                 .end()
-                                .find(".package-select, .amount-input, .done-button, .delete-button")
-                                .each(function () {
-                                    $(this).removeClass("hidden");
-                                })
-                                .end()
+                                .find(".package-select, .amount-input, .done-button, .delete-button, .delete-all-button")
+                                    .removeClass("hidden")
+                                .end();
 
-                            updateEntryPackageTypeOptions(cartItem.find(".item-input"), item.ProductID)
+                            updateEntryPackageTypeOptions(cartItem, item.ProductID)
                         })
                         .text("Edit")
-                )
-                    .append($("<button/>")
-                        .addClass("btn btn-default hidden done-button")
+                    )
+                    .append($("<button class='btn btn-default hidden done-button'/>")
                         .click(function () {
                             cartItem
                                 .find(".package-text, .amount-text, .edit-button, .unpull-button")
-                                .each(function () {
-                                    $(this).removeClass("hidden");
-                                })
+                                    .removeClass("hidden")
                                 .end()
-                                .find(".package-select, .amount-input, .done-button, .delete-button")
-                                .each(function () {
-                                    $(this).addClass("hidden");
-                                })
-                                .end()
+                                .find(".package-select, .amount-input, .done-button, .delete-button, .delete-all-button")
+                                    .addClass("hidden")
+                                .end();
 
                             handleDirtyItems(cartItem);
                         })
                         .text("Done")
-                )
-                    .append($("<button/>")
-                        .addClass("btn btn-default hidden delete-button")
+                    )
+                    .append($("<button class='btn btn-default hidden delete-all-button'/>")
                         .click(function () {
                         })
-                        .text("Delete")
-                )
-                    .append($("<button/>")
-                        .addClass("btn btn-default unpull-button")
+                        .text("Delete All")
+                    )
+                    .append($("<button class='btn btn-default unpull-button'/>")
                         .click(function () { /* TODO Unpull() */
                         })
                         .text("Unpull")
+                    )
                 )
             )
         )
-    )
         .append($("<br/>"))
 
     return cartItem;
@@ -212,83 +185,74 @@ function createItemEntry(item, parent) {
     var color = "Marker: " + (item.Marker || "");
     var location = "Location: " + (item.Location || "");
 
-    var cartItemEntry = $("<div/>")
-        .addClass("row item-entry")
+    var cartItemEntry = $("<div class='row form-group item-entry'/>")
         .data("dirty", false)
-        .append($("<div/>")
-            .addClass("col-sm-8 form-group item-input")
-            .append($("<div/>")
-                .addClass("row")
-                .append($("<div/>")
-                    .addClass("col-sm-5")
-                    .append($("<div/>")
-                        .addClass("package-text")
-                        .text(item.PackageName + " of " + item.UnitsPerPackage)
-                        .attr("name", item.PackageName)
-                        .data("size", item.UnitsPerPackage)
-                )
-                    .append($("<select/>")
-                        .addClass("form-control hidden package-select")
-                        .change(function () {
-                            var selected = cartItemEntry.find(".package-select option:selected");
-                            cartItemEntry.find(".total-text").text(parseInt(selected.data("size")) * parseInt(cartItemEntry.find(".amount-input").val()));
-
-                            cartItemEntry.find(".package-text")
-                                .attr("name", selected.attr("name"))
-                                .data("size", selected.data("size"))
-                                .text(selected.val());
-
-                            updateTotal(parent);
-                            cartItemEntry.data("dirty", true);
-                        })
-                )
+        .data("data", item)
+        .append($("<div class='col-sm-2'/>")
+            .append($("<div class='package-text'/>")
+                .attr("name", item.PackageName)
+                .data("size", item.UnitsPerPackage)
+                .text(item.PackageName + " of " + item.UnitsPerPackage)
             )
-                .append($("<div/>")
-                    .addClass("col-sm-1 text-center")
-                    .css("font-size", "150%")
-                    .text("*")
-            )
-                .append($("<div/>")
-                    .addClass("col-sm-3")
-                    .append($("<div/>")
-                        .addClass("amount-text")
-                        .text(item.NumPackages)
-                )
-                    .append($("<input/>")
-                        .addClass("form-control hidden amount-input")
-                        .attr("type", "number")
-                        .attr("min", 0)
-                        .val(parseInt(item.NumPackages))
-                        .change(function () {
-                            var selected = cartItemEntry.find(".package-select option:selected");
-                            cartItemEntry.find(".total-text").text(parseInt(selected.data("size")) * parseInt(cartItemEntry.find(".amount-input").val()));
+            .append($("<select class='form-control hidden package-select'/>")
+                .change(function () {
+                    var selected = cartItemEntry.find(".package-select option:selected");
+                    cartItemEntry.find(".total-text").text(parseInt(selected.data("size")) * parseInt(cartItemEntry.find(".amount-input").val()));
 
-                            cartItemEntry.find(".amount-text")
-                                .text(cartItemEntry.find(".amount-input").val());
+                    cartItemEntry.find(".package-text")
+                        .attr("name", selected.attr("name"))
+                        .data("size", selected.data("size"))
+                        .text(selected.val());
 
-                            updateTotal(parent);
-                            cartItemEntry.data("dirty", true);
-                        })
-                )
-            )
-                .append($("<div/>")
-                    .addClass("col-sm-1 text-center")
-                    .text("=")
-            )
-                .append($("<div/>")
-                    .addClass("col-sm-2 total-text")
-                    .text(total)
+                    updateTotal(parent);
+                    cartItemEntry.data("dirty", true);
+                })
             )
         )
-    )
-        .append($("<div/>")
-            .addClass("col-sm-2")
+        .append($("<div class='col-sm-1 text-center'/>")
+            .css("font-size", "150%")
+            .text("*")
+        )
+        .append($("<div class='col-sm-2'/>")
+            .append($("<div class='amount-text'/>")
+                .text(item.NumPackages)
+            )
+            .append($("<input class='form-control hidden amount-input' type='number' min='0'/>")
+                .val(parseInt(item.NumPackages))
+                .change(function () {
+                    cartItemEntry
+                        .find(".total-text")
+                            .text(parseInt(cartItemEntry.find(".package-select option:selected").data("size")) * parseInt(cartItemEntry.find(".amount-input").val()))
+                        .end()
+                        .find(".amount-text")
+                            .text(cartItemEntry.find(".amount-input").val())
+                        .end()
+                        .data("dirty", true);
+
+                    updateTotal(parent);
+                })
+            )
+        )
+        .append($("<div class='col-sm-2 text-center'/>")
+            .text("= ")
+                .append($("<span class='total-text'/>")
+                .text(total)
+            )
+        )
+        .append($("<div class='col-sm-2'/>")
             .text(color)
-    )
-        .append($("<div/>")
-            .addClass("col-sm-2")
+        )
+        .append($("<div class='col-sm-2'/>")
             .text(location)
-    )
+        )
+        .append($("<div class='col-sm-1'/>")
+            .append($("<button class='btn btn-default hidden delete-button'/>")
+                .click(function () {
+                    deleteRow(cartItemEntry, parent);
+                })
+                .text("Delete")
+            )
+        )
 
     return cartItemEntry;
 }
@@ -296,40 +260,119 @@ function createItemEntry(item, parent) {
 function updateTotal(cartItem) {
     var total = 0;
 
-    cartItem.find(".total-text").each(function () {
-        total += parseInt($(this).text()) || 0;
-    });
-
-    cartItem.find(".item-total-text").text(total);
+    cartItem
+        .find(".total-text")
+            .each(function () {
+                total += parseInt($(this).text()) || 0;
+            })
+        .end()
+        .find(".item-total-text")
+            .text(total);
 }
 
 // Prototype edit feature functions
 function handleDirtyItems(cartItem) {
-    // TODO post to route to update item
-    var refresh = false;
-
-    cartItem.find(".item-entry").each(function () {
+    /*cartItem.find(".item-entry").each(function () {
         if ($(this).data("dirty")) {
             console.log("Dirty: Package: " + $(this).find(".package-select option:selected").text() + ", Amount: " + $(this).find(".amount-input").val());
             refresh = true;
-            $(this).data("dirty".false);
+            $(this).data("dirty", false);
         }
-    });
+    });*/
+    handleDirtyItemsRecursively(cartItem.find(".item-entry").first(), cartItem);
+}
 
-    if (refresh) refreshCartEntry(cartItem); //refresh after done calling route
+function handleDirtyItemsRecursively(entry, cartItem) {
+    if (!entry.length) return;
+
+    if (!entry.data("dirty")) {
+        handleDirtyItemsRecursively(entry.next(), cartItem);
+        return;
+    }
+
+    if (entry.data("dirty")) {
+        var data = entry.data("data");
+        var cartID = $("#selectDropDown :selected").val();
+        var cartItemID = data.CartItemID;
+        var sizeMapID = entry.find(".package-select option:selected").val();
+        var quantity = parseInt(entry.find(".amount-input").val());
+        var runID = data.RunID;
+
+/*
+        console.log(window.apiRoute + "/Carts/EditCartItem/" + cartID + '/' + cartItemID + '/' + sizeMapID + '/' + quantity + '/' + runID);
+
+        var nextEntry = entry.next();
+
+        while (nextEntry.length && !nextEntry.data("dirty")) {
+            nextEntry = nextEntry.next();
+        }
+
+        if (!nextEntry.length) {
+            refreshCartEntry(cartItem);
+            return;
+        }
+
+        handleDirtyItemsRecursively(nextEntry, cartItem);
+*/
+
+        $.get(window.apiRoute + "/Carts/EditCartItem/"
+            + cartID + '/' + cartItemID + '/'
+            + sizeMapID + '/' + quantity + '/' + runID,
+            function (res) {
+                console.log("Results of submitting changed values: ");
+                console.log(JSON.parse(res));
+        })
+        .then(function() {
+            var nextEntry = entry.next();
+
+            while (nextEntry.length && !nextEntry.data("dirty")) {
+                nextEntry = nextEntry.next();
+            }
+
+            if (!nextEntry.length) {
+                refreshCartEntry(cartItem);
+                return;
+            }
+
+            handleDirtyItemsRecursively(nextEntry, cartItem);
+        })
+        .fail(function (res) {
+            $("#response").text("Error: handleDirtyItemsRecursively: Connection error.");
+        });
+    }
+}
+
+function deleteRow(entry, item) {
+    // TODO update dirty items and continue editing
+    var data = entry.data("data");
+    var cartItemID = data.CartItemID;
+
+    item
+        .find(".package-text, .amount-text, .edit-button, .unpull-button")
+            .removeClass("hidden")
+        .end()
+        .find(".package-select, .amount-input, .done-button, .delete-button, .delete-all-button")
+            .addClass("hidden")
+        .end();
+
+    $.get(window.apiRoute + "/Carts/DeleteItemInCart/" + cartItemID, function (res) {
+        console.log(res);
+    })
+    .then(function() {
+        refreshCartEntry(item);
+    })
+    .fail(function() {
+        console.log("Error: Failed to delete row.");
+    });
 }
 
 function refreshCartEntry(cartEntry) {
-    cartEntry.find(".item-entry").each(function () {
-        $(this).remove();
-    })
+    cartEntry.find(".item-entry").remove();
 
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (res) {
-        var items = JSON.parse(res)[0];
-
-        items.forEach(function (item) {
+    $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (data) {
+        data[0].forEach(function (item) {
             if (cartEntry.find(".item-name").text() != item.ProductName) {
                 return;
             }
@@ -345,19 +388,18 @@ function refreshCartEntry(cartEntry) {
 }
 
 //Updates the options for the package types of a single entry.
-function updateEntryPackageTypeOptions(input, productId) {
-    $.get(window.apiRoute + "/GetSizeByProductID/" + productId, function (res) {
-        var packageTypes = $.parseJSON(res);
-
-        input.each(function () {
+function updateEntryPackageTypeOptions(item, productId) {
+    $.getJSON(window.apiRoute + "/GetSizeByProductID/" + productId, function (data) {
+        item.find(".item-entry").each(function () {
             var select = $(this).find(".package-select").empty();
 
-            packageTypes.forEach(function (each) {
+            data.forEach(function (each) {
                 $("<option/>")
-                    .text(each.Name + " of " + each.Size)
                     .attr("name", each.Name)
                     .data("size", each.Size)
                     .data("sizeMapId", each.SizeMapID)
+                    .val(each.SizeMapID)
+                    .text(each.Name + " of " + each.Size)
                     .appendTo(select);
             });
 
@@ -368,27 +410,4 @@ function updateEntryPackageTypeOptions(input, productId) {
     }).fail(function (res) {
         $("#response").text("Error: Update package types: Connection error.");
     });
-}
-
-function showPrototypeButtons() {
-    var cartContainer = $("#inventory-container")
-        .empty();
-
-    if ($("#selectDropDown :selected").val() == -1) return;
-
-    state.nameSelected = $("#selectDropDown :selected").text();
-    navigation.saveState(state);
-    var idSelected = $("#selectDropDown :selected").val();
-
-    $.get(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (res) {
-        var items = JSON.parse(res)[0];
-        populateCartContainer(items);
-        $("#inventory-container .edit-button").removeClass("hidden");
-    }).fail(function (res) {
-        $("#response").text("Error: displayCartInventory: Connection error.");
-    });
-}
-
-function hidePrototypeButtons() {
-    displayCartInventory();
 }
