@@ -17,14 +17,23 @@
             <label for="track_by" class="input-label">Track Inventory By</label>
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
+                <option value="Item">Item</option>
+                <option value="All">All</option>
             </select>
         </div>
 
         <div class="col-sm-6">
-            <label for="customer" class="input-label">Filter</label>
-            <select id="customer" class="form-control filter customer">
-                <option value="0">All</option>
-            </select>
+            <div id="customer-filter" class="form-group">
+                <label for="customer" class="input-label">Filter</label><br/>
+                <select id="customer" class="form-control filter customer"/>
+            </div>
+            <div id="item-filter" class="form-group" hidden="hidden">
+                <label for="item" class="input-label">Search</label>
+                <div class="input-group">
+                    <input id="item" class="form-control" label="Enter search for an item." type="text"></input>
+                    <span class="input-group-btn"><button id="search_item_button" class="btn btn-default">Search</button></span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -41,28 +50,147 @@
          */
         var display_inventory = {
 
-            host: window.apiRoute+"/displayInventory/",
+            host: window.apiRoute + "/displayInventory/",
             inventory: false,
+            customerSelector: null,
             consolidated: false,
 
             /**
              * Go fetch everything and get it set up
              */
             init: function() {
+                var self = this;
+
+                $("#track_by").change(function() {
+                    $("#customer-filter").hide();
+                    $("#item-filter").hide();
+
+                    switch($("#track_by option:selected").val()) {
+                        case "Customer":
+                            $("#customer-filter").show();
+                            break;
+                        case "Item":
+                            $("#item-filter").show();
+                            break;
+                        case "All":
+                            self.showAllItems();
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                this.customerSelector = $("#customer").selectize({
+                    valueField: "label",
+                    labelField: "label",
+                    searchField: ["label"],
+                    render: {
+                        option: function(item, escape) {
+                            return "<div>" + escape(item.label) + "</div>";
+                        }
+                    },
+                    load: function(query, callback) {
+                        this.clearOptions();
+
+                        if (!query.length) return callback();
+
+                        $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(query), function(data) {
+                            callback(data); // data = [{label:"customer 1"}, {label:"customer 2"}, ..]
+                        });
+                    }
+                });
+
+                $("#customer").change(function() {
+                    self.searchCustomer($("#customer option:selected").text());
+                });
+
+                // Item search bar.
+                // TODO should we use the same combobox as customer?
+                $("#item").autocomplete({
+                    minLength: 1,
+                    source: function(request, response) {
+                        $.getJSON(window.apiRoute + "/itemAutoComplete/" + encodeURIComponent(request.term), response); // data = [{label:"item 1"}, {label:"item 2"}, ..]
+                    },
+                    select: function(event, ui) {
+                        // ui { label, value }
+                        self.searchItem(ui.item.label);
+                    }
+                });
+
+                $("#item").keypress(function(e) {
+                    if (e.which == 13) {
+                        self.searchItem($("#item").val());
+                    }
+                });
+
+                $("#search_item_button").click(function() {
+                    self.searchItem($("#item").val());
+                });
+
+            },
+
+            searchItem: function(keyword) {
+                if (!keyword) return;
+
+                //console.log("Search item: " + keyword); return;
 
                 var self = this;
-                $.get( this.host, function( response ) {
+                $.getJSON(window.apiRoute + "/searchItem/" + encodeURIComponent(keyword), function(data) {
+                    if (!data.length || data[0] === null) {
+                        $(".inventory-container")
+                            .empty()
+                            .text("No inventory found.");
 
-                    if( response && response.length ){
+                        return;
+                    }
 
-                        self.inventory = jQuery.parseJSON( response );
+                    self.inventory = data;
+                    self.display_inventory();
+                    self.customerSelector[0].selectize.clear();
+                }).fail(function() {
+                    self.render_error("Item: Search failed.");
+                });
+            },
+
+            searchCustomer: function(keyword) {
+                if (!keyword) return;
+
+                //console.log("Search customer: " + keyword); return;
+
+                var self = this;
+                $.getJSON(window.apiRoute + "/searchCustomer/" + encodeURIComponent(keyword), function(data) {
+                    if (!data.length || data[0] === null) {
+                        $(".inventory-container")
+                            .empty()
+                            .text("No inventory found.");
+
+                        return;
+                    }
+
+                    self.inventory = data;
+                    self.display_inventory();
+                    $("#item").val("");
+                }).fail(function() {
+                    self.render_error("Customer: Search failed.");
+                });
+            },
+
+            showAllItems: function() {
+                var self = this;
+                $.getJSON( this.host, function( data ) {
+
+                    if( data && data.length && data[0] !== null){
+
+                        self.inventory = data;
                         //self.consolidate_inventory();
                         self.display_inventory();
-
+                        self.customerSelector[0].selectize.clear();
+                        $("#item").val("");
                     }
                     else {
-
-                        self.render_error( "No inventory found" );
+                        $(".inventory-container")
+                            .empty()
+                            .text("No inventory found.");
                     }
 
                 }).fail( function( response ){
@@ -70,7 +198,6 @@
                     self.render_error( "Failed to load inventory: " + response );
 
                 });
-
             },
 
             /**
@@ -116,7 +243,10 @@
                 //    return;
 
                 var inventory_container = $( '.inventory-container' );
-                var customer_filter_container = $( '.filter.customer');
+                inventory_container.empty();
+
+                //var customer_filter_container = $( '.filter.customer');
+                //customer_filter_container.empty();
 
                 for( var i = 0; i < this.inventory.length; ++i ){
 
@@ -158,9 +288,8 @@
              * @param error
              */
             render_error: function( error ) {
-
+                $( '.error-message').remove();
                 $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
-
             },
 
             /**
