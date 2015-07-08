@@ -137,7 +137,10 @@
                 var self = this;
                 $.getJSON(window.apiRoute + "/searchItem/" + encodeURIComponent(keyword), function(data) {
                     if (!data.length || data[0] === null) {
-                        self.render_error("No inventory found.");
+                        $(".inventory-container")
+                            .empty()
+                            .text("No inventory found.");
+
                         return;
                     }
 
@@ -157,7 +160,10 @@
                 var self = this;
                 $.getJSON(window.apiRoute + "/searchCustomer/" + encodeURIComponent(keyword), function(data) {
                     if (!data.length || data[0] === null) {
-                        self.render_error("No inventory found.");
+                        $(".inventory-container")
+                            .empty()
+                            .text("No inventory found.");
+
                         return;
                     }
 
@@ -182,8 +188,9 @@
                         $("#item").val("");
                     }
                     else {
-
-                        self.render_error( "No inventory found" );
+                        $(".inventory-container")
+                            .empty()
+                            .text("No inventory found.");
                     }
 
                 }).fail( function( response ){
@@ -236,9 +243,9 @@
                 //    return;
 
                 var inventory_container = $( '.inventory-container' );
-                //var customer_filter_container = $( '.filter.customer');
-
                 inventory_container.empty();
+
+                //var customer_filter_container = $( '.filter.customer');
                 //customer_filter_container.empty();
 
                 for( var i = 0; i < this.inventory.length; ++i ){
@@ -281,9 +288,8 @@
              * @param error
              */
             render_error: function( error ) {
-
+                $( '.error-message').remove();
                 $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
-
             },
 
             /**
