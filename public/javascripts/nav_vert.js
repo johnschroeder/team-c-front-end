@@ -53,8 +53,11 @@ function Home(){
 }
 
 //
-function CreateUser(){
+function CreateUser() {
     navigation.go("CreateUser.html");
+}
+function resetPassword(){
+    navigation.go('ResetPassword.html');
 }
 
 function ViewCarts(){
@@ -84,7 +87,7 @@ function Audit(){
 }
 
 function Logs(){
-    $('#main_cont').text("Logs");
+    navigation.go("Logs.html");
 }
 
 function AddUsers(){
