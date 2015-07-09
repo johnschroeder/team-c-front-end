@@ -194,6 +194,7 @@ var addInventory = {
             addInventory.reset();
             $("#response").text("Added inventory: " + total + " at " + location + ".");
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
+            navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
             $("#response").text("Error: Submit add inventory: Connection error.");
             $("#inventory_add_button").prop("disabled", false);
