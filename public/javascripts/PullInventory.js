@@ -8,7 +8,7 @@ var pullInventory = {
         productID: null,
         productName: null,
         previousPage: null,
-        totalQuantity: null,
+        totalQuantity: null
     },
 
 
@@ -54,6 +54,7 @@ var pullInventory = {
                 $(dropdown).append($(option));
             }
         }).fail(function(res) {
+            $("#response").text("Error: Init: Connection error.");
             $("#response").text("Error: Init: Connection error.");
         });
     },
@@ -182,9 +183,9 @@ var pullInventory = {
 
 
     /**
-     * I don't know what this does or what the arguments are
-     * @param n
-     * @param s
+     * @param n : sizeName of the newly added size
+     * @param s : size of the newly added size
+     * This function bind newly created size to the size dorpdown in the input child rows
      */
     BindNewOption: function( n, s ) {
 
@@ -310,7 +311,6 @@ var pullInventory = {
             var msg = "";
 
             msg = resp.split('####', 2)[0];
-
             if (msg.trim() != 'Success') {
                 $("#response").text(msg);
             }
@@ -399,7 +399,6 @@ var pullInventory = {
      * Go back to the previous page
      */
     back: function(){
-
         navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
     }
 
