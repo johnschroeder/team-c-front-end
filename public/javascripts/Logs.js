@@ -1,18 +1,20 @@
-var counter = 0;
+var firstLog = true;
 function DisplayNext(log) {
 
-    var rowToCopy = $('.InputChild').first();
-    var rowsContainer = '#InputDiv';
+    if (firstLog) {
+        document.getElementById("logLabel").innerHTML = log;
 
-    var clonedRow = rowToCopy.clone();
+        firstLog = false;
+    }
+    else {
+        var rowToCopy = $('.InputChild').first();
+        var rowsContainer = '#InputDiv';
 
-    if (counter != 0) {
+        var clonedRow = rowToCopy.clone();
         clonedRow.appendTo(rowsContainer);
+        document.getElementById("logLabel").innerHTML = log;
     }
 
-
-    document.getElementById("logLabel").innerHTML = log;
-    counter++;
 }
 
 var DisplayAll =
@@ -20,11 +22,13 @@ var DisplayAll =
     Now: function () {
         var host = window.apiRoute + "/getLogs/";
 
-            $.get(host, function (logsForUsername) {
+
+        $.get(host, function (logsForUsername) {
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
 
-                for (var i = 0; i < logs.length; i++) {
+
+            for (var i = 0; i < logs.length; i++) {
 
                     var log = logs[i];
                     DisplayNext(log);
