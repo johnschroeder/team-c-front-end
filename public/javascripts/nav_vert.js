@@ -78,7 +78,8 @@ function Audit(){
 }
 
 function Logs(){
-    navigation.go("Logs.html");
+    $('#main_cont').text("Logs");
+    //navigation.go("Logs.html");
 }
 
 function AddUsers(){
