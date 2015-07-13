@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <title>Logs</title>
     <script src="javascripts/Logs.js"></script>
+    <script src="javascripts/navigation.js"></script>
 </head>
 <body>
 
 <div class="container-fluid">
     <h1>Logs</h1>
-
-    <h2>Item: <span id="ProductName"></span></h2>
-    <button class="btn btn-default" title="Go back to the last page." onclick="pullInventory.back()">Back</button>
     <hr/>
 
     <div id="InputDiv">
@@ -29,7 +27,7 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="DisplayAll.Now()">
+            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="Logs()">
                 Refresh Logs
             </button>
             <button id="DeleteSelected" class="btn btn-default" title="Delete Selected Logs"
