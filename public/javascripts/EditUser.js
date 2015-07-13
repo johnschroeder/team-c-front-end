@@ -25,7 +25,7 @@ var editUser = {
         var newFirstName = $("#FirstName").val();
         var newLastName = $("#LastName").val();
 
-        var values = new Array();
+        /* var values = new Array();
         $.each($("input[name='user_permission[]']:checked"), function () {
             values.push($(this).val());
         });
@@ -35,14 +35,20 @@ var editUser = {
             perms += values[i].toString();
             // alert(values[i]);
         }
+         */
 
-        alert("Permissions string is " + perms);
+        var dropdown = document.getElementById("permission_select");
+        var perms = dropdown.options[dropdown.selectedIndex].value;
+
+        //alert("Permissions string is " + perms);
 
         var host = window.apiRoute + '/editUser/' +
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
             + perms + '/' + isConfirmed;
+
+        //alert(host);
 
         $.get(host, function (data) {
             callback(data);
@@ -52,7 +58,7 @@ var editUser = {
     save: function () {
         if (confirm('Do you really want to make these edits?')) {
 
-            var message = editUser._submitChanges("true", function (message) {
+            var message = editUser._submitChanges(1, function (message) {
                 alert(message);
             });
         }
@@ -60,7 +66,7 @@ var editUser = {
 
     delete: function () {
         if (confirm('Do you really want to delete this user?')) {
-            var message = editUser._submitChanges("false", function (message) {
+            var message = editUser._submitChanges(0, function (message) {
                 alert(message);
             });
         }
