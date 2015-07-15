@@ -10,6 +10,66 @@ $(document).ready(function () {
 
     });
 
+    $('#DisplayInventory').on( 'touchend click', function( event ){
+        event.preventDefault();
+        DisplayInventories();
+    });
+
+    $('#ViewCarts').on( 'touchend click', function( event ){
+        event.preventDefault();
+        ViewCarts();
+    });
+
+    $('#AddProduct').on( 'touchend click', function( event ){
+        event.preventDefault();
+        AddProduct();
+    });
+
+    $('#PreDefined').on( 'touchend click', function( event ){
+        event.preventDefault();
+        PreDefinedReports();
+    });
+
+    $('#MakeMyOwn').on( 'touchend click', function( event ){
+        event.preventDefault();
+        MakeMyOwnReport();
+    });
+
+    $('#Audit').on( 'touchend click', function( event ){
+        event.preventDefault();
+        Audit();
+    });
+
+    $('#Logs').on( 'touchend click', function( event ){
+        event.preventDefault();
+        Logs();
+    });
+
+    $('#AddUsers').on( 'touchend click', function( event ){
+        event.preventDefault();
+        AddUsers();
+    });
+
+    $('#DeleteUsers').on( 'touchend click', function( event ){
+        event.preventDefault();
+        DeleteUsers();
+    });
+
+    $('#ViewUsers').on( 'touchend click', function( event ){
+        event.preventDefault();
+        ViewUsers();
+    });
+
+    $('#login').on( 'touchend click', function( event ){
+        event.preventDefault();
+        loginPage();
+    });
+
+    $('.header-logo').on( 'touchend click', function( event ){
+        event.preventDefault();
+        Home();
+    });
+
     $('.show-mobile-menu').on('touchend click', function (event) {
 
         event.preventDefault();
