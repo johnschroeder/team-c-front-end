@@ -87,6 +87,7 @@ var manageUsers = {
         var lname = $('#iptLastName').val();
         var email = $('#iptEmail').val();
         var perm = $('#sltPermission').text();
+        var permID = $('#sltPermission').val();
 
         if(uname=="")
         {
@@ -114,37 +115,38 @@ var manageUsers = {
             //return;
         }
 
+        var toPass = {
+            "username":uname,
+            "password":"0000",
+            "email":email,
+            "firstName":fname,
+            "lastName":lname,
+            "permID":permID
+        };
 
-        //call api route to submitnewuser
-        //Do following on success
+        jQuery.ajax({
+            type: "POST",
+            url: window.apiRoute+'/login/createUserAdmin/',
+            data: toPass,
+            dataType: 'json',
+            success: function(){
+                window.alert("User "+uname+" is created. Email confirmation is required to complete registration.");
+                this.LoadUsers();//re-load all users
+                $('#iptUsername').val('');
+                $('#iptFirstName').val('');
+                $('#iptLastName').val('');
+                $('#iptEmail').val('');
+                $('select#sltPermission option').removeAttr("selected");
+                $("#divNewUser").hide();
+            },
+            error: function(xhr, error){
+                window.alert(xhr +"    "+error);
+                this.LoadUsers();
+            }
+        });
 
 
-        //this.AppendNewUser(uname,fname,lname,email,perm);
-        this.LoadUsers();//re-load all users
-        $('#iptUsername').val('');
-        $('#iptFirstName').val('');
-        $('#iptLastName').val('');
-        $('#iptEmail').val('');
-        $('select#sltPermission option').removeAttr("selected");
-        $("#divNewUser").hide();
     }
-
-
-    /*
-    AppendNewUser: function(uname, fname, lname, email,perm){
-        var rowToCopy = $('.InputChild').first();
-        var newRow = rowToCopy.clone();
-        var rowsContainer = '#DisplayUsersDiv';
-        $($(newRow).children()[0]).text(uname);
-        $($(newRow).children()[1]).text(fname);
-        $($(newRow).children()[2]).text(lname);
-        $($(newRow).children()[3]).text(email);
-        $($(newRow).children()[4]).text(perm);
-        $(newRow).show();
-        newRow.appendTo(rowsContainer);
-    }
-    */
-
 
 
 };
