@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+    <script src="javascripts/ManageUsers.js"></script>
+</head>
+<div class="container-fluid">
+    <h1>Manage Users</h1>
+    <hr/>
+
+    <div id="response"></div>
+
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <button id="btnCreateUser" class="btn btn-default" title="CreateUser" onclick="manageUsers.CreateUser()">+ Add
+                New User
+            </button>
+        </div>
+    </div>
+    <div id="divNewUser" class="form-group form-inline" style="display:none">
+        <label for="iptUsername">Username</label>
+        <input id="iptUsername" class="form-control" type="text">
+        <br/>
+        <label for="iptFirstName">First Name</label>
+        <input id="iptFirstName" class="form-control" type="text">
+        <br/>
+        <label for="iptLastName">Last Name</label>
+        <input id="iptLastName" class="form-control" type="text">
+        <br/>
+        <label for="iptEmail">Email</label>
+        <input id="iptEmail" class="form-control" type="text">
+        <br/>
+        <label for="sltPermission">Permission</label>
+        <select id="sltPermission" class="form-control"></select>
+        <br/>
+
+
+
+        <button id="btnSubmitNewUser" class="btn btn-default" onclick="manageUsers.SubmitNewUser()">Submit New User</button>
+    </div>
+
+    <br/>
+
+    <div class="row form-group" >
+        <div class="col-sm-2"><label>Username</label></div>
+        <div class="col-sm-2"><label>First Name</label></div>
+        <div class="col-sm-2"><label>Last Name</label></div>
+        <div class="col-sm-3"><label>Email</label></div>
+        <div class="col-sm-2"><label>Permission</label></div>
+
+    </div>
+    <div id="DisplayUsersDiv">
+        <!-- Template for one row -->
+        <div class="InputChild row form-group" style="display:none">
+            <div class="col-sm-2">adf</div>
+            <div class="col-sm-2">first</div>
+            <div class="col-sm-2">last</div>
+            <div class="col-sm-3">Email@gmail.com</div>
+            <div class="col-sm-2">admin</div>
+            <button class="btn btn-default" onclick="manageUsers.EditUser(this)">Edit</button>
+        </div>
+
+    </div>
+
+
+
+    <br/>
+
+</div>
+<script>manageUsers.init()</script>
+</body>
+</html>
