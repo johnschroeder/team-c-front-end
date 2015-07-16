@@ -16,8 +16,11 @@
 
         <!-- Template for one row -->
         <div class="InputChild row form-group">
-            <div class="col-sm-4">
+            <div class="col-xs-1">
                 <input type="checkbox" name="ignoreLog" id="ignoreLog" value="ignoreLog">
+            </div>
+            <div class="col-xs-11">
+                <!--<input type="checkbox" name="ignoreLog" id="ignoreLog" value="ignoreLog"> -->
                 <label id="logLabel" for="ignoreLog">You must sign in to view logs</label>
                 <br>
             </div>
@@ -26,7 +29,7 @@
     </div>
 
     <div class="row form-group">
-        <div class="col-sm-4">
+        <div class="col-xs-12">
             <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="Logs()">
                 Refresh Logs
             </button>
