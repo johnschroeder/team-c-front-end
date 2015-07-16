@@ -15,19 +15,19 @@ var navigation = {
         this.stateTable[window.thisPage.toLowerCase().split(".")[0]] = state;
     },
     hit:function(route,callback){
-        $.get(window.apiRoute + route, function(err,result){
-            console.log("err status:" + err.status);
-            if(err.status == 511){
+        $.get(window.apiRoute + route, function(res){
+                callback(res);
+        }).fail(function(res){
+            if(res.status == 511){
                 console.log("Access Denied!");
+                alert("Sorry your permission level doesn't allow you to access this page.");
                 navigation.go("Home.html");
             }
-            if(err.status == 510){
+            if(res.status == 510){
                 navigation.go("loginForm.html");
+                alert("You have to log in before you can see this page!");
             }
-            console.log("results: " + JSON.parse(result).CartID);
-            callback(null,result);
-
-        });
+        })
 
     }
 }
