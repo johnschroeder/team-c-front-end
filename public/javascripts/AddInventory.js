@@ -31,58 +31,19 @@ var addInventory = {
 
     // Add an add inventory entry.
     addEntry: function() {
-        var entry = $(document.createElement("div"))
-            .addClass("row form-group")
-            .appendTo("#add_list");
+        var rowToCopy = $('.calc-clone').last().toggle();
+        var rowsContainer = '#add_list';
+
+        var entry = rowToCopy.clone();
+
+        entry.appendTo(rowsContainer);
+        console.log(entry);
 
         // package type input
-        var select = $(document.createElement("select"))
-            .addClass("form-control")
-            .attr("name", "package_input")
-            .attr("onchange", "addInventory.updateTotal()");
+        var select = entry.find(".select");
+        console.log(select);
 
         this.updateEntryPackageTypeOptions(select);
-
-        entry.append($(document.createElement("div"))
-                .addClass("col-sm-4")
-                .append(select)
-        ).append($(document.createElement("div"))
-                .addClass("col-sm-1")
-                .append($(document.createElement("p"))
-                    .addClass("form-control-static text-center")
-                    .css("font-size", "150%")
-                    .text("*")
-            )
-        ).append($(document.createElement("div"))
-                .addClass("col-sm-2")
-                .append($(document.createElement("input")) // amount input
-                    .addClass("form-control")
-                    .attr("name", "amount_input")
-                    .attr("type", "number")
-                    .attr("min", 0)
-                    .attr("onkeyup", "addInventory.updateTotal()")
-                    .attr("onchange", "addInventory.updateTotal()")
-            )
-            ).append($(document.createElement("div"))
-                .addClass("col-sm-1")
-                .append($(document.createElement("p"))
-                    .addClass("form-control-static text-center")
-                    .text("=")
-            )
-            ).append($(document.createElement("div"))
-                .addClass("col-sm-2")
-                .append($(document.createElement("p"))
-                    .addClass("form-control-static")
-                    .text("Count of")
-            )
-        ).append($(document.createElement("div"))
-                .addClass("col-sm-2")
-                .append($(document.createElement("p"))
-                    .addClass("form-control-static")
-                    .attr("name", "count_text")
-                    .text("0")
-            )
-            );
     },
 
     // Array of entries
@@ -193,7 +154,6 @@ var addInventory = {
         $.get(window.apiRoute + "/AddInventory/" + productId + "/" + total + "/" + location, function(res) {
             addInventory.reset();
             $("#response").text("Added inventory: " + total + " at " + location + ".");
-            navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
             navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
         }).fail(function(res) {
             $("#response").text("Error: Submit add inventory: Connection error.");

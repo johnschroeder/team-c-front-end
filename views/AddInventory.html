@@ -79,6 +79,28 @@
         <div id="response" class="col-sm-12"></div>
     </div>
 </div>
+
+<div class="row form-group calc-clone" hidden>
+    <div class="col-sm-4">
+        <select class="form-control" name="package_input" onchange="addInventory.updateTotal()"></select>
+    </div>
+    <div class="col-sm-1">
+        <p class="form-control-static text-center" style="font-size: 150%">*</p>
+    </div>
+    <div class="col-sm-2">
+        <input class="form-control" name="amount_input" type="number" min="0" onkeyup="addInventory.updateTotal()" onchange="addInventory.updateTotal()">
+    </div>
+    <div class="col-sm-1">
+        <p class="form-control-static text-center">=</p>
+    </div>
+    <div class="col-sm-2">
+        <p class="form-control-static">Count of</p>
+    </div>
+    <div class="col-sm-2">
+        <p class="form-control-static" name="count-text">0</p>
+    </div>
+</div>
+
 <script>
     $(function () {
         addInventory.init();
