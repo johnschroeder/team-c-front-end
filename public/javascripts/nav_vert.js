@@ -150,7 +150,7 @@ function DeleteUsers(){
 }
 
 function ViewUsers(){
-    $('#main_cont').text("ViewUsers");
+    navigation.go("ManageUsers.html");
 }
 
 function loginPage() {
