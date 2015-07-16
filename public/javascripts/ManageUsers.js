@@ -126,7 +126,7 @@ var manageUsers = {
 
         jQuery.ajax({
             type: "POST",
-            url: window.apiRoute+'/login/createUserAdmin/',
+            url: window.apiRoute+'/login/createUser/',
             data: toPass,
             dataType: 'json',
             success: function(){
