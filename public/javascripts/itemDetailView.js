@@ -72,6 +72,7 @@ var itemDetailView = {
             var r = jQuery.parseJSON(resp);
             if (r[0].message == 'Success') {
                 alert("Product " + $("#product_name").text() + " is deleted.");
+                navigation.go("DisplayInventory.html",{ProductID: window.args.ProductID, PreviousPage:"ItemDetailView"});
             }
             else {
                 alert(r[0].message);
