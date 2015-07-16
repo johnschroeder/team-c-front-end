@@ -37,11 +37,9 @@ var addInventory = {
         var entry = rowToCopy.clone();
 
         entry.appendTo(rowsContainer);
-        console.log(entry);
 
         // package type input
         var select = entry.find(".select");
-        console.log(select);
 
         this.updateEntryPackageTypeOptions(select);
     },
