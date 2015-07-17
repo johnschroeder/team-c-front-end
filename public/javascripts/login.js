@@ -17,6 +17,7 @@ function sendAuth() {
                 if (data != "Invalid Credentials!") {
 
                     alert("login success");
+                    navigation.go("Home.html");
                 }
 
                 if (data == "Invalid Credentials!") {

@@ -18,6 +18,7 @@ if(config.app.debug){
     app.use(express.static(path.join(__dirname, 'views')));
 }
 
+
 var path = process.cwd()+'/routes';
 glob.sync('**/*.js',{'cwd':path}).forEach(
     function(file){
@@ -40,8 +41,6 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
-
-
 
 app.use('*', function(req, res){
     console.log("Error trying to display route: "+req.path);
