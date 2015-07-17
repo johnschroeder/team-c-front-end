@@ -9,7 +9,7 @@ var editProduct = {
 
         var self = this;
 
-        $.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (res) {
+        navigation.hit("/EditProduct/" + window.args.ProductID, function (res) {
             self.product = $.parseJSON(res)[0];
             $("#product_name_text").text(self.product.Name);
             $("#description_text").text(self.product.Description);
@@ -21,8 +21,8 @@ var editProduct = {
     },
 
     getCustomers:function() {
-        var host = window.apiRoute + "/getCustomers/";
-        $.get(host, function(response) {
+        var host = "/getCustomers/";
+        navigation.hit(host, function(response) {
             if(response && response.length) {
                 editProduct.customers = JSON.parse(response);
                 editProduct.populateCustomers();
@@ -40,7 +40,7 @@ var editProduct = {
             editProduct.customers.forEach(function(customer) {
                 var newRow = rowToCopy.clone();
                 newRow.find(".checkbox_label").text(customer.Name);
-                $.get(window.apiRoute + "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
+                navigation.hit( "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
                     var associates = JSON.parse(res);
                     for (var i = 0; i < associates.length; i++) {
                         if (customer.CustomerID == associates[i].CustomerID) {
@@ -64,9 +64,9 @@ var editProduct = {
 
     submitCustomer:function() {
         var newCustomer = $("#new_customer_text").val();
-        var host = window.apiRoute + "/addCustomer/" + newCustomer;
+        var host ="/addCustomer/" + newCustomer;
 
-        $.get(host, function(response) {
+        navigation.hit(host, function(response) {
             if( response && response.length) {
                 editProduct.customers.push({
                     CustomerID:response.CustomerID,
@@ -84,18 +84,17 @@ var editProduct = {
     },
 
     breakAssociations: function() {
-        var host = window.apiRoute
-            + "/removeCustomersByProductID/"
+        var host = "/removeCustomersByProductID/"
             + window.args.ProductID;
-        $.get(host,function(response){
+        navigation.hit(host,function(response){
             if( response == "Success" ){
                 editProduct.submit();
             } else {
                 $("#message").text("Error: " + response);
             }
-        }).fail(function(err) {
+        });/*.fail(function(err) {
             $("#message").text("Error: " + err.responseText);
-        })
+        })*/
 
     },
 
@@ -110,29 +109,28 @@ var editProduct = {
         var customerContainer = $("#checkbox_cont").children();
         customerContainer.each(function() {
             if ($(this).find(".checkbox_input")[0].checked) {
-                var host = window.apiRoute
-                    + "/associateProductCustomer/"
+                var host = "/associateProductCustomer/"
                     + window.args.ProductID + "/"
                     + $(this).data().id;
             }
-            $.get(host,function(response){
+            navigation.hit(host,function(response){
                 if( response != "Success" ){
                     $("#message").text("Error: " + response);
                 }
-            }).fail(function(err) {
+            })/*.fail(function(err) {
                 $("#message").text("Error: " + err.responseText);
-            })
+            })*/;
         });
 
         //submit name and descricption change:
-        $.get(window.apiRoute +"/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
+        navigation.hit("/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
             if( response != "Success" ){
                 $("#message").text("Error: " + response);
             }
             navigation.go("DisplayInventory.html");
-        }).fail(function(err) {
+        })/*.fail(function(err) {
             $("#message").text("Error: " + err.responseText);
-        })
+        })*/;
     },
 
     back: function () {

@@ -2,14 +2,14 @@ var editCartData = {
     init: function () {
         $("#cart_name").text(window.args.cartName);
 
-        var host = window.apiRoute + "/Carts/GetAllCarts/";
+        var host = "/Carts/GetAllCarts/";
 
         var original_cart = "original_cart";
         var original_reporter = "original_reporter";
         var original_assignee = "original_assignee";
         var original_date = "original_date";
 
-        $.get(host, function (data) {
+        navigation.hit(host, function (data) {
             var carts = $.parseJSON(data);
 
             var cartsFound = carts.filter(function (each) {
@@ -70,7 +70,6 @@ var editCartData = {
     },
 
     CartDataEdit: function (cartID) {
-        //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
         //var prodID = window.args.ProductID
 
         var newCartName = $("#CartName").val();
@@ -80,9 +79,9 @@ var editCartData = {
 
         $("#edit_button").prop("disabled", true);
 
-        var host = window.apiRoute + '/Carts/EditCart/' + cartID + '/' + '"' + newCartName.trim() + '"' + "/" + '"' + newReporter.trim() + '"' + "/" + '"' + newAssignee.trim() + '"' + "/" + '"' + newDate.trim() + '"';
+        var host ='/Carts/EditCart/' + cartID + '/' + '"' + newCartName.trim() + '"' + "/" + '"' + newReporter.trim() + '"' + "/" + '"' + newAssignee.trim() + '"' + "/" + '"' + newDate.trim() + '"';
 
-        $.get(host, function (res) {
+        navigation.hit(host, function (res) {
             $("#CartName").addClass("hidden");
             $("#Reporter").addClass("hidden");
             $("#Assignee").addClass("hidden");
