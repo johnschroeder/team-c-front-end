@@ -20,10 +20,10 @@ function DisplayNext(log) {
 var DisplayAll =
 {
     Now: function () {
-        var host = window.apiRoute + "/getLogs/";
+        var host ="/getLogs/";
 
 
-        $.get(host, function (logsForUsername) {
+        navigation.hit(host, function (logsForUsername) {
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
 
