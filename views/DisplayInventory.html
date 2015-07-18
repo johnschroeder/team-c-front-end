@@ -37,6 +37,10 @@
         </div>
     </div>
 
+    <button id="qr_button" class="btn btn-default" title="Show the QR code for this page." onclick="qrCode()">
+        Show QR Code
+    </button>
+
     <div class="inventory-container"></div>
 
 </div>
@@ -68,12 +72,15 @@
                     switch($("#track_by option:selected").val()) {
                         case "Customer":
                             $("#customer-filter").show();
+                            $("#qr_button").removeClass("hidden");
                             break;
                         case "Item":
                             $("#item-filter").show();
+                            $("#qr_button").removeClass("hidden");
                             break;
                         case "All":
                             self.showAllItems();
+                            $("#qr_button").addClass("hidden");
                             break;
                         default:
                             break;
@@ -347,6 +354,31 @@
             ProductID: pid,
             ProductName: pname,
             TotalQuantity: tlq,
+            PreviousPage: "DisplayInventory.html"
+        });
+    };
+
+    var qrCode = function () {
+        var filter = "";
+        var keyword = null;
+
+        switch($("#track_by option:selected").val()) {
+            case "Customer":
+                filter = "Customer";
+                keyword = encodeURIComponent($("#customer option:selected").text());
+                break;
+            case "Item":
+                filter = "Item";
+                keyword = encodeURIComponent($("#item").val());
+                break;
+            default:
+                break;
+        }
+
+        if (!filter || !keyword) return;
+
+        navigation.go("ShowQRCode.html", {
+            Text: window.location + "TrackInventory-" + filter + "-" + keyword,
             PreviousPage: "DisplayInventory.html"
         });
     };

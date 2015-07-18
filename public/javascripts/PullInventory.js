@@ -23,6 +23,12 @@ var pullInventory = {
         this.navigationArgs.previousPage = window.args.PreviousPage;
         this.navigationArgs.totalQuantity = window.args.TotalQuantity;
 
+        if (!this.navigationArgs.productID) {
+            this.navigationArgs = window.state;
+        }
+
+        navigation.saveState(this.navigationArgs);
+
         $('#ProductName').text(this.navigationArgs.productName);
         $('#AvailableAmout').text(this.navigationArgs.totalQuantity);
 
@@ -400,6 +406,17 @@ var pullInventory = {
      */
     back: function(){
         navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
+    },
+
+    /**
+     * Show the QR code for the current page
+     */
+    qrCode: function () {
+        if (!this.navigationArgs.productID || !$("#slCart :selected").val()) return;
+        navigation.go("ShowQRCode.html", {
+            Text: window.location + "AddToCart-" + this.navigationArgs.productID + "-" + $("#slCart option:selected").val(),
+            PreviousPage: "PullInventory.html"
+        });
     }
 
 };
