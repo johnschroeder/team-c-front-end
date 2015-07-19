@@ -100,8 +100,6 @@ function preventBehavior(e)
     e.preventDefault();
 };
 
-document.addEventListener("touchmove", preventBehavior, false);
-
 function Home(){
     navigation.go("Home.html");
 }
