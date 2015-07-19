@@ -2,43 +2,70 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Pull Carts</title>
+    <title>Pull Inventory</title>
     <script src="javascripts/ViewCarts.js"></script>
 </head>
 <body>
+
 <div class="container-fluid">
-    <h1>Pull Carts</h1>
+    <h1>View Carts</h1>
+
+    <label for="selectCart">Select a cart to view</label>
+    <select id="selectCart" onchange="ViewCarts.ChooseCart(this)" class="form-control Size">
+    </select>
+
     <hr/>
 
-    <div class="row form-group">
-        <div class="col-sm-6">
-            <label for="selectDropDown">Select a cart to view</label>
-            <select id="selectDropDown" class="form-control filter track-by" onChange=displayCartInventory()></select>
-        </div>
-        <div class="col-sm-6">
-            <button class="btn btn-default pull-right" title="View or edit the details of the selected cart."
-                    onclick="gotoEditCarts()">View/Edit Cart
-            </button>
-            <br/>
-            <div id="notSelected"></div>
-        </div>
-    </div>
 
-    <div id="inventory-container"></div>
+    <div id="response"></div>
 
     <br/>
 
-    <div class="row">
-        <div class="col-sm-4">
-            <button id="pullAllButton" class="btn btn-default" onclick="pullAll()">Pull All</button>
+    <div id="InputDiv">
+
+        <!-- Template for one row -->
+        <div class="InputChild row form-group">
+            <div class="col-sm-4">
+                <select onchange="pullInventory.SelectOnchange(this)" class="form-control Size">
+                    <option value="0">Please Select Package Size---</option>
+                </select>
+            </div>
+            <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+
+            <div class="col-sm-2">
+                <input type="number" class="form-control Count" onchange="pullInventory.ReCalculate()" min="0">
+            </div>
+
+            <div class="col-sm-1">
+                <p class="form-control-static text-center">=</p>
+            </div>
+
+            <div class="col-sm-2"><p class="form-control-static">Subtotal of</p></div>
+            <div class="col-sm-2"><p class="form-control-static Subtotal">0</p></div>
         </div>
+
     </div>
 
-    <div id="response"></div>
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="pullInventory.AddMore()">+ Add
+                Entry
+            </button>
+        </div>
+        <div class="col-sm-offset-4 col-sm-2"><p class="form-control-static">Total</p></div>
+        <div class="col-sm-2"><p id="TotalInventory" class="form-control-static">0</p></div>
+    </div>
+
+    <div class="row">
+
+    </div>
+
+    <br/>
+
+
+
+
 </div>
-<script>
-    $(function () {
-        populateByCartId();
-    })</script>
+<script>ViewCarts.init()</script>
 </body>
 </html>
