@@ -5,9 +5,9 @@ window.lookup = "<%= lookup %>";
 </script>
 <% include indexBody.html %>
 <script>
-var temp = window.lookup.split("-", 1);
-var page = temp[0];
-var pageKey = temp[1];
+var temp = window.lookup.split("-");
+var page = temp.shift();
+var pageKey = temp.join("-");
 
 if(page.toLowerCase() == "confirm"){
     jQuery.get(window.apiRoute+"/Login/testLookup/"+window.lookup, function(lookup){
@@ -27,7 +27,7 @@ if(page.toLowerCase() == "confirm"){
     });
 }
 else{
-    navigation.go(page+".html", {routingKey:pageKey});
+    navigation.go(page+".html", {pageKey:pageKey});
 }
 
 </script>
