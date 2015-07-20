@@ -3,14 +3,8 @@
 <head lang="en">
     <meta charset="UTF-8"/>
     <title>New Product</title>
+    <script src="javascripts/dropzone.js"></script>
     <script src="javascripts/NewProduct.js"></script>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
 </head>
 <body>
 <b class="container-fluid">
@@ -80,18 +74,9 @@
 
     <br/>
 
-    <!-- TODO add api route to store the image that is uploaded into s3 -->
-    <div class="row">
-        <div class="col-sm-3">
-            <label>Image</label>
-
-            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-sm-4">
-            <button id="new_thumbnail_button" class="btn btn-default unimplemented">Upload Image</button>
+            <button id="new_thumbnail_button" class="btn btn-default">Upload Image</button>
         </div>
     </div>
 

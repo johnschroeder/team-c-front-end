@@ -32,6 +32,8 @@ var newProduct = {
         newProduct.getCustomers();
         $("#date").text(newProduct.getDate());
 
+        $('#new_thumbnail_button').dropzone({url:'http://localhost:50001/uploadImage'});
+
     },
 
     getCustomers:function() {
