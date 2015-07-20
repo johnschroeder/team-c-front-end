@@ -8,7 +8,7 @@ var itemDetailView = {
 
     init: function () {
         $("#response").text("");
-        this.productID = window.args.ProductID;
+        this.productID = window.args.ProductID || window.args.pageKey;
 
         var self = this;
 
