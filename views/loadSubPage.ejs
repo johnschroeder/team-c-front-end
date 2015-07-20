@@ -8,5 +8,11 @@ window.args = window.args || {};
 window.state = window.state || {};
 window.thisPage = "<%= thisPage %>";
 </script>
-<%- include(thisPage) %>
+<% try{ %>
+     <%- include(thisPage) %>
+<% }
+catch (err){
+    console.log("The page "+thisPage+" does not exist"); %>
+    <%- include("Home.html") %>
+<% } %>
 </body>
