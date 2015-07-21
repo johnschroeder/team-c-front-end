@@ -54,6 +54,10 @@ var DisplayAll =
                 var push = $this.attr("id");
                 checkedBoxes.push(push);
                 alert(push);
+                var host = window.apiRoute + "/Logging/AddLogViewMapEntry/" + push+ "/";
+                $.get(host, function (queryResult) {
+                    alert(queryResult);
+                });
             }
         });
     }
