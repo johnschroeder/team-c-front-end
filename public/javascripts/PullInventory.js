@@ -414,7 +414,7 @@ var pullInventory = {
     qrCode: function () {
         if (!this.navigationArgs.productID || !$("#slCart :selected").val()) return;
         navigation.go("ShowQRCode.html", {
-            Text: window.location + "ViewCarts-" + this.navigationArgs.productID + "?addProduct=" + $("#slCart option:selected").val(),
+            Text: window.location + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID,
             PreviousPage: "PullInventory.html"
         });
     }
