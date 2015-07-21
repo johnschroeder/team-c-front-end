@@ -28,8 +28,7 @@ var DisplayAll =
         counter = 0;
         var host = window.apiRoute + "/getLogs/";
 
-
-        $.get(host, function (logsForUsername) {
+        navigation.hit("/getLogs/", function (logsForUsername) {
             var logsObj = JSON.parse(logsForUsername);
             var logs = logsObj.logs;
 
@@ -45,16 +44,13 @@ var DisplayAll =
     },
 
     Ignore: function () {
-        var checkedBoxes = [];
 
         $("input:checkbox").each(function(){
             var $this = $(this);
 
             if($this.is(":checked")){
                 var push = $this.attr("id");
-                checkedBoxes.push(push);
-                var host = window.apiRoute + "/Logging/AddLogViewMapEntry/" + push+ "/";
-                $.get(host, function (queryResult) {
+                navigation.hit("/Logging/AddLogViewMapEntry/" + push + "/", function (logsForUsername) {
                 });
             }
         });

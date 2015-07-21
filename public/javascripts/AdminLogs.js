@@ -22,9 +22,8 @@ var DisplayAll =
 {
     Now: function () {
         counter = 0;
-        var host = window.apiRoute + "/getAllLogs/";
 
-        $.get(host, function (logsForUsername) {
+        navigation.hit("/getAllLogs/", function (logsForUsername) {
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
 
