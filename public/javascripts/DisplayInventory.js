@@ -89,13 +89,15 @@
 
             switch(toLowerCase(toSet)){
                 case "customer":
-                    if(('#customer-filter').find('option[value="'+setTo+'"]').length > 0){
-                        ('#customer-filter').val(setTo);
+                    if($('#customer-filter').find('option[value="'+setTo+'"]').length > 0){
+                        $("#customer-filter").show();
+                        $('#customer-filter').val(setTo);
                     }
                     break;
                 case "item":
-                    if(('#item-filter').find('option[value="'+setTo+'"]').length > 0){
-                        ('#item-filter').val(setTo);
+                    if($('#item-filter').find('option[value="'+setTo+'"]').length > 0){
+                        $("#item-filter").show();
+                        $('#item-filter').val(setTo);
                     }
                     break;
                 case "all":
