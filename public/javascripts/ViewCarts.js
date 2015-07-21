@@ -27,6 +27,7 @@ function populateByCartId() {
             if (state && state.nameSelected == results[i].CartName) {
                 option.prop("selected", true);
                 displayCartInventory();
+                $("#qr_button").removeClass("hidden");
             }
         }
     });
@@ -36,11 +37,15 @@ function displayCartInventory() {
     var cartContainer = $("#inventory-container")
         .empty();
 
-    if ($("#selectDropDown :selected").val() == -1) return;
+    if ($("#selectDropDown :selected").val() == -1) {
+        $("#qr_button").addClass("hidden");
+        return;
+    }
 
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
+    $("#qr_button").removeClass("hidden");
 
     $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (data) {
         populateCartContainer(data[0]);
@@ -409,3 +414,14 @@ function updateEntryPackageTypeOptions(item, productId) {
         $("#response").text("Error: Update package types: Connection error.");
     });
 }
+
+var qrCode = function () {
+    if ($("#selectDropDown :selected").val() == -1) return;
+
+    navigation.go("ShowQRCode.html", {
+        Text: window.location + "ViewCarts-" + $("#selectDropDown :selected").val(),
+        PreviousPage: "ViewCarts.html"
+    });
+};
+
+// TODO QR code for add product. Waiting for implementation first. For now, that QR code is made from the pull inventory page.
