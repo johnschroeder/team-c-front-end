@@ -371,7 +371,7 @@ function deleteRow(entry, item) {
             .addClass("hidden")
         .end();
 
-    $.get( "/Carts/DeleteItemInCart/" + cartItemID, function (res) {
+    $.get(window.apiRoute + "/Carts/DeleteItemInCart/" + cartItemID, function (res) {
         console.log(res);
     })
     .then(function() {
