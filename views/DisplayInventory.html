@@ -364,11 +364,11 @@
 
         switch($("#track_by option:selected").val()) {
             case "Customer":
-                filter = "Customer";
+                filter = "customer";
                 keyword = encodeURIComponent($("#customer option:selected").text());
                 break;
             case "Item":
-                filter = "Item";
+                filter = "item";
                 keyword = encodeURIComponent($("#item").val());
                 break;
             default:
@@ -378,7 +378,7 @@
         if (!filter || !keyword) return;
 
         navigation.go("ShowQRCode.html", {
-            Text: window.location + "TrackInventory-" + filter + "-" + keyword,
+            Text: window.location + "DisplayInventory?" + filter + "=" + keyword,
             PreviousPage: "DisplayInventory.html"
         });
     };

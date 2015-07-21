@@ -419,7 +419,9 @@ var qrCode = function () {
     if ($("#selectDropDown :selected").val() == -1) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location + "ViewCart-" + $("#selectDropDown :selected").val(),
+        Text: window.location + "ViewCarts-" + $("#selectDropDown :selected").val(),
         PreviousPage: "ViewCarts.html"
     });
 };
+
+// TODO QR code for add product. Waiting for implementation first. For now, that QR code is made from the pull inventory page.
