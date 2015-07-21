@@ -13,12 +13,11 @@ var itemDetailView = {
         if (window.args.ProductID) {
             this.productID = window.args.ProductID;
             this.prevPage = window.args.PreviousPage;
+            navigation.saveState(window.args);
         } else if (window.state.ProductID) {
             this.productID = window.state.ProductID;
             this.prevPage = window.state.PreviousPage;
         }
-
-        navigation.saveState({ProductID: this.productID, PreviousPage: this.prevPage});
 
         var self = this;
 

@@ -18,16 +18,18 @@ var pullInventory = {
     init: function(){
 
         //grab and save navigation object arguments
-        this.navigationArgs.productID = window.args.ProductID;
-        this.navigationArgs.productName = window.args.ProductName;
-        this.navigationArgs.previousPage = window.args.PreviousPage;
-        this.navigationArgs.totalQuantity = window.args.TotalQuantity;
-
-        if (!this.navigationArgs.productID) {
-            this.navigationArgs = window.state;
+        if (window.args.ProductID) {
+            this.navigationArgs.productID = window.args.ProductID;
+            this.navigationArgs.productName = window.args.ProductName;
+            this.navigationArgs.previousPage = window.args.PreviousPage;
+            this.navigationArgs.totalQuantity = window.args.TotalQuantity;
+            navigation.saveState(window.args);
+        } else if (window.state.ProductID) {
+            this.navigationArgs.productID = window.state.ProductID;
+            this.navigationArgs.productName = window.state.ProductName;
+            this.navigationArgs.previousPage = window.state.PreviousPage;
+            this.navigationArgs.totalQuantity = window.state.TotalQuantity;
         }
-
-        navigation.saveState(this.navigationArgs);
 
         $('#ProductName').text(this.navigationArgs.productName);
         $('#AvailableAmout').text(this.navigationArgs.totalQuantity);
@@ -60,7 +62,6 @@ var pullInventory = {
                 $(dropdown).append($(option));
             }
         }).fail(function(res) {
-            $("#response").text("Error: Init: Connection error.");
             $("#response").text("Error: Init: Connection error.");
         });
     },
@@ -405,7 +406,7 @@ var pullInventory = {
      * Go back to the previous page
      */
     back: function(){
-        navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
+        navigation.go(this.navigationArgs.previousPage);
     },
 
     /**
