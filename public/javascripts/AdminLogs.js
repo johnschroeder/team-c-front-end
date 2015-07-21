@@ -22,13 +22,11 @@ var DisplayAll =
 {
     Now: function () {
         counter = 0;
-        var host = window.apiRoute + "/getLogs/";
-
+        var host = window.apiRoute + "/getAllLogs/";
 
         $.get(host, function (logsForUsername) {
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
-
 
             for (var i = logs.length -1; i >= 0; i--) {
 
@@ -37,19 +35,5 @@ var DisplayAll =
             }
 
             });
-    },
-
-    Ignore: function () {
-        var checkedBoxes = [];
-
-        $("input:checkbox").each(function(){
-            var $this = $(this);
-
-            if($this.is(":checked")){
-                var push = $this.attr("id");
-                checkedBoxes.push(push);
-                alert(push);
-            }
-        });
     }
 };

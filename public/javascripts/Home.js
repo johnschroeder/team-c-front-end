@@ -4,7 +4,7 @@ var Redirect =
 
         navigation.hit("/getLogs/", function (usernameForLogs) {
 
-            navigation.go("AdminLogs.html");
+            navigation.go("Logs.html");
         });
 
     }

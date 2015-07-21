@@ -60,5 +60,6 @@ var DisplayAll =
                 });
             }
         });
+    navigation.go("Logs.html");
     }
 };
