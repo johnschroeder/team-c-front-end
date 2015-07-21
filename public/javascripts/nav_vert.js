@@ -64,6 +64,11 @@ $(document).ready(function () {
         event.preventDefault();
         loginPage();
     });
+    $('#logOut').on( 'touchend click', function( event ){
+        event.preventDefault();
+        logOutPage();
+    });
+
 
     $('.header-logo').on( 'touchend click', function( event ){
         event.preventDefault();
@@ -153,4 +158,9 @@ function ViewUsers(){
 
 function loginPage() {
     navigation.go("loginForm.html");
+}
+function logOutPage(){
+    navigation.hit("/LogOut/",function(res){
+        loginPage();
+    })
 }
