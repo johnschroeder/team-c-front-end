@@ -1,15 +1,24 @@
 var navigation = {
     stateTable:{},
     go:function(targetPage, args) {
+        if(targetPage == "loginForm.html"){
+            $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
+        }
         jQuery.get(window.apiRoute+"/getUserInfo", function(result){
             jQuery('#loggedIn').toggle(true);
             jQuery('#login').toggle(false);
             jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
-        }).then(function(result){
             jQuery.get(window.apiRoute+ "/checkPermissions/" + targetPage + "/" + result.PermsID,function(res){
-                $("#main_cont").load('/load/' + targetPage, {args:args, state:navigation.stateTable[targetPage.toLowerCase().split(".")[0]]});
-            }).fail(function(res){
-                $("#main_cont").load('/load/' + "Home.html");
+                if(res !== "Success"){
+                    navigation.go("Home.html");
+
+                }
+                else {
+                    $("#main_cont").load('/load/' + targetPage, {
+                        args: args,
+                        state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
+                    });
+                }
             });
         }).fail(function(){
             jQuery('#login').toggle(true);
@@ -25,8 +34,8 @@ var navigation = {
         }).fail(function(res){
             if(res.status == 511){
                 console.log("Access Denied!");
-                //alert("Sorry your permission level doesn't allow you to access this page.");
-               // navigation.go("Home.html");
+                alert("Sorry your permission level doesn't allow you to access" + route);
+               //navigation.go("Home.html");
             }
             if(res.status == 510){
                 navigation.go("loginForm.html");
