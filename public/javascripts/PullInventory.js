@@ -51,7 +51,7 @@ var pullInventory = {
         var addNew = new Option("New ---", -1);
         $(dropdown).append($(addNew));
 
-        $.get(window.apiRoute + "/GetSizeByProductID/" + pID, function(res) {
+        navigation.hit( "/GetSizeByProductID/" + pID, function(res) {
             var temp = $.parseJSON(res);
 
             for (var i = 0; i < temp.length; i++) {
@@ -61,9 +61,10 @@ var pullInventory = {
                 var exist = 0;
                 $(dropdown).append($(option));
             }
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             $("#response").text("Error: Init: Connection error.");
-        });
+            $("#response").text("Error: Init: Connection error.");
+        });*/;
     },
 
 
@@ -181,7 +182,7 @@ var pullInventory = {
         var productID = this.navigationArgs.ProductID;
         var productName = this.navigationArgs.ProductName;
 
-        $.get(window.apiRoute + "/addProductSize/" + productID + "/" + sizeName + "/" + size, function (res) {
+        navigation.hit( "/addProductSize/" + productID + "/" + sizeName + "/" + size, function (res) {
             alert("New Size " + sizeName + " for product " + productName + " Added!");
             this.BindNewOption(sizeName, size);
         });
@@ -199,7 +200,7 @@ var pullInventory = {
         var productID = this.navigationArgs.ProductID;
         var productName = this.navigationArgs.ProductName;
 
-        $.get(window.apiRoute + "/GetSizeMapID/" + productID + "/" + n + "/" + s, function (resp) {
+        navigation.hit( "/GetSizeMapID/" + productID + "/" + n + "/" + s, function (resp) {
             var temp = $.parseJSON(resp);
             var smID = temp[0].SizeMapID;
 
@@ -216,9 +217,9 @@ var pullInventory = {
             $('#SizeName').val('');
             $('#SizeNumber').val('');
             $("#AddNewSize").hide();
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             $("#response").text("Error: BindNewOption: Connection error.");
-        });
+        });*/;
     },
 
 
@@ -233,7 +234,7 @@ var pullInventory = {
 
         var username = 'don';//this needs to be swap out for real username
 
-        $.get(window.apiRoute + "/Carts/GetCartsByUser/" + username, function (resp) {
+        navigation.hit( "/Carts/GetCartsByUser/" + username, function (resp) {
             var temp = $.parseJSON(resp);
 
             for (var i = 0; i < temp.length; i++) {
@@ -241,9 +242,9 @@ var pullInventory = {
                 var cartoption = new Option(obj.CartName, obj.CartID);
                 $('#slCart').append($(cartoption));
             }
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             $("#response").text("Error: AddToExistingCart: Connection error.");
-        });
+        });*/;
     },
 
 
@@ -258,7 +259,7 @@ var pullInventory = {
         $('#iptCartName').val('');
         $('#iptDaysToSave').val('');
 
-        $.get(window.apiRoute + "/Carts/GetPossibleAssignees/", function(resp) {
+        navigation.hit( "/Carts/GetPossibleAssignees/", function(resp) {
             var temp = $.parseJSON(resp);
 
             for (var i = 0; i < temp.length; i++) {
@@ -266,9 +267,9 @@ var pullInventory = {
                 var assOption = new Option(obj.Assignee);
                 $('#sltAssignee').append($(assOption));
             }
-        }).fail(function(res) {
+        }) /*.fail(function(res) {
             $("#response").text("Error: AddToNewCart: Connection error.");
-        });
+        })*/;
     },
 
 
@@ -292,7 +293,7 @@ var pullInventory = {
         if (keepdays <= 0) keepdays = 1;
 
         var self = this;
-        $.get(window.apiRoute + "/Carts/CreateCart/" + cartName + "/" + reporter + "/" + assignee + "/" + keepdays, function () {
+        navigation.hit("/Carts/CreateCart/" + cartName + "/" + reporter + "/" + assignee + "/" + keepdays, function () {
             alert("New Cart " + cartName + " Added!");
             //clear inputs
             //delete options in assignee
@@ -314,7 +315,7 @@ var pullInventory = {
      */
     AddOneItemToCart: function( cID, smID, qty ){
 
-        $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cID + "/" + smID + "/" + qty, function (resp) {
+        navigation.hit("/Carts/AddItemToCartGeneral/" + cID + "/" + smID + "/" + qty, function (resp) {
             var msg = "";
 
             msg = resp.split('####', 2)[0];
@@ -323,11 +324,11 @@ var pullInventory = {
             }
 
             return msg;
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             var msg = "Error: Init: Connection error.";
             $("#response").text(msg);
             return msg;
-        });
+        })*/;
     },
 
     /**
@@ -378,9 +379,15 @@ var pullInventory = {
                 navigation.go(self.navigationArgs.previousPage, {ProductID: self.navigationArgs.productID});
             }
         }).fail(function(res) {
-            var msg = "Error: AddOneItemToCartRecursively: Connection error.";
-            $("#response").text(msg);
-            alert(msg);
+            if(res.status == 511){
+                console.log("Access Denied!");
+                alert("Sorry your permission level doesn't allow you to access this page.");
+                navigation.go("Home.html");
+            }
+            if(res.status == 510){
+                navigation.go("loginForm.html");
+                alert("You have to log in before you can see this page!");
+            }
         });
     },
 

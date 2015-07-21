@@ -5,9 +5,9 @@ var editUser = {
     init: function () {
         $("#username").text(window.args.editUser);
 
-        var host = window.apiRoute + "/getUser/" + window.args.editUser;
+        var host = "/getUser/" + window.args.editUser;
 
-        $.get(host, function (data) {
+        navigation.hit(host, function (data) {
             var userData = $.parseJSON(data);
 
             var firstName = userData.firstName;
@@ -42,7 +42,7 @@ var editUser = {
 
         //alert("Permissions string is " + perms);
 
-        var host = window.apiRoute + '/editUser/' +
+        var host ='/editUser/' +
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
@@ -50,7 +50,7 @@ var editUser = {
 
         //alert(host);
 
-        $.get(host, function (data) {
+        navigation.hit(host, function (data) {
             callback(data);
         });
     },
