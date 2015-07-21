@@ -1,8 +1,5 @@
-/**
- * Created by Trevor on 7/20/2015.
- */
 var counter = 0;
-function DisplayNext(log, currId) {
+function DisplayNext(log) {
 
     var rowToCopy = $('.InputChild').first();
     var rowsContainer = '#InputDiv';
@@ -13,7 +10,6 @@ function DisplayNext(log, currId) {
         $('.InputChild').first().remove();
     }
     clonedRow.find('label').prop('id', 'log' + counter);
-    clonedRow.find('input:checkbox').prop('id', currId);
     clonedRow.find('label').text(log);
 
     counter++;
@@ -30,18 +26,17 @@ var DisplayAll =
 
 
         $.get(host, function (logsForUsername) {
-            var logsObj = JSON.parse(logsForUsername);
-            var logs = logsObj.logs;
+                var logsObj = JSON.parse(logsForUsername);
+                var logs = logsObj.logs;
 
 
-            for (var i = logs.length -1; i >= 100; i--) {
+            for (var i = logs.length -1; i >= 0; i--) {
 
                 var log = logs[i];
-                var currId = logsObj.id[i];
-                DisplayNext(log, currId);
+                DisplayNext(log);
             }
 
-        });
+            });
     },
 
     Ignore: function () {

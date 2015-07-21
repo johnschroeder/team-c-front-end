@@ -139,6 +139,11 @@ function Logs(){
     navigation.go("Logs.html");
 }
 
+function AdminLogs()
+{
+    navigation.go("AdminLogs.html");
+}
+
 function AddUsers(){
     $('#main_cont').text("AddUsers");
 }
