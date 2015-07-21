@@ -14,14 +14,15 @@
     <script src="javascripts/jquery-ui.min.js"></script>
     <script src="javascripts/selectize.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/qrcode.min.js"></script>
     <script src="javascripts/nav_vert.js"></script>
     <script src="javascripts/navigation.js"></script>
 </head>
 <body>
 <div id="nav_hori" class="row-fluid main-horizontal-nav">
-    <div aligh="left"><a href="javascript:void(0);" class="header-logo" onclick="Home()" ><img class="si-logo" src="image/stevensis_logo.gif"></a></div>
+    <div aligh="left"><a href="javascript:void(0);" class="header-logo" ><img class="si-logo" src="image/stevensis_logo.gif"></a></div>
     <div class="header-menu-right" align="right">
-        <button id="login" type="button" onclick="loginPage()" hidden>Login</button>
+        <button id="login" type="button" hidden>Login</button>
         <div id="loggedIn" hidden>
             <a href="#">
                 <span class="glyphicon glyphicon-user"></span>
@@ -34,17 +35,17 @@
 </div>
 
 <div id="nav_vert" class="vertical-nav-bar">
-    <li><button class="btn btn-default action-button" id="DisplayInventory" onclick="DisplayInventories()">Track Inventory</button></li>
-    <li><button class="btn btn-default action-button" id="ViewCarts" onclick="ViewCarts()">View Carts</button></li>
-    <li><button class="btn btn-default action-button" id="AddProduct" onclick="AddProduct()">New Product</button></li>
+    <li><button class="btn btn-default action-button" id="DisplayInventory">Track Inventory</button></li>
+    <li><button class="btn btn-default action-button" id="ViewCarts">View Carts</button></li>
+    <li><button class="btn btn-default action-button" id="AddProduct">New Product</button></li>
 
     <li><button class="btn btn-default">Reports</button>
         <ul>
             <li>
-                <button class="btn btn-default action-button subbutton" id="PreDefined" onclick="PreDefinedReports()">Pre-defined</button>
+                <button class="btn btn-default action-button subbutton" id="PreDefined">Pre-defined</button>
             </li>
             <li>
-                <button class="btn btn-default action-button subbutton" id="MakeMyOwn" onclick="MakeMyOwnReport()">Make My Own</button>
+                <button class="btn btn-default action-button subbutton" id="MakeMyOwn">Make My Own</button>
             </li>
         </ul>
     </li>
@@ -52,13 +53,19 @@
     <li><button class="btn btn-default">Administrator</button>
         <ul>
             <li>
-                <button class="btn btn-default action-button subbutton" id="ViewUsers" Onclick="ViewUsers()">Manage Users</button>
+                <button class="btn btn-default action-button subbutton" id="Audit">Audit</button>
             </li>
             <li>
-                <button class="btn btn-default action-button subbutton" id="Audit" onclick="Audit()">Audit</button>
+                <button class="btn btn-default action-button subbutton" id="Logs">Logs</button>
             </li>
             <li>
-                <button class="btn btn-default action-button subbutton" id="Logs" onclick="Logs()">Logs</button>
+                <button class="btn btn-default action-button subbutton" id="AddUsers">Add Users</button>
+            </li>
+            <li>
+                <button class="btn btn-default action-button subbutton" id="DeleteUsers">Delete Users</button>
+            </li>
+            <li>
+                <button class="btn btn-default action-button subbutton" id="ViewUsers">View Users</button>
             </li>
         </ul>
     </li>
