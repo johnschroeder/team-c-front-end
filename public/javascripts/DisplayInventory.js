@@ -3,6 +3,7 @@
     /**
      * Handles the display-all functionality and filtering
      */
+
     var display_inventory = {
 
         host: window.apiRoute + "/displayInventory/",
@@ -82,6 +83,29 @@
                 self.searchItem($("#item").val());
             });
 
+            var query = window.location.search.substring(1).split('&', 1);
+            var toSet = query[0];
+            var setTo = query[1];
+
+            switch(toLowerCase(toSet)){
+                case "customer":
+                    if(('#customer-filter').find('option[value="'+setTo+'"]').length > 0){
+                        ('#customer-filter').val(setTo);
+                    }
+                    break;
+                case "item":
+                    if(('#item-filter').find('option[value="'+setTo+'"]').length > 0){
+                        ('#item-filter').val(setTo);
+                    }
+                    break;
+                case "all":
+                    if(toLowerCase(setTo) == "true") {
+                        self.showAllItems();
+                    }
+                    break;
+                default:
+                    // Do nothing
+            }
         },
 
         searchItem: function(keyword) {
