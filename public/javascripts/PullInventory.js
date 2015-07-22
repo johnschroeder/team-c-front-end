@@ -422,7 +422,7 @@ var pullInventory = {
     qrCode: function () {
         if (!this.navigationArgs.productID || !$("#slCart :selected").val()) return;
         navigation.go("ShowQRCode.html", {
-            Text: window.location + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID,
+            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID,
             PreviousPage: "PullInventory.html"
         });
     }

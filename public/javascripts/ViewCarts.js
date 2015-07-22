@@ -433,7 +433,7 @@ var qrCode = function () {
     if ($("#selectDropDown :selected").val() == -1) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location + "ViewCarts-" + $("#selectDropDown :selected").val(),
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#selectDropDown :selected").val(),
         PreviousPage: "ViewCarts.html"
     });
 };

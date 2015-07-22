@@ -86,30 +86,34 @@
                 self.searchItem($("#item").val());
             });
 
-            var query = window.location.search.substring(1).split('&', 1);
-            var toSet = query[0];
-            var setTo = query[1];
+            var query = window.location.search.substring(1).split('&');
+            var pair = query[0].split('=');
+            var key = decodeURIComponent(pair[0]);
+            var value = decodeURIComponent(pair[1]);
 
-            switch(toLowerCase(toSet)){
+            switch (key.toLowerCase()) {
                 case "customer":
-                    if($('#customer-filter').find('option[value="'+setTo+'"]').length > 0){
-                        $("#customer-filter").show();
-                        $('#customer-filter').val(setTo);
-                    }
+                    $("#track_by option:contains('Customer')").prop("selected", true);
+                    $("#track_by").trigger("change");
+                    this.customerSelector[0].selectize.addOption({label:value, value:value});
+                    this.customerSelector[0].selectize.addItem(value);
+                    this.searchCustomer(value);
                     break;
                 case "item":
-                    if($('#item-filter').find('option[value="'+setTo+'"]').length > 0){
-                        $("#item-filter").show();
-                        $('#item-filter').val(setTo);
-                    }
+                    $("#track_by option:contains('Item')").prop("selected", true);
+                    $("#track_by").trigger("change");
+                    $("#item").val(value);
+                    this.searchItem(value);
                     break;
                 case "all":
-                    if(toLowerCase(setTo) == "true") {
-                        self.showAllItems();
+                    if (value.toLowerCase() == "true") {
+                        $("#track_by option:contains('All')").prop("selected", true);
+                        $("#track_by").trigger("change");
+                        this.showAllItems();
                     }
                     break;
                 default:
-                    // Do nothing
+                    break;
             }
         },
 
@@ -355,7 +359,7 @@ var qrCode = function () {
     if (!filter || !keyword) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location + "DisplayInventory?" + filter + "=" + keyword,
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "DisplayInventory?" + filter + "=" + keyword,
         PreviousPage: "DisplayInventory.html"
     });
 };

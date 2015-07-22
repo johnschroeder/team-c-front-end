@@ -75,7 +75,7 @@ var itemDetailView = {
     qrCode: function () {
         if (!this.productID || !this.item) return;
         navigation.go("ShowQRCode.html", {
-            Text: window.location + "ItemDetailView-" + this.productID,
+            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ItemDetailView-" + this.productID,
             PreviousPage: "ItemDetailView.html"
         });
     },
