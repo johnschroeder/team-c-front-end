@@ -161,7 +161,6 @@ function loginPage() {
 }
 function logOutPage(){
     navigation.hit("/getUserInfo", function(userName){
-        console.log(userName);
     navigation.hit("/Login/LogOut/" + userName.Username,function(res){
         loginPage();
         });
