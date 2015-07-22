@@ -11,7 +11,6 @@ var navigation = {
             jQuery.get(window.apiRoute+ "/checkPermissions/" + targetPage + "/" + result.PermsID,function(res){
                 if(res !== "Success"){
                     navigation.go("Home.html");
-
                 }
                 else {
                     $("#main_cont").load('/load/' + targetPage, {
