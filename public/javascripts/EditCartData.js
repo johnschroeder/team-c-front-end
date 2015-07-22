@@ -72,7 +72,6 @@ var editCartData = {
     },
 
     CartDataEdit: function (cartID) {
-        //TODO implement: var prodID = getQueryStringParams().inventoryID; and get the prodID from there
         //var prodID = window.args.ProductID
 
         var newCartName = $("#CartName").val();

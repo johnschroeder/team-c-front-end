@@ -18,10 +18,18 @@ var pullInventory = {
     init: function(){
 
         //grab and save navigation object arguments
-        this.navigationArgs.productID = window.args.ProductID;
-        this.navigationArgs.productName = window.args.ProductName;
-        this.navigationArgs.previousPage = window.args.PreviousPage;
-        this.navigationArgs.totalQuantity = window.args.TotalQuantity;
+        if (window.args.ProductID) {
+            this.navigationArgs.productID = window.args.ProductID;
+            this.navigationArgs.productName = window.args.ProductName;
+            this.navigationArgs.previousPage = window.args.PreviousPage;
+            this.navigationArgs.totalQuantity = window.args.TotalQuantity;
+            navigation.saveState(window.args);
+        } else if (window.state.ProductID) {
+            this.navigationArgs.productID = window.state.ProductID;
+            this.navigationArgs.productName = window.state.ProductName;
+            this.navigationArgs.previousPage = window.state.PreviousPage;
+            this.navigationArgs.totalQuantity = window.state.TotalQuantity;
+        }
 
         $('#ProductName').text(this.navigationArgs.productName);
         $('#AvailableAmout').text(this.navigationArgs.totalQuantity);
@@ -432,7 +440,18 @@ var pullInventory = {
      * Go back to the previous page
      */
     back: function(){
-        navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
+        navigation.go(this.navigationArgs.previousPage);
+    },
+
+    /**
+     * Show the QR code for the current page
+     */
+    qrCode: function () {
+        if (!this.navigationArgs.productID || !$("#slCart :selected").val()) return;
+        navigation.go("ShowQRCode.html", {
+            Text: window.location + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID,
+            PreviousPage: "PullInventory.html"
+        });
     }
 
 };

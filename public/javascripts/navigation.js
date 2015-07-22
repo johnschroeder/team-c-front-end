@@ -1,19 +1,28 @@
 var navigation = {
     stateTable:{},
     go:function(targetPage, args) {
-        $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
-        this.get(window.apiRoute+"/getUserInfo", function(err, result){
-            if(err){
-                jQuery('#login').toggle(true);
-                jQuery('#loggedIn').toggle(false);
-            }
-            else {
-                jQuery('#loggedIn').toggle(true);
-                jQuery('#login').toggle(false);
-                jQuery('#usersName').text(function () {
-                    return result.FirstName + " " + result.LastName
-                });
-            }
+        if(targetPage == "loginForm.html"){
+            $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
+        }
+        jQuery.get(window.apiRoute+"/getUserInfo", function(result){
+            jQuery('#loggedIn').toggle(true);
+            jQuery('#login').toggle(false);
+            jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
+            jQuery.get(window.apiRoute+ "/checkPermissions/" + targetPage + "/" + result.PermsID,function(res){
+                if(res !== "Success"){
+                    navigation.go("Home.html");
+
+                }
+                else {
+                    $("#main_cont").load('/load/' + targetPage, {
+                        args: args,
+                        state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
+                    });
+                }
+            });
+        }).fail(function(){
+            jQuery('#login').toggle(true);
+            jQuery('#loggedIn').toggle(false);
         });
     },
     saveState:function(state) {

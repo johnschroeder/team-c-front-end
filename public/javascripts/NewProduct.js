@@ -49,7 +49,6 @@ var newProduct = {
             }
         })
     },
-    stupidCounter: 0,
     populateCustomers: function() {
         if(newProduct.customers) {
             var rowToCopy = $(".customer_checkbox").first();

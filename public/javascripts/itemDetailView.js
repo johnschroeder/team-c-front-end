@@ -5,10 +5,15 @@
 var itemDetailView = {
     productID: null,
     item: null,
+    prevPage: null,
 
     init: function () {
         $("#response").text("");
         this.productID = window.args.ProductID;
+
+        if (window.args.ProductID) {
+            navigation.saveState(window.args);
+        }
 
         var self = this;
 
@@ -67,6 +72,14 @@ var itemDetailView = {
         });
     },
 
+    qrCode: function () {
+        if (!this.productID || !this.item) return;
+        navigation.go("ShowQRCode.html", {
+            Text: window.location + "ItemDetailView-" + this.productID,
+            PreviousPage: "ItemDetailView.html"
+        });
+    },
+
     Delete: function() {
         var productID = window.args.ProductID;
         navigation.get(window.apiRoute + "/DeleteProductByID/" + productID, function (err, resp) {
@@ -91,9 +104,7 @@ var itemDetailView = {
     },
 
     back: function () {
-        navigation.go("DisplayInventory.html", {ProductID: window.args.ProductID});
+        if (this.prevPage)
+            navigation.go(this.prevPage);
     }
-
-
-
 };

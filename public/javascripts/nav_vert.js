@@ -40,9 +40,9 @@ $(document).ready(function () {
         Audit();
     });
 
-    $('#Logs').on( 'touchend click', function( event ){
+    $('#AdminLogs').on( 'touchend click', function( event ){
         event.preventDefault();
-        Logs();
+        AdminLogs();
     });
 
     $('#AddUsers').on( 'touchend click', function( event ){
@@ -137,6 +137,11 @@ function Audit(){
 
 function Logs(){
     navigation.go("Logs.html");
+}
+
+function AdminLogs()
+{
+    navigation.go("AdminLogs.html");
 }
 
 function AddUsers(){
