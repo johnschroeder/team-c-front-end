@@ -160,7 +160,10 @@ function loginPage() {
     navigation.go("loginForm.html");
 }
 function logOutPage(){
-    navigation.hit("/LogOut/",function(res){
+    navigation.hit("/getUserInfo", function(userName){
+        console.log(userName);
+    navigation.hit("/Login/LogOut/" + userName.Username,function(res){
         loginPage();
-    })
+        });
+    });
 }
