@@ -9,9 +9,9 @@
 
 <div class="container-fluid">
     <h1>View Carts</h1>
-
+    <hr/>
     <label for="selectCart">Select a cart to view</label>
-    <select id="selectCart" onchange="ViewCarts.ChooseCart(this)" class="form-control Size">
+    <select id="selectCart" onchange="ViewCarts.CartOnChange(this)" class="form-control Size">
     </select>
 
     <hr/>
@@ -19,48 +19,102 @@
 
     <div id="response"></div>
 
-    <br/>
 
-    <div id="InputDiv">
+    <div id="divCalc" style="display:none">
+        <label id="lblNewProductToPull"></label>
+        <div id="InputDiv">
+            <!-- Template for one row -->
+            <div class="InputChild row form-group">
+                <div class="col-sm-3">
+                    <select onchange="ViewCarts.SizeOnChange(this)" class="form-control Size">
+                        <option value="0">Please Select Package Size---</option>
+                    </select>
+                </div>
+                <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
 
-        <!-- Template for one row -->
-        <div class="InputChild row form-group">
-            <div class="col-sm-4">
-                <select onchange="pullInventory.SelectOnchange(this)" class="form-control Size">
-                    <option value="0">Please Select Package Size---</option>
-                </select>
+                <div class="col-sm-1">
+                    <input type="number" class="form-control Count" onchange="ViewCarts.ReCalculate()" min="0">
+                </div>
+
+                <div class="col-sm-1">
+                    <p class="form-control-static text-center">=</p>
+                </div>
+                <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
+                <div class="col-sm-3">
+                    <select onchange="ViewCarts.LocationOnChange(this)" class="form-control Location"></select>
+                </div>
+                <div class="col-sm-1">
+                    <button class="form-control Color"></button>
+                </div>
             </div>
-            <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+        </div>
+        <button id="btnAddRow">Add</button>
+        <button id="btnDoneAdding" onclick="ViewCarts.DoneAdding()">Exit</button>
+    </div>
 
-            <div class="col-sm-2">
-                <input type="number" class="form-control Count" onchange="pullInventory.ReCalculate()" min="0">
+
+    <div id="divProductsContainer">
+
+        <div class="divOneProductContainer row form-group">
+            <div class="divProductInfo" >
+                <label class="lbProductName "></label>
+                <label class="lbProductTotal"></label>
+            </div>
+            <div class="divEditPullButtons" style="display:none">
+                <button class="btnEdit" onclick="ViewCarts.Edit(this)">Edit</button>
+                <button class="btnPull" onclick="ViewCarts.Pull(this)">Pull</button>
+            </div>
+            <div class="divDoneEditButtons" style="display:none">
+                <button class="btnDone" onclick="ViewCarts.DoneEditing(this)">Done Editing</button>
+            </div>
+            <div class="divUnpullButton" style="display:none">
+                <button class="btnUnpull" onclick="ViewCarts.Unpull(this)">Unpull</button>
+            </div>
+            <div class="divItemRowEdit row form-group" style="display:none">
+                <div class="col-sm-3">
+                    <select class="form-control Size">
+                        <option value="0">Please Select Package Size---</option>
+                    </select>
+                </div>
+                <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+                <div class="col-sm-2">
+                    <input type="number" class="form-control Count"  min="0">
+                </div>
+                <div class="col-sm-1">
+                    <p class="form-control-static text-center">=</p>
+                </div>
+                <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
+                <div class="col-sm-3">
+                    <select  class="form-control Location"></select>
+                </div>
+                <div class="col-sm-1">
+                    <button class="form-control Color"></button>
+                </div>
             </div>
 
-            <div class="col-sm-1">
-                <p class="form-control-static text-center">=</p>
-            </div>
+            <div class="divItemRowView row form-group" style="display:none">
+                <div class="col-sm-3">
+                    <label class="ViewSize form-control-static text-center"></label>
+                </div>
+                <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
 
-            <div class="col-sm-2"><p class="form-control-static">Subtotal of</p></div>
-            <div class="col-sm-2"><p class="form-control-static Subtotal">0</p></div>
+                <div class="col-sm-1">
+                    <label class="form-control-static text-center ViewCount"></label>
+                </div>
+                <div class="col-sm-1">
+                    <p class="form-control-static text-center">=</p>
+                </div>
+                <div class="col-sm-2"><label class="form-control-static ViewSubtotal"></label></div>
+                <div class="col-sm-2">
+                    <label class="form-control-static text-center ViewLocation"></label>
+                </div>
+                <div class="col-sm-1">
+                    <button class="form-control form-control-static text-center ViewColor"></button>
+                </div>
+            </div>
         </div>
 
     </div>
-
-    <div class="row form-group">
-        <div class="col-sm-4">
-            <button id="AddMore" class="btn btn-default" title="Add a pull inventory entry." onclick="pullInventory.AddMore()">+ Add
-                Entry
-            </button>
-        </div>
-        <div class="col-sm-offset-4 col-sm-2"><p class="form-control-static">Total</p></div>
-        <div class="col-sm-2"><p id="TotalInventory" class="form-control-static">0</p></div>
-    </div>
-
-    <div class="row">
-
-    </div>
-
-    <br/>
 
 
 

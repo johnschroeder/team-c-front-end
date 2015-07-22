@@ -16,9 +16,10 @@
         <div class="col-sm-6 track-inventory-by">
             <label for="track_by" class="input-label">Track Inventory By</label>
             <select id="track_by" class="form-control filter track-by">
+                <option value="All">All</option>
                 <option value="Customer">Customer</option>
                 <option value="Item">Item</option>
-                <option value="All">All</option>
+
             </select>
         </div>
 
@@ -60,6 +61,21 @@
              */
             init: function() {
                 var self = this;
+
+                switch($("#track_by option:selected").val()) {
+                    case "Customer":
+                        $("#customer-filter").show();
+                        break;
+                    case "Item":
+                        $("#item-filter").show();
+                        break;
+                    case "All":
+                        self.showAllItems();
+                        break;
+                    default:
+                        break;
+                }
+
 
                 $("#track_by").change(function() {
                     $("#customer-filter").hide();

@@ -49,8 +49,8 @@ var itemDetailView = {
 
     pull: function () {
         if (!this.productID || !this.item) return;
-        navigation.go("PullInventory.html", {
-            ProductID: this.productID,
+        navigation.go("ViewCarts.html", {
+            ProductID: window.args.ProductID,
             ProductName: this.item.Name || "",
             TotalQuantity: this.item.TotalAvailable,
             PreviousPage: "ItemDetailView.html"
