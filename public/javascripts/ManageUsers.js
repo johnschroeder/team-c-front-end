@@ -15,63 +15,63 @@ var manageUsers = {
     },
 
     PopulatePerms: function(){
-        $.get(window.apiRoute + "/getAllPermissions/", function (resp) {
-            var perms = $.parseJSON(resp);
-
-
-            for (var i = 0; i < perms.length; i++) {
-                var obj = perms[i];
-                var optionname = obj.PermsID;
-                var option = new Option(obj.Perms, obj.PermsID);
-                $("#sltPermission").append($(option));
-
+        navigation.get(window.apiRoute + "/getAllPermissions/", function (err, resp) {
+            if(err){
+                var msg = "Error: LoadUsers: Connection error.";
+                $("#response").text(msg);
+                return msg;
             }
+            else {
+                var perms = $.parseJSON(resp);
 
-        }).fail(function(res) {
-            var msg = "Error: LoadUsers: Connection error.";
-            $("#response").text(msg);
-            return msg;
-        });
+
+                for (var i = 0; i < perms.length; i++) {
+                    var obj = perms[i];
+                    var optionname = obj.PermsID;
+                    var option = new Option(obj.Perms, obj.PermsID);
+                    $("#sltPermission").append($(option));
+
+                }
+            }
+        })
     },
 
     LoadUsers: function(){
 
-        $.get(window.apiRoute + "/getAllUsers/", function (resp) {
-            var users = $.parseJSON(resp);
-
-            //hold on to first div
-            //clear DisplayUsersDiv
-            var rowToCopy = $('.InputChild').first();
-            var newRow = rowToCopy.clone();
-            var rowsContainer = '#DisplayUsersDiv';
-            $("#DisplayUsersDiv").empty();
-            newRow.appendTo(rowsContainer);
-
-
-            //populate users
-            for (var i = 0; i < users.length; i++) {
-                var obj = users[i];
-                var tempRow = newRow.clone();
-                $($(tempRow).children()[0]).text(obj.Username);
-                $($(tempRow).children()[1]).text(obj.FirstName);
-                $($(tempRow).children()[2]).text(obj.LastName);
-                $($(tempRow).children()[3]).text(obj.Email);
-                $($(tempRow).children()[4]).text(obj.Perms);
-                $(tempRow).show();
-                tempRow.appendTo(rowsContainer);
-
+        navigation.get(window.apiRoute + "/getAllUsers/", function (err, resp) {
+            if(err){
+                var msg = "Error: LoadUsers: Connection error.";
+                $("#response").text(msg);
+                return msg;
             }
+            else {
+                var users = $.parseJSON(resp);
 
+                //hold on to first div
+                //clear DisplayUsersDiv
+                var rowToCopy = $('.InputChild').first();
+                var newRow = rowToCopy.clone();
+                var rowsContainer = '#DisplayUsersDiv';
+                $("#DisplayUsersDiv").empty();
+                newRow.appendTo(rowsContainer);
 
-        }).fail(function(res) {
-            var msg = "Error: LoadUsers: Connection error.";
-            $("#response").text(msg);
-            return msg;
-        });
+                //populate users
+                for (var i = 0; i < users.length; i++) {
+                    var obj = users[i];
+                    var tempRow = newRow.clone();
+                    $($(tempRow).children()[0]).text(obj.Username);
+                    $($(tempRow).children()[1]).text(obj.FirstName);
+                    $($(tempRow).children()[2]).text(obj.LastName);
+                    $($(tempRow).children()[3]).text(obj.Email);
+                    $($(tempRow).children()[4]).text(obj.Perms);
+                    $(tempRow).show();
+                    tempRow.appendTo(rowsContainer);
+                }
+            }
+        })
     },
 
     EditUser: function(editDiv){
-
         var usernameForEdit=$(editDiv).parent().children()[0];
         navigation.go("EditUser.html",{PreviousPage:"ManageUsers.html",editUser:usernameForEdit});
     },

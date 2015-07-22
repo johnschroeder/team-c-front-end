@@ -7,15 +7,17 @@ var editUser = {
 
         var host = window.apiRoute + "/getUser/" + window.args.editUser;
 
-        $.get(host, function (data) {
-            var userData = $.parseJSON(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                var userData = $.parseJSON(data);
 
-            var firstName = userData.firstName;
-            var lastName = userData.lastName;
+                var firstName = userData.firstName;
+                var lastName = userData.lastName;
 
 
-            $("#FirstName").val(firstName);
-            $("#LastName").val(lastName);
+                $("#FirstName").val(firstName);
+                $("#LastName").val(lastName);
+            }
         });
 
     },
@@ -50,8 +52,10 @@ var editUser = {
 
         //alert(host);
 
-        $.get(host, function (data) {
-            callback(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                callback(data);
+            }
         });
     },
 

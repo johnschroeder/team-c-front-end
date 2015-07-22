@@ -9,7 +9,7 @@ var editProduct = {
 
         var self = this;
 
-        $.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (res) {
+        navigation.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (res) {
             self.product = $.parseJSON(res)[0];
             $("#product_name_text").text(self.product.Name);
             $("#description_text").text(self.product.Description);
@@ -22,7 +22,7 @@ var editProduct = {
 
     getCustomers:function() {
         var host = window.apiRoute + "/getCustomers/";
-        $.get(host, function(response) {
+        navigation.get(host, function(response) {
             if(response && response.length) {
                 editProduct.customers = JSON.parse(response);
                 editProduct.populateCustomers();
@@ -40,7 +40,7 @@ var editProduct = {
             editProduct.customers.forEach(function(customer) {
                 var newRow = rowToCopy.clone();
                 newRow.find(".checkbox_label").text(customer.Name);
-                $.get(window.apiRoute + "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
+                navigation.get(window.apiRoute + "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
                     var associates = JSON.parse(res);
                     for (var i = 0; i < associates.length; i++) {
                         if (customer.CustomerID == associates[i].CustomerID) {
@@ -66,7 +66,7 @@ var editProduct = {
         var newCustomer = $("#new_customer_text").val();
         var host = window.apiRoute + "/addCustomer/" + newCustomer;
 
-        $.get(host, function(response) {
+        navigation.get(host, function(response) {
             if( response && response.length) {
                 editProduct.customers.push({
                     CustomerID:response.CustomerID,
@@ -87,7 +87,7 @@ var editProduct = {
         var host = window.apiRoute
             + "/removeCustomersByProductID/"
             + window.args.ProductID;
-        $.get(host,function(response){
+        navigation.get(host, function(response){
             if( response == "Success" ){
                 editProduct.submit();
             } else {
@@ -115,23 +115,27 @@ var editProduct = {
                     + window.args.ProductID + "/"
                     + $(this).data().id;
             }
-            $.get(host,function(response){
-                if( response != "Success" ){
+            navigation.get(host, function(err, response){
+                if(err){
+                    $("#message").text("Error: " + err.responseText);
+                }
+                else if( response != "Success" ){
                     $("#message").text("Error: " + response);
                 }
-            }).fail(function(err) {
-                $("#message").text("Error: " + err.responseText);
             })
         });
 
         //submit name and descricption change:
-        $.get(window.apiRoute +"/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
-            if( response != "Success" ){
+        navigation.get(window.apiRoute +"/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(err, response){
+            if(err){
+                $("#message").text("Error: " + err.responseText);
+            }
+            else if( response != "Success" ){
                 $("#message").text("Error: " + response);
             }
-            navigation.go("DisplayInventory.html");
-        }).fail(function(err) {
-            $("#message").text("Error: " + err.responseText);
+            else {
+                navigation.go("DisplayInventory.html");
+            }
         })
     },
 

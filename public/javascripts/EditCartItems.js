@@ -11,7 +11,7 @@ var editCartItems = {
     carts: [],
     productTable: [],
     init: function() {
-        $.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(res) {
+        navigation.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(res) {
             if (res && res.length) {
                 editCartItems.cartItems = JSON.parse(res)[0];
                 editCartItems.buildProductIDList();
@@ -67,7 +67,7 @@ var editCartItems = {
     getSizeByProductID: function(i) {
         var model = editCartItems.model;
 
-        $.get(window.apiRoute + "/GetSizeByProductID/" + model.productIDList[i], function(res) {
+        navigation.get(window.apiRoute + "/GetSizeByProductID/" + model.productIDList[i], function(res) {
             if (res && res.length) {
                 var productTable = editCartItems.model.products;
                 var index = model.productIDList[i];
@@ -267,24 +267,25 @@ var editCartItems = {
                 var sizeMapID = row.currentSize.SizeMapID;
                 var quantity = row.quantity;
                 var runID = row.runID;
-                $.get(window.apiRoute + "/Carts/EditCartItem/"
+                navigation.get(window.apiRoute + "/Carts/EditCartItem/"
                     + cartID + '/'
                     + cartItemID + '/'
                     + sizeMapID + '/'
                     + quantity + '/'
-                    + runID + '/'
-                    ,function (res) {
-                        if (res && res.length) {
+                    + runID + '/',
+                    function (err, res) {
+                        if(err){
+                            $("#response").text("Error: EditCartItems.init: Connection error.");
+                        }
+                        else if (res && res.length) {
                             console.log("Results of submitting changed values: ");
                             console.log(JSON.parse(res));
                         } else {
                             $("#response").text("Error: EditCartItems.init: No response.");
                         }
-                    }).fail(function (res) {
-                        $("#response").text("Error: EditCartItems.init: Connection error.");
-                    });
+                    })
 
             }
         }
     }
-}
+};

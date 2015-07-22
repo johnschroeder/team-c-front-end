@@ -36,8 +36,12 @@ var newProduct = {
 
     getCustomers:function() {
         var host = window.apiRoute + "/getCustomers/";
-        $.get(host, function(response) {
-            if(response && response.length) {
+        navigation.get(host, function(err, response) {
+            if(err){
+                console.log("An error occured in getCustomers when trying to access the route /getCustomers");
+                console.log(err);
+            }
+            else if(response && response.length) {
                 newProduct.customers = JSON.parse(response);
                 newProduct.populateCustomers();
             } else {
@@ -72,8 +76,12 @@ var newProduct = {
         var newCustomer = $("#new_customer_text").val();
         var host = window.apiRoute + "/addCustomer/" + newCustomer;
 
-        $.get(host, function(response) {
-            if( response && response.length) {
+        navigation.get(host, function(err, response) {
+            if(err){
+                console.log("An error occured with submitCustomer trying to access route /addCustomer/");
+                console.log(err);
+            }
+            else if( response && response.length) {
                 newProduct.customers.push({
                     CustomerID:response.CustomerID,
                     Name:newCustomer
@@ -113,8 +121,12 @@ var newProduct = {
 
         submit_button.prop("disabled", true);
 
-        $.get(host, function (response) {
-            if( response && response.length ){
+        navigation.get(host, function (err, response) {
+            if(err){
+                $("#message").text("Error: " + err.responseText);
+                submit_button.prop("disabled", false);
+            }
+            else if( response && response.length ){
                 newProduct.productID = JSON.parse(response).ProductID;
                 $("#message").text("Successfully created product");
                 submit_button.prop("disabled", false);
@@ -124,10 +136,7 @@ var newProduct = {
                 $("#message").text("Error: " + response);
                 submit_button.prop("disabled", false);
             }
-        }).fail(function (err) {
-            $("#message").text("Error: " + err.responseText);
-            submit_button.prop("disabled", false);
-        });
+        })
     },
 
     associateCustomers: function() {
@@ -140,17 +149,18 @@ var newProduct = {
                     + newProduct.productID + "/"
                     + $(this).data().id;
 
-                $.get(host, function(response) {
-                    if( response != "Success" ){
+                navigation.get(host, function(err, response) {
+                    if(err){
+                        nextPage = false;
+                        $("#message").text("Error: " + err.responseText);
+                    }
+                    else if( response != "Success" ){
                         nextPage = false;
                         $("#message").text("Error: " + response);
                     }
-                }).fail(function(err) {
-                    nextPage = false;
-                    $("#message").text("Error: " + err.responseText);
                 })
             }
-        })
+        });
 
         newProduct.nextPage();
     },

@@ -9,7 +9,7 @@ function populateByCartId() {
     //TODO when function runs we need to make sure that if there is a state.nameSelected that it is put in the selected option on run.
     //TODO when users is able to be gotten dynamically, change "don" to + userid; so it grabs the carts for the user
     var user = 'don';
-    navigation.hit("/Carts/GetCartsByUser/" + user,function(res){
+    navigation.get("/Carts/GetCartsByUser/" + user, function(err, res){
         var results = JSON.parse(res);
 
         var dropSelect = $("#selectDropDown")
@@ -42,11 +42,14 @@ function displayCartInventory() {
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (data) {
-        populateCartContainer(data[0]);
-    }).fail(function(res) {
-        $("#response").text("Error: displayCartInventory: Connection error.");
-    });
+    navigation.getJSON(window.apiRoute + "/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (err, data) {
+        if(err){
+            $("#response").text("Error: displayCartInventory: Connection error.");
+        }
+        else {
+            populateCartContainer(data[0]);
+        }
+    })
 }
 
 function pullAll() {
@@ -317,29 +320,29 @@ function handleDirtyItemsRecursively(entry, cartItem) {
         var quantity = parseInt(entry.find(".amount-input").val());
         var runID = data.RunID;
 
-        $.get(window.apiRoute + "/Carts/EditCartItem/"
+        navigation.get(window.apiRoute + "/Carts/EditCartItem/"
             + cartID + '/' + cartItemID + '/'
             + sizeMapID + '/' + quantity + '/' + runID,
-            function (res) {
-                console.log("Results of submitting changed values: ");
-                console.log(JSON.parse(res));
-        })
-        .then(function() {
-            var nextEntry = entry.next();
+            function (err, res) {
+                if(err){
+                    $("#response").text("Error: handleDirtyItemsRecursively: Connection error.");
+                }
+                else {
+                    console.log("Results of submitting changed values: ");
+                    console.log(JSON.parse(res));
+                    var nextEntry = entry.next();
 
-            while (nextEntry.length && !nextEntry.data("dirty")) {
-                nextEntry = nextEntry.next();
-            }
+                    while (nextEntry.length && !nextEntry.data("dirty")) {
+                        nextEntry = nextEntry.next();
+                    }
 
-            if (!nextEntry.length) {
-                refreshCartEntry(cartItem);
-                return;
-            }
+                    if (!nextEntry.length) {
+                        refreshCartEntry(cartItem);
+                        return;
+                    }
 
-            handleDirtyItemsRecursively(nextEntry, cartItem);
-        })
-        .fail(function (res) {
-            $("#response").text("Error: handleDirtyItemsRecursively: Connection error.");
+                    handleDirtyItemsRecursively(nextEntry, cartItem);
+                }
         });
     }
 }
@@ -357,15 +360,15 @@ function deleteRow(entry, item) {
             .addClass("hidden")
         .end();
 
-    $.get(window.apiRoute + "/Carts/DeleteItemInCart/" + cartItemID, function (res) {
-        console.log(res);
+    navigation.get(window.apiRoute + "/Carts/DeleteItemInCart/" + cartItemID, function (err, res) {
+        if(err){
+            console.log("Error: Failed to delete row.");
+        }
+        else {
+            console.log(res);
+            refreshCartEntry(item);
+        }
     })
-    .then(function() {
-        refreshCartEntry(item);
-    })
-    .fail(function() {
-        console.log("Error: Failed to delete row.");
-    });
 }
 
 function refreshCartEntry(cartEntry) {
@@ -373,39 +376,45 @@ function refreshCartEntry(cartEntry) {
 
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (data) {
-        data[0].forEach(function (item) {
-            if (cartEntry.data("productId") == item.ProductID) {
-                cartEntry.append(createItemEntry(item, cartEntry));
-                updateTotal(cartEntry);
-            }
-        });
-    }).fail(function (res) {
-        $("#response").text("Error: refreshCartInventory: Connection error.");
+    navigation.getJSON(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (err, data) {
+        if(err){
+            $("#response").text("Error: refreshCartInventory: Connection error.");
+        }
+        else {
+            data[0].forEach(function (item) {
+                if (cartEntry.data("productId") == item.ProductID) {
+                    cartEntry.append(createItemEntry(item, cartEntry));
+                    updateTotal(cartEntry);
+                }
+            });
+        }
     });
 }
 
 //Updates the options for the package types of a single entry.
 function updateEntryPackageTypeOptions(item, productId) {
-    $.getJSON(window.apiRoute + "/GetSizeByProductID/" + productId, function (data) {
-        item.find(".item-entry").each(function () {
-            var select = $(this).find(".package-select").empty();
+    navigation.getJSON(window.apiRoute + "/GetSizeByProductID/" + productId, function (err, data) {
+        if(err){
+            $("#response").text("Error: Update package types: Connection error.");
+        }
+        else {
+            item.find(".item-entry").each(function () {
+                var select = $(this).find(".package-select").empty();
 
-            data.forEach(function (each) {
-                $("<option/>")
-                    .attr("name", each.Name)
-                    .data("size", each.Size)
-                    .data("sizeMapId", each.SizeMapID)
-                    .val(each.SizeMapID)
-                    .text(each.Name + " of " + each.Size)
-                    .appendTo(select);
+                data.forEach(function (each) {
+                    $("<option/>")
+                        .attr("name", each.Name)
+                        .data("size", each.Size)
+                        .data("sizeMapId", each.SizeMapID)
+                        .val(each.SizeMapID)
+                        .text(each.Name + " of " + each.Size)
+                        .appendTo(select);
+                });
+
+                // Select the correct package type
+                var name = $(this).find(".package-text").attr("name");
+                select.find("option[name='" + name + "']").prop("selected", true);
             });
-
-            // Select the correct package type
-            var name = $(this).find(".package-text").attr("name");
-            select.find("option[name='" + name + "']").prop("selected", true);
-        });
-    }).fail(function (res) {
-        $("#response").text("Error: Update package types: Connection error.");
-    });
+        }
+    })
 }

@@ -23,18 +23,20 @@ var DisplayAll =
         var host = window.apiRoute + "/getLogs/";
 
 
-        $.get(host, function (logsForUsername) {
+        navigation.get(host, function (err, logsForUsername) {
+            if(logsForUsername){
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
 
 
-            for (var i = 0; i < logs.length; i++) {
+                for (var i = 0; i < logs.length; i++) {
 
-                    var log = logs[i];
-                    DisplayNext(log);
-                }
+                        var log = logs[i];
+                        DisplayNext(log);
+                    }
 
-            });
+            }
+        });
     },
 
     Ignore: function () {
