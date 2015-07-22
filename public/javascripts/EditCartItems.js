@@ -11,15 +11,16 @@ var editCartItems = {
     carts: [],
     productTable: [],
     init: function() {
-        navigation.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(res) {
-            if (res && res.length) {
+        navigation.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(err, res) {
+            if(err){
+                $("#response").text("Error: EditCartItems.init: Connection error.");
+            }
+            else if (res && res.length) {
                 editCartItems.cartItems = JSON.parse(res)[0];
                 editCartItems.buildProductIDList();
             } else {
                 $("#response").text("Error: EditCartItems.init: No response.");
             }
-        }).fail(function(res) {
-            $("#response").text("Error: EditCartItems.init: Connection error.");
         });
     },
 
@@ -59,7 +60,7 @@ var editCartItems = {
                 unitsPerPackage: this.cartItems[i].CountPerBatch,
                 quantity: this.cartItems[i].BatchCount,
                 dirty: false
-            }
+            };
             productTable[index].rows.push(row);
         }
         editCartItems.getSizeByProductID(0);
@@ -67,8 +68,11 @@ var editCartItems = {
     getSizeByProductID: function(i) {
         var model = editCartItems.model;
 
-        navigation.get(window.apiRoute + "/GetSizeByProductID/" + model.productIDList[i], function(res) {
-            if (res && res.length) {
+        navigation.get(window.apiRoute + "/GetSizeByProductID/" + model.productIDList[i], function(err, res) {
+            if(err){
+                $("#response").text("Error: EditCartItems.getSizeByProductID: Connection error.");
+            }
+            else if (res && res.length) {
                 var productTable = editCartItems.model.products;
                 var index = model.productIDList[i];
                 for(var j = 0; j < JSON.parse(res).length; ++j) {
@@ -91,8 +95,6 @@ var editCartItems = {
             } else {
                 $("#response").text("Error: EditCartItems.getSizeByProductID: No response.");
             }
-        }).fail(function(res) {
-            $("#response").text("Error: EditCartItems.getSizeByProductID: Connection error.");
         });
 
 

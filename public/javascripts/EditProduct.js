@@ -9,20 +9,22 @@ var editProduct = {
 
         var self = this;
 
-        navigation.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (res) {
-            self.product = $.parseJSON(res)[0];
-            $("#product_name_text").text(self.product.Name);
-            $("#description_text").text(self.product.Description);
-            $("#product_name_input").val(self.product.Name); //fill Item Name
-            $("#description_input").val(self.product.Description); //fill Description
+        navigation.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (err, res) {
+            if(res) {
+                self.product = $.parseJSON(res)[0];
+                $("#product_name_text").text(self.product.Name);
+                $("#description_text").text(self.product.Description);
+                $("#product_name_input").val(self.product.Name); //fill Item Name
+                $("#description_input").val(self.product.Description); //fill Description
 
-            $("#edit_button").prop("disabled", false);
+                $("#edit_button").prop("disabled", false);
+            }
         });
     },
 
     getCustomers:function() {
         var host = window.apiRoute + "/getCustomers/";
-        navigation.get(host, function(response) {
+        navigation.get(host, function(err, response) {
             if(response && response.length) {
                 editProduct.customers = JSON.parse(response);
                 editProduct.populateCustomers();
@@ -40,14 +42,15 @@ var editProduct = {
             editProduct.customers.forEach(function(customer) {
                 var newRow = rowToCopy.clone();
                 newRow.find(".checkbox_label").text(customer.Name);
-                navigation.get(window.apiRoute + "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
-                    var associates = JSON.parse(res);
-                    for (var i = 0; i < associates.length; i++) {
-                        if (customer.CustomerID == associates[i].CustomerID) {
-                            newRow.find(".checkbox_input").prop('checked', true);
+                navigation.get(window.apiRoute + "/FindAssociatesByProductID/" + window.args.ProductID, function (err, res) {
+                    if(res) {
+                        var associates = JSON.parse(res);
+                        for (var i = 0; i < associates.length; i++) {
+                            if (customer.CustomerID == associates[i].CustomerID) {
+                                newRow.find(".checkbox_input").prop('checked', true);
+                            }
                         }
                     }
-
                 });
                 newRow.removeClass("hidden");
                 newRow.appendTo( rowsContainer );
@@ -66,7 +69,7 @@ var editProduct = {
         var newCustomer = $("#new_customer_text").val();
         var host = window.apiRoute + "/addCustomer/" + newCustomer;
 
-        navigation.get(host, function(response) {
+        navigation.get(host, function(err, response) {
             if( response && response.length) {
                 editProduct.customers.push({
                     CustomerID:response.CustomerID,
@@ -87,15 +90,16 @@ var editProduct = {
         var host = window.apiRoute
             + "/removeCustomersByProductID/"
             + window.args.ProductID;
-        navigation.get(host, function(response){
-            if( response == "Success" ){
+        navigation.get(host, function(err, response){
+            if(err){
+                $("#message").text("Error: " + err.responseText);
+            }
+            else if( response == "Success" ){
                 editProduct.submit();
             } else {
                 $("#message").text("Error: " + response);
             }
-        }).fail(function(err) {
-            $("#message").text("Error: " + err.responseText);
-        })
+        });
 
     },
 
