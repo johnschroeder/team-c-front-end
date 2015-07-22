@@ -24,12 +24,15 @@
                 switch($("#track_by option:selected").val()) {
                     case "Customer":
                         $("#customer-filter").show();
+                        $("#qr_button").removeClass("hidden");
                         break;
                     case "Item":
                         $("#item-filter").show();
+                        $("#qr_button").removeClass("hidden");
                         break;
                     case "All":
                         self.showAllItems();
+                        $("#qr_button").addClass("hidden");
                         break;
                     default:
                         break;
@@ -328,6 +331,31 @@ var gotoPullInventory = function (pid, pname, tlq) {
         ProductID: pid,
         ProductName: pname,
         TotalQuantity: tlq,
+        PreviousPage: "DisplayInventory.html"
+    });
+};
+
+var qrCode = function () {
+    var filter = "";
+    var keyword = null;
+
+    switch($("#track_by option:selected").val()) {
+        case "Customer":
+            filter = "customer";
+            keyword = encodeURIComponent($("#customer option:selected").text());
+            break;
+        case "Item":
+            filter = "item";
+            keyword = encodeURIComponent($("#item").val());
+            break;
+        default:
+            break;
+    }
+
+    if (!filter || !keyword) return;
+
+    navigation.go("ShowQRCode.html", {
+        Text: window.location + "DisplayInventory?" + filter + "=" + keyword,
         PreviousPage: "DisplayInventory.html"
     });
 };
