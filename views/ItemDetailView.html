@@ -32,14 +32,17 @@
 
     <div id="buttons" class="row">
         <div class="col-sm-12">
-            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">Add
-                Inventory
+            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">
+                Add Inventory
             </button>
             <button class="btn btn-default" title="Pull inventory from this product." onclick="itemDetailView.pull()">
                 Pull Inventory
             </button>
-            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">View/Edit
-                Product
+            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">
+                View/Edit Product
+            </button>
+            <button id="qr_button" class="btn btn-default" title="Show the QR code for this page." onclick="itemDetailView.qrCode()">
+                Show QR Code
             </button>
             <button class="btn btn-default pull-right" title="Delete this product." onclick="itemDetailView.Delete()">Delete Product</button>
         </div>
@@ -64,8 +67,6 @@
     <div id="response"></div>
 </div>
 <script>
-
-
     $(function () {
         itemDetailView.init();
     });

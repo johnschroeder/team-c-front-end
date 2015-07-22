@@ -15,7 +15,7 @@ var manageUsers = {
     },
 
     PopulatePerms: function(){
-        $.get(window.apiRoute + "/getAllPermissions/", function (resp) {
+        navigation.hit("/getAllPermissions/", function (resp) {
             var perms = $.parseJSON(resp);
 
 
@@ -27,16 +27,16 @@ var manageUsers = {
 
             }
 
-        }).fail(function(res) {
+        }) /*.fail(function(res) {
             var msg = "Error: LoadUsers: Connection error.";
             $("#response").text(msg);
             return msg;
-        });
+        })*/;
     },
 
     LoadUsers: function(){
 
-        $.get(window.apiRoute + "/getAllUsers/", function (resp) {
+        navigation.hit( "/getAllUsers/", function (resp) {
             var users = $.parseJSON(resp);
 
             //hold on to first div
@@ -63,11 +63,11 @@ var manageUsers = {
             }
 
 
-        }).fail(function(res) {
+        }) /*.fail(function(res) {
             var msg = "Error: LoadUsers: Connection error.";
             $("#response").text(msg);
             return msg;
-        });
+        })*/;
     },
 
     EditUser: function(editDiv){

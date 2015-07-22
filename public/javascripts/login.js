@@ -15,9 +15,8 @@ function sendAuth() {
                 var cookie = data; //req.cookies.auth
 
                 if (data != "Invalid Credentials!") {
-
-                    alert("login success");
                     navigation.go("Home.html");
+                    alert("login success");
                 }
 
                 if (data == "Invalid Credentials!") {
