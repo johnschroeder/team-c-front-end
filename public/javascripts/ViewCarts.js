@@ -27,6 +27,7 @@ function populateByCartId() {
             if (state && state.nameSelected == results[i].CartName) {
                 option.prop("selected", true);
                 displayCartInventory();
+                $("#qr_button").removeClass("hidden");
             }
         }
     });
@@ -36,17 +37,22 @@ function displayCartInventory() {
     var cartContainer = $("#inventory-container")
         .empty();
 
-    if ($("#selectDropDown :selected").val() == -1) return;
+    if ($("#selectDropDown :selected").val() == -1) {
+        $("#qr_button").addClass("hidden");
+        return;
+    }
 
     state.nameSelected = $("#selectDropDown :selected").text();
     navigation.saveState(state);
     var idSelected = $("#selectDropDown :selected").val();
+    $("#qr_button").removeClass("hidden");
 
-    $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (data) {
+    navigation.hit("/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (data) {
+        data = JSON.parse(data);
         populateCartContainer(data[0]);
-    }).fail(function(res) {
+    })/*.fail(function(res) {
         $("#response").text("Error: displayCartInventory: Connection error.");
-    });
+    })*/;
 }
 
 function pullAll() {
@@ -339,7 +345,15 @@ function handleDirtyItemsRecursively(entry, cartItem) {
             handleDirtyItemsRecursively(nextEntry, cartItem);
         })
         .fail(function (res) {
-            $("#response").text("Error: handleDirtyItemsRecursively: Connection error.");
+                if(res.status == 511){
+                    console.log("Access Denied!");
+                    alert("Sorry your permission level doesn't allow you to access this page.");
+                    navigation.go("Home.html");
+                }
+                if(res.status == 510){
+                    navigation.go("loginForm.html");
+                    alert("You have to log in before you can see this page!");
+                }
         });
     }
 }
@@ -363,9 +377,16 @@ function deleteRow(entry, item) {
     .then(function() {
         refreshCartEntry(item);
     })
-    .fail(function() {
-        console.log("Error: Failed to delete row.");
-    });
+    .fail(function(res) {
+            if(res.status == 511){
+                console.log("Access Denied!");
+                alert("Sorry your permission level doesn't allow you to access this page.");
+                navigation.go("Home.html");
+            }
+            if(res.status == 510){
+                navigation.go("loginForm.html");
+                alert("You have to log in before you can see this page!");
+            }    });
 }
 
 function refreshCartEntry(cartEntry) {
@@ -373,21 +394,21 @@ function refreshCartEntry(cartEntry) {
 
     var idSelected = $("#selectDropDown :selected").val();
 
-    $.getJSON(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (data) {
+    navigation.hit("/Carts/GetCartItems/" + idSelected, function (data) {
+        data = JSON.parse(data);
         data[0].forEach(function (item) {
             if (cartEntry.data("productId") == item.ProductID) {
                 cartEntry.append(createItemEntry(item, cartEntry));
                 updateTotal(cartEntry);
             }
         });
-    }).fail(function (res) {
-        $("#response").text("Error: refreshCartInventory: Connection error.");
     });
 }
 
 //Updates the options for the package types of a single entry.
 function updateEntryPackageTypeOptions(item, productId) {
-    $.getJSON(window.apiRoute + "/GetSizeByProductID/" + productId, function (data) {
+    navigation.hit( "/GetSizeByProductID/" + productId, function (data) {
+        data = JSON.parse(data);
         item.find(".item-entry").each(function () {
             var select = $(this).find(".package-select").empty();
 
@@ -405,7 +426,16 @@ function updateEntryPackageTypeOptions(item, productId) {
             var name = $(this).find(".package-text").attr("name");
             select.find("option[name='" + name + "']").prop("selected", true);
         });
-    }).fail(function (res) {
-        $("#response").text("Error: Update package types: Connection error.");
     });
 }
+
+var qrCode = function () {
+    if ($("#selectDropDown :selected").val() == -1) return;
+
+    navigation.go("ShowQRCode.html", {
+        Text: window.location + "ViewCarts-" + $("#selectDropDown :selected").val(),
+        PreviousPage: "ViewCarts.html"
+    });
+};
+
+// TODO QR code for add product. Waiting for implementation first. For now, that QR code is made from the pull inventory page.

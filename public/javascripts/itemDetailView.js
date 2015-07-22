@@ -5,14 +5,24 @@
 var itemDetailView = {
     productID: null,
     item: null,
+    prevPage: null,
 
     init: function () {
         $("#response").text("");
         this.productID = window.args.ProductID || window.args.pageKey;
 
+        if (window.args.ProductID) {
+            this.productID = window.args.ProductID;
+            this.prevPage = window.args.PreviousPage;
+            navigation.saveState(window.args);
+        } else if (window.state.ProductID) {
+            this.productID = window.state.ProductID;
+            this.prevPage = window.state.PreviousPage;
+        }
+
         var self = this;
 
-        $.get(window.apiRoute + "/itemDetail/" + this.productID, function (response) {
+        navigation.hit("/itemDetail/" + this.productID, function (response) {
             if (response && response.length) {
                 self.item = jQuery.parseJSON(response)[0];
                 //console.log(self.item);
@@ -21,9 +31,9 @@ var itemDetailView = {
             } else {
                 self.renderError("No inventory found");
             }
-        }).fail(function (response) {
+        })/*.fail(function (response) {
             self.renderError("Failed to load inventory: " + response);
-        });
+        })*/;
     },
 
     displayItem: function () {
@@ -66,9 +76,17 @@ var itemDetailView = {
         });
     },
 
+    qrCode: function () {
+        if (!this.productID || !this.item) return;
+        navigation.go("ShowQRCode.html", {
+            Text: window.location + "ItemDetailView-" + this.productID,
+            PreviousPage: "ItemDetailView.html"
+        });
+    },
+
     Delete: function() {
         var productID = window.args.ProductID;
-        $.get(window.apiRoute + "/DeleteProductByID/" + productID, function (resp) {
+        navigation.hit( "/DeleteProductByID/" + productID, function (resp) {
             var r = jQuery.parseJSON(resp);
             if (r[0].message == 'Success') {
                 alert("Product " + $("#product_name").text() + " is deleted.");
@@ -81,15 +99,13 @@ var itemDetailView = {
                 //$("#response").append("<br/>" + "1. Inventory of the product is 0.");
                 //$("#response").append("<br/>" + "2. De-associate all customers from the product");
             }
-        }).fail(function (res) {
+        })/*.fail(function (res) {
             $("#response").text( "Fail to delete product: Error --- " + res );
-        });
+        })*/;
     },
 
     back: function () {
-        navigation.go("DisplayInventory.html", {ProductID: window.args.ProductID});
+        if (this.prevPage)
+            navigation.go(this.prevPage);
     }
-
-
-
 };
