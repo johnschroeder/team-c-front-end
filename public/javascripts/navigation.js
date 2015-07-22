@@ -34,6 +34,9 @@ var navigation = {
     getJSON:function(route, callback){
         this._ajax(route, 'GET', null, 'json', callback);
     },
+    postJSON:function(route, callback){
+        this._ajax(route, 'GET', null, 'json', callback);
+    },
     post:function(route, data, callback){
         this._ajax(route, 'POST', data, null, callback);
     },

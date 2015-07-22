@@ -7,12 +7,8 @@ jQuery('#createUser').submit(function(){
         "lastName":jQuery('#last').val()
     };
     //console.log(toPass);
-    jQuery.ajax({
-        type: "POST",
-        url: window.apiRoute+'/login/createUser/',
-        data: toPass,
-        dataType: 'json',
-        success: function(){
+    navigation.postJSON(window.apiRoute+'/login/createUser/', toPass, function(err, res){
+        if(res) {
             window.alert("Please check your email for an account creation confirmation.");
         }
     });

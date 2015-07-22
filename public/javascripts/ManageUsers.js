@@ -124,25 +124,21 @@ var manageUsers = {
             "permID":permID
         };
 
-        jQuery.ajax({
-            type: "POST",
-            url: window.apiRoute+'/login/createUser/',
-            data: toPass,
-            dataType: 'json',
-            success: function(){
-                window.alert("User "+uname+" is created. Email confirmation is required to complete registration.");
-                this.LoadUsers();//re-load all users
-                $('#iptUsername').val('');
-                $('#iptFirstName').val('');
-                $('#iptLastName').val('');
-                $('#iptEmail').val('');
-                $('select#sltPermission option').removeAttr("selected");
-                $("#divNewUser").hide();
-            },
-            error: function(xhr, error){
-                window.alert(xhr +"    "+error);
-                this.LoadUsers();
-            }
+        navigation.postJSON(window.apiRoute+'/login/createUser/', toPass, function(err, res){
+                if(err) {
+                    window.alert("Error: "+error);
+                    this.LoadUsers();
+                }
+                else{
+                    window.alert("User "+uname+" is created. Email confirmation is required to complete registration.");
+                    this.LoadUsers();//re-load all users
+                    $('#iptUsername').val('');
+                    $('#iptFirstName').val('');
+                    $('#iptLastName').val('');
+                    $('#iptEmail').val('');
+                    $('select#sltPermission option').removeAttr("selected");
+                    $("#divNewUser").hide();
+                }
         });
 
 
