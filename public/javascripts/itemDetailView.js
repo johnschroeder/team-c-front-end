@@ -9,14 +9,11 @@ var itemDetailView = {
 
     init: function () {
         $("#response").text("");
+        this.productID = window.args.ProductID || window.args.pageKey || window.state.ProductID;
+        this.prevPage = window.args.PreviousPage || window.state.PreviousPage;
 
         if (window.args.ProductID) {
-            this.productID = window.args.ProductID;
-            this.prevPage = window.args.PreviousPage;
             navigation.saveState(window.args);
-        } else if (window.state.ProductID) {
-            this.productID = window.state.ProductID;
-            this.prevPage = window.state.PreviousPage;
         }
 
         var self = this;
