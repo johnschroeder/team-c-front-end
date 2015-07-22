@@ -91,7 +91,7 @@
             var key = decodeURIComponent(pair[0]);
             var value = decodeURIComponent(pair[1]);
 
-            switch (key) {
+            switch (key.toLowerCase()) {
                 case "customer":
                     $("#track_by option:contains('Customer')").prop("selected", true);
                     $("#track_by").trigger("change");
