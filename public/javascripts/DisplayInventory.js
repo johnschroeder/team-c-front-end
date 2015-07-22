@@ -106,7 +106,7 @@
                     this.searchItem(value);
                     break;
                 case "all":
-                    if (value == "true") {
+                    if (value.toLowerCase() == "true") {
                         $("#track_by option:contains('All')").prop("selected", true);
                         $("#track_by").trigger("change");
                         this.showAllItems();
