@@ -9,15 +9,13 @@ var navigation = {
             jQuery('#login').toggle(false);
             jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
             jQuery.get(window.apiRoute+ "/checkPermissions/" + targetPage + "/" + result.PermsID,function(res){
-                if(res !== "Success"){
-                    navigation.go("Home.html");
-                }
-                else {
-                    $("#main_cont").load('/load/' + targetPage, {
-                        args: args,
-                        state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
-                    });
-                }
+                $("#main_cont").load('/load/' + targetPage, {
+                    args: args,
+                    state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
+                });
+            })
+            .fail(function(){
+                navigation.go("Home.html");
             });
         }).fail(function(){
             jQuery('#login').toggle(true);
