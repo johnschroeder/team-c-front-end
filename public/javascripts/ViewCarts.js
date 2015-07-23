@@ -348,7 +348,6 @@ function handleDirtyItemsRecursively(entry, cartItem) {
                 if(res.status == 511){
                     console.log("Access Denied!");
                     alert("Sorry your permission level doesn't allow you to access this page.");
-                    navigation.go("Home.html");
                 }
                 if(res.status == 510){
                     navigation.go("loginForm.html");
@@ -381,7 +380,6 @@ function deleteRow(entry, item) {
             if(res.status == 511){
                 console.log("Access Denied!");
                 alert("Sorry your permission level doesn't allow you to access this page.");
-                navigation.go("Home.html");
             }
             if(res.status == 510){
                 navigation.go("loginForm.html");
