@@ -105,6 +105,21 @@ function preventBehavior(e)
     e.preventDefault();
 };
 
+function getCurrentFileName(){
+    var pagePathName= window.location.pathname;
+    return pagePathName.substring(pagePathName.lastIndexOf("/") + 1);
+}
+
+function stayOrRedirect()
+{
+    var stayPage = getCurrentFileName();
+    if (stayPage == "")
+    {
+        Home();
+    }
+}
+
+
 function Home(){
     navigation.go("Home.html");
 }
