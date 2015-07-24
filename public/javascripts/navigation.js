@@ -3,24 +3,30 @@ var navigation = {
     go:function(targetPage, args) {
         if(targetPage == "loginForm.html"){
             $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
-        }
-        jQuery.get(window.apiRoute+"/getUserInfo", function(result){
-            jQuery('#loggedIn').toggle(true);
-            jQuery('#login').toggle(false);
-            jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
-            jQuery.get(window.apiRoute+ "/checkPermissions/" + targetPage + "/" + result.PermsID,function(res){
-                $("#main_cont").load('/load/' + targetPage, {
-                    args: args,
-                    state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
-                });
-            })
-            .fail(function(){
-                navigation.go("Home.html");
-            });
-        }).fail(function(){
             jQuery('#login').toggle(true);
-            jQuery('#loggedIn').toggle(false);
-        });
+            jQuery('#loggedIn').toggle(false)
+        }
+        else {
+            jQuery.get(window.apiRoute + "/getUserInfo", function (result) {
+                jQuery('#loggedIn').toggle(true);
+                jQuery('#login').toggle(false);
+                jQuery('#usersName').text(function () {
+                    return result.FirstName + " " + result.LastName
+                });
+                jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
+                    $("#main_cont").load('/load/' + targetPage, {
+                        args: args,
+                        state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
+                    });
+                }).fail(function () {
+                        navigation.go("Home.html");
+                });
+            }).fail(function () {
+                navigation.go("loginForm.html")
+                jQuery('#login').toggle(true);
+                jQuery('#loggedIn').toggle(false);
+            });
+        }
     },
     saveState:function(state) {
         this.stateTable[window.thisPage.toLowerCase().split(".")[0]] = state;
