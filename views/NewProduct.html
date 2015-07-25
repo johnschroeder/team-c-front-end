@@ -4,13 +4,6 @@
     <meta charset="UTF-8"/>
     <title>New Product</title>
     <script src="javascripts/NewProduct.js"></script>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
 </head>
 <body>
 <b class="container-fluid">
@@ -18,18 +11,6 @@
     <hr/>
 
     <div>Date: <span id="date"></span></div>
-
-    <br/>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="checkbox">
-                <label>
-                    <input id="new_run_checkbox" type="checkbox"> Create a new run of this item when finished</input>
-                </label>
-            </div>
-        </div>
-    </div>
 
     <br/>
 
@@ -80,18 +61,13 @@
 
     <br/>
 
-    <!-- TODO add api route to store the image that is uploaded into s3 -->
     <div class="row">
-        <div class="col-sm-3">
-            <label>Image</label>
-
-            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <button id="new_thumbnail_button" class="btn btn-default unimplemented">Upload Image</button>
+        <div class="col-sm-12">
+            <div class="checkbox">
+                <label>
+                    <input id="new_run_checkbox" type="checkbox"> Create a new run of this item when finished</input>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -104,6 +80,7 @@
     </div>
 
     <div id="message"></div>
+
 </div>
 <script>newProduct.init()</script>
 </body>

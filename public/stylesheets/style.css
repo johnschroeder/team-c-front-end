@@ -227,6 +227,20 @@ li button.active {
   line-height: 30px;
 }
 
+.imageUpload img {
+  width: 200px;
+  height: auto;
+}
+
+.imageUpload.loading {
+  width: 200px;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  border: 1px solid gray;
+  color: gray;
+}
+
 /* Upload and submit button will get the same general styles */
 .new-product-form .upload-button,
 .new-product-form .submit {
@@ -294,12 +308,27 @@ li button.active {
   font-size: 14px;
 }
 
+.thumbnail {
+  width: 128px;
+  height: auto;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: auto;
+}
+
+.noImage {
+  width: 100%;
+  height: 100px;
+}
+
 /* DisplayInventory.html specific styles
 *******************************/
 .display-inventory-container .thumbnail {
   width: 100px;
   height: 100px;
-  background-color: red;
+  overflow: hidden;
   float: left;
   clear: both; /* Fully clear the previous element */
   margin-right: 20px;

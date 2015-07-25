@@ -9,7 +9,7 @@ var editProduct = {
 
         var self = this;
 
-        navigation.hit("/EditProduct/" + window.args.ProductID, function (res) {
+        $.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (res) {
             self.product = $.parseJSON(res)[0];
             $("#product_name_text").text(self.product.Name);
             $("#description_text").text(self.product.Description);
@@ -18,11 +18,14 @@ var editProduct = {
 
             $("#edit_button").prop("disabled", false);
         });
+
+        this.setupImageHandler();
+
     },
 
     getCustomers:function() {
-        var host = "/getCustomers/";
-        navigation.hit(host, function(response) {
+        var host = window.apiRoute + "/getCustomers/";
+        $.get(host, function(response) {
             if(response && response.length) {
                 editProduct.customers = JSON.parse(response);
                 editProduct.populateCustomers();
@@ -40,7 +43,7 @@ var editProduct = {
             editProduct.customers.forEach(function(customer) {
                 var newRow = rowToCopy.clone();
                 newRow.find(".checkbox_label").text(customer.Name);
-                navigation.hit( "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
+                $.get(window.apiRoute + "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
                     var associates = JSON.parse(res);
                     for (var i = 0; i < associates.length; i++) {
                         if (customer.CustomerID == associates[i].CustomerID) {
@@ -64,9 +67,9 @@ var editProduct = {
 
     submitCustomer:function() {
         var newCustomer = $("#new_customer_text").val();
-        var host ="/addCustomer/" + newCustomer;
+        var host = window.apiRoute + "/addCustomer/" + newCustomer;
 
-        navigation.hit(host, function(response) {
+        $.get(host, function(response) {
             if( response && response.length) {
                 editProduct.customers.push({
                     CustomerID:response.CustomerID,
@@ -84,17 +87,18 @@ var editProduct = {
     },
 
     breakAssociations: function() {
-        var host = "/removeCustomersByProductID/"
+        var host = window.apiRoute
+            + "/removeCustomersByProductID/"
             + window.args.ProductID;
-        navigation.hit(host,function(response){
+        $.get(host,function(response){
             if( response == "Success" ){
                 editProduct.submit();
             } else {
                 $("#message").text("Error: " + response);
             }
-        });/*.fail(function(err) {
+        }).fail(function(err) {
             $("#message").text("Error: " + err.responseText);
-        })*/
+        })
 
     },
 
@@ -109,28 +113,76 @@ var editProduct = {
         var customerContainer = $("#checkbox_cont").children();
         customerContainer.each(function() {
             if ($(this).find(".checkbox_input")[0].checked) {
-                var host = "/associateProductCustomer/"
+                var host = window.apiRoute
+                    + "/associateProductCustomer/"
                     + window.args.ProductID + "/"
                     + $(this).data().id;
             }
-            navigation.hit(host,function(response){
+            $.get(host,function(response){
                 if( response != "Success" ){
                     $("#message").text("Error: " + response);
                 }
-            })/*.fail(function(err) {
+            }).fail(function(err) {
                 $("#message").text("Error: " + err.responseText);
-            })*/;
+            })
         });
 
         //submit name and descricption change:
-        navigation.hit("/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
+        $.get(window.apiRoute +"/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
             if( response != "Success" ){
                 $("#message").text("Error: " + response);
             }
             navigation.go("DisplayInventory.html");
-        })/*.fail(function(err) {
+        }).fail(function(err) {
             $("#message").text("Error: " + err.responseText);
-        })*/;
+        })
+    },
+
+    setupImageHandler:function() {
+
+        var savedImage = navigation.makeImageURL( window.args.ProductID );
+        navigation.checkImage( savedImage,
+        function(){
+            console.log("Image found for product");
+            $('.thumbnail').html("<img src='"+savedImage+"'/>");
+        },function(){
+                console.log("No image found for product");
+                $('.thumbnail').html("<div class='noImage'>No Image</div>");
+        });
+
+        $(':file').change(function(){
+            var file = this.files[0];
+            var size = file.size;
+            $('#uploadFileSize').val(size);
+            $('#prodIDForImg').val(window.args.ProductID);
+            var type = file.type;
+            if( type.indexOf("jpeg") == -1 ) {
+                alert( "Sorry, jpeg images only");
+                return;
+            }
+
+            var formData = new FormData($('#uploadImageForm')[0]);
+            $.ajax({
+                url: window.apiRoute + '/uploadImage',  //Server script to process data
+                type: 'POST',
+                beforeSend: function(){
+                    $('.imageUpload').remove();
+                    $('.uploadImageFormContainer').after( "<div class='imageUpload loading'>Uploading Image<div>" );
+                    console.log("Uploading Image");
+                },
+                success: function( response ){
+                    $('.imageUpload').removeClass("loading");
+                    $('.imageUpload').html( "<img src='http://" + response +"' />" );
+                },
+                error: function(err){
+                    $("#message").text("Error: " + err.responseText);
+                },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
     },
 
     back: function () {

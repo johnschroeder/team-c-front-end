@@ -4,13 +4,6 @@
     <meta charset="UTF-8"/>
     <title>Edit Product</title>
     <script src="javascripts/EditProduct.js"></script>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -19,8 +12,6 @@
     <h2>Item: <span id="item_name"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="editProduct.back()">Back</button>
     <hr/>
-
-
 
     <br/>
 
@@ -70,18 +61,15 @@
 
     <br/>
 
-    <!-- TODO add api route to store the image that is uploaded into s3 -->
-    <div class="row">
-        <div class="col-sm-3">
-            <label>Image</label>
-
-            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
-        </div>
-    </div>
-
-    <div class="row">
+    <div class="row uploadImageFormContainer">
+        <div class="thumbnail"></div>
         <div class="col-sm-4">
-            <button id="new_thumbnail_button" class="btn btn-default unimplemented">Upload Image</button>
+            Upload Image
+            <form id="uploadImageForm" enctype="multipart/form-data">
+                <input type="hidden" name="prodID" id="prodIDForImg" value="0" />
+                <input type="hidden" name="size" id="uploadFileSize" value="0" />
+                <input name="productImage" type="file" />
+            </form>
         </div>
     </div>
 

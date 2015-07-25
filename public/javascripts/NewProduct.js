@@ -32,11 +32,12 @@ var newProduct = {
         newProduct.getCustomers();
         $("#date").text(newProduct.getDate());
 
+
     },
 
     getCustomers:function() {
-        var host = "/getCustomers/";
-        navigation.hit(host, function(response) {
+        var host = window.apiRoute + "/getCustomers/";
+        $.get(host, function(response) {
             if(response && response.length) {
                 newProduct.customers = JSON.parse(response);
                 newProduct.populateCustomers();
@@ -45,6 +46,7 @@ var newProduct = {
             }
         })
     },
+    stupidCounter: 0,
     populateCustomers: function() {
         if(newProduct.customers) {
             var rowToCopy = $(".customer_checkbox").first();
@@ -69,9 +71,9 @@ var newProduct = {
 
     submitCustomer:function() {
         var newCustomer = $("#new_customer_text").val();
-        var host = "/addCustomer/" + newCustomer;
+        var host = window.apiRoute + "/addCustomer/" + newCustomer;
 
-        navigation.hit(host, function(response) {
+        $.get(host, function(response) {
             if( response && response.length) {
                 newProduct.customers.push({
                     CustomerID:response.CustomerID,
@@ -94,9 +96,10 @@ var newProduct = {
         var submit_button = $("#submit");
         $("#message").text("");
 
-        var host = "/newProductSubmission/";
+        var host = window.apiRoute + "/newProductSubmission/";
         var product_name = $("#product_name_input").val();
         var description = $("#description_input").val();
+        var image = $("productImageSrc").val();
         var date = newProduct.getDate();
         newProduct.productName = product_name;
 
@@ -112,7 +115,7 @@ var newProduct = {
 
         submit_button.prop("disabled", true);
 
-        navigation.hit(host, function (response) {
+        $.get(host, function (response) {
             if( response && response.length ){
                 newProduct.productID = JSON.parse(response).ProductID;
                 $("#message").text("Successfully created product");
@@ -123,10 +126,10 @@ var newProduct = {
                 $("#message").text("Error: " + response);
                 submit_button.prop("disabled", false);
             }
-        })/*.fail(function (err) {
+        }).fail(function (err) {
             $("#message").text("Error: " + err.responseText);
             submit_button.prop("disabled", false);
-        });*/;
+        });
     },
 
     associateCustomers: function() {
@@ -134,19 +137,20 @@ var newProduct = {
         var nextPage = true;
         customerContainer.each(function(){
             if($(this).find(".checkbox_input")[0].checked) {
-                var host ="/associateProductCustomer/"
+                var host = window.apiRoute
+                    + "/associateProductCustomer/"
                     + newProduct.productID + "/"
                     + $(this).data().id;
 
-                navigation.hit(host, function(response) {
+                $.get(host, function(response) {
                     if( response != "Success" ){
                         nextPage = false;
                         $("#message").text("Error: " + response);
                     }
-                }) /*.fail(function(err) {
+                }).fail(function(err) {
                     nextPage = false;
                     $("#message").text("Error: " + err.responseText);
-                })*/;
+                })
             }
         })
 
@@ -162,5 +166,6 @@ var newProduct = {
         } else {
             navigation.go("DisplayInventory.html");
         }
-    }
+    },
+
 };

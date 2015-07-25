@@ -1,32 +1,15 @@
 var navigation = {
     stateTable:{},
     go:function(targetPage, args) {
-        if(targetPage == "loginForm.html"){
-            $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
+        $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
+        jQuery.get(window.apiRoute+"/getUserInfo", function(result){
+            jQuery('#loggedIn').toggle(true);
+            jQuery('#login').toggle(false);
+            jQuery('#usersName').text(function(){return result.FirstName+" "+result.LastName});
+        }).fail(function(){
             jQuery('#login').toggle(true);
-            jQuery('#loggedIn').toggle(false)
-        }
-        else {
-            jQuery.get(window.apiRoute + "/getUserInfo", function (result) {
-                jQuery('#loggedIn').toggle(true);
-                jQuery('#login').toggle(false);
-                jQuery('#usersName').text(function () {
-                    return result.FirstName + " " + result.LastName
-                });
-                jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
-                    $("#main_cont").load('/load/' + targetPage, {
-                        args: args,
-                        state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
-                    });
-                }).fail(function () {
-                        navigation.go("Home.html");
-                });
-            }).fail(function () {
-                navigation.go("loginForm.html")
-                jQuery('#login').toggle(true);
-                jQuery('#loggedIn').toggle(false);
-            });
-        }
+            jQuery('#loggedIn').toggle(false);
+        });
     },
     saveState:function(state) {
         this.stateTable[window.thisPage.toLowerCase().split(".")[0]] = state;
@@ -37,8 +20,8 @@ var navigation = {
         }).fail(function(res){
             if(res.status == 511){
                 console.log("Access Denied!");
-                alert("Sorry your permission level doesn't allow you to access" + route);
-               //navigation.go("Home.html");
+                alert("Sorry your permission level doesn't allow you to access this page.");
+                navigation.go("Home.html");
             }
             if(res.status == 510){
                 navigation.go("loginForm.html");
@@ -46,5 +29,17 @@ var navigation = {
             }
         })
 
+    },
+    checkImage: function( src, onLoad, onError ) {
+
+        var img = new Image();
+
+        img.onload = onLoad;
+        img.onerror = onError;
+        img.src = src;
+
+    },
+    makeImageURL: function( productID ) {
+        return 'http://images.thisisimp.com.s3.amazonaws.com/'+productID+'.jpeg';
     }
 }
