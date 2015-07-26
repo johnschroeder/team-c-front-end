@@ -169,7 +169,7 @@
                     self.inventory = data;
                     //self.consolidate_inventory();
                     self.display_inventory();
-                    self.customerSelector[0].selectize.clear();
+                    $("#customer").val("");
                     $("#item").val("");
                 }
                 else {
@@ -343,7 +343,7 @@ var qrCode = function () {
     switch($("#track_by option:selected").val()) {
         case "Customer":
             filter = "customer";
-            keyword = encodeURIComponent($("#customer option:selected").text());
+            keyword = encodeURIComponent($("#customer").val());
             break;
         case "Item":
             filter = "item";
