@@ -24,6 +24,7 @@ var itemDetailView = {
                 //console.log(self.item);
                 self.productName = self.item.Name;
                 self.displayItem();
+                self.doThumbnail();
             } else {
                 self.renderError("No inventory found");
             }
@@ -100,6 +101,21 @@ var itemDetailView = {
         })*/;
     },
 
+     doThumbnail: function() {
+
+         var imageLocation = navigation.makeImageURL(this.productID);
+
+         navigation.checkImage( imageLocation,
+            function(){
+                console.log("Image found for product");
+                $('.thumbnail').html("<img src='"+imageLocation+"'/>");
+            },
+            function(){
+                console.log("No image found for product");
+                $('.thumbnail').html("<div class='noImage'>No Image</div>");
+            });
+
+    },
     back: function () {
         if (this.prevPage)
             navigation.go(this.prevPage);
