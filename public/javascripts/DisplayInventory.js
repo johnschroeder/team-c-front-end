@@ -39,32 +39,29 @@
                 }
             });
 
-            this.customerSelector = $("#customer").selectize({
-                valueField: "label",
-                labelField: "label",
-                searchField: ["label"],
-                render: {
-                    option: function(item, escape) {
-                        return "<div>" + escape(item.label) + "</div>";
-                    }
+            // Customer search bar.
+            $("#customer").autocomplete({
+                minLength: 1,
+                source: function(request, response) {
+                    $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(request.term), response); // data = [{label:"item 1"}, {label:"item 2"}, ..]
                 },
-                load: function(query, callback) {
-                    this.clearOptions();
-
-                    if (!query.length) return callback();
-
-                    $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(query), function(data) {
-                        callback(data); // data = [{label:"customer 1"}, {label:"customer 2"}, ..]
-                    });
+                select: function(event, ui) {
+                    // ui { label, value }
+                    self.searchCustomer(ui.item.label);
                 }
             });
 
-            $("#customer").change(function() {
-                self.searchCustomer($("#customer option:selected").text());
+            $("#customer").keypress(function(e) {
+                if (e.which == 13) {
+                    self.searchCustomer($("#customer").val());
+                }
+            });
+
+            $("#search_customer_button").click(function() {
+                self.searchItem($("#customer").val());
             });
 
             // Item search bar.
-            // TODO should we use the same combobox as customer?
             $("#item").autocomplete({
                 minLength: 1,
                 source: function(request, response) {
@@ -134,7 +131,7 @@
 
                 self.inventory = data;
                 self.display_inventory();
-                self.customerSelector[0].selectize.clear();
+                $("#customer").val("");
             }).fail(function() {
                 self.render_error("Item: Search failed.");
             });
@@ -172,7 +169,7 @@
                     self.inventory = data;
                     //self.consolidate_inventory();
                     self.display_inventory();
-                    self.customerSelector[0].selectize.clear();
+                    $("#customer").val("");
                     $("#item").val("");
                 }
                 else {
@@ -354,7 +351,7 @@ var qrCode = function () {
     switch($("#track_by option:selected").val()) {
         case "Customer":
             filter = "customer";
-            keyword = encodeURIComponent($("#customer option:selected").text());
+            keyword = encodeURIComponent($("#customer").val());
             break;
         case "Item":
             filter = "item";
