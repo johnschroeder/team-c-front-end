@@ -15,7 +15,7 @@ function populateByCartId() {
         var dropSelect = $("#selectDropDown")
             .append($("<option/>")
                 .val(-1)
-                .text("-- Select a Cart --")
+                .text("-- Select a Job --")
         );
 
         for (var i = 0; i < results.length; ++i) {
