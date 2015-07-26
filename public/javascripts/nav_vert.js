@@ -25,10 +25,6 @@ $(document).ready(function () {
         AddProduct();
     });
 
-    $('#Audit').on( 'touchend click', function( event ){
-        event.preventDefault();
-        Audit();
-    });
 
     $('#AdminLogs').on( 'touchend click', function( event ){
         event.preventDefault();
@@ -132,9 +128,6 @@ function DisplayInventories(){
 }
 
 // Administrator
-function Audit(){
-    $('#main_cont').text("Audit");
-}
 
 function Logs(){
     navigation.go("Logs.html");
