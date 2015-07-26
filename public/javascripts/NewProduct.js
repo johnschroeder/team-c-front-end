@@ -47,16 +47,14 @@ var newProduct = {
     },
     populateCustomers: function() {
         if(newProduct.customers) {
-            var rowToCopy = $(".customer_checkbox").first();
-            var rowsContainer = $("#checkbox_cont");
-            rowsContainer.empty();
+            $("#customer_select").empty();
 
-            newProduct.customers.forEach(function(customer) {
-                var newRow = rowToCopy.clone();
-                newRow.find(".checkbox_label").text(customer.Name);
-                newRow.removeClass("hidden");
-                newRow.appendTo( rowsContainer );
-                newRow.attr("data-ID", customer.CustomerID);
+            newProduct.customers.forEach(function(customer){
+                $("#customer_select").append(
+                    $("<option/>")
+                        .text(customer.Name)
+                        .val(customer.CustomerID)
+                );
             });
         }
     },
@@ -130,25 +128,19 @@ var newProduct = {
     },
 
     associateCustomers: function() {
-        var customerContainer = $("#checkbox_cont").children();
-        var nextPage = true;
-        customerContainer.each(function(){
-            if($(this).find(".checkbox_input")[0].checked) {
-                var host ="/associateProductCustomer/"
-                    + newProduct.productID + "/"
-                    + $(this).data().id;
+        $("#customer_select option:selected").each(function(){
+            var host ="/associateProductCustomer/"
+                + newProduct.productID + "/"
+                + parseInt($(this).val());
 
-                navigation.hit(host, function(response) {
-                    if( response != "Success" ){
-                        nextPage = false;
-                        $("#message").text("Error: " + response);
-                    }
-                }) /*.fail(function(err) {
-                    nextPage = false;
-                    $("#message").text("Error: " + err.responseText);
-                })*/;
-            }
-        })
+            navigation.hit(host, function(response) {
+                if(response != "Success"){
+                    $("#message").text("Error: " + response);
+                }
+            })/*.fail(function(err) {
+                $("#message").text("Error: " + err.responseText);
+            })*/;
+        });
 
         newProduct.nextPage();
     },

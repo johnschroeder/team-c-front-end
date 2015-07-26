@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-<b class="container-fluid">
+<div class="container-fluid">
     <h1>New Product</h1>
     <hr/>
 
@@ -47,18 +47,21 @@
         </div>
     </div>
 
-    <div id="checkbox_cont" class="row">
-        <div class="col-sm-12">
-            <label>Select customers to associate:</label>
+    <div id="customers" class="form-group">
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="customer_select">Select customers to associate</label>
+            </div>
         </div>
 
-        <div class="customer_checkbox col-sm-12 hidden">
-            <div class="checkbox col-sm-12">
-                <input class="checkbox_input" type="checkbox">
-                <label class="checkbox_label"></label>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <select id="customer_select" class="form-control" multiple="multiple" />
             </div>
         </div>
     </div>
+
+    <br/>
 
     <div id="add_customer" class="row">
         <div class="col-sm-4">
