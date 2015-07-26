@@ -9,24 +9,27 @@
 <body>
 
 <div class="container-fluid display-inventory-container">
-    <h1>Track Inventory</h1>
+    <h1>View Inventory</h1>
     <hr/>
 
     <div class="row">
 
         <div class="col-sm-6 track-inventory-by">
-            <label for="track_by" class="input-label">Track Inventory By</label>
+            <label for="track_by" class="input-label">View Inventory By</label>
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
-                <option value="Item">Item</option>
+                <option value="Item">Product</option>
                 <option value="All">All</option>
             </select>
         </div>
 
         <div class="col-sm-6">
             <div id="customer-filter" class="form-group">
-                <label for="customer" class="input-label">Filter</label><br/>
-                <select id="customer" class="form-control filter customer"/>
+                <label for="customer" class="input-label">Search</label>
+                <div class="input-group">
+                    <input id="customer" class="form-control" label="Enter search for a customer." type="text"></input>
+                    <span class="input-group-btn"><button id="search_customer_button" class="btn btn-default">Search</button></span>
+                </div>
             </div>
             <div id="item-filter" class="form-group" hidden="hidden">
                 <label for="item" class="input-label">Search</label>
