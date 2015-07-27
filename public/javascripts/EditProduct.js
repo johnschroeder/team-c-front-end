@@ -2,10 +2,11 @@ var editProduct = {
     product: null,
 
     init: function () {
+        $("#customer_select").multiselect({maxHeight:128});
+
         //TODO use john's breadcrumb loader to load a new page here populated with the data.
         $("#item_name").text(window.args.ProductName);
         editProduct.getCustomers();
-
 
         var self = this;
 
@@ -32,46 +33,31 @@ var editProduct = {
         })
     },
     populateCustomers: function() {
-        if(editProduct.customers) {
-            var rowToCopy = $(".customer_checkbox").first();
-            var rowsContainer = $("#checkbox_cont");
-            rowsContainer.empty();
-
-            editProduct.customers.forEach(function(customer) {
-                var newRow = rowToCopy.clone();
-                newRow.find(".checkbox_label").text(customer.Name);
-                navigation.hit( "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
-                    var associates = JSON.parse(res);
-                    for (var i = 0; i < associates.length; i++) {
-                        if (customer.CustomerID == associates[i].CustomerID) {
-                            newRow.find(".checkbox_input").prop('checked', true);
-                        }
-                    }
-
-                });
-                newRow.removeClass("hidden");
-                newRow.appendTo( rowsContainer );
-                newRow.attr("data-ID", customer.CustomerID);
-            });
-
+        if(this.customers) {
             $("#customer_select").empty();
 
-            editProduct.customers.forEach(function(customer){
-                var option = $("<option/>")
-                    .text(customer.Name)
-                    .val(customer.CustomerID)
-                    .appendTo("#customer_select");
-
-                navigation.hit("/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
-                    var associates = JSON.parse(res);
-                    for (var i = 0; i < associates.length; ++i) {
-                        if (customer.CustomerID == associates[i].CustomerID) {
-                            option.prop("selected", true);
-                        }
-                    }
-                });
+            this.customers.forEach(function(customer){
+                $("#customer_select").append(
+                    $("<option/>")
+                        .text(customer.Name)
+                        .val(customer.CustomerID)
+                );
             });
         }
+
+        navigation.hit("/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
+            var associates = JSON.parse(res);
+
+            $("#customer_select option").each(function(){
+                for (var i = 0; i < associates.length; ++i) {
+                    if ($(this).val() == associates[i].CustomerID) {
+                        $(this).prop("selected", true);
+                    }
+                }
+            });
+
+            $("#customer_select").multiselect("rebuild");
+        });
     },
 
     addCustomer:function() {

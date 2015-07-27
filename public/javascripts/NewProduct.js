@@ -29,9 +29,9 @@ var newProduct = {
 
     //Tack the date on in the upper-right corner
     init:function() {
+        $("#customer_select").multiselect({maxHeight:128});
         newProduct.getCustomers();
         $("#date").text(newProduct.getDate());
-
     },
 
     getCustomers:function() {
@@ -46,10 +46,10 @@ var newProduct = {
         })
     },
     populateCustomers: function() {
-        if(newProduct.customers) {
+        if(this.customers) {
             $("#customer_select").empty();
 
-            newProduct.customers.forEach(function(customer){
+            this.customers.forEach(function(customer){
                 $("#customer_select").append(
                     $("<option/>")
                         .text(customer.Name)
@@ -57,6 +57,8 @@ var newProduct = {
                 );
             });
         }
+
+        $("#customer_select").multiselect("rebuild");
     },
 
     addCustomer:function() {
