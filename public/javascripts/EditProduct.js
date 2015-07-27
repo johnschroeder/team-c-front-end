@@ -113,7 +113,7 @@ var editProduct = {
         // Associate customers
         $("#customer_select option:selected").each(function(){
             var host ="/associateProductCustomer/"
-                + newProduct.productID + "/"
+                + window.args.ProductID + "/"
                 + parseInt($(this).val());
 
             navigation.hit(host, function(response) {
