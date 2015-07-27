@@ -29,7 +29,7 @@ var newProduct = {
 
     //Tack the date on in the upper-right corner
     init:function() {
-        $("#customer_select").multiselect({maxHeight:128});
+        $("#customer_select").multiselect({maxHeight:192});
         newProduct.getCustomers();
         $("#date").text(newProduct.getDate());
     },
@@ -46,6 +46,12 @@ var newProduct = {
         })
     },
     populateCustomers: function() {
+        var selected = [];
+
+        $("#customer_select option:selected").each(function(){
+            selected.push($(this).val());
+        });
+
         if(this.customers) {
             $("#customer_select").empty();
 
@@ -57,6 +63,14 @@ var newProduct = {
                 );
             });
         }
+
+        selected.forEach(function(v){
+            $("#customer_select option").each(function(){
+                if ($(this).val() == v) {
+                    $(this).prop("selected", true);
+                }
+            });
+        });
 
         $("#customer_select").multiselect("rebuild");
     },

@@ -2,7 +2,7 @@ var editProduct = {
     product: null,
 
     init: function () {
-        $("#customer_select").multiselect({maxHeight:128});
+        $("#customer_select").multiselect({maxHeight:192});
 
         //TODO use john's breadcrumb loader to load a new page here populated with the data.
         $("#item_name").text(window.args.ProductName);
@@ -33,6 +33,12 @@ var editProduct = {
         })
     },
     populateCustomers: function() {
+        var selected = [];
+
+        $("#customer_select option:selected").each(function(){
+            selected.push($(this).val());
+        });
+
         if(this.customers) {
             $("#customer_select").empty();
 
@@ -54,6 +60,14 @@ var editProduct = {
                         $(this).prop("selected", true);
                     }
                 }
+            });
+
+            selected.forEach(function(v){
+                $("#customer_select option").each(function(){
+                    if ($(this).val() == v) {
+                        $(this).prop("selected", true);
+                    }
+                });
             });
 
             $("#customer_select").multiselect("rebuild");
