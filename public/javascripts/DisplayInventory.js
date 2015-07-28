@@ -248,9 +248,10 @@
                     + "<div class='thumbnail unimplemented'>Thumbnail</div>"
                     + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                     + "</a></div>";
+                inventory_item += "<div class='pull-button'>" + "<span>"+
+                    "<button class='btn btn-default' onclick='gotoAddInventory(" + ProductID + "," + "\"" + ProductName + "\"" + ")' type='button'>Add</button> </span>";
 
-                inventory_item += "<div class='pull-button'>" +
-                    "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
+                inventory_item += "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
                 inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                 inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
                 inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
@@ -332,6 +333,13 @@ var gotoPullInventory = function (pid, pname, tlq) {
         ProductID: pid,
         ProductName: pname,
         TotalQuantity: tlq,
+        PreviousPage: "DisplayInventory.html"
+    });
+};
+var gotoAddInventory = function (pid, pname) {
+    navigation.go("AddInventory.html", {
+        ProductID: pid,
+        ProductName: pname || "",
         PreviousPage: "DisplayInventory.html"
     });
 };
