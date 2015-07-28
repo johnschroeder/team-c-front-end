@@ -8,28 +8,19 @@ var navigation = {
         }
         else {
             jQuery.get(window.apiRoute + "/getUserInfo", function (result) {
-                console.log(result.isConfirmed);
-                if(result.isConfirmed == 1) {
-                    jQuery('#loggedIn').toggle(true);
-                    jQuery('#login').toggle(false);
-                    jQuery('#usersName').text(function () {
-                        return result.FirstName + " " + result.LastName
+                jQuery('#loggedIn').toggle(true);
+                jQuery('#login').toggle(false);
+                jQuery('#usersName').text(function () {
+                    return result.FirstName + " " + result.LastName
+                });
+                jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
+                    $("#main_cont").load('/load/' + targetPage, {
+                        args: args,
+                        state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
                     });
-                    jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
-                        $("#main_cont").load('/load/' + targetPage, {
-                            args: args,
-                            state: navigation.stateTable[targetPage.toLowerCase().split(".")[0]]
-                        });
-                    }).fail(function () {
-                        alert("Your permission level doesn't allow you to access this page");
-                       navigation.go("Home.html");
-                    });
-                }
-                else{
-                    alert("Your account has been created but not yet confirmed. Please check your email and confirm your account.");
-                    jQuery('#login').toggle(true);
-                    jQuery('#loggedIn').toggle(false);
-                }
+                }).fail(function () {
+                        navigation.go("Home.html");
+                });
             }).fail(function () {
                 navigation.go("loginForm.html")
                 jQuery('#login').toggle(true);
