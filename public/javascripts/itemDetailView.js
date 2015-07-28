@@ -33,11 +33,26 @@ var itemDetailView = {
     },
 
     displayItem: function () {
+
+        var lastRunDate = this.item.MostRecent ? this.item.MostRecent : "No last run date available";
+
+        var dateString;
+
+        if (lastRunDate != "No last run date available")
+        {
+            lastRunDate = new Date(lastRunDate);
+            dateString = lastRunDate.getMonth() + "/" + lastRunDate.getDay() + "/" + lastRunDate.getFullYear() + " ";
+            var hhmm = (lastRunDate.getHours() != 0) ? lastRunDate.getHours() : "00";
+            hhmm += ":";
+            hhmm += (lastRunDate.getMinutes() != 0) ? lastRunDate.getMinutes() : "00";
+            lastRunDate = dateString + hhmm;
+        }
+
         $("#response").text("");
         $("#product_name").text(this.item.Name);
         $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
         "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
-        "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
+        "<div>Last run: <span>" + lastRunDate + "</span></div>");
     },
 
     renderError: function (error) {

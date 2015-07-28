@@ -249,9 +249,22 @@
                     + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                     + "</a></div>";
 
+                var lastRunDate = this.inventory[i].LastRunDate ? this.inventory[i].LastRunDate : "Last Run Date not available";
+                var dateString;
+
+                if (lastRunDate != "Last Run Date not available")
+                {
+                    lastRunDate = new Date(lastRunDate);
+                    dateString = lastRunDate.getMonth() + "/" + lastRunDate.getDay() + "/" + lastRunDate.getFullYear() + " ";
+                    var hhmm = (lastRunDate.getHours() != 0) ? lastRunDate.getHours() : "00";
+                    hhmm += ":";
+                    hhmm += (lastRunDate.getMinutes() != 0) ? lastRunDate.getMinutes() : "00";
+                    lastRunDate = dateString + hhmm;
+                }
+
                 inventory_item += "<div class='pull-button'>" +
                     "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
-                inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
+                inventory_item += "<div>Last run: " + lastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                 inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
                 inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
                 inventory_item += "</div>";

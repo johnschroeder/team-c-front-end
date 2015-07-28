@@ -9,7 +9,12 @@ var addInventory = {
     // Initialize the page.
     init: function() {
 
-        var optionBox = document.forms[0].location_input;
+        var locations = "No locations;sorry".split(";");
+
+        navigation.hit("/GetInventoryLocations/", function (res) {
+            locations = (JSON.parse(res)).locationList;
+            createEditableSelect(document.forms[0].location_input, locations);
+        });
 
         this.productId = parseInt(window.args.ProductID) || 0;
 
@@ -187,6 +192,7 @@ var addInventory = {
         var productId = this.getProductId();
         var total = this.getTotal();
         var location = this.getLocation();
+        var properLocation = true;
 
         navigation.hit("/GetInventoryLocations/", function(locations) {
             var locationList = JSON.parse(locations).locationList;
@@ -200,12 +206,23 @@ var addInventory = {
                 }
             }
             if (!alreadyIn) {
-                $.post(apiRoute + "/StoreLocation/" + location, function (res) {
-                    alert(location);
-                    var done = res;
-                });
+                if (confirm("Do you want to add " + location + " to the list of locations for next time?") == true) {
+                    $.post(apiRoute + "/StoreLocation/" + location, function (res) {
+
+                        var done = res;
+                    });
+                }
+                else{
+                    properLocation = false;
+                }
             }
+
         });
+
+        if (!properLocation)
+        {
+            return;
+        }
 
 
         if (productId == 0 || total == 0 || location == "") {
