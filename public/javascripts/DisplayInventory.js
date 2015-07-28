@@ -39,32 +39,29 @@
                 }
             });
 
-            this.customerSelector = $("#customer").selectize({
-                valueField: "label",
-                labelField: "label",
-                searchField: ["label"],
-                render: {
-                    option: function(item, escape) {
-                        return "<div>" + escape(item.label) + "</div>";
-                    }
+            // Customer search bar.
+            $("#customer").autocomplete({
+                minLength: 1,
+                source: function(request, response) {
+                    $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(request.term), response); // data = [{label:"item 1"}, {label:"item 2"}, ..]
                 },
-                load: function(query, callback) {
-                    this.clearOptions();
-
-                    if (!query.length) return callback();
-
-                    $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(query), function(data) {
-                        callback(data); // data = [{label:"customer 1"}, {label:"customer 2"}, ..]
-                    });
+                select: function(event, ui) {
+                    // ui { label, value }
+                    self.searchCustomer(ui.item.label);
                 }
             });
 
-            $("#customer").change(function() {
-                self.searchCustomer($("#customer option:selected").text());
+            $("#customer").keypress(function(e) {
+                if (e.which == 13) {
+                    self.searchCustomer($("#customer").val());
+                }
+            });
+
+            $("#search_customer_button").click(function() {
+                self.searchItem($("#customer").val());
             });
 
             // Item search bar.
-            // TODO should we use the same combobox as customer?
             $("#item").autocomplete({
                 minLength: 1,
                 source: function(request, response) {
@@ -86,30 +83,34 @@
                 self.searchItem($("#item").val());
             });
 
-            var query = window.location.search.substring(1).split('&', 1);
-            var toSet = query[0];
-            var setTo = query[1];
+            var query = window.location.search.substring(1).split('&');
+            var pair = query[0].split('=');
+            var key = decodeURIComponent(pair[0]);
+            var value = decodeURIComponent(pair[1]);
 
-            switch(toLowerCase(toSet)){
+            switch (key.toLowerCase()) {
                 case "customer":
-                    if($('#customer-filter').find('option[value="'+setTo+'"]').length > 0){
-                        $("#customer-filter").show();
-                        $('#customer-filter').val(setTo);
-                    }
+                    $("#track_by option:contains('Customer')").prop("selected", true);
+                    $("#track_by").trigger("change");
+                    this.customerSelector[0].selectize.addOption({label:value, value:value});
+                    this.customerSelector[0].selectize.addItem(value);
+                    this.searchCustomer(value);
                     break;
                 case "item":
-                    if($('#item-filter').find('option[value="'+setTo+'"]').length > 0){
-                        $("#item-filter").show();
-                        $('#item-filter').val(setTo);
-                    }
+                    $("#track_by option:contains('Item')").prop("selected", true);
+                    $("#track_by").trigger("change");
+                    $("#item").val(value);
+                    this.searchItem(value);
                     break;
                 case "all":
-                    if(toLowerCase(setTo) == "true") {
-                        self.showAllItems();
+                    if (value.toLowerCase() == "true") {
+                        $("#track_by option:contains('All')").prop("selected", true);
+                        $("#track_by").trigger("change");
+                        this.showAllItems();
                     }
                     break;
                 default:
-                    // Do nothing
+                    break;
             }
         },
 
@@ -130,7 +131,7 @@
 
                 self.inventory = data;
                 self.display_inventory();
-                self.customerSelector[0].selectize.clear();
+                $("#customer").val("");
             }).fail(function() {
                 self.render_error("Item: Search failed.");
             });
@@ -168,7 +169,7 @@
                     self.inventory = data;
                     //self.consolidate_inventory();
                     self.display_inventory();
-                    self.customerSelector[0].selectize.clear();
+                    $("#customer").val("");
                     $("#item").val("");
                 }
                 else {
@@ -244,12 +245,13 @@
                 var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
                 inventory_item +=
                     "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
-                    + "<div class='thumbnail unimplemented'>Thumbnail</div>"
+                    + "<div class='thumbnail'><div class='noImage'>No Image</div></div>"
                     + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                     + "</a></div>";
+                inventory_item += "<div class='pull-button'>" + "<span>"+
+                    "<button class='btn btn-default' onclick='gotoAddInventory(" + ProductID + "," + "\"" + ProductName + "\"" + ")' type='button'>Add</button> </span>";
 
-                inventory_item += "<div class='pull-button'>" +
-                    "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
+                inventory_item += "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
                 inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                 inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
                 inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
@@ -262,6 +264,23 @@
                  this.inventory[i].Runs[0].Customer +
                  "</option>"*/
             }
+
+            //Fetch the thumbnails
+            $('.detail-view').each(function(){
+                var id = $( this).data('id');
+                var self = this;
+
+                if( !id )
+                    return;
+
+                var thumbSource = navigation.makeImageURL( id );
+                navigation.checkImage( thumbSource,
+                    function(){
+                        $( self ).find(".thumbnail").html( "<img src='"+thumbSource+"'/>" );
+                    },
+                    function(){}
+                );
+            });
 
             //this.setup_customer_select_menu();
             this.setup_links();
@@ -334,6 +353,13 @@ var gotoPullInventory = function (pid, pname, tlq) {
         PreviousPage: "DisplayInventory.html"
     });
 };
+var gotoAddInventory = function (pid, pname) {
+    navigation.go("AddInventory.html", {
+        ProductID: pid,
+        ProductName: pname || "",
+        PreviousPage: "DisplayInventory.html"
+    });
+};
 
 var qrCode = function () {
     var filter = "";
@@ -342,7 +368,7 @@ var qrCode = function () {
     switch($("#track_by option:selected").val()) {
         case "Customer":
             filter = "customer";
-            keyword = encodeURIComponent($("#customer option:selected").text());
+            keyword = encodeURIComponent($("#customer").val());
             break;
         case "Item":
             filter = "item";
@@ -355,7 +381,7 @@ var qrCode = function () {
     if (!filter || !keyword) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location + "DisplayInventory?" + filter + "=" + keyword,
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "DisplayInventory?" + filter + "=" + keyword,
         PreviousPage: "DisplayInventory.html"
     });
 };

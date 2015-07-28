@@ -15,7 +15,7 @@ function populateByCartId() {
         var dropSelect = $("#selectDropDown")
             .append($("<option/>")
                 .val(-1)
-                .text("-- Select a Cart --")
+                .text("-- Select a Job --")
         );
 
         for (var i = 0; i < results.length; ++i) {
@@ -428,7 +428,7 @@ var qrCode = function () {
     if ($("#selectDropDown :selected").val() == -1) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location + "ViewCarts-" + $("#selectDropDown :selected").val(),
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#selectDropDown :selected").val(),
         PreviousPage: "ViewCarts.html"
     });
 };

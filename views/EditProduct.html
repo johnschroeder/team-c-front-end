@@ -4,13 +4,6 @@
     <meta charset="UTF-8"/>
     <title>Edit Product</title>
     <script src="javascripts/EditProduct.js"></script>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -19,8 +12,6 @@
     <h2>Item: <span id="item_name"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="editProduct.back()">Back</button>
     <hr/>
-
-
 
     <br/>
 
@@ -38,18 +29,22 @@
         </div>
     </div>
 
-    <div id="checkbox_cont" class="row">
-        <div class="col-sm-12">
-            <label>Select customers to associate:</label>
+    <div id="customers" class="form-group">
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="customer_select">Select Customers to Associate</label>
+            </div>
         </div>
 
-        <div class="customer_checkbox col-sm-12 hidden">
-            <div class="checkbox col-sm-12">
-                <input class="checkbox_input" type="checkbox">
-                <label class="checkbox_label"></label>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <select id="customer_select" class="form-control" multiple="multiple"/>
             </div>
         </div>
     </div>
+
+    <br/>
+
     <div id="add_customer" class="row">
         <div class="col-sm-4">
             <button id="add_customer_button" class="btn btn-default" onclick="editProduct.addCustomer()">Add Customer</button>
@@ -70,18 +65,15 @@
 
     <br/>
 
-    <!-- TODO add api route to store the image that is uploaded into s3 -->
-    <div class="row">
-        <div class="col-sm-3">
-            <label>Image</label>
-
-            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
-        </div>
-    </div>
-
-    <div class="row">
+    <div class="row uploadImageFormContainer">
+        <div class="thumbnail"></div>
         <div class="col-sm-4">
-            <button id="new_thumbnail_button" class="btn btn-default unimplemented">Upload Image</button>
+            Upload Image
+            <form id="uploadImageForm" enctype="multipart/form-data">
+                <input type="hidden" name="prodID" id="prodIDForImg" value="0" />
+                <input type="hidden" name="size" id="uploadFileSize" value="0" />
+                <input name="productImage" type="file" />
+            </form>
         </div>
     </div>
 

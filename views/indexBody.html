@@ -9,11 +9,14 @@
     <link rel="stylesheet" href="stylesheets/jquery-ui.structure.min.css"/>
     <link rel="stylesheet" href="stylesheets/jquery-ui.theme.min.css"/>
     <link rel="stylesheet" href="stylesheets/selectize.bootstrap3.css"/>
+    <link rel="stylesheet" href="stylesheets/bootstrap-multiselect.css"/>
     <link rel="stylesheet" href="stylesheets/style.css"/>
     <script src="javascripts/jquery-1.11.3.min.js"></script>
     <script src="javascripts/jquery-ui.min.js"></script>
     <script src="javascripts/selectize.min.js"></script>
     <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/bootstrap-multiselect.js"></script>
+    <script src="javascripts/bootstrap-multiselect-collapsible-groups.js"></script>
     <script src="javascripts/qrcode.min.js"></script>
     <script src="javascripts/nav_vert.js"></script>
     <script src="javascripts/navigation.js"></script>
@@ -28,33 +31,21 @@
                 <span class="glyphicon glyphicon-user"></span>
                 <span id="usersName"></span>
             </a>
+            <button id="logOut" type="button">Log Out</button>
         </div>
-        <a href="#about">About &nbsp</a>
+        <a href="#about" class="hidden">About &nbsp</a>
     </div>
     <div class="show-mobile-menu">V</div>
 </div>
 
 <div id="nav_vert" class="vertical-nav-bar">
-    <li><button class="btn btn-default action-button" id="DisplayInventory">Track Inventory</button></li>
-    <li><button class="btn btn-default action-button" id="ViewCarts">View Carts</button></li>
+    <li><button class="btn btn-default action-button" id="DisplayInventory">View Inventory</button></li>
+    <li><button class="btn btn-default action-button" id="ViewCarts">View Jobs</button></li>
     <li><button class="btn btn-default action-button" id="AddProduct">New Product</button></li>
 
-    <li><button class="btn btn-default">Reports</button>
-        <ul>
-            <li>
-                <button class="btn btn-default action-button subbutton" id="PreDefined">Pre-defined</button>
-            </li>
-            <li>
-                <button class="btn btn-default action-button subbutton" id="MakeMyOwn">Make My Own</button>
-            </li>
-        </ul>
-    </li>
 
-    <li><button class="btn btn-default">Administrator</button>
+    <li><button id="AdminBar" class="btn btn-default hidden">Administrator</button>
         <ul>
-            <li>
-                <button class="btn btn-default action-button subbutton" id="Audit">Audit</button>
-            </li>
             <li>
                 <button class="btn btn-default action-button subbutton" id="AdminLogs">Logs</button>
             </li>
@@ -72,7 +63,15 @@
 </div>
 
 <div id="main_cont" class="ng-view col-xs-8 main-content-container">
-    <script type="text/javascript">Home()</script>
+    <script type="text/javascript">stayOrRedirect()</script>
+    <script>
+        //TODO refactor to navigation.get when function is made, and if an error occurs then nobody is logged in and admin bar should remain hidden
+        $.get(window.apiRoute + "/getUserInfo", function(user) {
+            if (user.PermsID == 604) {
+                $("#AdminBar").removeClass("hidden");
+            }
+        });
+    </script>
 </div>
 
 </body>

@@ -29,9 +29,9 @@ var newProduct = {
 
     //Tack the date on in the upper-right corner
     init:function() {
+        $("#customer_select").multiselect({maxHeight:192});
         newProduct.getCustomers();
         $("#date").text(newProduct.getDate());
-
     },
 
     getCustomers:function() {
@@ -50,19 +50,33 @@ var newProduct = {
         })
     },
     populateCustomers: function() {
-        if(newProduct.customers) {
-            var rowToCopy = $(".customer_checkbox").first();
-            var rowsContainer = $("#checkbox_cont");
-            rowsContainer.empty();
+        var selected = [];
 
-            newProduct.customers.forEach(function(customer) {
-                var newRow = rowToCopy.clone();
-                newRow.find(".checkbox_label").text(customer.Name);
-                newRow.removeClass("hidden");
-                newRow.appendTo( rowsContainer );
-                newRow.attr("data-ID", customer.CustomerID);
+        $("#customer_select option:selected").each(function(){
+            selected.push($(this).val());
+        });
+
+        if(this.customers) {
+            $("#customer_select").empty();
+
+            this.customers.forEach(function(customer){
+                $("#customer_select").append(
+                    $("<option/>")
+                        .text(customer.Name)
+                        .val(customer.CustomerID)
+                );
             });
         }
+
+        selected.forEach(function(v){
+            $("#customer_select option").each(function(){
+                if ($(this).val() == v) {
+                    $(this).prop("selected", true);
+                }
+            });
+        });
+
+        $("#customer_select").multiselect("rebuild");
     },
 
     addCustomer:function() {
@@ -139,14 +153,10 @@ var newProduct = {
     },
 
     associateCustomers: function() {
-        var customerContainer = $("#checkbox_cont").children();
-        var nextPage = true;
-        customerContainer.each(function(){
-            if($(this).find(".checkbox_input")[0].checked) {
-                var host = window.apiRoute
-                    + "/associateProductCustomer/"
-                    + newProduct.productID + "/"
-                    + $(this).data().id;
+        $("#customer_select option:selected").each(function(){
+            var host ="/associateProductCustomer/"
+                + newProduct.productID + "/"
+                + parseInt($(this).val());
 
                 navigation.get(host, function(err, response) {
                     if(err){

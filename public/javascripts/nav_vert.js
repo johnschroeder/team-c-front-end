@@ -25,20 +25,6 @@ $(document).ready(function () {
         AddProduct();
     });
 
-    $('#PreDefined').on( 'touchend click', function( event ){
-        event.preventDefault();
-        PreDefinedReports();
-    });
-
-    $('#MakeMyOwn').on( 'touchend click', function( event ){
-        event.preventDefault();
-        MakeMyOwnReport();
-    });
-
-    $('#Audit').on( 'touchend click', function( event ){
-        event.preventDefault();
-        Audit();
-    });
 
     $('#AdminLogs').on( 'touchend click', function( event ){
         event.preventDefault();
@@ -64,6 +50,11 @@ $(document).ready(function () {
         event.preventDefault();
         loginPage();
     });
+    $('#logOut').on( 'touchend click', function( event ){
+        event.preventDefault();
+        logOutPage();
+    });
+
 
     $('.header-logo').on( 'touchend click', function( event ){
         event.preventDefault();
@@ -100,6 +91,21 @@ function preventBehavior(e)
     e.preventDefault();
 };
 
+function getCurrentFileName(){
+    var pagePathName= window.location.pathname;
+    return pagePathName.substring(pagePathName.lastIndexOf("/") + 1);
+}
+
+function stayOrRedirect()
+{
+    var stayPage = getCurrentFileName();
+    if (stayPage == "")
+    {
+        Home();
+    }
+}
+
+
 function Home(){
     navigation.go("Home.html");
 }
@@ -121,19 +127,7 @@ function DisplayInventories(){
     navigation.go("DisplayInventory.html");
 }
 
-// Reports
-function PreDefinedReports(){
-    $('#main_cont').text("PreDefinedReports");
-}
-
-function MakeMyOwnReport(){
-    $('#main_cont').text("MakeMyOwnReport");
-}
-
 // Administrator
-function Audit(){
-    $('#main_cont').text("Audit");
-}
 
 function Logs(){
     navigation.go("Logs.html");
@@ -158,4 +152,16 @@ function ViewUsers(){
 
 function loginPage() {
     navigation.go("loginForm.html");
+}
+function logOutPage(){
+    $("#AdminBar").addClass("hidden");
+    $("#AdminLogs").addClass("hidden");
+    $("#AddUsers").addClass("hidden");
+    $("#DeleteUsers").addClass("hidden");
+    $("#ViewUsers").addClass("hidden");
+    navigation.hit("/getUserInfo", function(userName){
+    navigation.hit("/Login/LogOut/" + userName.Username,function(res){
+        loginPage();
+        });
+    });
 }

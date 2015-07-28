@@ -1,20 +1,18 @@
 <html>
 <head>
     <title>Login Page</title>
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="javascripts/nav_vert.js"></script>
     <script src="javascripts/login.js"></script>
 </head>
 <body>
 
 <h1>Welcome to Login!</h1>
 
+<div id="invalidCreds" class="alert alert-danger hidden" role="alert">Your username and password don't match our records please try again!</div>
 <div class="input-row">
     <div class="input-label">Username</div>
     <input type="text" id="username">
 </div>
+
 
 <div class="input-row">
     <div class="input-label">Password</div>
@@ -23,9 +21,6 @@
 
 <div class="input-row">
     <button type="button" id="signOn" onclick="sendAuth()">Sign On</button>
-</div>
-<div>
-<a onclick="CreateUser()">Create Account &nbsp</a>
 </div>
 
 </body>
