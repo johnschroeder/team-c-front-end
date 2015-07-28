@@ -168,7 +168,6 @@ var newProduct = {
                         $("#message").text("Error: " + response);
                     }
                 })
-            }
         });
 
         newProduct.nextPage();

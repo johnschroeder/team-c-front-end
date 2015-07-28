@@ -20,8 +20,9 @@ function sendAuth() {
                         alert("login success");
                     }
 
-                if (data == "Invalid Credentials!") {
-                    $("#invalidCreds").removeClass("hidden");
+                    if (data == "Invalid Credentials!") {
+                        $("#invalidCreds").removeClass("hidden");
+                    }
                 }
             }
         );
