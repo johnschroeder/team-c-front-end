@@ -155,6 +155,10 @@ function loginPage() {
 }
 function logOutPage(){
     $("#AdminBar").addClass("hidden");
+    $("#AdminLogs").addClass("hidden");
+    $("#AddUsers").addClass("hidden");
+    $("#DeleteUsers").addClass("hidden");
+    $("#ViewUsers").addClass("hidden");
     navigation.hit("/getUserInfo", function(userName){
     navigation.hit("/Login/LogOut/" + userName.Username,function(res){
         loginPage();
