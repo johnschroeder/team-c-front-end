@@ -57,7 +57,6 @@ var itemDetailView = {
                 $("#runs").append("<div style=\"background:lightgray\" class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityReserved + "</div>" + " </div>");
             } else {
                 $("#runs").append("<div class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityReserved + "</div>" + " </div>");
-
             }
         }
     },
