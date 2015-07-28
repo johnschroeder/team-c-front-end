@@ -25,20 +25,6 @@ $(document).ready(function () {
         AddProduct();
     });
 
-    $('#PreDefined').on( 'touchend click', function( event ){
-        event.preventDefault();
-        PreDefinedReports();
-    });
-
-    $('#MakeMyOwn').on( 'touchend click', function( event ){
-        event.preventDefault();
-        MakeMyOwnReport();
-    });
-
-    $('#Audit').on( 'touchend click', function( event ){
-        event.preventDefault();
-        Audit();
-    });
 
     $('#AdminLogs').on( 'touchend click', function( event ){
         event.preventDefault();
@@ -141,19 +127,7 @@ function DisplayInventories(){
     navigation.go("DisplayInventory.html");
 }
 
-// Reports
-function PreDefinedReports(){
-    $('#main_cont').text("PreDefinedReports");
-}
-
-function MakeMyOwnReport(){
-    $('#main_cont').text("MakeMyOwnReport");
-}
-
 // Administrator
-function Audit(){
-    $('#main_cont').text("Audit");
-}
 
 function Logs(){
     navigation.go("Logs.html");
@@ -180,6 +154,11 @@ function loginPage() {
     navigation.go("loginForm.html");
 }
 function logOutPage(){
+    $("#AdminBar").addClass("hidden");
+    $("#AdminLogs").addClass("hidden");
+    $("#AddUsers").addClass("hidden");
+    $("#DeleteUsers").addClass("hidden");
+    $("#ViewUsers").addClass("hidden");
     navigation.hit("/getUserInfo", function(userName){
     navigation.hit("/Login/LogOut/" + userName.Username,function(res){
         loginPage();
