@@ -50,7 +50,7 @@ var itemDetailView = {
         //this.runs.forEach(function (run) {
         // using for loop instead of forEach to reverse order
         $("#runs").append("<div class=\"col-sm-12\">" + "<b>" + "<div class=\"col-sm-1\">" + "Run ID" + "</div>" + "<div class=\"col-sm-1\">" + "Alt ID" + "</div>" + "<div class=\"col-sm-2\">" + "Location" + "</div>" + "<div class=\"col-sm-2\">" + "Date Created" + "</div>" + "<div class=\"col-sm-2\">" + "Initial Quantity" + "</div>" + "<div class=\"col-sm-2\">" + "Quantity Available" + "</div>" + "<div class=\"col-sm-2\">" + "Quantity Reserved" + "</div>" + "</b>" + "</div>");
-        for (var i = this.runs.length - 1; i > 0; --i) {
+        for (var i = this.runs.length - 1; i >= 0; --i) {
             var run = this.runs[i];
             var dateRegex = /\d\d\d\d-\d\d-\d\d/;
             //$("#runs").append("<div>" + "RunID: " + run.RunID + "&nbsp &nbsp" + " Location: " + run.Location + "&nbsp &nbsp" + " DateCreated: " + dateRegex.exec(run.DateCreated) + "InitialQuantity: " + run.InitialQuantity + "&nbsp &nbsp" + " QuantityAvailable: " + run.QuantityAvailable + "&nbsp &nbsp" + " QuantityReserved: " + run.QuantityReserved + "<br/><br/>" + "</div>");
