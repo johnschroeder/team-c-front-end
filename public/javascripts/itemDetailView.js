@@ -47,9 +47,12 @@ var itemDetailView = {
     },
 
     displayRuns: function () {
-        this.runs.forEach(function (run) {
-            $("#runs").append("<div>" + "RunID:" + run.RunID + "   Location:" + run.Location +  "DateCreated:" + run.DateCreated + "   InitialQuantity:" + run.InitialQuantity + "   QuantityAvailable:" + run.QuantityAvailable + "   QuantityReserved:" + run.QuantityReserved + "</div>");
-        });
+        //this.runs.forEach(function (run) {
+        // using for loop instead of forEach to reverse order
+        for (var i = this.runs.length - 1; i > 0; --i) {
+            var run = this.runs[i];
+            $("#runs").append("<div>" + "RunID:" + run.RunID + "   Location:" + run.Location + "DateCreated:" + run.DateCreated + "   InitialQuantity:" + run.InitialQuantity + "   QuantityAvailable:" + run.QuantityAvailable + "   QuantityReserved:" + run.QuantityReserved + "</div>");
+        }
     },
 
     renderError: function (error) {
