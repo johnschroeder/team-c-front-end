@@ -55,5 +55,17 @@ var navigation = {
             }
         })
 
+    },
+    checkImage: function( src, onLoad, onError ) {
+
+        var img = new Image();
+
+        img.onload = onLoad;
+        img.onerror = onError;
+        img.src = src;
+
+    },
+    makeImageURL: function( productID ) {
+        return 'http://images.thisisimp.com.s3.amazonaws.com/'+productID+'.jpeg';
     }
 }
