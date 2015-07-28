@@ -99,8 +99,6 @@ var itemDetailView = {
                 //$("#response").append("<br/>" + "1. Inventory of the product is 0.");
                 //$("#response").append("<br/>" + "2. De-associate all customers from the product");
             }
-        }).fail(function (res) {
-
         });
     },
 
