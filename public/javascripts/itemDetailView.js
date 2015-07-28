@@ -51,7 +51,8 @@ var itemDetailView = {
         // using for loop instead of forEach to reverse order
         for (var i = this.runs.length - 1; i > 0; --i) {
             var run = this.runs[i];
-            $("#runs").append("<div>" + "RunID:" + run.RunID + "   Location:" + run.Location + "DateCreated:" + run.DateCreated + "   InitialQuantity:" + run.InitialQuantity + "   QuantityAvailable:" + run.QuantityAvailable + "   QuantityReserved:" + run.QuantityReserved + "</div>");
+            var dateRegex = /\d\d\d\d-\d\d-\d\d/;
+            $("#runs").append("<div>" + "RunID:" + run.RunID + "Location:" + run.Location + "DateCreated:" + dateRegex.exec(run.DateCreated) + "<br/>" + "InitialQuantity:" + run.InitialQuantity + "QuantityAvailable:" + run.QuantityAvailable + "QuantityReserved:" + run.QuantityReserved + "<br/><br/>" + "</div>");
         }
     },
 
