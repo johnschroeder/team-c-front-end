@@ -3,14 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8"/>
     <title>New Product</title>
-    <script src="javascripts/EditProduct.js"></script>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
+    <script src="javascripts/NewProduct.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -20,13 +13,6 @@
     <div>Date: <span id="date"></span></div>
 
     <br/>
-
-    <div id="customer" class="row form-group">
-        <div class="col-sm-12">
-            <label for="customer_input">Customer</label>
-            <input id="customer_input" class="form-control" type="text"/>
-        </div>
-    </div>
 
     <div id="product_name" class="row form-group">
         <div class="col-sm-12">
@@ -42,18 +28,49 @@
         </div>
     </div>
 
-    <!-- TODO add api route to store the image that is uploaded into s3 -->
-    <div class="row">
-        <div class="col-sm-3">
-            <label>Image</label>
+    <div id="customers" class="form-group">
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="customer_select">Select Customers to Associate</label>
+            </div>
+        </div>
 
-            <div id="thumbnail" class="thumbnail unimplemented">Thumbnail</div>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <select id="customer_select" class="form-control" multiple="multiple"/>
+            </div>
         </div>
     </div>
 
-    <div class="row">
+    <br/>
+
+    <div id="add_customer" class="row">
         <div class="col-sm-4">
-            <button id="new_thumbnail_button" class="btn btn-default">Upload Image</button>
+            <button id="add_customer_button" class="btn btn-default" onclick="newProduct.addCustomer()">Add Customer</button>
+        </div>
+    </div>
+
+    <div id="add_customer_text" class="row hidden">
+        <div class="col-sm-4">
+            <input id="new_customer_text" type="text" placeholder="New customer">
+        </div>
+    </div>
+    <br/>
+    <div id="submit_customer" class="row hidden">
+        <div class="col-sm-4">
+            <button id="submit_customer_button" class="btn btn-default" onclick="newProduct.submitCustomer()">Submit New Customer</button>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="checkbox">
+                <label>
+                    <input id="new_run_checkbox" type="checkbox"> Create a new run of this item when finished</input>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -61,91 +78,13 @@
 
     <div class="row">
         <div class="col-sm-4">
-            <button id="submit" class="btn btn-default">Create</button>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"> Create a new run of this item when finished</input>
-                </label>
-            </div>
+            <button id="submit" class="btn btn-default" onclick="newProduct.submit()">Create</button>
         </div>
     </div>
 
     <div id="message"></div>
 </div>
-
-<script type="text/javascript">
-    ( function( $ ){
-
-        /**
-         * Generates the current date and returns it as a string
-         * @returns {string}
-         */
-        function getDate() {
-
-            var date_object = new Date();
-            var day = date_object.getDate();
-            var month = date_object.getMonth() + 1;
-            var year = date_object.getFullYear();
-
-            var date = year + "-";
-            if( month < 10 )
-                date += "0";
-            date += month + "-";
-            if( day < 10 )
-                date += "0";
-            date += day;
-
-            return date;
-        }
-
-        //Tack the date on in the upper-right corner
-        $("#date").text(getDate());
-
-        var submit_button = $("#submit");
-
-        //Submit the form when the submit button is clicked
-        submit_button.on( 'click', function(){
-            $("#message").text("");
-
-            var host = window.apiRoute + "/newProductSubmission/";
-            var customer = $("#customer_input").val();
-            var product_name = $("#product_name_input").val();
-            var description = $("#description_input").val();
-            var date = getDate();
-
-            if( !customer.length || !product_name.length || !description.length ){
-                $("#message").text("Error: One or more required fields isn't filled out");
-                return;
-            }
-
-            host = host
-                    + product_name + "/"
-                    + customer + "/"
-                    + description + "/"
-                    + date + "/";
-
-            submit_button.prop("disabled", true);
-
-            $.get(host, function (response) {
-                if( response == "Success" ){
-                    $("#message").text("Successfully created product");
-                    submit_button.prop("disabled", false);
-                }
-                else {
-                    $("#message").text("Error: " + response);
-                    submit_button.prop("disabled", false);
-                }
-            }).fail(function (err) {
-                $("#message").text("Error: " + err.responseText);
-                submit_button.prop("disabled", false);
-            });
-        });
-    })( jQuery );
-</script>
+<script>newProduct.init()</script>
 </body>
 </html>
+

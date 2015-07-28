@@ -8,7 +8,7 @@ var pullInventory = {
         productID: null,
         productName: null,
         previousPage: null,
-        totalQuantity: null,
+        totalQuantity: null
     },
 
 
@@ -18,10 +18,18 @@ var pullInventory = {
     init: function(){
 
         //grab and save navigation object arguments
-        this.navigationArgs.productID = window.args.ProductID;
-        this.navigationArgs.productName = window.args.ProductName;
-        this.navigationArgs.previousPage = window.args.PreviousPage;
-        this.navigationArgs.totalQuantity = window.args.TotalQuantity;
+        if (window.args.ProductID) {
+            this.navigationArgs.productID = window.args.ProductID;
+            this.navigationArgs.productName = window.args.ProductName;
+            this.navigationArgs.previousPage = window.args.PreviousPage;
+            this.navigationArgs.totalQuantity = window.args.TotalQuantity;
+            navigation.saveState(window.args);
+        } else if (window.state.ProductID) {
+            this.navigationArgs.productID = window.state.ProductID;
+            this.navigationArgs.productName = window.state.ProductName;
+            this.navigationArgs.previousPage = window.state.PreviousPage;
+            this.navigationArgs.totalQuantity = window.state.TotalQuantity;
+        }
 
         $('#ProductName').text(this.navigationArgs.productName);
         $('#AvailableAmout').text(this.navigationArgs.totalQuantity);
@@ -43,7 +51,7 @@ var pullInventory = {
         var addNew = new Option("New ---", -1);
         $(dropdown).append($(addNew));
 
-        $.get(window.apiRoute + "/GetSizeByProductID/" + pID, function(res) {
+        navigation.hit( "/GetSizeByProductID/" + pID, function(res) {
             var temp = $.parseJSON(res);
 
             for (var i = 0; i < temp.length; i++) {
@@ -53,9 +61,10 @@ var pullInventory = {
                 var exist = 0;
                 $(dropdown).append($(option));
             }
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             $("#response").text("Error: Init: Connection error.");
-        });
+            $("#response").text("Error: Init: Connection error.");
+        });*/;
     },
 
 
@@ -173,7 +182,7 @@ var pullInventory = {
         var productID = this.navigationArgs.ProductID;
         var productName = this.navigationArgs.ProductName;
 
-        $.get(window.apiRoute + "/addProductSize/" + productID + "/" + sizeName + "/" + size, function (res) {
+        navigation.hit( "/addProductSize/" + productID + "/" + sizeName + "/" + size, function (res) {
             alert("New Size " + sizeName + " for product " + productName + " Added!");
             this.BindNewOption(sizeName, size);
         });
@@ -182,16 +191,16 @@ var pullInventory = {
 
 
     /**
-     * I don't know what this does or what the arguments are
-     * @param n
-     * @param s
+     * @param n : sizeName of the newly added size
+     * @param s : size of the newly added size
+     * This function bind newly created size to the size dorpdown in the input child rows
      */
     BindNewOption: function( n, s ) {
 
         var productID = this.navigationArgs.ProductID;
         var productName = this.navigationArgs.ProductName;
 
-        $.get(window.apiRoute + "/GetSizeMapID/" + productID + "/" + n + "/" + s, function (resp) {
+        navigation.hit( "/GetSizeMapID/" + productID + "/" + n + "/" + s, function (resp) {
             var temp = $.parseJSON(resp);
             var smID = temp[0].SizeMapID;
 
@@ -208,9 +217,9 @@ var pullInventory = {
             $('#SizeName').val('');
             $('#SizeNumber').val('');
             $("#AddNewSize").hide();
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             $("#response").text("Error: BindNewOption: Connection error.");
-        });
+        });*/;
     },
 
 
@@ -225,7 +234,7 @@ var pullInventory = {
 
         var username = 'don';//this needs to be swap out for real username
 
-        $.get(window.apiRoute + "/Carts/GetCartsByUser/" + username, function (resp) {
+        navigation.hit( "/Carts/GetCartsByUser/" + username, function (resp) {
             var temp = $.parseJSON(resp);
 
             for (var i = 0; i < temp.length; i++) {
@@ -233,9 +242,9 @@ var pullInventory = {
                 var cartoption = new Option(obj.CartName, obj.CartID);
                 $('#slCart').append($(cartoption));
             }
-        }).fail(function(res) {
+        })/*.fail(function(res) {
             $("#response").text("Error: AddToExistingCart: Connection error.");
-        });
+        });*/;
     },
 
 
@@ -250,7 +259,7 @@ var pullInventory = {
         $('#iptCartName').val('');
         $('#iptDaysToSave').val('');
 
-        $.get(window.apiRoute + "/Carts/GetPossibleAssignees/", function(resp) {
+        navigation.hit( "/Carts/GetPossibleAssignees/", function(resp) {
             var temp = $.parseJSON(resp);
 
             for (var i = 0; i < temp.length; i++) {
@@ -258,9 +267,9 @@ var pullInventory = {
                 var assOption = new Option(obj.Assignee);
                 $('#sltAssignee').append($(assOption));
             }
-        }).fail(function(res) {
+        }) /*.fail(function(res) {
             $("#response").text("Error: AddToNewCart: Connection error.");
-        });
+        })*/;
     },
 
 
@@ -284,7 +293,7 @@ var pullInventory = {
         if (keepdays <= 0) keepdays = 1;
 
         var self = this;
-        $.get(window.apiRoute + "/Carts/CreateCart/" + cartName + "/" + reporter + "/" + assignee + "/" + keepdays, function () {
+        navigation.hit("/Carts/CreateCart/" + cartName + "/" + reporter + "/" + assignee + "/" + keepdays, function () {
             alert("New Cart " + cartName + " Added!");
             //clear inputs
             //delete options in assignee
@@ -306,7 +315,45 @@ var pullInventory = {
      */
     AddOneItemToCart: function( cID, smID, qty ){
 
-        $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cID + "/" + smID + "/" + qty, function (resp) {
+        navigation.hit("/Carts/AddItemToCartGeneral/" + cID + "/" + smID + "/" + qty, function (resp) {
+            var msg = "";
+
+            msg = resp.split('####', 2)[0];
+            if (msg.trim() != 'Success') {
+                $("#response").text(msg);
+            }
+
+            return msg;
+        })/*.fail(function(res) {
+            var msg = "Error: Init: Connection error.";
+            $("#response").text(msg);
+            return msg;
+        })*/;
+    },
+
+    /**
+     * Send every row recursively to the back end for saving
+     * @param entry - The jQuery object containing the list of row entries
+     */
+    AddOneItemToCartRecursively: function(entry){
+
+        var nextEntry = entry;
+
+        while (nextEntry.length && !(nextEntry.find('option:selected').val() > 0)) {
+            nextEntry = nextEntry.next();
+        }
+
+        if (!nextEntry.length) {
+            return;
+        }
+
+        var sizeMapID = $(nextEntry).find('.Size').find('option:selected').val();
+        var cartID = $('#slCart').find('option:selected').val();
+        var quantity = $(nextEntry).find('.Count').val();
+
+        var self = this;
+
+        $.get(window.apiRoute + "/Carts/AddItemToCartGeneral/" + cartID + "/" + sizeMapID + "/" + quantity, function (resp) {
             var msg = "";
 
             msg = resp.split('####', 2)[0];
@@ -315,11 +362,31 @@ var pullInventory = {
                 $("#response").text(msg);
             }
 
-            return msg;
+            console.log(msg);
+        }).then(function() {
+            nextEntry = nextEntry.next();
+
+            while (nextEntry.length && !(nextEntry.find('option:selected').val() > 0)) {
+                nextEntry = nextEntry.next();
+            }
+
+            if (nextEntry.length) {
+                self.AddOneItemToCartRecursively(nextEntry);
+            } else {
+                $('#slCart').empty();
+                $("#divSelectCart").hide();
+                alert("Items added to cart ");
+                navigation.go(self.navigationArgs.previousPage, {ProductID: self.navigationArgs.productID});
+            }
         }).fail(function(res) {
-            var msg = "Error: Init: Connection error.";
-            $("#response").text(msg);
-            return msg;
+            if(res.status == 511){
+                console.log("Access Denied!");
+                alert("Sorry your permission level doesn't allow you to access this page.");
+            }
+            if(res.status == 510){
+                navigation.go("loginForm.html");
+                alert("You have to log in before you can see this page!");
+            }
         });
     },
 
@@ -331,34 +398,13 @@ var pullInventory = {
 
         var availableAmount = parseInt($('#AvailableAmout').text());
         var currentTotal = parseInt($('#TotalInventory').text());
-        var self = this;
 
         if (availableAmount < currentTotal) {
             alert("There is not enough inventory to pull. Please Update Pull Amount");
             return;
         }
 
-        $('#InputDiv').children('.InputChild').each(function () {
-            var subtotal = 0;
-            var sizeMapID = $(this).find('.Size').find('option:selected').val();
-            var cartID = $('#slCart').find('option:selected').val();
-
-            if (sizeMapID > 0) {
-                var count = $(this).find('.Count').val();
-                var message = self.AddOneItemToCart(cartID, sizeMapID, count);
-                console.log(message);
-
-                if (message != 'Success') {
-                    alert(message);
-                    return;
-                }
-            }
-        });
-
-        $('#slCart').empty();
-        $("#divSelectCart").hide();
-        alert("Items added to cart ");
-        navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
+        this.AddOneItemToCartRecursively($('#InputDiv').children('.InputChild').first());
     },
 
 
@@ -366,8 +412,18 @@ var pullInventory = {
      * Go back to the previous page
      */
     back: function(){
+        navigation.go(this.navigationArgs.previousPage);
+    },
 
-        navigation.go(this.navigationArgs.PreviousPage, {ProductID: this.navigationArgs.ProductID});
+    /**
+     * Show the QR code for the current page
+     */
+    qrCode: function () {
+        if (!this.navigationArgs.productID || !$("#slCart :selected").val()) return;
+        navigation.go("ShowQRCode.html", {
+            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID,
+            PreviousPage: "PullInventory.html"
+        });
     }
 
 };

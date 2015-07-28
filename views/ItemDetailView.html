@@ -3,13 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8"/>
     <title>Current Inventory</title>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
+    <script src="javascripts/itemDetailView.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -21,7 +15,7 @@
 
     <div class="row">
         <div class="col-sm-3">
-            <div class="thumbnail unimplemented">Thumbnail</div>
+            <div class="thumbnail">Thumbnail</div>
         </div>
 
         <div id="details" class="col-sm-9"></div>
@@ -31,105 +25,27 @@
 
     <div id="buttons" class="row">
         <div class="col-sm-12">
-            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">Add
-                Inventory
+            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">
+                Add Inventory
             </button>
             <button class="btn btn-default" title="Pull inventory from this product." onclick="itemDetailView.pull()">
                 Pull Inventory
             </button>
-            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">View/Edit
-                Product
+            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">
+                View/Edit Product
             </button>
-            <button class="btn btn-default pull-right" title="Delete this product.">Delete Product</button>
+            <button id="qr_button" class="btn btn-default" title="Show the QR code for this page." onclick="itemDetailView.qrCode()">
+                Show QR Code
+            </button>
+            <button class="btn btn-default pull-right" title="Delete this product." onclick="itemDetailView.Delete()">Delete Product</button>
         </div>
     </div>
 
     <br/>
-    <hr/>
-
-    <h2>Timeline</h2>
-
-    <div class="row form-group">
-        <div class="col-sm-2">
-            <select class="form-control">
-                <option>All</option>
-                <option>Runs</option>
-                <option>Pulls</option>
-                <option>Changes</option>
-            </select>
-        </div>
-    </div>
 
     <div id="response"></div>
 </div>
 <script>
-    var itemDetailView = {
-        productID: null,
-        item: null,
-
-        init: function () {
-            this.productID = window.args.ProductID;
-
-            var self = this;
-
-            $.get(window.apiRoute + "/itemDetail/" + this.productID, function (response) {
-                if (response && response.length) {
-                    self.item = jQuery.parseJSON(response)[0];
-                    //console.log(self.item);
-                    self.productName = self.item.Name;
-                    self.displayItem();
-                } else {
-                    self.renderError("No inventory found");
-                }
-            }).fail(function (response) {
-                self.renderError("Failed to load inventory: " + response);
-            });
-        },
-
-        displayItem: function () {
-            $("#product_name").text(this.item.Name);
-            $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
-                    "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
-                    "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
-        },
-
-        renderError: function (error) {
-            $("#response").text("Error: " + error);
-        },
-
-        add: function () {
-            if (!this.productID || !this.item) return;
-            navigation.go("AddInventory.html", {
-                ProductID: this.productID,
-                ProductName: this.item.Name || "",
-                PreviousPage: "ItemDetailView.html"
-            });
-        },
-
-        pull: function () {
-            if (!this.productID || !this.item) return;
-            navigation.go("PullInventory.html", {
-                ProductID: this.productID,
-                ProductName: this.item.Name || "",
-                TotalQuantity: this.item.TotalAvailable,
-                PreviousPage: "ItemDetailView.html"
-            });
-        },
-
-        edit: function () {
-            if (!this.productID || !this.item) return;
-            navigation.go("EditProduct.html", {
-                ProductID: this.productID,
-                ProductName: this.item.Name || "",
-                PreviousPage: "ItemDetailView.html"
-            });
-        },
-
-        back: function () {
-            navigation.go("DisplayInventory.html", {ProductID: window.args.ProductID});
-        }
-    };
-
     $(function () {
         itemDetailView.init();
     });

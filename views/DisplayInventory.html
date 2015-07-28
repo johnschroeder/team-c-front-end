@@ -3,224 +3,50 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Current Inventory</title>
+    <script src="javascripts/DisplayInventory.js"></script>
 </head>
 
 <body>
 
 <div class="container-fluid display-inventory-container">
-    <h1>Track Inventory</h1>
+    <h1>View Inventory</h1>
     <hr/>
 
     <div class="row">
 
         <div class="col-sm-6 track-inventory-by">
-            <label for="track_by" class="input-label">Track Inventory By</label>
+            <label for="track_by" class="input-label">View Inventory By</label>
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
+                <option value="Item">Product</option>
+                <option value="All">All</option>
             </select>
         </div>
 
         <div class="col-sm-6">
-            <label for="customer" class="input-label">Filter</label>
-            <select id="customer" class="form-control filter customer">
-                <option value="0">All</option>
-            </select>
+            <div id="customer-filter" class="form-group">
+                <label for="customer" class="input-label">Search</label>
+                <div class="input-group">
+                    <input id="customer" class="form-control" label="Enter search for a customer." type="text"></input>
+                    <span class="input-group-btn"><button id="search_customer_button" class="btn btn-default">Search</button></span>
+                </div>
+            </div>
+            <div id="item-filter" class="form-group" hidden="hidden">
+                <label for="item" class="input-label">Search</label>
+                <div class="input-group">
+                    <input id="item" class="form-control" label="Enter search for an item." type="text"></input>
+                    <span class="input-group-btn"><button id="search_item_button" class="btn btn-default">Search</button></span>
+                </div>
+            </div>
         </div>
     </div>
+
+    <button id="qr_button" class="btn btn-default" title="Show the QR code for this page." onclick="qrCode()">
+        Show QR Code
+    </button>
 
     <div class="inventory-container"></div>
 
 </div>
-
-<script>
-
-    (function($){
-
-        /**
-         * Handles the display-all functionality and filtering
-         */
-        var display_inventory = {
-
-            host: window.apiRoute+"/displayInventory/",
-            inventory: false,
-            consolidated: false,
-
-            /**
-             * Go fetch everything and get it set up
-             */
-            init: function() {
-
-                var self = this;
-                $.get( this.host, function( response ) {
-
-                    if( response && response.length ){
-
-                        self.inventory = jQuery.parseJSON( response );
-                        //self.consolidate_inventory();
-                        self.display_inventory();
-
-                    }
-                    else {
-
-                        self.render_error( "No inventory found" );
-                    }
-
-                }).fail( function( response ){
-
-                    self.render_error( "Failed to load inventory: " + response );
-
-                });
-
-            },
-
-            /**
-             * Consolidate all of the items by product id
-             */
-            /*consolidate_inventory: function() {
-
-                this.consolidated = new Array();
-                if( !this.inventory || !this.inventory.length )
-                    return;
-
-                for( var i = 0; i < this.inventory.length; ++i ){
-
-                    var found = false;
-                    for( var j = 0; j < this.consolidated.length; ++j ){
-
-                        if( this.consolidated[j].ProductID == this.inventory[i].ProductID ){
-                            found = true;
-                            this.consolidated[j].Runs.push( this.inventory[i] );
-                            this.consolidated[j].Total += this.inventory[i].Amount;
-                            this.consolidated[j].Runs.sort( function(a, b){ return a.Date.localeCompare( b.Date ) } );
-                            break;
-                        }
-
-                    }
-
-                    if( !found ){
-                        this.consolidated.push({
-                            ProductID: this.inventory[i].ProductID,
-                            Total: this.inventory[i].Amount,
-                            Runs: [ this.inventory[i] ]
-                        });
-                    }
-                }
-            },*/
-
-            /**
-             * Output all of the items to the screen
-             */
-            display_inventory: function() {
-
-                //if( !this.consolidated || !this.consolidated.length )
-                //    return;
-
-                var inventory_container = $( '.inventory-container' );
-                var customer_filter_container = $( '.filter.customer');
-
-                for( var i = 0; i < this.inventory.length; ++i ){
-
-                    //var latest_run = this.inventory[i].LastRunDate;
-                    //var concatenated_customer = this.inventory[i].Runs[0].Customer.replace(/ /g,"_");
-
-                    var ProductID = this.inventory[i].ProductID;
-                    var ProductName = this.inventory[i].ProductName;
-                    var TotalQuantity = this.inventory[i].TotalQuantity;
-
-                    var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
-                    inventory_item +=
-                            "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
-                            + "<div class='thumbnail unimplemented'>Thumbnail</div>"
-                            + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
-                            + "</a></div>";
-
-                    inventory_item += "<div class='pull-button'>" +
-                            "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
-                    inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
-                    inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
-                    inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
-                    inventory_item += "</div>";
-
-                    inventory_container.append( inventory_item );
-
-                    /*customer_filter_container.append(
-                     "<option value='" + concatenated_customer + "'>" +
-                     this.inventory[i].Runs[0].Customer +
-                     "</option>"*/
-                }
-
-                //this.setup_customer_select_menu();
-                this.setup_links();
-            },
-
-            /**
-             * Spit out an error message at the top of the screen
-             * @param error
-             */
-            render_error: function( error ) {
-
-                $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
-
-            },
-
-            /**
-             * Set up the filter actions for the customer select filter
-             */
-            setup_customer_select_menu: function() {
-                var select_menu = $( '.filter.customer' );
-
-                select_menu.change( function(){
-
-                    var selection = select_menu.val()
-
-                    if( selection == "0" ){
-                        $('.inventory-item').show();
-                    } else {
-                        $( '.inventory-item').hide();
-                        $( '.'+selection).show();
-                    }
-
-                });
-            },
-
-            setup_links: function() {
-
-                $( '.display-inventory-container').find( '.detail-view').on( 'touchend click', function( evt ){
-
-                    evt.preventDefault();
-
-                    var product_id = $( this).data( 'id' );
-
-                    navigation.go("ItemDetailView.html", {
-                        ProductID: product_id,
-                        PreviousPage: "DisplayInventory.html"
-                    });
-
-                    /*$('#main_cont').load('ItemDetailView.html', function(){
-                     detailView.init( product_id );
-                     });*/
-
-                });
-            }
-
-        };
-
-        display_inventory.init();
-
-    })( jQuery );
-
-    /**
-     * Created by Kun on 6/18/2015.
-     */
-
-    var gotoPullInventory = function (pid, pname, tlq) {
-        navigation.go("PullInventory.html", {
-            ProductID: pid,
-            ProductName: pname,
-            TotalQuantity: tlq,
-            PreviousPage: "DisplayInventory.html"
-        });
-    };
-</script>
 </body>
 </html>

@@ -1,0 +1,34 @@
+<body>
+<script>
+window.apiRoute = "<%= apiRoute %>";
+window.lookup = "<%= lookup %>";
+</script>
+<% include indexBody.html %>
+<script>
+var temp = window.lookup.split("-");
+var page = temp.shift();
+var pageKey = temp.join("-");
+
+if(page.toLowerCase() == "confirm"){
+    jQuery.get(window.apiRoute+"/Login/testLookup/"+window.lookup, function(lookup){
+        if(lookup.type == "reset"){
+            navigation.go('ResetPassword.html');
+        }
+        else if(lookup.type == "create"){
+            navigation.go('confirmUser.html');
+        }
+        else{
+            navigation.go('Home.html');
+        }
+    })
+    .fail(function(){
+        window.alert("Not a valid confirmation code");
+        navigation.go('Home.html');
+    });
+}
+else{
+    navigation.go(page+".html", {pageKey:pageKey});
+}
+
+</script>
+</body>

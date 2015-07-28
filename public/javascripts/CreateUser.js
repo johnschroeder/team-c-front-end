@@ -6,7 +6,7 @@ jQuery('#createUser').submit(function(){
         "firstName":jQuery('#first').val(),
         "lastName":jQuery('#last').val()
     };
-    console.log(toPass);
+    //console.log(toPass);
     jQuery.ajax({
         type: "POST",
         url: window.apiRoute+'/login/createUser/',
