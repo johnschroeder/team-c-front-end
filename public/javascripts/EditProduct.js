@@ -2,10 +2,11 @@ var editProduct = {
     product: null,
 
     init: function () {
+        $("#customer_select").multiselect({maxHeight:192});
+
         //TODO use john's breadcrumb loader to load a new page here populated with the data.
         $("#item_name").text(window.args.ProductName);
         editProduct.getCustomers();
-
 
         var self = this;
 
@@ -32,28 +33,45 @@ var editProduct = {
         })
     },
     populateCustomers: function() {
-        if(editProduct.customers) {
-            var rowToCopy = $(".customer_checkbox").first();
-            var rowsContainer = $("#checkbox_cont");
-            rowsContainer.empty();
+        var selected = [];
 
-            editProduct.customers.forEach(function(customer) {
-                var newRow = rowToCopy.clone();
-                newRow.find(".checkbox_label").text(customer.Name);
-                navigation.hit( "/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
-                    var associates = JSON.parse(res);
-                    for (var i = 0; i < associates.length; i++) {
-                        if (customer.CustomerID == associates[i].CustomerID) {
-                            newRow.find(".checkbox_input").prop('checked', true);
-                        }
-                    }
+        $("#customer_select option:selected").each(function(){
+            selected.push($(this).val());
+        });
 
-                });
-                newRow.removeClass("hidden");
-                newRow.appendTo( rowsContainer );
-                newRow.attr("data-ID", customer.CustomerID);
+        if(this.customers) {
+            $("#customer_select").empty();
+
+            this.customers.forEach(function(customer){
+                $("#customer_select").append(
+                    $("<option/>")
+                        .text(customer.Name)
+                        .val(customer.CustomerID)
+                );
             });
         }
+
+        navigation.hit("/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
+            var associates = JSON.parse(res);
+
+            $("#customer_select option").each(function(){
+                for (var i = 0; i < associates.length; ++i) {
+                    if ($(this).val() == associates[i].CustomerID) {
+                        $(this).prop("selected", true);
+                    }
+                }
+            });
+
+            selected.forEach(function(v){
+                $("#customer_select option").each(function(){
+                    if ($(this).val() == v) {
+                        $(this).prop("selected", true);
+                    }
+                });
+            });
+
+            $("#customer_select").multiselect("rebuild");
+        });
     },
 
     addCustomer:function() {
@@ -99,22 +117,21 @@ var editProduct = {
     },
 
     submit: function(){
-        //get new item Name and description
+        // Get new item name and description
         var name = $("#product_name_input").val();
         var description = $("#description_input").val();
-        console.log("name: " + name);
-        console.log("description: " + description);
 
-        //get and submit checked boxes:
-        var customerContainer = $("#checkbox_cont").children();
-        customerContainer.each(function() {
-            if ($(this).find(".checkbox_input")[0].checked) {
-                var host = "/associateProductCustomer/"
-                    + window.args.ProductID + "/"
-                    + $(this).data().id;
-            }
-            navigation.hit(host,function(response){
-                if( response != "Success" ){
+        //console.log("Name: " + name);
+        //console.log("Description: " + description);
+
+        // Associate customers
+        $("#customer_select option:selected").each(function(){
+            var host ="/associateProductCustomer/"
+                + window.args.ProductID + "/"
+                + parseInt($(this).val());
+
+            navigation.hit(host, function(response) {
+                if(response != "Success"){
                     $("#message").text("Error: " + response);
                 }
             })/*.fail(function(err) {
@@ -122,7 +139,7 @@ var editProduct = {
             })*/;
         });
 
-        //submit name and descricption change:
+        // Submit name and description change
         navigation.hit("/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
             if( response != "Success" ){
                 $("#message").text("Error: " + response);
