@@ -1,7 +1,3 @@
-/**
- * Created by Kun on 7/5/2015.
- */
-
 var itemDetailView = {
     productID: null,
     item: null,
@@ -30,6 +26,16 @@ var itemDetailView = {
         })/*.fail(function (response) {
             self.renderError("Failed to load inventory: " + response);
         })*/;
+
+        navigation.hit("/GetRunsByProduct/" + this.productID, function (response) {
+           if (response && response.length) {
+               self.runs = jQuery.parseJSON(response);
+               //console.log(response);
+               self.displayRuns();
+           } else {
+               self.renderError("No runs to display");
+           }
+        });
     },
 
     displayItem: function () {
@@ -38,6 +44,12 @@ var itemDetailView = {
         $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
         "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
         "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
+    },
+
+    displayRuns: function () {
+        this.runs.forEach(function (run) {
+            $("#runs").append("<div>" + "RunID:" + run.RunID + "   Location:" + run.Location +  "DateCreated:" + run.DateCreated + "   InitialQuantity:" + run.InitialQuantity + "   QuantityAvailable:" + run.QuantityAvailable + "   QuantityReserved:" + run.QuantityReserved + "</div>");
+        });
     },
 
     renderError: function (error) {
