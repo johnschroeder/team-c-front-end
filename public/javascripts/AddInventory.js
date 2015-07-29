@@ -45,6 +45,7 @@ var addInventory = {
 
         entry.append($(document.createElement("div"))
                 .addClass("col-sm-4")
+                .attr("title", "Type of package.")
                 .append(select)
         ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
@@ -62,6 +63,7 @@ var addInventory = {
                     .attr("min", 0)
                     .attr("onkeyup", "addInventory.updateTotal()")
                     .attr("onchange", "addInventory.updateTotal()")
+                    .attr("title", "Number of packages of this type.")
             )
             ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
