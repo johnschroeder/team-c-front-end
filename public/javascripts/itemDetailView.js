@@ -31,7 +31,19 @@ var itemDetailView = {
             } else {
                 self.renderError("No inventory found");
             }
-        })
+        });
+
+        navigation.get("/GetRunsByProduct/" + this.productID, function (err, response) {
+           if (response && response.length) {
+               self.runs = jQuery.parseJSON(response);
+               //console.log(response);
+               if (response.length > 2) {
+                   self.displayRuns();
+               }
+           } else {
+               self.renderError("No runs to display");
+           }
+        });
     },
 
     displayItem: function () {
@@ -40,6 +52,25 @@ var itemDetailView = {
         $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
         "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
         "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
+    },
+
+    displayRuns: function () {
+        //this.runs.forEach(function (run) {
+        // using for loop instead of forEach to reverse order
+        $("#runs").append("<h2>" + "Run History" + "</h2>" +
+                          "<div class=\"col-sm-12\">" + "<b>" + "<div class=\"col-sm-1\">" + "Run ID" + "</div>" + "<div class=\"col-sm-1\">" + "Alt ID" + "</div>" + "<div class=\"col-sm-2\">" + "Location" + "</div>" + "<div class=\"col-sm-2\">" + "Date Created" + "</div>" + "<div class=\"col-sm-2\">" + "Initial Quantity" + "</div>" + "<div class=\"col-sm-2\">" + "Quantity Available" + "</div>" + "<div class=\"col-sm-2\">" + "Quantity Reserved" + "</div>" + "</b>" + "</div>");
+        var displayColor = 0;  // using i % 2 was inconsistent, depends on whether the total number of runs was even or odd
+        for (var i = this.runs.length - 1; i >= 0; --i) {
+            var run = this.runs[i];
+            var dateRegex = /\d\d\d\d-\d\d-\d\d/;
+            if (displayColor % 2 == 0) {
+                $("#runs").append("<div style=\"background:lightgray\" class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityReserved + "</div>" + " </div>");
+                ++displayColor;
+            } else {
+                $("#runs").append("<div class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityReserved + "</div>" + " </div>");
+                ++displayColor;
+            }
+        }
     },
 
     renderError: function (error) {
