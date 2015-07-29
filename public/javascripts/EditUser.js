@@ -25,18 +25,6 @@ var editUser = {
         var newFirstName = $("#FirstName").val();
         var newLastName = $("#LastName").val();
 
-        /* var values = new Array();
-        $.each($("input[name='user_permission[]']:checked"), function () {
-            values.push($(this).val());
-        });
-
-        perms = "";
-        for (var i = 0; i < values.length; i++) {
-            perms += values[i].toString();
-            // alert(values[i]);
-        }
-         */
-
         var dropdown = document.getElementById("permission_select");
         var perms = dropdown.options[dropdown.selectedIndex].value;
 
