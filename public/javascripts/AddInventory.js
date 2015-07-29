@@ -223,7 +223,6 @@ var addInventory = {
         navigation.get(window.apiRoute + "/AddProductSize/" + productId + "/" + name + "/" + size, function(err, res) {
             if(err){
                 $("#response").text("Error: Submit new package type: Connection error.");
-                $("#pkg_add_button").prop("disabled", false);
             }
             else {
                 $("#response").text("Added new package type: " + name + " " + size + ".");
