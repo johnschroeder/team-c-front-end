@@ -50,10 +50,13 @@ var DisplayAll =
 
             if($this.is(":checked")){
                 var push = $this.attr("id");
-                navigation.hit("/Logging/AddLogViewMapEntry/" + push + "/", function (logsForUsername) {
+                navigation.get("/Logging/AddLogViewMapEntry/" + push + "/", function (err, logsForUsername) {
+                    if(err){
+                        console.log(err);
+                    }
                 });
             }
         });
-    navigation.go("Logs.html");
+        navigation.go("Logs.html");
     }
 };
