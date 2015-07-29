@@ -23,16 +23,20 @@ var DisplayAll =
     Now: function () {
         counter = 0;
 
-        navigation.hit("/getAllLogs/", function (logsForUsername) {
+        navigation.get("/getAllLogs/", function (err, logsForUsername) {
+            if(err){
+                console.log(err);
+            }
+            else {
                 var logsObj = JSON.parse(logsForUsername);
                 var logs = logsObj.logs;
 
-            for (var i = logs.length -1; i >= 0; i--) {
+                for (var i = logs.length - 1; i >= 0; i--) {
 
-                var log = logs[i];
-                DisplayNext(log);
+                    var log = logs[i];
+                    DisplayNext(log);
+                }
             }
-
-            });
+        });
     }
 };

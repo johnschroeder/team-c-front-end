@@ -5,17 +5,19 @@ var editUser = {
     init: function () {
         $("#username").text(window.args.editUser);
 
-        var host = "/getUser/" + window.args.editUser;
+        var host = window.apiRoute + "/getUser/" + window.args.editUser;
 
-        navigation.hit(host, function (data) {
-            var userData = $.parseJSON(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                var userData = $.parseJSON(data);
 
-            var firstName = userData.firstName;
-            var lastName = userData.lastName;
+                var firstName = userData.firstName;
+                var lastName = userData.lastName;
 
 
-            $("#FirstName").val(firstName);
-            $("#LastName").val(lastName);
+                $("#FirstName").val(firstName);
+                $("#LastName").val(lastName);
+            }
         });
 
     },
@@ -25,24 +27,12 @@ var editUser = {
         var newFirstName = $("#FirstName").val();
         var newLastName = $("#LastName").val();
 
-        /* var values = new Array();
-        $.each($("input[name='user_permission[]']:checked"), function () {
-            values.push($(this).val());
-        });
-
-        perms = "";
-        for (var i = 0; i < values.length; i++) {
-            perms += values[i].toString();
-            // alert(values[i]);
-        }
-         */
-
         var dropdown = document.getElementById("permission_select");
         var perms = dropdown.options[dropdown.selectedIndex].value;
 
         //alert("Permissions string is " + perms);
 
-        var host ='/editUser/' +
+        var host = window.apiRoute + '/editUser/' +
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
@@ -50,8 +40,10 @@ var editUser = {
 
         //alert(host);
 
-        navigation.hit(host, function (data) {
-            callback(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                callback(data);
+            }
         });
     },
 
