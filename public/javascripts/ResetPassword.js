@@ -13,10 +13,11 @@ jQuery('#complete').submit(function(){
         };
         navigation.postJSON(window.apiRoute + '/login/completepasswordreset/', toPass, function(err, response) {
             if(response){
-                window.alert("Your password was reset.")
+                jQuery("#formContainer").innerHTML("Your password was reset.");
             }
             else{
-                window.alert("Something went wrong please contact the site admin.")
+                jQuery("#formContainer").innerHTML("Something went wrong please contact the site admin.");
+                console.log(err);
             }
         })
     }
@@ -26,12 +27,13 @@ jQuery('#complete').submit(function(){
 });
 
 jQuery('#start').submit(function(){
-    jQuery.ajax({
-        type: "POST",
-        url: window.apiRoute+"/Login/StartPasswordReset/",
-        data: {email:jQuery('#username').val()},
-        dataType: 'json',
-        success: function(){ window.alert("Please check your email for a password reset link")},
-        error: function(){window.alert("Something went wrong please contact the site admin.")}
+    navigation.postJSON(window.apiRoute+"/Login/StartPasswordReset/", {email:jQuery('#username').val()}, function(err, response) {
+        if(response){
+            jQuery("#formContainer").innerHTML("Please check your email for a password reset link");
+        }
+        else{
+            jQuery("#formContainer").innerHTML("Something went wrong please contact the site admin.");
+            console.log(err);
+        }
     })
 });
