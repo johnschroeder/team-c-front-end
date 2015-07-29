@@ -27,7 +27,7 @@ jQuery('#complete').submit(function(){
 });
 
 jQuery('#start').submit(function(){
-    navigation.postJSON(window.apiRoute+"/Login/StartPasswordReset/", {email:jQuery('#username').val()}, function(err, response) {
+    navigation.postJSON(window.apiRoute+"/Login/StartPasswordReset/", {username:jQuery('#username').val()}, function(err, response) {
         if(response){
             jQuery("#formContainer").innerHTML("Please check your email for a password reset link");
         }
