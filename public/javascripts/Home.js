@@ -2,9 +2,13 @@ var Redirect =
 {
     Now: function () {
 
-        navigation.hit("/getLogs/", function (usernameForLogs) {
-
-            navigation.go("Logs.html");
+        navigation.get("/getLogs/", function (err, usernameForLogs) {
+            if(err){
+                console.log(err);
+            }
+            else {
+                navigation.go("Logs.html");
+            }
         });
 
     }

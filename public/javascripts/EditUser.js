@@ -5,17 +5,19 @@ var editUser = {
     init: function () {
         $("#username").text(window.args.editUser);
 
-        var host = "/getUser/" + window.args.editUser;
+        var host = window.apiRoute + "/getUser/" + window.args.editUser;
 
-        navigation.hit(host, function (data) {
-            var userData = $.parseJSON(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                var userData = $.parseJSON(data);
 
-            var firstName = userData.firstName;
-            var lastName = userData.lastName;
+                var firstName = userData.firstName;
+                var lastName = userData.lastName;
 
 
-            $("#FirstName").val(firstName);
-            $("#LastName").val(lastName);
+                $("#FirstName").val(firstName);
+                $("#LastName").val(lastName);
+            }
         });
 
     },
@@ -30,7 +32,7 @@ var editUser = {
 
         //alert("Permissions string is " + perms);
 
-        var host ='/editUser/' +
+        var host = window.apiRoute + '/editUser/' +
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
@@ -38,8 +40,10 @@ var editUser = {
 
         //alert(host);
 
-        navigation.hit(host, function (data) {
-            callback(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                callback(data);
+            }
         });
     },
 

@@ -1,3 +1,7 @@
+/**
+ * Created by Kun on 7/5/2015.
+ */
+
 var itemDetailView = {
     productID: null,
     item: null,
@@ -14,8 +18,11 @@ var itemDetailView = {
 
         var self = this;
 
-        navigation.hit("/itemDetail/" + this.productID, function (response) {
-            if (response && response.length) {
+        navigation.get(window.apiRoute + "/itemDetail/" + this.productID, function (err, response) {
+            if(err){
+                self.renderError("Failed to load inventory: " + response);
+            }
+            else if (response && response.length) {
                 self.item = jQuery.parseJSON(response)[0];
                 //console.log(self.item);
                 self.productName = self.item.Name;
@@ -24,11 +31,9 @@ var itemDetailView = {
             } else {
                 self.renderError("No inventory found");
             }
-        })/*.fail(function (response) {
-            self.renderError("Failed to load inventory: " + response);
-        })*/;
+        });
 
-        navigation.hit("/GetRunsByProduct/" + this.productID, function (response) {
+        navigation.get("/GetRunsByProduct/" + this.productID, function (err, response) {
            if (response && response.length) {
                self.runs = jQuery.parseJSON(response);
                //console.log(response);
@@ -110,7 +115,10 @@ var itemDetailView = {
 
     Delete: function() {
         var productID = window.args.ProductID;
-        navigation.hit( "/DeleteProductByID/" + productID, function (resp) {
+        navigation.get(window.apiRoute + "/DeleteProductByID/" + productID, function (err, resp) {
+            if(err){
+                $("#response").text( "Fail to delete product: Error --- " + res );
+            }
             var r = jQuery.parseJSON(resp);
             if (r[0].message == 'Success') {
                 alert("Product " + $("#product_name").text() + " is deleted.");
@@ -123,9 +131,7 @@ var itemDetailView = {
                 //$("#response").append("<br/>" + "1. Inventory of the product is 0.");
                 //$("#response").append("<br/>" + "2. De-associate all customers from the product");
             }
-        })/*.fail(function (res) {
-            $("#response").text( "Fail to delete product: Error --- " + res );
-        })*/;
+        });
     },
 
      doThumbnail: function() {

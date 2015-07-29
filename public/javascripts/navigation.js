@@ -8,13 +8,13 @@ var navigation = {
         }
         else {
             jQuery.get(window.apiRoute + "/getUserInfo", function (result) {
-                console.log(result.isConfirmed);
                 if(result.isConfirmed == 1) {
                     jQuery('#loggedIn').toggle(true);
                     jQuery('#login').toggle(false);
                     jQuery('#usersName').text(function () {
                         return result.FirstName + " " + result.LastName
                     });
+                    jQuery("#AdminBar").removeClass("hidden");
                     jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
                         $("#main_cont").load('/load/' + targetPage, {
                             args: args,
@@ -22,7 +22,7 @@ var navigation = {
                         });
                     }).fail(function () {
                         alert("Your permission level doesn't allow you to access this page");
-                       navigation.go("Home.html");
+                        navigation.go("Home.html");
                     });
                 }
                 else{
@@ -40,21 +40,58 @@ var navigation = {
     saveState:function(state) {
         this.stateTable[window.thisPage.toLowerCase().split(".")[0]] = state;
     },
-    hit:function(route,callback){
-        $.get(window.apiRoute + route, function(res){
-                callback(res);
-        }).fail(function(res){
-            if(res.status == 511){
-                console.log("Access Denied!");
-                alert("Sorry your permission level doesn't allow you to access" + route);
-               //navigation.go("Home.html");
-            }
-            if(res.status == 510){
-                navigation.go("loginForm.html");
-                alert("You have to log in before you can see this page!");
-            }
-        })
+    get:function(route, callback){
+        this._ajax(route, 'GET', null, null, callback);
+    },
+    getJSON:function(route, callback){
+        this._ajax(route, 'GET', null, 'json', callback);
+    },
+    postJSON:function(route, callback){
+        this._ajax(route, 'POST', null, 'json', callback);
+    },
+    post:function(route, data, callback){
+        this._ajax(route, 'POST', data, null, callback);
+    },
+    put:function(route, data, callback) {
+        this._ajax(route, 'PUT', data, null, callback);
+    },
+    _ajax: function(route, method, data, dataType, callback){
+        params = {};
 
+        if(data != null && typeof data != 'undefined'){
+            params.data = data;
+        }
+        if(route.indexOf(window.apiRoute) < 0){
+            route = window.apiRoute+route;
+        }
+        params.url = route;
+
+        method = method.toUpperCase();
+        if(['GET', 'POST', 'PUT'].indexOf(method) < 0){
+            method = 'GET';
+        }
+        params.method = method;
+
+        if(dataType != null && typeof dataType != 'undefined'){
+            params.dataType = dataType;
+        }
+
+        $.ajax(params)
+            .done(function(res){callback(null, res)})
+            .fail(function(err){
+                if(res.status == 511){
+                    console.log("Access Denied!");
+                    alert("Sorry your permission level doesn't allow you to access this page.");
+                    navigation.go("Home.html");
+                }
+                else if(res.status == 510){
+                    navigation.go("loginForm.html");
+                    alert("You have to log in before you can see this page!");
+                }
+                else{
+                    callback(err, null);
+                }
+            })
     },
     checkImage: function( src, onLoad, onError ) {
 
@@ -68,4 +105,4 @@ var navigation = {
     makeImageURL: function( productID ) {
         return 'http://images.thisisimp.com.s3.amazonaws.com/'+productID+'.jpeg';
     }
-}
+};
