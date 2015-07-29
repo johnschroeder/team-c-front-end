@@ -11,9 +11,13 @@ jQuery('#complete').submit(function(){
             "lookup": window.lookup,
             "password": jQuery('#newpw').val()
         };
-        navigation.postJSON(window.apiRoute + '/login/completepasswordreset/', toPass, {
-            success: function(){ window.alert("Your password was reset.")},
-            error: function(){window.alert("Something went wrong please contact the site admin.")}
+        navigation.postJSON(window.apiRoute + '/login/completepasswordreset/', toPass, function(err, response) {
+            if(response){
+                window.alert("Your password was reset.")
+            }
+            else{
+                window.alert("Something went wrong please contact the site admin.")
+            }
         })
     }
     else{
