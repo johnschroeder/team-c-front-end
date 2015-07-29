@@ -66,7 +66,7 @@ var navigation = {
         }
         params.url = route;
 
-        method = toUpperCase(method);
+        method = method.toUpperCase();
         if(['GET', 'POST', 'PUT'].indexOf(method) < 0){
             method = 'GET';
         }
