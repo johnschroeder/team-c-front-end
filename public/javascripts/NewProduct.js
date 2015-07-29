@@ -160,11 +160,9 @@ var newProduct = {
 
                 navigation.get(host, function(err, response) {
                     if(err){
-                        nextPage = false;
                         $("#message").text("Error: " + err.responseText);
                     }
                     else if( response != "Success" ){
-                        nextPage = false;
                         $("#message").text("Error: " + response);
                     }
                 })
