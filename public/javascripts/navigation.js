@@ -8,13 +8,13 @@ var navigation = {
         }
         else {
             jQuery.get(window.apiRoute + "/getUserInfo", function (result) {
-                console.log(result.isConfirmed);
                 if(result.isConfirmed == 1) {
                     jQuery('#loggedIn').toggle(true);
                     jQuery('#login').toggle(false);
                     jQuery('#usersName').text(function () {
                         return result.FirstName + " " + result.LastName
                     });
+                    jQuery("#AdminBar").removeClass("hidden");
                     jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
                         $("#main_cont").load('/load/' + targetPage, {
                             args: args,
@@ -22,7 +22,7 @@ var navigation = {
                         });
                     }).fail(function () {
                         alert("Your permission level doesn't allow you to access this page");
-                       navigation.go("Home.html");
+                        navigation.go("Home.html");
                     });
                 }
                 else{
