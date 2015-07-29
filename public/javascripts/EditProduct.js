@@ -10,20 +10,24 @@ var editProduct = {
 
         var self = this;
 
-        navigation.hit("/EditProduct/" + window.args.ProductID, function (res) {
-            self.product = $.parseJSON(res)[0];
-            $("#product_name_text").text(self.product.Name);
-            $("#description_text").text(self.product.Description);
-            $("#product_name_input").val(self.product.Name); //fill Item Name
-            $("#description_input").val(self.product.Description); //fill Description
+        navigation.get(window.apiRoute + "/EditProduct/" + window.args.ProductID, function (err, res) {
+            if(res) {
+                self.product = $.parseJSON(res)[0];
+                $("#product_name_text").text(self.product.Name);
+                $("#description_text").text(self.product.Description);
+                $("#product_name_input").val(self.product.Name); //fill Item Name
+                $("#description_input").val(self.product.Description); //fill Description
 
-            $("#edit_button").prop("disabled", false);
+                $("#edit_button").prop("disabled", false);
+            }
         });
+
+        this.setupImageHandler();
     },
 
     getCustomers:function() {
-        var host = "/getCustomers/";
-        navigation.hit(host, function(response) {
+        var host = window.apiRoute + "/getCustomers/";
+        navigation.get(host, function(err, response) {
             if(response && response.length) {
                 editProduct.customers = JSON.parse(response);
                 editProduct.populateCustomers();
@@ -51,26 +55,27 @@ var editProduct = {
             });
         }
 
-        navigation.hit("/FindAssociatesByProductID/" + window.args.ProductID, function (res) {
-            var associates = JSON.parse(res);
-
-            $("#customer_select option").each(function(){
-                for (var i = 0; i < associates.length; ++i) {
-                    if ($(this).val() == associates[i].CustomerID) {
-                        $(this).prop("selected", true);
-                    }
-                }
-            });
-
-            selected.forEach(function(v){
+        navigation.get("/FindAssociatesByProductID/" + window.args.ProductID, function (err, res) {
+            if(res){
+                var associates = JSON.parse(res);
+    
                 $("#customer_select option").each(function(){
-                    if ($(this).val() == v) {
-                        $(this).prop("selected", true);
+                    for (var i = 0; i < associates.length; ++i) {
+                        if ($(this).val() == associates[i].CustomerID) {
+                            $(this).prop("selected", true);
+                        }
                     }
                 });
-            });
-
-            $("#customer_select").multiselect("rebuild");
+    
+                selected.forEach(function(v){
+                    $("#customer_select option").each(function(){
+                        if ($(this).val() == v) {
+                            $(this).prop("selected", true);
+                        }
+                        });
+                });
+                $("#customer_select").multiselect("rebuild");
+            }
         });
     },
 
@@ -84,7 +89,7 @@ var editProduct = {
         var newCustomer = $("#new_customer_text").val();
         var host ="/addCustomer/" + newCustomer;
 
-        navigation.hit(host, function(response) {
+        navigation.get(host, function(err, response) {
             if( response && response.length) {
                 editProduct.customers.push({
                     CustomerID:response.CustomerID,
@@ -104,19 +109,20 @@ var editProduct = {
     breakAssociations: function() {
         var host = "/removeCustomersByProductID/"
             + window.args.ProductID;
-        navigation.hit(host,function(response){
-            if( response == "Success" ){
+        navigation.get(host, function(err, response){
+            if(err){
+                $("#message").text("Error: " + err.responseText);
+            }
+            else if( response == "Success" ){
                 editProduct.submit();
             } else {
                 $("#message").text("Error: " + response);
             }
-        });/*.fail(function(err) {
-            $("#message").text("Error: " + err.responseText);
-        })*/
+        });
 
     },
 
-    submit: function(){
+    submit: function() {
         // Get new item name and description
         var name = $("#product_name_input").val();
         var description = $("#description_input").val();
@@ -125,29 +131,79 @@ var editProduct = {
         //console.log("Description: " + description);
 
         // Associate customers
-        $("#customer_select option:selected").each(function(){
-            var host ="/associateProductCustomer/"
+        $("#customer_select option:selected").each(function () {
+            var host = "/associateProductCustomer/"
                 + window.args.ProductID + "/"
                 + parseInt($(this).val());
 
-            navigation.hit(host, function(response) {
-                if(response != "Success"){
+            navigation.get(host, function (err, response) {
+                if (err) {
+                    $("#message").text("Error: " + err.responseText);
+                }
+                else if (response != "Success") {
                     $("#message").text("Error: " + response);
                 }
-            })/*.fail(function(err) {
-                $("#message").text("Error: " + err.responseText);
-            })*/;
+            })
         });
 
-        // Submit name and description change
-        navigation.hit("/reSubmit/" + window.args.ProductID +"/" + name + "/" + description, function(response){
-            if( response != "Success" ){
+        //submit name and descricption change:
+        navigation.get(window.apiRoute + "/reSubmit/" + window.args.ProductID + "/" + name + "/" + description, function (err, response) {
+            if (err) {
+                $("#message").text("Error: " + err.responseText);
+            }
+            else if (response != "Success") {
                 $("#message").text("Error: " + response);
             }
-            navigation.go("DisplayInventory.html");
-        })/*.fail(function(err) {
-            $("#message").text("Error: " + err.responseText);
-        })*/;
+            else {
+                navigation.go("DisplayInventory.html");
+            }
+        });
+    },
+    setupImageHandler:function() {
+
+        var savedImage = navigation.makeImageURL( window.args.ProductID );
+        navigation.checkImage( savedImage,
+            function(){
+                console.log("Image found for product");
+                $('.thumbnail').html("<img src='"+savedImage+"'/>");
+            },function(){
+                console.log("No image found for product");
+                $('.thumbnail').html("<div class='noImage'>No Image</div>");
+            });
+
+        $(':file').change(function(){
+            var file = this.files[0];
+            var size = file.size;
+            $('#uploadFileSize').val(size);
+            $('#prodIDForImg').val(window.args.ProductID);
+            var type = file.type;
+            if( type.indexOf("jpeg") == -1 ) {
+                alert( "Sorry, jpeg images only");
+                return;
+            }
+
+            var formData = new FormData($('#uploadImageForm')[0]);
+            $.ajax({
+                url: window.apiRoute + '/uploadImage',  //Server script to process data
+                type: 'POST',
+                beforeSend: function(){
+                    $('.imageUpload').remove();
+                    $('.uploadImageFormContainer').after( "<div class='imageUpload loading'>Uploading Image<div>" );
+                    console.log("Uploading Image");
+                },
+                success: function( response ){
+                    $('.imageUpload').removeClass("loading");
+                    $('.imageUpload').html( "<img src='http://" + response +"' />" );
+                },
+                error: function(err){
+                    $("#message").text("Error: " + err.responseText);
+                },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
     },
 
     back: function () {

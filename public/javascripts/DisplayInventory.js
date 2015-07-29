@@ -245,7 +245,7 @@
                 var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
                 inventory_item +=
                     "<div><a class='detail-view' href='javascript:void(0);' data-id='" + this.inventory[i].ProductID + "'>"
-                    + "<div class='thumbnail unimplemented'>Thumbnail</div>"
+                    + "<div class='thumbnail'><div class='noImage'>No Image</div></div>"
                     + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                     + "</a></div>";
 
@@ -276,6 +276,23 @@
                  this.inventory[i].Runs[0].Customer +
                  "</option>"*/
             }
+
+            //Fetch the thumbnails
+            $('.detail-view').each(function(){
+                var id = $( this).data('id');
+                var self = this;
+
+                if( !id )
+                    return;
+
+                var thumbSource = navigation.makeImageURL( id );
+                navigation.checkImage( thumbSource,
+                    function(){
+                        $( self ).find(".thumbnail").html( "<img src='"+thumbSource+"'/>" );
+                    },
+                    function(){}
+                );
+            });
 
             //this.setup_customer_select_menu();
             this.setup_links();
