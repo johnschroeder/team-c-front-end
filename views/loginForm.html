@@ -5,23 +5,24 @@
 </head>
 <body>
 
-<h1>Welcome to Login!</h1>
+    <h1>Welcome to Login!</h1>
 
-<div id="invalidCreds" class="alert alert-danger hidden" role="alert">Your username and password don't match our records please try again!</div>
-<div class="input-row">
-    <div class="input-label">Username</div>
-    <input type="text" id="username">
-</div>
+    <div id="invalidCreds" class="alert alert-danger hidden" role="alert">Your username and password don't match our records please try again!</div>
+    <div class="input-row">
+        <div class="input-label">Username</div>
+        <input type="text" id="username">
+    </div>
 
 
-<div class="input-row">
-    <div class="input-label">Password</div>
-    <input type="password" id="password">
-</div>
+    <div class="input-row">
+        <div class="input-label">Password</div>
+        <input type="password" id="password">
+    </div>
 
-<div class="input-row">
-    <button type="button" id="signOn" onclick="sendAuth()">Sign On</button>
-</div>
+    <div class="input-row">
+        <button type="button" id="signOn" onclick="sendAuth()">Sign On</button>
+    </div>
+    <a onclick="resetPassword()">Reset Password</a>
 
 </body>
 </html>

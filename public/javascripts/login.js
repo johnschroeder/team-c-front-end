@@ -28,5 +28,9 @@ function sendAuth() {
         );
         $("#username").val("");
         $("#password").val("");
+
+        var resetPassword = function(){
+            navigation.go("ResetPassword.html");
+        }
     });
 }
