@@ -159,9 +159,19 @@ function logOutPage(){
     $("#AddUsers").addClass("hidden");
     $("#DeleteUsers").addClass("hidden");
     $("#ViewUsers").addClass("hidden");
-    navigation.hit("/getUserInfo", function(userName){
-    navigation.hit("/Login/LogOut/" + userName.Username,function(res){
-        loginPage();
-        });
+    navigation.get("/getUserInfo", function(err, userName){
+        if(err){
+            console.log(err);
+        }
+        else {
+            navigation.get("/Login/LogOut/" + userName.Username, function (err, res) {
+                if(err){
+                    console.log(err);
+                }
+                else {
+                    loginPage();
+                }
+            });
+        }
     });
 }

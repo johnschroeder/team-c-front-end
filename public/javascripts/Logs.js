@@ -28,18 +28,18 @@ var DisplayAll =
         counter = 0;
         var host = window.apiRoute + "/getLogs/";
 
-        navigation.hit("/getLogs/", function (logsForUsername) {
-            var logsObj = JSON.parse(logsForUsername);
-            var logs = logsObj.logs;
 
+        navigation.get(host, function (err, logsForUsername) {
+            if(logsForUsername) {
+                var logsObj = JSON.parse(logsForUsername);
+                var logs = logsObj.logs;
 
-            for (var i = logs.length -1; i >= 100; i--) {
-
-                var log = logs[i];
-                var currId = logsObj.id[i];
-                DisplayNext(log, currId);
+                for (var i = logs.length - 1; i >= 100; i--) {
+                    var log = logs[i];
+                    var currId = logsObj.id[i];
+                    DisplayNext(log, currId);
+                }
             }
-
         });
     },
 
@@ -50,10 +50,13 @@ var DisplayAll =
 
             if($this.is(":checked")){
                 var push = $this.attr("id");
-                navigation.hit("/Logging/AddLogViewMapEntry/" + push + "/", function (logsForUsername) {
+                navigation.get("/Logging/AddLogViewMapEntry/" + push + "/", function (err, logsForUsername) {
+                    if(err){
+                        console.log(err);
+                    }
                 });
             }
         });
-    navigation.go("Logs.html");
+        navigation.go("Logs.html");
     }
 };

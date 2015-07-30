@@ -6,14 +6,13 @@ jQuery('#createUser').submit(function(){
         "firstName":jQuery('#first').val(),
         "lastName":jQuery('#last').val()
     };
-    //console.log(toPass);
-    jQuery.ajax({
-        type: "POST",
-        url: window.apiRoute+'/login/createUser/',
-        data: toPass,
-        dataType: 'json',
-        success: function(){
-            window.alert("Please check your email for an account creation confirmation.");
+    navigation.postJSON(window.apiRoute+'/login/createUser/', toPass, function(err, res){
+        if(err){
+            jQuery("#mainContainer").innerHTML("An error occured, check the console for error message.")
+            console.log(err);
+        }
+        if(res) {
+            jQuery("#mainContainer").innerHTML("Please check your email for an account creation confirmation.");
         }
     });
 });
