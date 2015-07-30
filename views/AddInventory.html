@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <h1>Add Inventory</h1>
 
-    <h2>Item: <span id="item_name"></span></h2>
+    <h2>Product: <span id="item_name"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="addInventory.back()">Back</button>
     <hr/>
 
@@ -17,10 +17,10 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <button class="btn btn-default" title="Add an add inventory entry." onclick="addInventory.addEntry()">+ Add
-                Entry
+            <button class="btn btn-default" title="Add an additional package size and quantity." onclick="addInventory.addEntry()">
+                + Add another package size
             </button>
-            <button class="btn btn-default" title="Clear all add inventory entries." onclick="addInventory.reset()">
+            <button class="btn btn-default" title="Reset package sizes and quantities." onclick="addInventory.reset()">
                 Reset
             </button>
         </div>
@@ -37,14 +37,14 @@
     <div class="row form-group">
         <div class="col-sm-4">
             <label for="location_input">Location</label>
-            <input id="location_input" class="form-control" title="Enter the location to add inventory."></input>
+            <input id="location_input" class="form-control" title="The location this inventory will be stored at."></input>
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-4">
-            <button id="inventory_add_button" class="btn btn-default" title="Add the total inventory."
-                    onclick="addInventory.submitAdd()">Add to Inventory
+            <button id="inventory_add_button" class="btn btn-default" title="Submit this inventory into IMP." onclick="addInventory.submitAdd()">
+                Add to Inventory
             </button>
         </div>
     </div>
@@ -67,8 +67,8 @@
 
     <div class="row">
         <div class="col-sm-4">
-            <button id="pkg_add_button" class="btn btn-default" onclick="addInventory.submitNewPackageType()">Add New
-                Package Type
+            <button id="pkg_add_button" class="btn btn-default" title="Submit new package type." onclick="addInventory.submitNewPackageType()">
+                Add new package type
             </button>
         </div>
     </div>
