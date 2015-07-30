@@ -16,8 +16,19 @@ function sendAuth() {
                     var cookie = data; //req.cookies.auth
 
                     if (data != "Invalid Credentials!") {
+                        navigation.get("/getUserInfo", function(err,user) {
+                            if(err){
+                                console.log(err);
+                            }
+                            if (user.PermsID == 604) {
+                                $("#AdminBar").removeClass("hidden");
+                                $("#AdminLogs").removeClass("hidden");
+                                $("#AddUsers").removeClass("hidden");
+                                $("#DeleteUsers").removeClass("hidden");
+                                $("#ViewUsers").removeClass("hidden");
+                            }
+                        });
                         navigation.go("Home.html");
-                        alert("login success");
                     }
 
                     if (data == "Invalid Credentials!") {
