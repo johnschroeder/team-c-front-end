@@ -1,7 +1,3 @@
-/**
- * Created by Kun on 7/5/2015.
- */
-
 var itemDetailView = {
     productID: null,
     item: null,
@@ -55,21 +51,26 @@ var itemDetailView = {
     },
 
     displayRuns: function () {
-        //this.runs.forEach(function (run) {
-        // using for loop instead of forEach to reverse order
         $("#runs").append("<h2>" + "Run History" + "</h2>" +
                           "<div class=\"col-sm-12\">" + "<b>" + "<div class=\"col-sm-1\">" + "Run ID" + "</div>" + "<div class=\"col-sm-1\">" + "Alt ID" + "</div>" + "<div class=\"col-sm-2\">" + "Date Created" + "</div>" + "<div class=\"col-sm-2\">" + "Location" + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + "Initial Quantity" + "</div>" + "<div class=\"col-sm-4\">" + "Quantity Available" + "</div>" + "<div class=\"col-sm-4\">" + "Quantity Reserved" + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + "Color" + "</div>" + "</b>" + "</div>");
-        var displayColor = 0;  // using i % 2 was inconsistent, depends on whether the total number of runs was even or odd
-        for (var i = this.runs.length - 1; i >= 0; --i) {
-            var run = this.runs[i];
-            var dateRegex = /\d\d\d\d-\d\d-\d\d/;
+        var displayColor = 0;  // used to set background of every other row
+        this.runs.forEach(function (run) {
             if (displayColor % 2 == 0) {
-                $("#runs").append("<div style=\"background:lightgray\" class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityReserved + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + run.Marker + "</div>" + "</div>");
+                $("#runs").append("<div style=\"background:lightgray\" class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + formatDate(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityReserved + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + run.Marker + "</div>" + "</div>");
                 ++displayColor;
             } else {
-                $("#runs").append("<div class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityReserved + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + run.Marker + "</div>" + "</div>");
+                $("#runs").append("<div class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + formatDate(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityReserved + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + run.Marker + "</div>" + "</div>");
                 ++displayColor;
             }
+        });
+
+        function formatDate(date) {
+            var dateString;
+            var dateRegex = /\d\d\d\d-\d\d-\d\d/;
+            dateString = dateRegex.exec(date).toString();
+            var dateArray = dateString.split("-");
+            dateString = dateArray[1] + "/" + dateArray[2] + "/" + dateArray[0];
+            return dateString;
         }
     },
 
