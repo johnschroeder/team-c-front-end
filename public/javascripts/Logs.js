@@ -66,21 +66,20 @@ var DisplayAll =
 
     Now: function () {
         counter = 0;
-alert("Now called");
+//alert("Now called");
         var filterParameters = JSON.stringify({"filter":logTypesDisplayed});
         var host = window.apiRoute + "/getLogs/" + filterParameters;
         navigation.get(host, function (err, logsForUsername) {
             var logsObj = JSON.parse(logsForUsername);
 
-            alert("Json parsed");
+            //alert("Json parsed");
             var logs = logsObj.logs;
-            alert("Start for loop");
+            //alert("Start for loop");
 
             for (var i = logs.length -1; i >= 0; i--) {
 
                 var log = logs[i];
                 var currId = logsObj.id[i];
-                alert(log);
                 DisplayNext(log, currId);
             }
 

@@ -189,16 +189,12 @@
          * Consolidate all of the items by product id
          */
         /*consolidate_inventory: function() {
-
          this.consolidated = new Array();
          if( !this.inventory || !this.inventory.length )
          return;
-
          for( var i = 0; i < this.inventory.length; ++i ){
-
          var found = false;
          for( var j = 0; j < this.consolidated.length; ++j ){
-
          if( this.consolidated[j].ProductID == this.inventory[i].ProductID ){
          found = true;
          this.consolidated[j].Runs.push( this.inventory[i] );
@@ -206,9 +202,7 @@
          this.consolidated[j].Runs.sort( function(a, b){ return a.Date.localeCompare( b.Date ) } );
          break;
          }
-
          }
-
          if( !found ){
          this.consolidated.push({
          ProductID: this.inventory[i].ProductID,
@@ -248,23 +242,11 @@
                     + "<div class='thumbnail'><div class='noImage'>No Image</div></div>"
                     + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                     + "</a></div>";
+                inventory_item += "<div class='pull-button'>" + "<span>"+
+                    "<button class='btn btn-default' onclick='gotoAddInventory(" + ProductID + "," + "\"" + ProductName + "\"" + ")' type='button'>Add</button> </span>";
 
-                var lastRunDate = this.inventory[i].LastRunDate ? this.inventory[i].LastRunDate : "Last Run Date not available";
-                var dateString;
-
-                if (lastRunDate != "Last Run Date not available")
-                {
-                    lastRunDate = new Date(lastRunDate);
-                    dateString = lastRunDate.getMonth() + "/" + lastRunDate.getDay() + "/" + lastRunDate.getFullYear() + " ";
-                    var hhmm = (lastRunDate.getHours() != 0) ? lastRunDate.getHours() : "00";
-                    hhmm += ":";
-                    hhmm += (lastRunDate.getMinutes() != 0) ? lastRunDate.getMinutes() : "00";
-                    lastRunDate = dateString + hhmm;
-                }
-
-                inventory_item += "<div class='pull-button'>" +
-                    "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
-                inventory_item += "<div>Last run: " + lastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
+                inventory_item += "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
+                inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
                 inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
                 inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
                 inventory_item += "</div>";
@@ -362,6 +344,13 @@ var gotoPullInventory = function (pid, pname, tlq) {
         ProductID: pid,
         ProductName: pname,
         TotalQuantity: tlq,
+        PreviousPage: "DisplayInventory.html"
+    });
+};
+var gotoAddInventory = function (pid, pname) {
+    navigation.go("AddInventory.html", {
+        ProductID: pid,
+        ProductName: pname || "",
         PreviousPage: "DisplayInventory.html"
     });
 };

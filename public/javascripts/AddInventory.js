@@ -8,14 +8,6 @@ var addInventory = {
 
     // Initialize the page.
     init: function() {
-
-        var locations = "No locations;sorry".split(";");
-
-        navigation.hit("/GetInventoryLocations/", function (res) {
-            locations = (JSON.parse(res)).locationList;
-            createEditableSelect(document.forms[0].location_input, locations);
-        });
-
         this.productId = parseInt(window.args.ProductID) || 0;
 
         if (this.productId == 0) {
@@ -53,6 +45,7 @@ var addInventory = {
 
         entry.append($(document.createElement("div"))
                 .addClass("col-sm-4")
+                .attr("title", "Type of package.")
                 .append(select)
         ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
@@ -70,14 +63,15 @@ var addInventory = {
                     .attr("min", 0)
                     .attr("onkeyup", "addInventory.updateTotal()")
                     .attr("onchange", "addInventory.updateTotal()")
+                    .attr("title", "Number of packages of this type.")
             )
-            ).append($(document.createElement("div"))
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static text-center")
                     .text("=")
             )
-            ).append($(document.createElement("div"))
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static")
@@ -90,7 +84,7 @@ var addInventory = {
                     .attr("name", "count_text")
                     .text("0")
             )
-            );
+        );
     },
 
     // Array of entries
@@ -193,38 +187,6 @@ var addInventory = {
         var productId = this.getProductId();
         var total = this.getTotal();
         var location = this.getLocation();
-        var properLocation = true;
-
-        navigation.hit("/GetInventoryLocations/", function(locations) {
-            var locationList = JSON.parse(locations).locationList;
-
-            var alreadyIn = false;
-            for (var i = 0; i < locations.length; i++)
-            {
-                if (locationList[i] == location)
-                {
-                    alreadyIn = true;
-                }
-            }
-            if (!alreadyIn) {
-                if (confirm("Do you want to add " + location + " to the list of locations for next time?") == true) {
-                    $.post(apiRoute + "/StoreLocation/" + location, function (res) {
-
-                        var done = res;
-                    });
-                }
-                else{
-                    properLocation = false;
-                }
-            }
-
-        });
-
-        if (!properLocation)
-        {
-            return;
-        }
-
 
         if (productId == 0 || total == 0 || location == "") {
             $("#response").text("Error: Submit add inventory: Invalid input or product ID.");

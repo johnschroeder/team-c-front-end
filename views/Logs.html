@@ -2,14 +2,14 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Full Admin Logs</title>
-    <script src="javascripts/AdminLogs.js"></script>
+    <title>Logs</title>
+    <script src="javascripts/Logs.js"></script>
     <script src="javascripts/navigation.js"></script>
 </head>
 <body>
 
 <div class="container-fluid">
-    <h1>Admin Logs</h1>
+    <h1>Logs</h1>
     <h2>Filter Options</h2>
     <form id="filterForm">
         <div class = "filter">
@@ -26,9 +26,12 @@
 
         <!-- Template for one row -->
         <div class="InputChild row form-group">
+            <div class="col-xs-1">
+                <input type="checkbox" name="ignoreLog" id="ignoreLog" value="ignoreLog">
+            </div>
             <div class="col-xs-11">
                 <!--<input type="checkbox" name="ignoreLog" id="ignoreLog" value="ignoreLog"> -->
-                <label id="logLabel">You must sign in to view logs</label>
+                <label id="logLabel" for="ignoreLog">You must sign in to view logs</label>
                 <br>
             </div>
         </div>

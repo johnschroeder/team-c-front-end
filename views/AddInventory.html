@@ -4,17 +4,12 @@
     <meta charset="UTF-8"/>
     <title>Add Inventory</title>
     <script src="javascripts/AddInventory.js"></script>
-    <script src="javascripts/EditableDropDown.js"></script>
-
-
-
 </head>
 <body>
-
 <div class="container-fluid">
     <h1>Add Inventory</h1>
 
-    <h2>Item: <span id="item_name"></span></h2>
+    <h2>Product: <span id="item_name"></span></h2>
     <button class="btn btn-default" title="Go back to the last page." onclick="addInventory.back()">Back</button>
     <hr/>
 
@@ -22,10 +17,10 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <button class="btn btn-default" title="Add an add inventory entry." onclick="addInventory.addEntry()">+ Add
-                Entry
+            <button class="btn btn-default" title="Add an additional package size and quantity." onclick="addInventory.addEntry()">
+                + Add another package size
             </button>
-            <button class="btn btn-default" title="Clear all add inventory entries." onclick="addInventory.reset()">
+            <button class="btn btn-default" title="Reset package sizes and quantities." onclick="addInventory.reset()">
                 Reset
             </button>
         </div>
@@ -41,21 +36,15 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-
-            <form>
-                        Location
-                        <input type="text" id="location_input" name="location_input" value="A-1"
-                               selectBoxOptions="A-1;A-2">
-            </form>
-
-           <!-- <input id="location_input" class="form-control" title="Enter the location to add inventory."></input> -->
+            <label for="location_input">Location</label>
+            <input id="location_input" class="form-control" title="The location this inventory will be stored at."></input>
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-4">
-            <button id="inventory_add_button" class="btn btn-default" title="Add the total inventory."
-                    onclick="addInventory.submitAdd()">Add to Inventory
+            <button id="inventory_add_button" class="btn btn-default" title="Submit this inventory into IMP." onclick="addInventory.submitAdd()">
+                Add to Inventory
             </button>
         </div>
     </div>
@@ -67,19 +56,19 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <label for="pkg_name">Name</label><label id="pkg_name" class="form-control" type="text"
-                                                     title="Name of the package."></label>
+            <label for="pkg_name">Name</label><input id="pkg_name" class="form-control" type="text"
+                                                     title="Name of the package."></input>
         </div>
         <div class="col-sm-4">
-            <label for="pkg_size">Size</label><label id="pkg_size" class="form-control" type="number"
-                                                     title="Size of the package." min="0"></label>
+            <label for="pkg_size">Size</label><input id="pkg_size" class="form-control" type="number"
+                                                     title="Size of the package." min="0"></input>
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-4">
-            <button id="pkg_add_button" class="btn btn-default" onclick="addInventory.submitNewPackageType()">Add New
-                Package Type
+            <button id="pkg_add_button" class="btn btn-default" title="Submit new package type." onclick="addInventory.submitNewPackageType()">
+                Add new package type
             </button>
         </div>
     </div>
