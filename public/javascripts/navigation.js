@@ -14,7 +14,6 @@ var navigation = {
                     jQuery('#usersName').text(function () {
                         return result.FirstName + " " + result.LastName
                     });
-                    jQuery("#AdminBar").removeClass("hidden");
                     jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
                         $("#main_cont").load('/load/' + targetPage, {
                             args: args,

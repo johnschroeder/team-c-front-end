@@ -5,12 +5,8 @@
     <title>Add Inventory</title>
     <script src="javascripts/AddInventory.js"></script>
     <script src="javascripts/EditableDropDown.js"></script>
-
-
-
 </head>
 <body>
-
 <div class="container-fluid">
     <h1>Add Inventory</h1>
 
@@ -41,14 +37,22 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
+            <label for="location_input">Location</label>
+            <input id="location_input" class="form-control" title="Enter the location to add inventory."></input>
+            
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-sm-4">
 
             <form>
-                        Location
-                        <input type="text" id="location_input" name="location_input" value="A-1"
-                               selectBoxOptions="A-1;A-2">
+                Location
+                <input type="text" id="location_input" name="location_input" value="A-1"
+                       selectBoxOptions="A-1;A-2">
             </form>
 
-           <!-- <input id="location_input" class="form-control" title="Enter the location to add inventory."></input> -->
+            <!-- <input id="location_input" class="form-control" title="Enter the location to add inventory."></input> -->
         </div>
     </div>
 
@@ -67,12 +71,12 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <label for="pkg_name">Name</label><label id="pkg_name" class="form-control" type="text"
-                                                     title="Name of the package."></label>
+            <label for="pkg_name">Name</label><input id="pkg_name" class="form-control" type="text"
+                                                     title="Name of the package."></input>
         </div>
         <div class="col-sm-4">
-            <label for="pkg_size">Size</label><label id="pkg_size" class="form-control" type="number"
-                                                     title="Size of the package." min="0"></label>
+            <label for="pkg_size">Size</label><input id="pkg_size" class="form-control" type="number"
+                                                     title="Size of the package." min="0"></input>
         </div>
     </div>
 
