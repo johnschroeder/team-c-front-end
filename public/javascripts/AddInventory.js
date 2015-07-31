@@ -9,14 +9,14 @@ var addInventory = {
     // Initialize the page.
     init: function() {
 
-        this.productId = parseInt(window.args.ProductID) || 0;
-
         var locations = "No locations;sorry".split(";");
 
-        navigation.get(apiRoute + "/GetInventoryLocations/" + this.productId, function (err, res) {
+        navigation.hit("/GetInventoryLocations/", function (res) {
             locations = (JSON.parse(res)).locationList;
             createEditableSelect(document.forms[0].location_input, locations);
         });
+
+        this.productId = parseInt(window.args.ProductID) || 0;
 
         if (this.productId == 0) {
             $("#response").text("Error: Init: Invalid product ID.");
@@ -195,14 +195,6 @@ var addInventory = {
         var productId = this.getProductId();
         var total = this.getTotal();
         var location = this.getLocation();
-        var properLocation = true;
-
-        if (!properLocation)
-        {
-            return;
-        }
-
-
         if (productId == 0 || total == 0 || location == "") {
             $("#response").text("Error: Submit add inventory: Invalid input or product ID.");
             return;

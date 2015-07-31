@@ -10,6 +10,16 @@
 
 <div class="container-fluid">
     <h1>Logs</h1>
+    <h2>Filter Options</h2>
+    <form id="filterForm">
+        <div class = "filter">
+            <label id="filterLabel" for="filterLogs">First Filter</label>
+            <input type="checkbox" name="filterLogs" id="filterLogs">
+        </div>
+    </form>
+    <button id="Filter" class="btn btn-default" title="Filter Logs." onclick="DisplayAll.Filter()">
+        Filter Logs
+    </button>
     <hr/>
 
     <div id="InputDiv">
@@ -30,7 +40,7 @@
 
     <div class="row form-group">
         <div class="col-xs-12">
-            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="Logs()">
+            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="DisplayAll.refreshedLogs()">
                 Refresh Logs
             </button>
             <button id="DeleteSelected" class="btn btn-default" title="Delete Selected Logs"
@@ -47,6 +57,9 @@
     <br/>
 
 </div>
-<script>DisplayAll.Now()</script>
+<script>
+    DisplayAll.FilterBoxes();
+</script>
+<script>DisplayAll.Filter()</script>
 </body>
 </html>
