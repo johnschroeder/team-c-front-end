@@ -145,17 +145,12 @@ var editProduct = {
                 }
             })
         });
-
         //submit name and descricption change:
         navigation.get(window.apiRoute + "/reSubmit/" + window.args.ProductID + "/" + name + "/" + description, function (err, response) {
-            if (err) {
-                $("#message").text("Error: " + err.responseText);
-            }
-            else if (response != "Success") {
+            if (response === "Success") {
+                navigation.go("ItemDetailView.html");
+            } else {
                 $("#message").text("Error: " + response);
-            }
-            else {
-                navigation.go("DisplayInventory.html");
             }
         });
     },
