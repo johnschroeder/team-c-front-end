@@ -36,9 +36,13 @@ var manageUsers = {
         })
     },
 
-    LoadUsers: function(){
+    LoadUsers: function() {
+        LoadUsers(Username);
+    },
 
-        navigation.get(window.apiRoute + "/getAllUsers/", function (err, resp) {
+    LoadUsers: function(filterType){
+
+        navigation.get(window.apiRoute + "/getAllUsers/" + filterType, function (err, resp) {
             if(err){
                 var msg = "Error: LoadUsers: Connection error.";
                 $("#response").text(msg);
