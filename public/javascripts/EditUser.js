@@ -66,6 +66,6 @@ var editUser = {
 
 
     back: function () {
-        navigation.go(window.args.previousPage);
+        navigation.go("ManageUsers.html");
     }
 };
