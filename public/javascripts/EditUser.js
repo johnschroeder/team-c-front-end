@@ -1,6 +1,3 @@
-/**
- * Created by Trevor on 7/10/2015.
- */
 var editUser = {
     init: function () {
         $("#username").text(window.args.editUser);
@@ -13,10 +10,12 @@ var editUser = {
 
                 var firstName = userData.firstName;
                 var lastName = userData.lastName;
+                var permsId = userData.permsId;
 
 
                 $("#FirstName").val(firstName);
                 $("#LastName").val(lastName);
+                $('select option[value="' + permsId + '"]').attr("selected", true);
             }
         });
 
