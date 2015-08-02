@@ -7,36 +7,46 @@ var state = window.state;
 
 function populateByCartId() {
     navigation.setTitle("Jobs");
-    //TODO when function runs we need to make sure that if there is a state.nameSelected that it is put in the selected option on run.
-    //TODO when users is able to be gotten dynamically, change "don" to + userid; so it grabs the carts for the user
-    var user = 'don';
-    navigation.get("/Carts/GetCartsByUser/" + user, function(err, res){
-        var results = JSON.parse(res);
+    hideAllAlerts();
 
-        var dropSelect = $("#selectDropDown")
-            .append($("<option/>")
-                .val(-1)
-                .text("-- Select a Job --")
-        );
+    navigation.get("/getUserInfo", function(err,user) {
+        if(err){
+            console.log(err);
+        } else if (user && user.Username) {
+            navigation.get("/Carts/GetCartsByUser/" + user.Username, function(err, res){
+                var results = JSON.parse(res);
 
-        for (var i = 0; i < results.length; ++i) {
-            var option = $("<option/>")
-                .val(results[i].CartID)
-                .text(results[i].CartName)
-                .appendTo(dropSelect);
+                var dropSelect = $("#selectDropDown")
+                    .append($("<option/>")
+                        .val(-1)
+                        .text("-- Select a Job --")
+                );
 
-            if (state && state.nameSelected == results[i].CartName) {
-                option.prop("selected", true);
-                displayCartInventory();
-                $("#qr_button").removeClass("hidden");
-            }
+                for (var i = 0; i < results.length; ++i) {
+                    var option = $("<option/>")
+                        .val(results[i].CartID)
+                        .text(results[i].CartName)
+                        .appendTo(dropSelect);
+
+                    if (state && state.nameSelected == results[i].CartName) {
+                        option.prop("selected", true);
+                        displayCartInventory();
+                        $("#qr_button").removeClass("hidden");
+                    }
+                }
+            });
+        } else {
+            showError("Failed to get user information to populate carts.");
         }
     });
+
+
 }
 
 function displayCartInventory() {
-    var cartContainer = $("#inventory-container")
-        .empty();
+    hideAllAlerts();
+
+    var cartContainer = $("#inventory-container").empty();
 
     if ($("#selectDropDown :selected").val() == -1) {
         $("#qr_button").addClass("hidden");
@@ -50,7 +60,8 @@ function displayCartInventory() {
 
     navigation.getJSON(window.apiRoute + "/Carts/GetCartItems/" + encodeURIComponent(idSelected), function (err, data) {
         if(err){
-            $("#response").text("Error: displayCartInventory: Connection error.");
+            showError("Failed to get cart items.");
+            console.log("Error: displayCartInventory: Connection error.");
         }
         else {
             populateCartContainer(data[0]);
@@ -67,11 +78,9 @@ function pullAll() {
             .text("Ship Cart!")
             .prop("onclick", null)
             .off("click");
-    }
-}
 
-function doNothing() {
-    $("#response").text("Shipment sent!");
+        showResponse("All carts pulled!");
+    }
 }
 
 function gotoEditCarts() {
@@ -305,6 +314,7 @@ function updateTotal(cartItem) {
 }
 
 function handleDirtyItems(cartItem) {
+    hideAllAlerts();
     handleDirtyItemsRecursively(cartItem.find(".item-entry").first(), cartItem);
 }
 
@@ -329,7 +339,8 @@ function handleDirtyItemsRecursively(entry, cartItem) {
             + sizeMapID + '/' + quantity + '/' + runID,
             function (err, res) {
                 if(err){
-                    $("#response").text("Error: handleDirtyItemsRecursively: Connection error.");
+                    showError("Failed to update cart items.");
+                    console.log("Error: handleDirtyItemsRecursively: Connection error.");
                 }
                 else {
                     console.log("Results of submitting changed values: ");
@@ -352,6 +363,8 @@ function handleDirtyItemsRecursively(entry, cartItem) {
 }
 
 function deleteRow(entry, item) {
+    hideAllAlerts();
+
     // TODO update dirty items and continue editing
     var data = entry.data("data");
     var cartItemID = data.CartItemID;
@@ -366,6 +379,7 @@ function deleteRow(entry, item) {
 
     navigation.get(window.apiRoute + "/Carts/DeleteItemInCart/" + cartItemID, function (err, res) {
         if(err){
+            showError("Failed to delete row.");
             console.log("Error: Failed to delete row.");
         }
         else {
@@ -376,13 +390,14 @@ function deleteRow(entry, item) {
 }
 
 function refreshCartEntry(cartEntry) {
+    hideAllAlerts();
     cartEntry.find(".item-entry").remove();
-
     var idSelected = $("#selectDropDown :selected").val();
 
     navigation.getJSON(window.apiRoute + "/Carts/GetCartItems/" + idSelected, function (err, data) {
         if(err){
-            $("#response").text("Error: refreshCartInventory: Connection error.");
+            showError("Failed to refresh cart entry.");
+            console.log("Error: refreshCartInventory: Connection error.");
         }
         else {
             data[0].forEach(function (item) {
@@ -397,9 +412,12 @@ function refreshCartEntry(cartEntry) {
 
 //Updates the options for the package types of a single entry.
 function updateEntryPackageTypeOptions(item, productId) {
+    hideAllAlerts();
+
     navigation.getJSON(window.apiRoute + "/GetSizeByProductID/" + productId, function (err, data) {
         if(err){
-            $("#response").text("Error: Update package types: Connection error.");
+            showError("Failed to update package types.");
+            console.log("Error: Update package types: Connection error.");
         }
         else {
             item.find(".item-entry").each(function () {
@@ -423,6 +441,29 @@ function updateEntryPackageTypeOptions(item, productId) {
     })
 }
 
+// Alert
+function showError(msg) {
+    $("#error").removeClass("hidden").text(msg);
+}
+
+function hideError() {
+    $("#error").addClass("hidden");
+}
+
+function showResponse(msg) {
+    $("#response").removeClass("hidden").text(msg);
+}
+
+function hideResponse() {
+    $("#response").addClass("hidden");
+}
+
+function hideAllAlerts() {
+    $("#error").addClass("hidden");
+    $("#response").addClass("hidden");
+}
+
+// QR Code button
 var qrCode = function () {
     if ($("#selectDropDown :selected").val() == -1) return;
 
