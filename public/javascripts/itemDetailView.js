@@ -24,6 +24,7 @@ var itemDetailView = {
                 self.productName = self.item.Name;
                 self.displayItem();
                 self.doThumbnail();
+                navigation.setTitle("Product Details: " + self.productName);
             } else {
                 self.renderError("No inventory found");
             }
@@ -165,8 +166,4 @@ var itemDetailView = {
             });
 
     },
-    back: function () {
-        if (this.prevPage)
-            navigation.go(this.prevPage);
-    }
 };

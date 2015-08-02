@@ -1,6 +1,7 @@
 var editCartData = {
     init: function () {
-        $("#cart_name").text(window.args.cartName);
+        navigation.setTitle("Job Data: " + window.args.cartName)
+        //$("#cart_name").text(window.args.cartName);
 
         var host = window.apiRoute + "/Carts/GetAllCarts/";
 
@@ -115,9 +116,5 @@ var editCartData = {
 
     CartItemsEdit: function (cartID, cartName) {
         //navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
-    },
-
-    back: function () {
-        navigation.go(window.args.previousPage);
     }
 };

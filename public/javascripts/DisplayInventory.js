@@ -5,7 +5,6 @@
      */
 
     var display_inventory = {
-
         host: window.apiRoute + "/displayInventory/",
         inventory: false,
         customerSelector: null,
@@ -15,6 +14,7 @@
          * Go fetch everything and get it set up
          */
         init: function() {
+            navigation.setTitle("View Inventory");
             var self = this;
 
             $("#track_by").change(function() {
@@ -92,8 +92,7 @@
                 case "customer":
                     $("#track_by option:contains('Customer')").prop("selected", true);
                     $("#track_by").trigger("change");
-                    this.customerSelector[0].selectize.addOption({label:value, value:value});
-                    this.customerSelector[0].selectize.addItem(value);
+                    $("#customer").val(value);
                     this.searchCustomer(value);
                     break;
                 case "item":

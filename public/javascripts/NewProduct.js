@@ -5,12 +5,20 @@ var newProduct = {
     productID: false,
     productName: false,
     customers: false,
+
+    //Tack the date on in the upper-right corner
+    init:function() {
+        navigation.setTitle("New Product");
+        $("#customer_select").multiselect({maxHeight:192});
+        newProduct.getCustomers();
+        $("#date").text(newProduct.getDate());
+    },
+
     /**
      * Generates the current date and returns it as a string
      * @returns {string}
      */
     getDate:function() {
-
         var date_object = new Date();
         var day = date_object.getDate();
         var month = date_object.getMonth() + 1;
@@ -25,13 +33,6 @@ var newProduct = {
         date += day;
 
         return date;
-    },
-
-    //Tack the date on in the upper-right corner
-    init:function() {
-        $("#customer_select").multiselect({maxHeight:192});
-        newProduct.getCustomers();
-        $("#date").text(newProduct.getDate());
     },
 
     getCustomers:function() {

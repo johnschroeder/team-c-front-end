@@ -11,12 +11,10 @@ var pullInventory = {
         totalQuantity: null
     },
 
-
     /**
      * Populate the page with relevant information
      */
     init: function(){
-
         //grab and save navigation object arguments
         if (window.args.ProductID) {
             this.navigationArgs.productID = window.args.ProductID;
@@ -33,6 +31,8 @@ var pullInventory = {
 
         $('#ProductName').text(this.navigationArgs.productName);
         $('#AvailableAmout').text(this.navigationArgs.totalQuantity);
+
+        navigation.setTitle("Pull Inventory: " + this.navigationArgs.productName)
 
         //add dropdown options to select
         var selectEle = $("#InputDiv").children().find(".size");

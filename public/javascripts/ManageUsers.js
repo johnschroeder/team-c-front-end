@@ -8,10 +8,10 @@ var manageUsers = {
     },
 
     init: function(){
+        navigation.setTitle("Manage Users");
         //initialize page. load all users info
         this.LoadUsers();
         this.PopulatePerms();
-
     },
 
     PopulatePerms: function(){

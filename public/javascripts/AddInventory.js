@@ -8,6 +8,7 @@ var addInventory = {
 
     // Initialize the page.
     init: function() {
+        navigation.setTitle("Add Inventory: " + window.args.ProductName);
         this.productId = parseInt(window.args.ProductID) || 0;
 
         if (this.productId == 0) {

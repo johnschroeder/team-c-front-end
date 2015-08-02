@@ -5,7 +5,8 @@ var editProduct = {
         $("#customer_select").multiselect({maxHeight:192});
 
         //TODO use john's breadcrumb loader to load a new page here populated with the data.
-        $("#item_name").text(window.args.ProductName);
+        navigation.setTitle("Product Data: " + window.args.ProductName);
+        //$("#item_name").text(window.args.ProductName);
         editProduct.getCustomers();
 
         var self = this;
@@ -58,7 +59,7 @@ var editProduct = {
         navigation.get("/FindAssociatesByProductID/" + window.args.ProductID, function (err, res) {
             if(res){
                 var associates = JSON.parse(res);
-    
+
                 $("#customer_select option").each(function(){
                     for (var i = 0; i < associates.length; ++i) {
                         if ($(this).val() == associates[i].CustomerID) {
@@ -66,7 +67,7 @@ var editProduct = {
                         }
                     }
                 });
-    
+
                 selected.forEach(function(v){
                     $("#customer_select option").each(function(){
                         if ($(this).val() == v) {
@@ -204,10 +205,6 @@ var editProduct = {
                 processData: false
             });
         });
-    },
-
-    back: function () {
-        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };
 

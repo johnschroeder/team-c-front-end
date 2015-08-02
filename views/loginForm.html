@@ -4,24 +4,32 @@
     <script src="javascripts/login.js"></script>
 </head>
 <body>
+<div class="container-fluid">
+    <div id="invalidCreds" class="alert alert-danger hidden" role="alert">Your username and password don't match our records please try again!</div>
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="input-label" for="username">Username</label>
+            <input type="text" id="username" class="form-control"/>
+        </div>
+    </div>
 
-<h1>Welcome to Login!</h1>
+    <br/>
 
-<div id="invalidCreds" class="alert alert-danger hidden" role="alert">Your username and password don't match our records please try again!</div>
-<div class="input-row">
-    <div class="input-label">Username</div>
-    <input type="text" id="username">
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="input-label">Password</label>
+            <input type="password" id="password" class="form-control"/>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button type="button" id="signOn" class="btn btn-default" onclick="sendAuth()">Sign In</button>
+        </div>
+    </div>
 </div>
-
-
-<div class="input-row">
-    <div class="input-label">Password</div>
-    <input type="password" id="password">
-</div>
-
-<div class="input-row">
-    <button type="button" id="signOn" onclick="sendAuth()">Sign On</button>
-</div>
-
+<script>navigation.setTitle("Welcome to Login!");</script>
 </body>
 </html>
