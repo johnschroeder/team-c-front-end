@@ -4,7 +4,7 @@ var itemDetailView = {
 
     init: function () {
         $("#response").text("");
-        this.productID = window.args.ProductID || window.args.pageKey || window.state.ProductID;
+        this.productID = window.args.ProductID || window.state.ProductID || window.args.pageKey;
 
         if (window.args.ProductID) {
             navigation.saveState(window.args);
