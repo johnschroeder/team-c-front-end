@@ -81,8 +81,7 @@ function gotoEditCarts() {
     var idSelected = $("#selectDropDown :selected").val();
     navigation.go('EditCartData.html', {
         cartID: idSelected,
-        cartName: state.nameSelected,
-        previousPage: "ViewCarts.html"
+        cartName: state.nameSelected
     });
 }
 
@@ -93,8 +92,7 @@ function gotoEditItems() {
     var idSelected = $("#selectDropDown :selected").val();
     //navigation.go('EditCartItems.html', {
     //    cartID: idSelected,
-    //    cartName: state.nameSelected,
-    //    previousPage: "ViewCarts.html"
+    //    cartName: state.nameSelected
     //});
 }
 
@@ -429,8 +427,7 @@ var qrCode = function () {
     if ($("#selectDropDown :selected").val() == -1) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#selectDropDown :selected").val(),
-        PreviousPage: "ViewCarts.html"
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#selectDropDown :selected").val()
     });
 };
 

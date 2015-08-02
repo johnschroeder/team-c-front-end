@@ -7,7 +7,6 @@ var pullInventory = {
     navigationArgs: {
         productID: null,
         productName: null,
-        previousPage: null,
         totalQuantity: null
     },
 
@@ -19,13 +18,11 @@ var pullInventory = {
         if (window.args.ProductID) {
             this.navigationArgs.productID = window.args.ProductID;
             this.navigationArgs.productName = window.args.ProductName;
-            this.navigationArgs.previousPage = window.args.PreviousPage;
             this.navigationArgs.totalQuantity = window.args.TotalQuantity;
             navigation.saveState(window.args);
         } else if (window.state.ProductID) {
             this.navigationArgs.productID = window.state.ProductID;
             this.navigationArgs.productName = window.state.ProductName;
-            this.navigationArgs.previousPage = window.state.PreviousPage;
             this.navigationArgs.totalQuantity = window.state.TotalQuantity;
         }
 
@@ -37,7 +34,6 @@ var pullInventory = {
         //add dropdown options to select
         var selectEle = $("#InputDiv").children().find(".size");
         this.PopulateOptions( selectEle, this.navigationArgs.productID );
-
     },
 
 
@@ -414,7 +410,7 @@ var pullInventory = {
             $('#slCart').empty();
             $("#divSelectCart").hide();
             alert("Items added to cart ");
-            navigation.go(self.navigationArgs.previousPage, {ProductID: self.navigationArgs.productID});
+            navigation.back();
         }
     },
 
@@ -435,22 +431,13 @@ var pullInventory = {
         this.AddOneItemToCartRecursively($('#InputDiv').children('.InputChild').first());
     },
 
-
-    /**
-     * Go back to the previous page
-     */
-    back: function(){
-        navigation.go(this.navigationArgs.previousPage);
-    },
-
     /**
      * Show the QR code for the current page
      */
     qrCode: function () {
         if (!this.navigationArgs.productID || !$("#slCart :selected").val()) return;
         navigation.go("ShowQRCode.html", {
-            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID,
-            PreviousPage: "PullInventory.html"
+            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ViewCarts-" + $("#slCart option:selected").val() + "?addProduct=" + this.navigationArgs.productID
         });
     }
 

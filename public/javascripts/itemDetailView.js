@@ -1,12 +1,10 @@
 var itemDetailView = {
     productID: null,
     item: null,
-    prevPage: null,
 
     init: function () {
         $("#response").text("");
         this.productID = window.args.ProductID || window.args.pageKey || window.state.ProductID;
-        this.prevPage = window.args.PreviousPage || window.state.PreviousPage;
 
         if (window.args.ProductID) {
             navigation.saveState(window.args);
@@ -98,8 +96,7 @@ var itemDetailView = {
         if (!this.productID || !this.item) return;
         navigation.go("AddInventory.html", {
             ProductID: this.productID,
-            ProductName: this.item.Name || "",
-            PreviousPage: "ItemDetailView.html"
+            ProductName: this.item.Name || ""
         });
     },
 
@@ -108,8 +105,7 @@ var itemDetailView = {
         navigation.go("PullInventory.html", {
             ProductID: this.productID,
             ProductName: this.item.Name || "",
-            TotalQuantity: this.item.TotalAvailable,
-            PreviousPage: "ItemDetailView.html"
+            TotalQuantity: this.item.TotalAvailable
         });
     },
 
@@ -117,16 +113,14 @@ var itemDetailView = {
         if (!this.productID || !this.item) return;
         navigation.go("EditProduct.html", {
             ProductID: this.productID,
-            ProductName: this.item.Name || "",
-            PreviousPage: "ItemDetailView.html"
+            ProductName: this.item.Name || ""
         });
     },
 
     qrCode: function () {
         if (!this.productID || !this.item) return;
         navigation.go("ShowQRCode.html", {
-            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ItemDetailView-" + this.productID,
-            PreviousPage: "ItemDetailView.html"
+            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ItemDetailView-" + this.productID
         });
     },
 
@@ -139,7 +133,7 @@ var itemDetailView = {
             var r = jQuery.parseJSON(resp);
             if (r[0].message == 'Success') {
                 alert("Product " + $("#product_name").text() + " is deleted.");
-                navigation.go("DisplayInventory.html",{ProductID: window.args.ProductID, PreviousPage:"ItemDetailView"});
+                navigation.go("DisplayInventory.html",{ProductID: window.args.ProductID});
             }
             else {
                 alert(r[0].message);

@@ -109,7 +109,7 @@ var editCartData = {
                     .prop("disabled", false)
                     .text("Edit");
 
-                //navigation.go(window.args.previousPage);
+                //navigation.back();
             }
         });
     },

@@ -156,7 +156,7 @@ var editProduct = {
                 $("#message").text("Error: " + response);
             }
             else {
-                navigation.go("DisplayInventory.html");
+                navigation.back();
             }
         });
     },

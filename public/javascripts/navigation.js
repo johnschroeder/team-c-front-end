@@ -47,7 +47,7 @@ var navigation = {
         }
     },
     back:function(times) {
-        if (!times || times < 0) times = 1;
+        if (!times || times <= 0) times = 1;
         if (!this.pageHistory.length) return;
 
         var last = null;
@@ -57,7 +57,10 @@ var navigation = {
         for (var i = 0; i < times; ++i)
             last = this.pageHistory.shift();
 
-        this.go(last.page);
+        if (last)
+            this.go(last.page);
+        else
+            this.go("Home.html");
     },
     saveState:function(state) {
         this.stateTable[window.thisPage.toLowerCase().split(".")[0]] = state;

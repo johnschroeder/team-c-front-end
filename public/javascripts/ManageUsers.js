@@ -73,7 +73,7 @@ var manageUsers = {
 
     EditUser: function(editDiv){
         var usernameForEdit= $(editDiv).parent().children()[0].innerHTML;
-        navigation.go("EditUser.html",{PreviousPage:"ManageUsers.html",editUser:usernameForEdit});
+        navigation.go("EditUser.html",{editUser:usernameForEdit});
     },
 
     CreateUser: function(){

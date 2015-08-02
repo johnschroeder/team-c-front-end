@@ -174,11 +174,13 @@ var newProduct = {
 
     nextPage:function() {
         if($("#new_run_checkbox")[0].checked){
+            navigation.clearPageHistory();
             navigation.go("AddInventory.html", {
                 ProductID:newProduct.productID,
                 ProductName:newProduct.productName
             });
         } else {
+            navigation.clearPageHistory();
             navigation.go("DisplayInventory.html");
         }
     }
