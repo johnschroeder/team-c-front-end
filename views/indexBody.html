@@ -43,39 +43,48 @@
     <li><button class="btn btn-default action-button" id="ViewCarts">View Jobs</button></li>
     <li><button class="btn btn-default action-button" id="AddProduct">New Product</button></li>
 
-
     <li><button id="AdminBar" class="btn btn-default hidden">Administrator</button>
         <ul>
             <li>
                 <button class="btn btn-default action-button subbutton" id="AdminLogs">Logs</button>
             </li>
             <li>
-                <button class="btn btn-default action-button subbutton" id="AddUsers">Add Users</button>
-            </li>
-            <li>
-                <button class="btn btn-default action-button subbutton" id="DeleteUsers">Delete Users</button>
-            </li>
-            <li>
-                <button class="btn btn-default action-button subbutton" id="ViewUsers">View Users</button>
+                <button class="btn btn-default action-button subbutton" id="ManageUsers">Manage Users</button>
             </li>
         </ul>
     </li>
 </div>
 
-<div id="main_cont" class="ng-view col-xs-8 main-content-container">
-    <script type="text/javascript">stayOrRedirect()</script>
-    <script>
-        //TODO refactor to navigation.get when function is made, and if an error occurs then nobody is logged in and admin bar should remain hidden
-        navigation.get("/getUserInfo", function(err,user) {
-            if(err){
-                console.log(err);
-            }
-            if (user.PermsID == 604) {
-                $("#AdminBar").removeClass("hidden");
-            }
-        });
-    </script>
+<div id="main_win" class="col-xs-8 main-content-container">
+    <div class="container-fluid">
+        <br/>
+        <div id="top_nav" class="row">
+            <div class="col-sm-12">
+                <button id="back_button" class="btn btn-default hidden" title="Go back to the last page." onclick="navigation.back()">Back</button>
+                <span id="breadcrumbs" class="hidden"></span><span id="title" class="hidden" style="font-size: 150%;"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <hr/>
+            </div>
+        </div>
+    </div>
+    <div id="main_cont"></div>
 </div>
+
+<script type="text/javascript">stayOrRedirect()</script>
+<script>
+    //TODO refactor to navigation.get when function is made, and if an error occurs then nobody is logged in and admin bar should remain hidden
+    navigation.get("/getUserInfo", function(err,user) {
+        if(err){
+            console.log(err);
+        }
+        if (user.PermsID == 604) {
+            $("#AdminBar").removeClass("hidden");
+        }
+    });
+</script>
 
 </body>
 </html>

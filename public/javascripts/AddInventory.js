@@ -1,5 +1,5 @@
 //<script>
-// Input arguments: ProductID, ProductName, PreviousPage
+// Input arguments: ProductID, ProductName
 var addInventory = {
     productId: 0,
     itemName: "",
@@ -8,6 +8,7 @@ var addInventory = {
 
     // Initialize the page.
     init: function() {
+        navigation.setTitle("Add Inventory: " + window.args.ProductName);
         this.productId = parseInt(window.args.ProductID) || 0;
 
         if (this.productId == 0) {
@@ -203,8 +204,7 @@ var addInventory = {
             else {
                 addInventory.reset();
                 $("#response").text("Added inventory: " + total + " at " + location + ".");
-                navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
-                navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
+                navigation.back();
             }
         });
     },
@@ -234,10 +234,5 @@ var addInventory = {
                 $("#pkg_add_button").prop("disabled", false);
             }
         });
-    },
-
-    // Go back to the last page.
-    back: function () {
-        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };

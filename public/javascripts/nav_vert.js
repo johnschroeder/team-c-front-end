@@ -25,25 +25,14 @@ $(document).ready(function () {
         AddProduct();
     });
 
-
     $('#AdminLogs').on( 'touchend click', function( event ){
         event.preventDefault();
         AdminLogs();
     });
 
-    $('#AddUsers').on( 'touchend click', function( event ){
+    $('#ManageUsers').on( 'touchend click', function( event ){
         event.preventDefault();
-        AddUsers();
-    });
-
-    $('#DeleteUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        DeleteUsers();
-    });
-
-    $('#ViewUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        ViewUsers();
+        ManageUsers();
     });
 
     $('#login').on( 'touchend click', function( event ){
@@ -54,7 +43,6 @@ $(document).ready(function () {
         event.preventDefault();
         logOutPage();
     });
-
 
     $('.header-logo').on( 'touchend click', function( event ){
         event.preventDefault();
@@ -105,60 +93,11 @@ function stayOrRedirect()
     }
 }
 
-
-function Home(){
-    navigation.go("Home.html");
-}
-
-//
-function CreateUser(){
-    navigation.go("CreateUser.html");
-}
-
-function ViewCarts(){
-    navigation.go("ViewCarts.html");
-}
-
-function AddProduct(){
-    navigation.go("NewProduct.html");
-}
-
-function DisplayInventories(){
-    navigation.go("DisplayInventory.html");
-}
-
-// Administrator
-
-function Logs(){
-    navigation.go("Logs.html");
-}
-
-function AdminLogs()
-{
-    navigation.go("AdminLogs.html");
-}
-
-function AddUsers(){
-    $('#main_cont').text("AddUsers");
-}
-
-function DeleteUsers(){
-    $('#main_cont').text("DeleteUsers");
-}
-
-function ViewUsers(){
-    navigation.go("ManageUsers.html");
-}
-
-function loginPage() {
-    navigation.go("loginForm.html");
-}
 function logOutPage(){
     $("#AdminBar").addClass("hidden");
     $("#AdminLogs").addClass("hidden");
-    $("#AddUsers").addClass("hidden");
-    $("#DeleteUsers").addClass("hidden");
-    $("#ViewUsers").addClass("hidden");
+    $("#ManageUsers").addClass("hidden");
+
     navigation.get("/getUserInfo", function(err, userName){
         if(err){
             console.log(err);
@@ -174,4 +113,54 @@ function logOutPage(){
             });
         }
     });
+}
+
+// Menu
+
+function Home(){
+    navigation.clearPageHistory();
+    navigation.go("Home.html");
+}
+
+function CreateUser(){
+    navigation.clearPageHistory();
+    navigation.go("CreateUser.html");
+}
+
+function ViewCarts(){
+    navigation.clearPageHistory();
+    navigation.go("ViewCarts.html");
+}
+
+function AddProduct(){
+    navigation.clearPageHistory();
+    navigation.go("NewProduct.html");
+}
+
+function DisplayInventories(){
+    navigation.clearPageHistory();
+    navigation.go("DisplayInventory.html");
+}
+
+function Logs(){
+    navigation.clearPageHistory();
+    navigation.go("Logs.html");
+}
+
+// Administrator
+
+function AdminLogs()
+{
+    navigation.clearPageHistory();
+    navigation.go("AdminLogs.html");
+}
+
+function ManageUsers(){
+    navigation.clearPageHistory();
+    navigation.go("ManageUsers.html");
+}
+
+function loginPage() {
+    navigation.clearPageHistory();
+    navigation.go("loginForm.html");
 }
