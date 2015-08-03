@@ -1,5 +1,6 @@
 var editUser = {
     init: function () {
+        navigation.setTitle("User Data: " + window.args.editUser)
         $("#username").text(window.args.editUser);
 
         var host = window.apiRoute + "/getUser/" + window.args.editUser;
@@ -61,10 +62,5 @@ var editUser = {
                 alert(message);
             });
         }
-    },
-
-
-    back: function () {
-        navigation.go("ManageUsers.html");
     }
 };
