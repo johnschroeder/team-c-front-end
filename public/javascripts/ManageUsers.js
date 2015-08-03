@@ -36,9 +36,25 @@ var manageUsers = {
         })
     },
 
-    LoadUsers: function(){
+    LoadUsers: function() {
+        LoadUsers("default");
+    },
 
-        navigation.get(window.apiRoute + "/getAllUsers/", function (err, resp) {
+    LoadUsers: function(filterType){
+        var route;
+        switch (filterType) {
+            case "First Name":
+                route = "getAllUsersFilterFirstName";
+                break;
+            case "Last Name":
+                route = "getAllUsersFilterLastName";
+                break;
+            default:
+                route = "getAllUsers";
+                break;
+        }
+
+        navigation.get(window.apiRoute + "/" + route + "/", function (err, resp) {
             if(err){
                 var msg = "Error: LoadUsers: Connection error.";
                 $("#response").text(msg);
@@ -55,6 +71,21 @@ var manageUsers = {
                 $("#DisplayUsersDiv").empty();
                 newRow.appendTo(rowsContainer);
 
+                function permsName(perms) {
+                    switch (perms) {
+                        case 0:
+                            return 'Customer';
+                        case 1:
+                            return 'Account Manager';
+                        case 2:
+                            return 'Employee';
+                        case 3:
+                            return 'Admin';
+                        case 4:
+                            return "Level: " + perms;
+                    }
+                }
+
                 //populate users
                 for (var i = 0; i < users.length; i++) {
                     var obj = users[i];
@@ -63,7 +94,7 @@ var manageUsers = {
                     $($(tempRow).children()[1]).text(obj.FirstName);
                     $($(tempRow).children()[2]).text(obj.LastName);
                     $($(tempRow).children()[3]).text(obj.Email);
-                    $($(tempRow).children()[4]).text(obj.Perms);
+                    $($(tempRow).children()[4]).text(permsName(obj.Perms));
                     $(tempRow).show();
                     tempRow.appendTo(rowsContainer);
                 }
