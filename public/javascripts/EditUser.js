@@ -22,7 +22,7 @@ var editUser = {
 
     },
 
-    _submitChanges: function (isConfirmed, callback) {
+    _submitChanges: function (requestDelete, callback) {
         var username = $("#username").text();
         var newFirstName = $("#FirstName").val();
         var newLastName = $("#LastName").val();
@@ -36,9 +36,9 @@ var editUser = {
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
-            + perms + '/' + isConfirmed;
+            + perms + '/' + requestDelete;
 
-        //alert(host);
+        alert(host);
 
         navigation.get(host, function (err, data) {
             if(data) {
@@ -50,7 +50,7 @@ var editUser = {
     save: function () {
         if (confirm('Do you really want to make these edits?')) {
 
-            var message = editUser._submitChanges(1, function (message) {
+            var message = editUser._submitChanges(0, function (message) {
                 alert(message);
             });
         }
@@ -58,14 +58,9 @@ var editUser = {
 
     delete: function () {
         if (confirm('Do you really want to delete this user?')) {
-            var message = editUser._submitChanges(0, function (message) {
+            var message = editUser._submitChanges(1, function (message) {
                 alert(message);
             });
         }
-    },
-
-
-    back: function () {
-        navigation.go(window.args.previousPage);
     }
 };
