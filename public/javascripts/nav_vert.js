@@ -30,16 +30,6 @@ $(document).ready(function () {
         AdminLogs();
     });
 
-    $('#AddUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        AddUsers();
-    });
-
-    $('#DeleteUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        DeleteUsers();
-    });
-
     $('#ManageUsers').on( 'touchend click', function( event ){
         event.preventDefault();
         ManageUsers();
@@ -53,7 +43,6 @@ $(document).ready(function () {
         event.preventDefault();
         logOutPage();
     });
-
 
     $('.header-logo').on( 'touchend click', function( event ){
         event.preventDefault();
