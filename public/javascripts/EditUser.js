@@ -37,7 +37,7 @@ var editUser = {
             + '"' + newLastName + '"' + '/'
             + perms + '/' + requestDelete;
 
-        alert(host);
+        //alert(host);
 
         navigation.get(host, function (err, data) {
             if(data) {
