@@ -8,8 +8,7 @@ var addInventory = {
 
     // Initialize the page.
     init: function() {
-
-
+        navigation.setTitle("Add Inventory: " + window.args.ProductName);
         this.productId = parseInt(window.args.ProductID) || 0;
 
         var locations = "No locations;sorry".split(";");
@@ -76,13 +75,13 @@ var addInventory = {
                     .attr("onchange", "addInventory.updateTotal()")
                     .attr("title", "Number of packages of this type.")
             )
-            ).append($(document.createElement("div"))
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-1")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static text-center")
                     .text("=")
             )
-            ).append($(document.createElement("div"))
+        ).append($(document.createElement("div"))
                 .addClass("col-sm-2")
                 .append($(document.createElement("p"))
                     .addClass("form-control-static")
@@ -95,7 +94,7 @@ var addInventory = {
                     .attr("name", "count_text")
                     .text("0")
             )
-            );
+        );
     },
 
     // Array of entries
@@ -198,6 +197,7 @@ var addInventory = {
         var productId = this.getProductId();
         var total = this.getTotal();
         var location = this.getLocation();
+
         if (productId == 0 || total == 0 || location == "") {
             $("#response").text("Error: Submit add inventory: Invalid input or product ID.");
             return;
@@ -213,8 +213,7 @@ var addInventory = {
             else {
                 addInventory.reset();
                 $("#response").text("Added inventory: " + total + " at " + location + ".");
-                navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
-                navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
+                navigation.back();
             }
         });
     },
@@ -244,10 +243,5 @@ var addInventory = {
                 $("#pkg_add_button").prop("disabled", false);
             }
         });
-    },
-
-    // Go back to the last page.
-    back: function () {
-        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };

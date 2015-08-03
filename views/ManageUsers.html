@@ -6,9 +6,6 @@
     <script src="javascripts/ManageUsers.js"></script>
 </head>
 <div class="container-fluid">
-    <h1>Manage Users</h1>
-    <hr/>
-
     <div id="response"></div>
 
     <div class="row form-group">
@@ -43,9 +40,12 @@
     <br/>
 
     <div class="row form-group" >
-        <div class="col-sm-2"><label>Username</label></div>
-        <div class="col-sm-2"><label>First Name</label></div>
-        <div class="col-sm-2"><label>Last Name</label></div>
+        <!--<div class="col-sm-2"><label>Username</label></div>-->
+        <div id="btmFilterByUsername" class="col-sm-2 btn-link" style="cursor: pointer" title="Sort by username" onclick="manageUsers.LoadUsers('Username')"><b>Username</b></div>
+        <!--<div class="col-sm-2"><label>First Name</label></div>-->
+        <div id="btmFilterByFirstName" class="col-sm-2 btn-link" style="cursor: pointer" title="Sort by first name" onclick="manageUsers.LoadUsers('First Name')"><b>First Name</b></div>
+        <!--<div class="col-sm-2"><label>Last Name</label></div>-->
+        <div id="btmFilterByLastName" class="col-sm-2 btn-link" style="cursor: pointer" title="Sort by last name" onclick="manageUsers.LoadUsers('Last Name')"><b>Last Name</b></div>
         <div class="col-sm-3"><label>Email</label></div>
         <div class="col-sm-2"><label>Permission</label></div>
 

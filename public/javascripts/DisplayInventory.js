@@ -5,7 +5,6 @@
      */
 
     var display_inventory = {
-
         host: window.apiRoute + "/displayInventory/",
         inventory: false,
         customerSelector: null,
@@ -15,6 +14,7 @@
          * Go fetch everything and get it set up
          */
         init: function() {
+            navigation.setTitle("View Inventory");
             var self = this;
 
             $("#track_by").change(function() {
@@ -92,8 +92,7 @@
                 case "customer":
                     $("#track_by option:contains('Customer')").prop("selected", true);
                     $("#track_by").trigger("change");
-                    this.customerSelector[0].selectize.addOption({label:value, value:value});
-                    this.customerSelector[0].selectize.addItem(value);
+                    $("#customer").val(value);
                     this.searchCustomer(value);
                     break;
                 case "item":
@@ -318,8 +317,7 @@
                 var product_id = $( this).data( 'id' );
 
                 navigation.go("ItemDetailView.html", {
-                    ProductID: product_id,
-                    PreviousPage: "DisplayInventory.html"
+                    ProductID: product_id
                 });
 
                 /*$('#main_cont').load('ItemDetailView.html', function(){
@@ -343,15 +341,13 @@ var gotoPullInventory = function (pid, pname, tlq) {
     navigation.go("PullInventory.html", {
         ProductID: pid,
         ProductName: pname,
-        TotalQuantity: tlq,
-        PreviousPage: "DisplayInventory.html"
+        TotalQuantity: tlq
     });
 };
 var gotoAddInventory = function (pid, pname) {
     navigation.go("AddInventory.html", {
         ProductID: pid,
-        ProductName: pname || "",
-        PreviousPage: "DisplayInventory.html"
+        ProductName: pname || ""
     });
 };
 
@@ -375,7 +371,6 @@ var qrCode = function () {
     if (!filter || !keyword) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location.protocol + "//" + window.location.hostname + "/" + "DisplayInventory?" + filter + "=" + keyword,
-        PreviousPage: "DisplayInventory.html"
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "DisplayInventory?" + filter + "=" + keyword
     });
 };
