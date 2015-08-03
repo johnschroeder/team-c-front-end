@@ -6,9 +6,10 @@ jQuery('#createUser').submit(function(){
         "firstName":jQuery('#first').val(),
         "lastName":jQuery('#last').val()
     };
-    navigation.postJSON(window.apiRoute+'/login/createUser/', toPass, function(err, res){
+    alert(toPass.username);
+    navigation.postJSON(window.apiRoute+'/Login/createUser/' + JSON.stringify(toPass), function(err, res){
         if(err){
-            jQuery("#mainContainer").innerHTML("An error occured, check the console for error message.")
+            jQuery("#mainContainer").innerHTML("An error occured, check the console for error message.");
             console.log(err);
         }
         if(res) {
