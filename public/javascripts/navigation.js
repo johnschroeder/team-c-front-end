@@ -1,7 +1,8 @@
 var navigation = {
     stateTable:{},
-    pageHistory:[],
+    pageHistory:[], // [{page, title}]
     maxPageHistory: 16,
+
     go:function(targetPage, args) {
         var self = this;
 
@@ -132,6 +133,7 @@ var navigation = {
     },
 
     // Breadcrumbs
+
     savePageHistory: function(page) {
         if (this.pageHistory.length >= this.maxPageHistory) {
             this.pageHistory.pop();
@@ -139,12 +141,11 @@ var navigation = {
 
         if (!page) return;
 
-        title = page.split(".", 1)[0];
-        $("#title").text(title);
-        this.pageHistory.unshift({page:page, title:title});
+        this.pageHistory.unshift({page:page});
         this.showBreadcrumbs(3);
     },
 
+    // Copy of the page history array. [{page, title}].
     getPageHistory: function() {
         return this.pageHistory.slice(0);
     },
@@ -157,11 +158,11 @@ var navigation = {
     setTitle: function(title) {
         if (!title) {
             $("#title").empty();
-        }
-        else {
+        } else {
             $("#title").text(title);
-            this.showTitle(true);
-            if (this.pageHistory.length) this.pageHistory[0].title = title;
+
+            if (this.pageHistory.length)
+                this.pageHistory[0].title = title;
         }
     },
 
@@ -177,12 +178,13 @@ var navigation = {
         if (!limit) {
             $("#breadcrumbs").addClass("hidden");
             this.showBackButton(false);
+            this.showTitle(false);
         } else {
             $("#breadcrumbs").removeClass("hidden").empty();
-
             var history = this.getPageHistory();
             var current = history.shift();
-            $("#title").text(current.title);
+            var title = current.title || ""; // page.split(".", 1)[0]
+            $("#title").text(title);
             this.showTitle(true);
 
             if (history.length < 1) {
@@ -195,18 +197,15 @@ var navigation = {
 
             for (var i = 0; i < limit && history.length; ++i) {
                 var next = history.shift();
-
-                var a = $("<a/>");
+                var a = $("<a style='cursor: pointer;'/>")
+                    .text(next.title);
                 // a.attr("href", "#") // html4 and below
-
-                this.makeBackLink(a, i + 1)
-
-                a.text(next.title);
-
+                this.makeBackLink(a, i + 1);
                 $("#breadcrumbs").prepend(" > ").prepend(a);
             }
         }
     },
+
     makeBackLink(elem, times) {
         elem.click(function() {
             navigation.back(times); // closure fix

@@ -9,12 +9,14 @@
 <body>
 
 <div class="container-fluid display-inventory-container">
+    <div id="error" class="alert alert-danger hidden" role="alert"></div>
+
     <div class="row">
         <div class="col-sm-6 track-inventory-by">
             <label for="track_by" class="input-label">Filter By</label>
             <select id="track_by" class="form-control filter track-by">
                 <option value="Customer">Customer</option>
-                <option value="Item">Product</option>
+                <option value="Product">Product</option>
                 <option value="All">All</option>
             </select>
         </div>
