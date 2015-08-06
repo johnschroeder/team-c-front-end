@@ -21,7 +21,7 @@ var editUser = {
 
     },
 
-    _submitChanges: function (requestDelete, callback) {
+    _submitChanges: function (requestDeactivate, callback) {
         var username = $("#username").text();
         var newFirstName = $("#FirstName").val();
         var newLastName = $("#LastName").val();
@@ -35,7 +35,7 @@ var editUser = {
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
-            + perms + '/' + requestDelete;
+            + perms + '/' + requestDeactivate;
 
         //alert(host);
 
@@ -55,8 +55,8 @@ var editUser = {
         }
     },
 
-    delete: function () {
-        if (confirm('Do you really want to delete this user?')) {
+    deactivate: function () {
+        if (confirm('Do you really want to deactivate this user?')) {
             var message = editUser._submitChanges(1, function (message) {
                 alert(message);
             });
