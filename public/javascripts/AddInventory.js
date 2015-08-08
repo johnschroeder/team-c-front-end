@@ -11,7 +11,7 @@ var addInventory = {
         this.productId = parseInt(window.args.ProductID) || 0;
 
         if (this.productId == 0) {
-            this.showError("Failed to initialize. Invalid product ID.");
+            this.showError("Failed to initialize. Invalid product ID. Please reload the page.");
             console.log("Error: Init: Invalid product ID.");
             return;
         }
@@ -108,11 +108,7 @@ var addInventory = {
     },
 
     getAlternateId: function () {
-        var v = parseInt($("#alt_id_input").val()) || 0;
-
-        if (v < 0) v = 0; // unsigned number
-
-        return v;
+        return parseInt($("#alt_id_input").val()) || null;
     },
 
     getTotal: function () {
@@ -191,7 +187,7 @@ var addInventory = {
         var altId = this.getAlternateId();
 
         if (productId == 0) {
-            this.showError("Failed to add inventory. Invalid product ID.");
+            this.showError("Failed to add inventory. Invalid product ID. Please reload the page.");
             return;
         }
 
@@ -205,15 +201,15 @@ var addInventory = {
             return;
         }
 
-        if (altId == 0) {
-            this.showError("Failed to add inventory. Invalid alternate ID. Please enter a number greater than 0.");
+        if (altId < 0) {
+            this.showError("Failed to add inventory. Invalid alternate ID. Please enter a number greater than or equal to 0, or nothing.");
             return;
         }
 
         $("#inventory_add_button").prop("disabled", true);
         var self = this;
 
-        navigation.get(window.apiRoute + "/AddInventory/" + productId + "/" + total + "/" + location + "/" + altId, function(err, res) {
+        navigation.get(window.apiRoute + "/AddInventory/" + productId + "/" + total + "/" + location + "/" + (altId === null ? "null" : altId), function(err, res) {
             if (err) {
                 self.showError("Failed to add inventory: " + err);
                 console.log("Error: Submit add inventory: " + err);
@@ -235,7 +231,7 @@ var addInventory = {
         if (size < 0) size = 0; // unsigned number
 
         if (productId == 0) {
-            this.showError("Failed to add inventory. Invalid product ID.");
+            this.showError("Failed to add inventory. Invalid product ID. Please reload the page.");
             return;
         }
 
@@ -264,27 +260,27 @@ var addInventory = {
                 $("#pkg_add_button").prop("disabled", false);
             }
         });
-    }
+    },
 
     // Alert
 
     showError: function (msg) {
         if (!msg) $("#error").addClass("hidden");
         $("#error").removeClass("hidden").text(msg);
-    }
+    },
 
     hideError: function () {
         $("#error").addClass("hidden");
-    }
+    },
 
     showResponse: function (msg) {
         if (!msg) $("#response").addClass("hidden");
         $("#response").removeClass("hidden").text(msg);
-    }
+    },
 
     hideResponse: function () {
         $("#response").addClass("hidden");
-    }
+    },
 
     hideAllAlerts: function () {
         $("#error").addClass("hidden");
