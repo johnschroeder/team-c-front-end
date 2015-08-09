@@ -38,7 +38,7 @@ var addInventory = {
             .appendTo("#add_list");
 
         // package type input
-        var select = $("<select class='form-control' name='package_input'/>");
+        var select = $("<select class='form-control' name='package_input'/>")
             .change(function(){self.updateTotal();});
 
         this.updateEntryPackageTypeOptions(select);
@@ -52,15 +52,15 @@ var addInventory = {
             )
         ).append($("<div class='col-sm-2'/>")
             .append($("<input class='form-control' name='amount_input' type='number' min='0' title='Number of packages of this type.'/>") // amount input
-                .keyup(function(){self.updateTotal();});
-                .change(function(){self.updateTotal();});
+                .keyup(function(){self.updateTotal();})
+                .change(function(){self.updateTotal();})
             )
         ).append($("<div class='col-sm-1'/>")
             .append($("<p class='form-control-static text-center'/>")
                 .text("=")
             )
         ).append($("<div class='col-sm-2'/>")
-            .append("<p class='form-control-static'/>")
+            .append($("<p class='form-control-static'/>")
                 .text("Count of")
             )
         ).append($("<div class'col-sm-2'/>")
@@ -107,8 +107,10 @@ var addInventory = {
         return $("#location_input").val() || "";
     },
 
+    // Get the alternate ID. Returns null or non-negative integer if input is valid, -1 if input is invalid.
     getAlternateId: function () {
-        return parseInt($("#alt_id_input").val()) || null;
+        if ($("#alt_id_input").val() === "") return null;
+        return /^\d+$/.test($("#alt_id_input").val()) ? parseInt($("#alt_id_input").val()) : -1;
     },
 
     getTotal: function () {
@@ -168,7 +170,7 @@ var addInventory = {
     // Updates the options for the package types of a single entry.
     updateEntryPackageTypeOptions: function (entry) {
         this.packageTypes.forEach(function (each) {
-            $($("<option/>"))
+            $("<option/>")
                 .text(each.Name + " " + each.Size)
                 .data("name", each.Name)
                 .data("size", each.Size)
