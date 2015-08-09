@@ -287,10 +287,13 @@ console.log(res);
     RowRecalculate: function(row){
         var sizeNumber = $(row).find('.Size :selected').text().split('---', 2)[1];
         var count = $(row).find('.Count').val();
-        var available = ($(row).find('.Location').text().split('---', 2)[1]).split('still',2)[0];
+        var available = ($(row).find('.Location').find('option:selected').text().split('---', 2)[1]).split('still',2)[0];
         if(available<sizeNumber*count){
             count = (available - available%sizeNumber)/sizeNumber;
             console.log(count);
+            console.log(available);
+            console.log(sizeNumber);
+            console.log(($(row).find('.Location').text()));
             $(row).find('.Count').val(count);
             $(row).find('.Subtotal').text(count*sizeNumber);
             return false;
