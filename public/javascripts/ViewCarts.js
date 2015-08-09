@@ -145,7 +145,7 @@ var ViewCarts={
 
 
     BindPage: function(cartID){
-        navigation.hit("/Carts/GetCartModelByCartID/" + cartID,function(res){
+        navigation.hit("/Carts/GetCartModel/" + cartID,function(res){
             var state = window.state;
             state.CartModel = res;
             navigation.saveState(state);
@@ -303,12 +303,31 @@ var ViewCarts={
 
 
     ReBindPage: function(row){
+        var cartID = $("#selectCart").val();
         var productID = $(row).parent().find('.lbProductID').text();
         var cartItemID = $(row).find('.CartItemID').text();
         var sizeMapID = $(row).find('.Size').val();
-        var count = $(row).find('.Count').val();
+        var packageCount = $(row).find('.Count').val();
         var location = $(row).find('.Location').val();
+        var sizeSelect = $(row).find('.Size');
+        var packageSizeOption = $(sizeSelect).find('option:selected').text();
+        var packageSize = (packageSizeOption.split('---'))[1];
 
+        var dirtyRow = {"cartID":cartID,
+            "productID":productID,
+            "cartItemID":cartItemID,
+            "sizeMapID":sizeMapID,
+            "packageSize":packageSize,
+            "packageCount":packageCount,
+            "location":location
+        };
+
+        navigation.hit("/Carts/PutCartModel/" + dirtyRow,function(res){
+            console.log(res);
+        });
+
+
+        /*
         var cartModel = window.state.CartModel;
         var index;
         for(k=0; k<cartModel.products.length; k++){
@@ -322,7 +341,7 @@ var ViewCarts={
             if(item.cartItemID == cartItemID){
                 //can update more.....but below are the critical ones
                 item.sizeMapID = sizeMapID;
-                item.packageCount = count;
+                item.packageCount = packageCount;
                 item.location = location;
                 item.dirty = true;
             }
@@ -331,6 +350,9 @@ var ViewCarts={
         navigation.saveState(window.state);
 
         var mmm = window.state.CartModel;
+//console.log(JSON.stringify(mmm));
+        */
+
 
         //hit backend with window.state.CartModel
         /*
