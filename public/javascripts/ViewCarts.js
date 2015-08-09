@@ -152,7 +152,7 @@ var ViewCarts={
             if(res == 'empty') {
                 return;
             }
-
+console.log(res);
             var products = res.products;
             var oneProductContainer = ($("#divProductsContainer").children())[0];
 
@@ -322,8 +322,43 @@ var ViewCarts={
             "location":location
         };
 
-        navigation.hit("/Carts/PutCartModel/" + dirtyRow,function(res){
+        navigation.hit("/Carts/PutCartModel/" +  JSON.stringify(dirtyRow),function(res){
             console.log(res);
+            if(res=="Success"){
+                ViewCarts.BindPage(cartID);
+                //or parseresult
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
         });
 
 
