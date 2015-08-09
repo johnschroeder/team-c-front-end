@@ -156,8 +156,10 @@ var manageUsers = {
         };
 
 
-        var createUserArgs = JSON.stringify(toPass);
-        navigation.postJSON(window.apiRoute+'/Login/createUser/', createUserArgs, function(err, res){
+
+       // var createUserArgs = JSON.stringify(toPass);
+        //alert(createUserArgs);
+        navigation.post(window.apiRoute+'/Login/createUser/', toPass, function(err, res){
                 if(err) {
                     window.alert("Error: "+error);
                     this.LoadUsers();
