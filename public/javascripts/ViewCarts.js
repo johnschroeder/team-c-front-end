@@ -22,7 +22,7 @@ var ViewCarts={
         if(window.args.ProductID != null) {
             this.AddNewCartItem();
         }
-
+        window.state.productUnderEdit = [];
     },
 
     CartOnChange: function( dropdown ) {
@@ -153,10 +153,9 @@ var ViewCarts={
                 return;
             }
 console.log(res);
-
+console.log(window.state.productUnderEdit);
 
             var template = ($('#divProductsContainer').children())[0];
-            console.log(template);
             $('#divProductsContainer').empty();
             $('#divProductsContainer').append(template);
             var products = res.products;
@@ -239,6 +238,15 @@ console.log(res);
     Edit: function(button){
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
+        var productID = $(oneProd).find('.lbProductID').text();
+        var products = window.state.productUnderEdit;
+        var hasProduct = false;
+        $.each(myArray, function(i,obj) {
+            if (obj.pID === productID) { hasProduct = true; return false;}
+        });
+        if(hasProduct = false)
+            window.state.productUnderEdit.push({"pID":productID});
+console.log(products);
         $(oneProd).find('.divDoneEditButtons').show();
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
