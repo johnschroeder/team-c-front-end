@@ -153,6 +153,12 @@ var ViewCarts={
                 return;
             }
 console.log(res);
+
+
+            var template = ($('#divProductsContainer').children())[0];
+            console.log(template);
+            $('#divProductsContainer').empty();
+            $('#divProductsContainer').append(template);
             var products = res.products;
             var oneProductContainer = ($("#divProductsContainer").children())[0];
 
