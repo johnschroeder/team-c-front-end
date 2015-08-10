@@ -319,8 +319,15 @@ console.log(inEditMode);
                    // alert(deleteHost);
                     navigation.hit(deleteHost,
                         function(res) {
+                            if (res == "Success") {
+
                             alert("Shipping!");
-                            navigation.go("DisplayInventory.html", null);
+                                navigation.go("DisplayInventory.html", null);
+                        }
+                            else{
+                                alert(res);
+                            }
+
                         });
                 });
             $(btn).appendTo("#divProductsContainer");// .appendChild(btn);
