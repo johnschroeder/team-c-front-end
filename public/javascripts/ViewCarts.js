@@ -7,22 +7,42 @@ var ViewCarts={
 
 
     init: function(){
-        var scID = state.CartIDSelected;
+        var scID
+        if(window.args.CartID === undefined) {
+            scID = state.CartIDSelected;
+        } else {
+            scID = window.args.CartID;
+        }
 
+        
+        if(typeof window.state.productUnderEdit === 'undefined')
+            window.state.productUnderEdit = [];
         this.PopulateCart(function(){
             if (state && state.CartIDSelected) {
                 $('#selectCart').val(scID);
             }
         });
 
-        if (state && state.CartIDSelected) {
-            this.BindPage(scID);
-        }
 
         if(window.args.ProductID != null) {
             this.AddNewCartItem();
+
+
+             var productID = window.args.ProductID;
+             var products = window.state.productUnderEdit;
+             var hasProduct = false;
+             $.each(products, function(i,obj) {
+             if (obj.pID === productID)
+             hasProduct = true;
+             });
+             if(hasProduct == false)
+             window.state.productUnderEdit.push({"pID":productID.toString()});
+
         }
-        window.state.productUnderEdit = [];
+
+        if (state && state.CartIDSelected) {
+            this.BindPage(scID);
+        }
     },
 
     CartOnChange: function( dropdown ) {
@@ -34,7 +54,6 @@ var ViewCarts={
         navigation.saveState(state);
         this.CleanPage(cartIDSelected);
         this.BindPage(cartIDSelected);
-
     },
 
     PopulateCart: function(callback){
@@ -44,7 +63,25 @@ var ViewCarts={
             .val(0)
             .text("Please select cart")
             .appendTo('#selectCart');
+        option = $("<option/>")
+            .val(1)
+            .text("--- New Cart ---")
+            .appendTo("#selectCart");
         var user = 'don';
+        var assignee = 'don';
+        $('#selectCart').on('change', function() {
+            if($(this).find('option:selected').text()=="--- New Cart ---" ){
+                var cartName = window.prompt("Enter job ID:", "Job ID");
+                navigation.hit("/Carts/CreateCart/" + cartName + "/" + user  + "/" + assignee + "/" + 5,
+                                function(res) {
+                                    state.CartIDSelected = res;
+                                    console.log("STUFF");
+                                    $('#sel1').off('change');
+                                    navigation.go("ViewCarts.html", {CartID: res,
+                                                    ProductID: window.args.ProductID});
+                                });
+            }
+        });
         navigation.hit("/Carts/GetCartsByUser/" + user,function(res){
             var results = JSON.parse(res);
 
@@ -113,6 +150,10 @@ var ViewCarts={
 
     },
 
+    addNewProductRow: function(){
+
+    },
+
     DoneAdding: function(){
         $("#divCalc").hide();
         this.ReBindPage($("#selectCart").val());
@@ -154,7 +195,6 @@ var ViewCarts={
                 return;
             }
 console.log(res);
-console.log(window.state.productUnderEdit);
 
             var template = ($('#divProductsContainer').children())[0];
             $('#divProductsContainer').empty();
@@ -174,7 +214,17 @@ console.log(window.state.productUnderEdit);
                     var pIDLabel = $(newProductContainer).find(".lbProductID");
                     $(pnameLabel).text(productName);
                     $(pIDLabel).text(productID);
-                    $(newProductContainer).appendTo("#divProductsContainer");
+
+                    if(window.args.ProductID != null && window.args.ProductID == productID){
+
+                        $(newProductContainer).appendTo("#divProductsContainer");
+                    }
+                    else{
+                        $(newProductContainer).appendTo("#divProductsContainer");
+                    }
+
+
+
 
                     var items = product.items;
                     var itemLen = items.length;
@@ -184,6 +234,15 @@ console.log(window.state.productUnderEdit);
 
                     var viewRow = $(newProductContainer).children('.divItemRowView');
                     var editRow = $(newProductContainer).children('.divItemRowEdit');
+
+
+                    var products = window.state.productUnderEdit;
+                    var inEditMode = false;
+                    $.each(products, function(i,obj) {
+                        if (obj.pID == productID.toString())
+                            inEditMode = true;
+                    });
+console.log(inEditMode);
 
                     for (i = 0; i < itemLen; i++) {
 
@@ -195,23 +254,21 @@ console.log(window.state.productUnderEdit);
                         var newEditRow = editRow.clone();
                         var sizeSelect = $(newEditRow).find('.Size');
 
-                        ViewCarts.PopulateSizeByProductID(sizeSelect, productID, sizeMapID);
+                        ViewCarts.PopulateSizeByProductID(sizeSelect,productID,sizeMapID);
                         $(newEditRow).find('.CartItemID').text(items[i].cartItemID);
                         $(newEditRow).find('.Count').val(items[i].packageCount);
                         $(newEditRow).find('.Subtotal').text(subtotal);
                         $(newEditRow).find('.Location').text(items[i].location);
-                        $(newEditRow).find('.Color').css({'background': items[i].color});
+                        $(newEditRow).find('.Color').css({'background':items[i].color});
 
                         var locSelect = $(newEditRow).find('.Location');
-                        for (j = 0; j < locs.length; j++) {
+                        for(j = 0; j < locs.length; j++){
                             var optionname = locs[j] + "---" + avlQty[j] + " still available";
                             var option = new Option(optionname, locs[j]);
                             $(locSelect).append($(option));
 
                         }
                         $(locSelect).val(items[i].location);
-
-
                         newEditRow.appendTo(newProductContainer);
 
                         var newRow = viewRow.clone();
@@ -219,17 +276,33 @@ console.log(window.state.productUnderEdit);
                         $(newRow).find('.ViewCount').text(items[i].packageCount);
                         $(newRow).find('.ViewSubtotal').text(subtotal);
                         $(newRow).find('.ViewLocation').text(items[i].location);
-                        $(newRow).find('.ViewColor').css({'background': items[i].color});
-                        $(newRow).show();
+                        $(newRow).find('.ViewColor').css({'background':items[i].color});
+                        //$(newRow).show();
                         newRow.appendTo(newProductContainer);
+
+                        var lbTotal = $(newProductContainer).find(".lbProductTotal");
+                        $(lbTotal).text(" with Quantity of "+total+" in Cart");
+                        var btnsEditPull = $(newProductContainer).find('.divEditPullButtons');
+                        var btnsDoneEdit = $(newProductContainer).find('.divDoneEditButtons');
+                        $(btnsEditPull).show();
+
+
+                        if(inEditMode == false){
+                            $(newRow).show();
+                            $(newEditRow).hide();
+                            $(btnsEditPull).show();
+                            $(btnsDoneEdit).hide();
+                        }
+                        else{
+                            $(newRow).hide();
+                            $(newEditRow).show();
+                            $(btnsEditPull).hide();
+                            $(btnsDoneEdit).show();
+                        }
 
                     }
 
 
-                    var lbTotal = $(newProductContainer).find(".lbProductTotal");
-                    $(lbTotal).text(" with Quantity of "+total+" in Cart");
-                    var btns = $(newProductContainer).find('.divEditPullButtons');
-                    $(btns).show();
 
 
                 }
@@ -253,8 +326,6 @@ console.log(window.state.productUnderEdit);
             $(btn).appendTo("#divProductsContainer");// .appendChild(btn);
             $(btn).hide();
         });
-
-
     },
 
     Edit: function(button){
@@ -263,12 +334,12 @@ console.log(window.state.productUnderEdit);
         var productID = $(oneProd).find('.lbProductID').text();
         var products = window.state.productUnderEdit;
         var hasProduct = false;
-        $.each(myArray, function(i,obj) {
-            if (obj.pID === productID) { hasProduct = true; return false;}
+        $.each(products, function(i,obj) {
+            if (obj.pID === productID)
+                hasProduct = true;
         });
-        if(hasProduct = false)
+        if(hasProduct == false)
             window.state.productUnderEdit.push({"pID":productID});
-console.log(products);
         $(oneProd).find('.divDoneEditButtons').show();
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
@@ -286,6 +357,17 @@ console.log(products);
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
         var viewRowsLen = viewRows.length;
+
+        var productID = $(oneProd).find('.lbProductID').text();
+        var products = window.state.productUnderEdit;
+        var hasProduct = false;
+        $.each(products, function(i,obj) {
+            if (obj.pID === productID)
+                hasProduct = true;
+        });
+        if(hasProduct == true)
+            window.state.productUnderEdit.pop({"pID":productID});
+
         for (i = 1; i < viewRowsLen; i++) {
             $(viewRows[i]).show();
             $(editRows[i]).hide();
@@ -335,8 +417,6 @@ console.log(products);
             this.ReBindPage(row);
         }
 
-
-
     },
 
 
@@ -346,10 +426,6 @@ console.log(products);
         var available = ($(row).find('.Location').find('option:selected').text().split('---', 2)[1]).split('still',2)[0];
         if(available<sizeNumber*count){
             count = (available - available%sizeNumber)/sizeNumber;
-            console.log(count);
-            console.log(available);
-            console.log(sizeNumber);
-            console.log(($(row).find('.Location').text()));
             $(row).find('.Count').val(count);
             $(row).find('.Subtotal').text(count*sizeNumber);
             return false;
@@ -382,7 +458,6 @@ console.log(products);
         };
 
         navigation.hit("/Carts/PutCartModel/" +  JSON.stringify(dirtyRow),function(res){
-            console.log(res);
             if(res=="Success"){
                 ViewCarts.BindPage(cartID);
                 //or parseresult
