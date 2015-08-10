@@ -216,8 +216,10 @@ console.log(res);
                     $(pIDLabel).text(productID);
 
                     if(window.args.ProductID != null && window.args.ProductID == productID){
+                        var firstdiv = $('#divProductsContainer').children()[0];
+                        console.log(firstdiv);
+                        $(newProductContainer).insertAfter($(firstdiv));
 
-                        $(newProductContainer).appendTo("#divProductsContainer");
                     }
                     else{
                         $(newProductContainer).appendTo("#divProductsContainer");
