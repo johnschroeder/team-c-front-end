@@ -206,7 +206,7 @@ var navigation = {
         }
     },
 
-    makeBackLink(elem, times) {
+    makeBackLink:function(elem, times) {
         elem.click(function() {
             navigation.back(times); // closure fix
         });
