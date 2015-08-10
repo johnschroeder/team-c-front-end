@@ -34,6 +34,7 @@ var ViewCarts={
         navigation.saveState(state);
         this.CleanPage(cartIDSelected);
         this.BindPage(cartIDSelected);
+
     },
 
     PopulateCart: function(callback){
@@ -194,15 +195,15 @@ console.log(window.state.productUnderEdit);
                         var newEditRow = editRow.clone();
                         var sizeSelect = $(newEditRow).find('.Size');
 
-                        ViewCarts.PopulateSizeByProductID(sizeSelect,productID,sizeMapID);
+                        ViewCarts.PopulateSizeByProductID(sizeSelect, productID, sizeMapID);
                         $(newEditRow).find('.CartItemID').text(items[i].cartItemID);
                         $(newEditRow).find('.Count').val(items[i].packageCount);
                         $(newEditRow).find('.Subtotal').text(subtotal);
                         $(newEditRow).find('.Location').text(items[i].location);
-                        $(newEditRow).find('.Color').css({'background':items[i].color});
+                        $(newEditRow).find('.Color').css({'background': items[i].color});
 
                         var locSelect = $(newEditRow).find('.Location');
-                        for(j = 0; j < locs.length; j++){
+                        for (j = 0; j < locs.length; j++) {
                             var optionname = locs[j] + "---" + avlQty[j] + " still available";
                             var option = new Option(optionname, locs[j]);
                             $(locSelect).append($(option));
@@ -218,11 +219,12 @@ console.log(window.state.productUnderEdit);
                         $(newRow).find('.ViewCount').text(items[i].packageCount);
                         $(newRow).find('.ViewSubtotal').text(subtotal);
                         $(newRow).find('.ViewLocation').text(items[i].location);
-                        $(newRow).find('.ViewColor').css({'background':items[i].color});
+                        $(newRow).find('.ViewColor').css({'background': items[i].color});
                         $(newRow).show();
                         newRow.appendTo(newProductContainer);
 
                     }
+
 
                     var lbTotal = $(newProductContainer).find(".lbProductTotal");
                     $(lbTotal).text(" with Quantity of "+total+" in Cart");
@@ -232,7 +234,27 @@ console.log(window.state.productUnderEdit);
 
                 }
             });
+
+            var btn = document.createElement("BUTTON");        // Create a <button> element
+            var t = document.createTextNode("SHIP");       // Create a text node
+            btn.setAttribute("id", "shipBtnId");
+
+            btn.appendChild(t); // Append the text to <button>
+            btn.addEventListener("click",
+                function() {
+                    var deleteHost = "/Carts/DeleteCart/" + cartID;
+                   // alert(deleteHost);
+                    navigation.hit(deleteHost,
+                        function(res) {
+                            alert("Shipping!");
+                            navigation.go("DisplayInventory.html", null);
+                        });
+                });
+            $(btn).appendTo("#divProductsContainer");// .appendChild(btn);
+            $(btn).hide();
         });
+
+
     },
 
     Edit: function(button){
@@ -274,12 +296,29 @@ console.log(products);
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divUnpullButton').show();
+
+        var readyToShip = true;
+        $(".btnPull").each(function(){
+
+
+            if ($(this).is(":visible"))
+            {
+                readyToShip = false;
+            }
+        });
+
+        if (readyToShip)
+        {
+            document.getElementById('shipBtnId').style.display = "";
+        }
+
     },
 
     Unpull: function(button){
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divEditPullButtons').show();
+        document.getElementById('shipBtnId').style.display = "none";
     },
 
 
@@ -292,8 +331,11 @@ console.log(products);
             alert("There is not enough inventory in the selected location.");
         }
         else{
+
             this.ReBindPage(row);
         }
+
+
 
     },
 
@@ -344,36 +386,6 @@ console.log(products);
             if(res=="Success"){
                 ViewCarts.BindPage(cartID);
                 //or parseresult
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             }
         });
