@@ -218,8 +218,10 @@ console.log(res);
                     $(pIDLabel).text(productID);
 
                     if(window.args.ProductID != null && window.args.ProductID == productID){
+                        var firstdiv = $('#divProductsContainer').children()[0];
+                        console.log(firstdiv);
+                        $(newProductContainer).insertAfter($(firstdiv));
 
-                        $(newProductContainer).appendTo("#divProductsContainer");
                     }
                     else{
                         $(newProductContainer).appendTo("#divProductsContainer");
@@ -314,6 +316,31 @@ console.log(inEditMode);
 
                 }
             });
+
+            var btn = document.createElement("BUTTON");        // Create a <button> element
+            var t = document.createTextNode("SHIP");       // Create a text node
+            btn.setAttribute("id", "shipBtnId");
+
+            btn.appendChild(t); // Append the text to <button>
+            btn.addEventListener("click",
+                function() {
+                    var deleteHost = "/Carts/DeleteCart/" + cartID;
+                   // alert(deleteHost);
+                    navigation.hit(deleteHost,
+                        function(res) {
+                            if (res == "Success") {
+
+                            alert("Shipping!");
+                                navigation.go("DisplayInventory.html", null);
+                        }
+                            else{
+                                alert(res);
+                            }
+
+                        });
+                });
+            $(btn).appendTo("#divProductsContainer");// .appendChild(btn);
+            $(btn).hide();
         });
     },
 
@@ -401,12 +428,29 @@ console.log(inEditMode);
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divUnpullButton').show();
+
+        var readyToShip = true;
+        $(".btnPull").each(function(){
+
+
+            if ($(this).is(":visible"))
+            {
+                readyToShip = false;
+            }
+        });
+
+        if (readyToShip)
+        {
+            document.getElementById('shipBtnId').style.display = "";
+        }
+
     },
 
     Unpull: function(button){
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divEditPullButtons').show();
+        document.getElementById('shipBtnId').style.display = "none";
     },
 
 
@@ -420,6 +464,7 @@ console.log(inEditMode);
             alert("There is not enough inventory in the selected location.");
         }
         else{
+
             this.ReBindPage(row);
         }
 
@@ -467,36 +512,6 @@ console.log(inEditMode);
             if(res=="Success"){
                 CartView.BindPage(cartID);
                 //or parseresult
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             }
         });
