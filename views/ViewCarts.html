@@ -26,7 +26,6 @@
     <div id="divCalc" style="display:none">
         <label id="lblNewProductToPull"></label>
         <div id="InputDiv">
-            <!-- Template for one row -->
             <div class="InputChild row form-group">
                 <div class="col-sm-3">
                     <select onchange="CartView.SizeOnChange(this)" class="form-control Size">
@@ -51,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <button id="btnAddRow">Add</button>
+        <button id="btnAddRow" onclick="CartView.addNewProductRow()">Add</button>
         <button id="btnDoneAdding" onclick="CartView.DoneAdding()">Exit</button>
     </div>
 
@@ -78,7 +77,7 @@
 
 
             <div class="divItemRowEdit row form-group" style="display:none">
-                <div style="display:none"><label class="CartItemID"></label></div>
+                <div style="display:none"><label class="CartItemID">-1</label></div>
                 <div class="col-sm-3">
                     <select class="form-control Size" onchange="CartView.RowItemOnChange(this)">
                         <option value="0">Please Select Package Size---</option>
