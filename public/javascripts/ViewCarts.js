@@ -7,7 +7,12 @@ var CartView={
 
 
     init: function(){
-        var scID = state.CartIDSelected;
+        var scID
+        if(window.args.CartID === undefined) {
+            scID = state.CartIDSelected;
+        } else {
+            scID = window.args.CartID;
+        }
 
         this.PopulateCart(function(){
             if (state && state.CartIDSelected) {
@@ -22,7 +27,7 @@ var CartView={
         if(window.args.ProductID != null) {
             this.AddNewCartItem();
         }
-
+        window.state.productUnderEdit = [];
     },
 
     CartOnChange: function( dropdown ) {
@@ -43,7 +48,25 @@ var CartView={
             .val(0)
             .text("Please select cart")
             .appendTo('#selectCart');
+        option = $("<option/>")
+            .val(1)
+            .text("--- New Cart ---")
+            .appendTo("#selectCart");
         var user = 'don';
+        var assignee = 'don';
+        $('#selectCart').on('change', function() {
+            if($(this).find('option:selected').text()=="--- New Cart ---" ){
+                var cartName = window.prompt("Enter job ID:", "Job ID");
+                navigation.hit("/Carts/CreateCart/" + cartName + "/" + user  + "/" + assignee + "/" + 5,
+                                function(res) {
+                                    state.CartIDSelected = res;
+                                    console.log("STUFF");
+                                    $('#sel1').off('change');
+                                    navigation.go("ViewCarts.html", {CartID: res,
+                                                    ProductID: window.args.ProductID});
+                                });
+            }
+        });
         navigation.hit("/Carts/GetCartsByUser/" + user,function(res){
             var results = JSON.parse(res);
 
@@ -156,9 +179,7 @@ var CartView={
             }
 console.log(res);
 
-
             var template = ($('#divProductsContainer').children())[0];
-            console.log(template);
             $('#divProductsContainer').empty();
             $('#divProductsContainer').append(template);
             var products = res.products;
@@ -187,6 +208,15 @@ console.log(res);
                     var viewRow = $(newProductContainer).children('.divItemRowView');
                     var editRow = $(newProductContainer).children('.divItemRowEdit');
 
+
+                    var products = window.state.productUnderEdit;
+                    var inEditMode = false;
+                    $.each(products, function(i,obj) {
+                        if (obj.pID == productID.toString())
+                            inEditMode = true;
+                    });
+console.log(inEditMode);
+
                     for (i = 0; i < itemLen; i++) {
 
                         subtotal = items[i].amountPerPackage * items[i].packageCount;
@@ -212,8 +242,6 @@ console.log(res);
 
                         }
                         $(locSelect).val(items[i].location);
-
-
                         newEditRow.appendTo(newProductContainer);
 
                         var newRow = viewRow.clone();
@@ -222,17 +250,36 @@ console.log(res);
                         $(newRow).find('.ViewSubtotal').text(subtotal);
                         $(newRow).find('.ViewLocation').text(items[i].location);
                         $(newRow).find('.ViewColor').css({'background':items[i].color});
-                        $(newRow).show();
+                        //$(newRow).show();
                         newRow.appendTo(newProductContainer);
+
+                        var lbTotal = $(newProductContainer).find(".lbProductTotal");
+                        $(lbTotal).text(" with Quantity of "+total+" in Cart");
+                        var btnsEditPull = $(newProductContainer).find('.divEditPullButtons');
+                        var btnsDoneEdit = $(newProductContainer).find('.divDoneEditButtons');
+                        $(btnsEditPull).show();
+
+
+                        if(inEditMode == false){
+                            $(newRow).show();
+                            $(newEditRow).hide();
+                            $(btnsEditPull).show();
+                            $(btnsDoneEdit).hide();
+                        }
+                        else{
+                            $(newRow).hide();
+                            $(newEditRow).show();
+                            $(btnsEditPull).hide();
+                            $(btnsDoneEdit).show();
+                        }
 
                     }
 
-                    var lbTotal = $(newProductContainer).find(".lbProductTotal");
-                    $(lbTotal).text(" with Quantity of "+total+" in Cart");
-                    var btns = $(newProductContainer).find('.divEditPullButtons');
-                    $(btns).show();
                     var addBtn = $(newProductContainer).parent().find('.addBtn').clone();
                     $(addBtn).appendTo(newProductContainer);
+
+
+
                 }
             });
         });
@@ -251,6 +298,15 @@ console.log(res);
     Edit: function(button){
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
+        var productID = $(oneProd).find('.lbProductID').text();
+        var products = window.state.productUnderEdit;
+        var hasProduct = false;
+        $.each(products, function(i,obj) {
+            if (obj.pID === productID)
+                hasProduct = true;
+        });
+        if(hasProduct == false)
+            window.state.productUnderEdit.push({"pID":productID});
         $(oneProd).find('.divDoneEditButtons').show();
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
@@ -269,6 +325,17 @@ console.log(res);
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
         var viewRowsLen = viewRows.length;
+
+        var productID = $(oneProd).find('.lbProductID').text();
+        var products = window.state.productUnderEdit;
+        var hasProduct = false;
+        $.each(products, function(i,obj) {
+            if (obj.pID === productID)
+                hasProduct = true;
+        });
+        if(hasProduct == true)
+            window.state.productUnderEdit.pop({"pID":productID});
+
         for (i = 1; i < viewRowsLen; i++) {
             $(viewRows[i]).show();
             $(editRows[i]).hide();
@@ -310,10 +377,6 @@ console.log(res);
         var available = ($(row).find('.Location').find('option:selected').text().split('---', 2)[1]).split('still',2)[0];
         if(available<sizeNumber*count){
             count = (available - available%sizeNumber)/sizeNumber;
-            console.log(count);
-            console.log(available);
-            console.log(sizeNumber);
-            console.log(($(row).find('.Location').text()));
             $(row).find('.Count').val(count);
             $(row).find('.Subtotal').text(count*sizeNumber);
             return false;
@@ -346,7 +409,6 @@ console.log(res);
         };
 
         navigation.hit("/Carts/PutCartModel/" +  JSON.stringify(dirtyRow),function(res){
-            console.log(res);
             if(res=="Success"){
                 CartView.BindPage(cartID);
                 //or parseresult
