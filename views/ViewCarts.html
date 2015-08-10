@@ -11,13 +11,16 @@
     <h1>View Carts</h1>
     <hr/>
     <label for="selectCart">Select a cart to view</label>
-    <select id="selectCart" onchange="ViewCarts.CartOnChange(this)" class="form-control Size">
+    <select id="selectCart" onchange="CartView.CartOnChange(this)" class="form-control Size">
     </select>
 
     <hr/>
 
 
     <div id="response"></div>
+    <div class="addBtn" style="display:none">
+        <button class="addBtn" onClick="CartView.AddNewEditRow(this)">Add</button>
+    </div>
 
 
     <div id="divCalc" style="display:none">
@@ -25,14 +28,14 @@
         <div id="InputDiv">
             <div class="InputChild row form-group">
                 <div class="col-sm-3">
-                    <select onchange="ViewCarts.SizeOnChange(this)" class="form-control Size">
+                    <select onchange="CartView.SizeOnChange(this)" class="form-control Size">
                         <option value="0">Please Select Package Size---</option>
                     </select>
                 </div>
                 <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
 
                 <div class="col-sm-1">
-                    <input type="number" class="form-control Count" onchange="ViewCarts.ReCalculate()" min="0">
+                    <input type="number" class="form-control Count" onchange="CartView.ReCalculate()" min="0">
                 </div>
 
                 <div class="col-sm-1">
@@ -40,15 +43,15 @@
                 </div>
                 <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
                 <div class="col-sm-3">
-                    <select onchange="ViewCarts.LocationOnChange(this)" class="form-control Location"> </select>
+                    <select onchange="CartView.LocationOnChange(this)" class="form-control Location"> </select>
                 </div>
                 <div class="col-sm-1">
                     <button class="form-control Color"></button>
                 </div>
             </div>
         </div>
-        <button id="btnAddRow" onclick="addNewProductRow()">Add</button>
-        <button id="btnDoneAdding" onclick="ViewCarts.DoneAdding()">Exit</button>
+        <button id="btnAddRow" onclick="CartView.addNewProductRow()">Add</button>
+        <button id="btnDoneAdding" onclick="CartView.DoneAdding()">Exit</button>
     </div>
 
 
@@ -62,34 +65,34 @@
             </div>
 
             <div class="divEditPullButtons" style="display:none">
-                <button class="btnEdit" onclick="ViewCarts.Edit(this)">Edit</button>
-                <button class="btnPull" onclick="ViewCarts.Pull(this)">Pull</button>
+                <button class="btnEdit" onclick="CartView.Edit(this)">Edit</button>
+                <button class="btnPull" onclick="CartView.Pull(this)">Pull</button>
             </div>
             <div class="divDoneEditButtons" style="display:none">
-                <button class="btnDone" onclick="ViewCarts.DoneEditing(this)">Done Editing</button>
+                <button class="btnDone" onclick="CartView.DoneEditing(this)">Done Editing</button>
             </div>
             <div class="divUnpullButton" style="display:none">
-                <button class="btnUnpull" onclick="ViewCarts.Unpull(this)">Unpull</button>
+                <button class="btnUnpull" onclick="CartView.Unpull(this)">Unpull</button>
             </div>
 
 
             <div class="divItemRowEdit row form-group" style="display:none">
                 <div style="display:none"><label class="CartItemID">-1</label></div>
                 <div class="col-sm-3">
-                    <select class="form-control Size" onchange="ViewCarts.RowItemOnChange(this)">
+                    <select class="form-control Size" onchange="CartView.RowItemOnChange(this)">
                         <option value="0">Please Select Package Size---</option>
                     </select>
                 </div>
                 <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
                 <div class="col-sm-2">
-                    <input type="number" class="form-control Count"  min="0" onchange="ViewCarts.RowItemOnChange(this)">
+                    <input type="number" class="form-control Count"  min="0" onchange="CartView.RowItemOnChange(this)">
                 </div>
                 <div class="col-sm-1">
                     <p class="form-control-static text-center">=</p>
                 </div>
                 <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
                 <div class="col-sm-3">
-                    <select  class="form-control Location" onchange="ViewCarts.RowItemOnChange(this)"></select>
+                    <select  class="form-control Location" onchange="CartView.RowItemOnChange(this)"></select>
                 </div>
                 <div class="col-sm-1">
                     <button class="form-control Color"></button>
@@ -116,7 +119,9 @@
                     <button class="form-control form-control-static text-center ViewColor"></button>
                 </div>
             </div>
+
         </div>
+
 
     </div>
 
@@ -124,6 +129,6 @@
 
 
 </div>
-<script>ViewCarts.init()</script>
+<script>CartView.init()</script>
 </body>
 </html>
