@@ -2,7 +2,7 @@
  * Created by Kun on 7/19/2015.
  */
 
-var ViewCarts={
+var CartView={
 
 
 
@@ -137,7 +137,9 @@ var ViewCarts={
                 var exist = 0;
                 $(dropdown).append($(option));
             }
-            dropdown.val(sizeMapID);
+            if(sizeMapId) {
+                dropdown.val(sizeMapID);
+            }
         });
 
     },
@@ -195,7 +197,7 @@ console.log(res);
                         var newEditRow = editRow.clone();
                         var sizeSelect = $(newEditRow).find('.Size');
 
-                        ViewCarts.PopulateSizeByProductID(sizeSelect,productID,sizeMapID);
+                        CartView.PopulateSizeByProductID(sizeSelect,productID,sizeMapID);
                         $(newEditRow).find('.CartItemID').text(items[i].cartItemID);
                         $(newEditRow).find('.Count').val(items[i].packageCount);
                         $(newEditRow).find('.Subtotal').text(subtotal);
@@ -229,11 +231,21 @@ console.log(res);
                     $(lbTotal).text(" with Quantity of "+total+" in Cart");
                     var btns = $(newProductContainer).find('.divEditPullButtons');
                     $(btns).show();
-
-
+                    var addBtn = $(newProductContainer).parent().find('.addBtn').clone();
+                    $(addBtn).appendTo(newProductContainer);
                 }
             });
         });
+    },
+
+    AddNewEditRow: function(button){
+        var thisProd = button.parent().parent();
+        var newRow = $(thisProd).('.divItemRowEdit').clone();
+        var productID = $(thisProd).find(".lbProductID").text();
+        var sizeSelect = $(newRow).find('.Size');
+        console.log(sizeSelect);
+        CartView.PopulateSizeByProductID(sizeSelect,productID,null);
+        newRow.insertBefore(button);
     },
 
     Edit: function(button){
@@ -247,6 +259,7 @@ console.log(res);
             $(viewRows[i]).hide();
             $(editRows[i]).show();
         }
+        $(oneProd).find('.AddBtn').show();
     },
 
     DoneEditing: function(button){
@@ -260,6 +273,7 @@ console.log(res);
             $(viewRows[i]).show();
             $(editRows[i]).hide();
         }
+        $(oneProd).find('.AddBtn').hide();
     },
 
     Pull: function(button){
@@ -334,7 +348,7 @@ console.log(res);
         navigation.hit("/Carts/PutCartModel/" +  JSON.stringify(dirtyRow),function(res){
             console.log(res);
             if(res=="Success"){
-                ViewCarts.BindPage(cartID);
+                CartView.BindPage(cartID);
                 //or parseresult
 
 
