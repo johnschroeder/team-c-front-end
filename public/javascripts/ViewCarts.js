@@ -160,7 +160,7 @@ var CartView={
                 var exist = 0;
                 $(dropdown).append($(option));
             }
-            if(sizeMapId) {
+            if(sizeMapID) {
                 dropdown.val(sizeMapID);
             }
         });
@@ -275,7 +275,9 @@ console.log(inEditMode);
 
                     }
 
-                    var addBtn = $(newProductContainer).parent().find('.addBtn').clone();
+                    console.log($('.addBtn'));
+                    var addBtn = $('.addBtn').first().clone();
+
                     $(addBtn).appendTo(newProductContainer);
 
 
@@ -286,13 +288,13 @@ console.log(inEditMode);
     },
 
     AddNewEditRow: function(button){
-        var thisProd = button.parent().parent();
-        var newRow = $(thisProd).('.divItemRowEdit').clone();
+        var thisProd = $(button).parent().parent();
+        var newRow = $(thisProd).children('.divItemRowEdit').first().clone();
         var productID = $(thisProd).find(".lbProductID").text();
         var sizeSelect = $(newRow).find('.Size');
-        console.log(sizeSelect);
         CartView.PopulateSizeByProductID(sizeSelect,productID,null);
-        newRow.insertBefore(button);
+        $(newRow).insertBefore(button);
+        $(newRow).show();
     },
 
     Edit: function(button){
