@@ -7,22 +7,35 @@ var ViewCarts={
 
 
     init: function(){
-        var scID = state.CartIDSelected;
-
+        var scID = window.state.CartIDSelected;
+        if(typeof window.state.productUnderEdit === 'undefined')
+            window.state.productUnderEdit = [];
         this.PopulateCart(function(){
             if (state && state.CartIDSelected) {
                 $('#selectCart').val(scID);
             }
         });
 
-        if (state && state.CartIDSelected) {
-            this.BindPage(scID);
-        }
 
         if(window.args.ProductID != null) {
             this.AddNewCartItem();
+
+
+             var productID = window.args.ProductID;
+             var products = window.state.productUnderEdit;
+             var hasProduct = false;
+             $.each(products, function(i,obj) {
+             if (obj.pID === productID)
+             hasProduct = true;
+             });
+             if(hasProduct == false)
+             window.state.productUnderEdit.push({"pID":productID.toString()});
+
         }
-        window.state.productUnderEdit = [];
+
+        if (state && state.CartIDSelected) {
+            this.BindPage(scID);
+        }
     },
 
     CartOnChange: function( dropdown ) {
@@ -112,6 +125,10 @@ var ViewCarts={
 
     },
 
+    addNewProductRow: function(){
+
+    },
+
     DoneAdding: function(){
         $("#divCalc").hide();
         this.ReBindPage($("#selectCart").val());
@@ -172,7 +189,17 @@ console.log(res);
                     var pIDLabel = $(newProductContainer).find(".lbProductID");
                     $(pnameLabel).text(productName);
                     $(pIDLabel).text(productID);
-                    $(newProductContainer).appendTo("#divProductsContainer");
+
+                    if(window.args.ProductID != null && window.args.ProductID == productID){
+
+                        $(newProductContainer).appendTo("#divProductsContainer");
+                    }
+                    else{
+                        $(newProductContainer).appendTo("#divProductsContainer");
+                    }
+
+
+
 
                     var items = product.items;
                     var itemLen = items.length;
@@ -353,6 +380,7 @@ console.log(inEditMode);
         var cartID = $("#selectCart").val();
         var productID = $(row).parent().find('.lbProductID').text();
         var cartItemID = $(row).find('.CartItemID').text();
+        //check if cartItemID is null -> new cart item. set it to -1 if this is the case
         var sizeMapID = $(row).find('.Size').val();
         var packageCount = $(row).find('.Count').val();
         var location = $(row).find('.Location').val();
