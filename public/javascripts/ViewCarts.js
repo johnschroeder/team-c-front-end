@@ -7,7 +7,12 @@ var ViewCarts={
 
 
     init: function(){
-        var scID = state.CartIDSelected;
+        var scID
+        if(window.args.CartID === undefined) {
+            scID = state.CartIDSelected;
+        } else {
+            scID = window.args.CartID;
+        }
 
         this.PopulateCart(function(){
             if (state && state.CartIDSelected) {
@@ -43,7 +48,25 @@ var ViewCarts={
             .val(0)
             .text("Please select cart")
             .appendTo('#selectCart');
+        option = $("<option/>")
+            .val(1)
+            .text("--- New Cart ---")
+            .appendTo("#selectCart");
         var user = 'don';
+        var assignee = 'don';
+        $('#selectCart').on('change', function() {
+            if($(this).find('option:selected').text()=="--- New Cart ---" ){
+                var cartName = window.prompt("Enter job ID:", "Job ID");
+                navigation.hit("/Carts/CreateCart/" + cartName + "/" + user  + "/" + assignee + "/" + 5,
+                                function(res) {
+                                    state.CartIDSelected = res;
+                                    console.log("STUFF");
+                                    $('#sel1').off('change');
+                                    navigation.go("ViewCarts.html", {CartID: res,
+                                                    ProductID: window.args.ProductID});
+                                });
+            }
+        });
         navigation.hit("/Carts/GetCartsByUser/" + user,function(res){
             var results = JSON.parse(res);
 
