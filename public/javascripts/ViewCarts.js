@@ -246,7 +246,6 @@ console.log(res);
                         if (obj.pID == productID.toString())
                             inEditMode = true;
                     });
-console.log(inEditMode);
 
                     for (i = 0; i < itemLen; i++) {
 
@@ -289,25 +288,29 @@ console.log(inEditMode);
                         var btnsEditPull = $(newProductContainer).find('.divEditPullButtons');
                         var btnsDoneEdit = $(newProductContainer).find('.divDoneEditButtons');
                         $(btnsEditPull).show();
-                        var addBtn = $('.addBtn').first().clone();
-                        $(addBtn).appendTo(newProductContainer);
-
 
                         if(inEditMode == false){
                             $(newRow).show();
                             $(newEditRow).hide();
                             $(btnsEditPull).show();
                             $(btnsDoneEdit).hide();
-                            $(addBtn).hide();
                         }
                         else{
                             $(newRow).hide();
                             $(newEditRow).show();
                             $(btnsEditPull).hide();
                             $(btnsDoneEdit).show();
-                            $(addBtn).show();
                         }
 
+
+
+                    }
+
+                    var addBtn = $('.addBtn').first().clone();
+                    $(addBtn).appendTo(newProductContainer);
+
+                    if(inEditMode == true){
+                        $(addBtn).show();
                     }
 
 
@@ -405,7 +408,7 @@ console.log(inEditMode);
         $(oneProd).find('.divEditPullButtons').show();
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
-        var viewRowsLen = viewRows.length;
+        var editRowsLen = editRows.length;
 
         var productID = $(oneProd).find('.lbProductID').text();
         var products = window.state.productUnderEdit;
@@ -417,7 +420,7 @@ console.log(inEditMode);
         if(hasProduct == true)
             window.state.productUnderEdit.pop({"pID":productID});
 
-        for (i = 1; i < viewRowsLen; i++) {
+        for (i = 1; i < editRowsLen; i++) {
             $(viewRows[i]).show();
             $(editRows[i]).hide();
         }
