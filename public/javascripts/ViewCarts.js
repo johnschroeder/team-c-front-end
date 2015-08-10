@@ -287,6 +287,8 @@ console.log(inEditMode);
                         var btnsEditPull = $(newProductContainer).find('.divEditPullButtons');
                         var btnsDoneEdit = $(newProductContainer).find('.divDoneEditButtons');
                         $(btnsEditPull).show();
+                        var addBtn = $('.addBtn').first().clone();
+                        $(addBtn).appendTo(newProductContainer);
 
 
                         if(inEditMode == false){
@@ -294,20 +296,19 @@ console.log(inEditMode);
                             $(newEditRow).hide();
                             $(btnsEditPull).show();
                             $(btnsDoneEdit).hide();
+                            $(addBtn).hide();
                         }
                         else{
                             $(newRow).hide();
                             $(newEditRow).show();
                             $(btnsEditPull).hide();
                             $(btnsDoneEdit).show();
+                            $(addBtn).show();
                         }
 
                     }
 
-                    console.log($('.addBtn'));
-                    var addBtn = $('.addBtn').first().clone();
 
-                    $(addBtn).appendTo(newProductContainer);
 
 
 
@@ -321,9 +322,31 @@ console.log(inEditMode);
         var newRow = $(thisProd).children('.divItemRowEdit').first().clone();
         var productID = $(thisProd).find(".lbProductID").text();
         var sizeSelect = $(newRow).find('.Size');
-        CartView.PopulateSizeByProductID(sizeSelect,productID,null);
-        $(newRow).insertBefore(button);
-        $(newRow).show();
+        var product = false;
+        var products = state.CartModel.products;
+        products.forEach(function(p){
+            if(p.productID == productID){
+                product = p;
+            }
+        });
+        if(!product){
+            console.log("ERROR, Product not found in AddNewEditRow")
+        }
+        else {
+            var locs = product.availableByLocations.locations;
+            var avlQty = product.availableByLocations.available;
+            var locSelect = $(newRow).find('.Location');
+            for (j = 0; j < locs.length; j++) {
+                var optionname = locs[j] + "---" + avlQty[j] + " still available";
+                var option = new Option(optionname, locs[j]);
+                $(locSelect).append($(option));
+
+            }
+            CartView.PopulateSizeByProductID(sizeSelect, productID, null);
+            var placeToPut = $(button).parent();
+            $(newRow).insertBefore(placeToPut);
+            $(newRow).show();
+        }
     },
 
     Edit: function(button){
@@ -388,6 +411,7 @@ console.log(inEditMode);
 
 
     RowItemOnChange: function(input){
+        console.log(input);
         var row = $(input).parent().parent();
         var legal = this.RowRecalculate(row);
         var cartItemID = $(row).find('.CartItemID').text();
