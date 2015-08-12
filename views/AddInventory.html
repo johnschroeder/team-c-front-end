@@ -4,8 +4,13 @@
     <meta charset="UTF-8"/>
     <title>Add Inventory</title>
     <script src="javascripts/AddInventory.js"></script>
+    <script src="javascripts/EditableDropDown.js"></script>
+
+
+
 </head>
 <body>
+
 <div class="container-fluid">
     <div id="add_list"></div>
 
@@ -30,8 +35,11 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <label for="location_input">Location</label>
-            <input id="location_input" class="form-control" title="The location this inventory will be stored at."></input>
+            <form>
+                        Location
+                        <input type="text" id="location_input" name="location_input" value=""
+                               selectBoxOptions="A-1;A-2">
+            </form>
         </div>
     </div>
 
@@ -50,12 +58,12 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <label for="pkg_name">Name</label><input id="pkg_name" class="form-control" type="text"
-                                                     title="Name of the package."></input>
+            <label for="pkg_name">Name</label><label id="pkg_name" class="form-control" type="text"
+                                                     title="Name of the package."></label>
         </div>
         <div class="col-sm-4">
-            <label for="pkg_size">Size</label><input id="pkg_size" class="form-control" type="number"
-                                                     title="Size of the package." min="0"></input>
+            <label for="pkg_size">Size</label><label id="pkg_size" class="form-control" type="number"
+                                                     title="Size of the package." min="0"></label>
         </div>
     </div>
 

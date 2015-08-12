@@ -67,7 +67,9 @@ var DisplayAll =
         counter = 0;
 
         var filterParameters = JSON.stringify({"filter":logTypesDisplayed});
+      
         var host = window.apiRoute + "/getAllLogs/" + filterParameters;
+
         navigation.get(host, function (err, logsForUsername) {
             var logsObj = JSON.parse(logsForUsername);
             var logs = logsObj.logs;

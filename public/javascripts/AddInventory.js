@@ -1,5 +1,5 @@
 //<script>
-// Input arguments: ProductID, ProductName
+// Input arguments: ProductID, ProductName, PreviousPage
 var addInventory = {
     productId: 0,
     itemName: "",
@@ -10,6 +10,15 @@ var addInventory = {
     init: function() {
         navigation.setTitle("Add Inventory: " + window.args.ProductName);
         this.productId = parseInt(window.args.ProductID) || 0;
+
+        var locations = "No locations;sorry".split(";");
+
+        navigation.get(apiRoute + "/GetInventoryLocations/" + this.productId, function (err, res) {
+            locations = (JSON.parse(res)).locationList;
+            createEditableSelect(document.forms[0].location_input, locations);
+        });
+
+
 
         if (this.productId == 0) {
             $("#response").text("Error: Init: Invalid product ID.");
