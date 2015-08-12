@@ -33,7 +33,9 @@ function clearLogs()
     }
 }
 
-
+function selectAllLogs() {
+    $( '#InputDiv input:checkbox').prop('checked', true);
+}
 
 var filterCounter = 0;
 function DisplayNextFilter(filterName, filterId) {

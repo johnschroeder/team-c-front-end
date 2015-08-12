@@ -7,6 +7,7 @@ var Redirect =
                 console.log(err);
             }
             else {
+                navigation.clearPageHistory();
                 navigation.go("Logs.html");
             }
         });

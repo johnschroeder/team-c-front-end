@@ -9,7 +9,6 @@
 <body>
 
 <div class="container-fluid">
-    <h1>Logs</h1>
     <h2>Filter Options</h2>
     <form id="filterForm">
         <div class = "filter">
@@ -21,6 +20,21 @@
         Filter Logs
     </button>
     <hr/>
+
+    <div class="row form-group">
+        <div class="col-xs-12">
+            <button id="SelectAll" class="btn btn-default" title="Select All" onclick="selectAllLogs()">
+                Select All
+            </button>
+            <button id="DeleteSelected" class="btn btn-default" title="Delete Selected Logs"
+                    onclick="DisplayAll.Ignore()">
+                Ignore Selected Logs
+            </button>
+            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="DisplayAll.refreshedLogs()">
+                Refresh Logs
+            </button>
+        </div>
+    </div>
 
     <div id="InputDiv">
 
@@ -38,18 +52,6 @@
 
     </div>
 
-    <div class="row form-group">
-        <div class="col-xs-12">
-            <button id="Refresh" class="btn btn-default" title="Refresh Logs." onclick="DisplayAll.refreshedLogs()">
-                Refresh Logs
-            </button>
-            <button id="DeleteSelected" class="btn btn-default" title="Delete Selected Logs"
-                    onclick="DisplayAll.Ignore()">
-                Ignore Selected Logs
-            </button>
-        </div>
-    </div>
-
     <div class="row">
 
     </div>
@@ -58,6 +60,7 @@
 
 </div>
 <script>
+    navigation.setTitle("Logs");
     DisplayAll.FilterBoxes();
 </script>
 <script>DisplayAll.Filter()</script>

@@ -1,8 +1,6 @@
-/**
- * Created by Trevor on 7/10/2015.
- */
 var editUser = {
     init: function () {
+        navigation.setTitle("User Data: " + window.args.editUser)
         $("#username").text(window.args.editUser);
 
         var host = window.apiRoute + "/getUser/" + window.args.editUser;
@@ -13,10 +11,12 @@ var editUser = {
 
                 var firstName = userData.firstName;
                 var lastName = userData.lastName;
+                var permsId = userData.permsId;
 
 
                 $("#FirstName").val(firstName);
                 $("#LastName").val(lastName);
+                $('select option[value="' + permsId + '"]').attr("selected", true);
             }
         });
 
