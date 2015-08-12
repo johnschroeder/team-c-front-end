@@ -14,23 +14,25 @@
 </style>
 <body>
 <div class="container-fluid">
-
-    <h1><button class="btn btn-default" title="Go back to the last page." onclick="editUser.back()">Back</button> <span class = "spacer"> Edit User - </span> <span id="username"></span></h1>
-    <hr/>
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label>Username</label>
+            <br/>
+            <span id="username"/>
+        </div>
+    </div>
 
     <div class="row form-group">
         <div class="col-sm-12">
             <label for="FirstName">First Name</label>
-            <p> </p>
-            <input id="FirstName" type="text">
+            <input id="FirstName" class="form-control" type="text">
         </div>
     </div>
 
     <div class="row form-group">
         <div class="col-sm-12">
             <label for="LastName">Last Name</label>
-            <p></p>
-            <input id="LastName" type="text">
+            <input id="LastName" class="form-control" type="text">
         </div>
     </div>
 
@@ -39,7 +41,7 @@
         <div class="col-sm-12">
             <label for="permission_select" class="input-label">Permission Type</label>
             <br/>
-            <select id="permission_select">
+            <select id="permission_select" class="form-control">
                 <option value="601">Customer</option>
                 <option value="602">Account manager</option>
                 <option value="603">Employee</option>
@@ -53,7 +55,7 @@
 
     <div class="row form-group">
         <div class="col-sm-12">
-            <button id="Delete_User" class="btn btn-default" onclick="editUser.delete()">Delete User
+            <button id="Deactivate_User" class="btn btn-default" onclick="editUser.deactivate()">Deactivate User
             </button>
 
         </div>

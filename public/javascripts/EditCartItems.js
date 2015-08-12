@@ -11,6 +11,7 @@ var editCartItems = {
     carts: [],
     productTable: [],
     init: function() {
+        navigation.setTitle("Jobs");
         navigation.get(window.apiRoute + "/Carts/GetCartItems/" + this.cartID, function(err, res) {
             if(err){
                 $("#response").text("Error: EditCartItems.init: Connection error.");

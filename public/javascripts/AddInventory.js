@@ -8,7 +8,17 @@ var addInventory = {
 
     // Initialize the page.
     init: function() {
+        navigation.setTitle("Add Inventory: " + window.args.ProductName);
         this.productId = parseInt(window.args.ProductID) || 0;
+
+        var locations = "No locations;sorry".split(";");
+
+        navigation.get(apiRoute + "/GetInventoryLocations/" + this.productId, function (err, res) {
+            locations = (JSON.parse(res)).locationList;
+            createEditableSelect(document.forms[0].location_input, locations);
+        });
+
+
 
         if (this.productId == 0) {
             $("#response").text("Error: Init: Invalid product ID.");
@@ -203,8 +213,7 @@ var addInventory = {
             else {
                 addInventory.reset();
                 $("#response").text("Added inventory: " + total + " at " + location + ".");
-                navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
-                navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
+                navigation.back();
             }
         });
     },
@@ -234,10 +243,5 @@ var addInventory = {
                 $("#pkg_add_button").prop("disabled", false);
             }
         });
-    },
-
-    // Go back to the last page.
-    back: function () {
-        navigation.go(window.args.PreviousPage, {ProductID: window.args.ProductID});
     }
 };
