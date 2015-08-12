@@ -196,7 +196,8 @@ var CartView={
             if(res == 'empty') {
                 return;
             }
-console.log(res);
+            console.log(res);
+
 
             var template = ($('#divProductsContainer').children())[0];
             $('#divProductsContainer').empty();
@@ -475,10 +476,21 @@ console.log(res);
 
 
     RowRecalculate: function(row){
+        var dirtyCartItemID = $(row).find('.CartItemID').text();
+        var originalCount = 0;
+        window.state.CartModel.products.forEach(function (product) {
+            product.items.forEach(function (item) {
+                if (item.cartItemID == dirtyCartItemID) {
+                    originalCount = item.packageCount;
+                }
+            });
+        });
         var sizeNumber = $(row).find('.Size :selected').text().split('---', 2)[1];
         var count = $(row).find('.Count').val();
+        var diffCount = count - originalCount;
         var available = ($(row).find('.Location').find('option:selected').text().split('---', 2)[1]).split('still',2)[0];
-        if(available<sizeNumber*count){
+        //alert(available + ", " + sizeNumber + ", " + diffCount);
+        if(available<sizeNumber*diffCount){
             count = (available - available%sizeNumber)/sizeNumber;
             $(row).find('.Count').val(count);
             $(row).find('.Subtotal').text(count*sizeNumber);
