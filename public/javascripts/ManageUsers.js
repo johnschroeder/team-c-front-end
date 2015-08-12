@@ -155,7 +155,11 @@ var manageUsers = {
             "permID":permID
         };
 
-        navigation.postJSON(window.apiRoute+'/login/createUser/', toPass, function(err, res){
+
+
+       // var createUserArgs = JSON.stringify(toPass);
+        //alert(createUserArgs);
+        navigation.post(window.apiRoute+'/Login/createUser/', toPass, function(err, res){
                 if(err) {
                     window.alert("Error: "+error);
                     this.LoadUsers();
