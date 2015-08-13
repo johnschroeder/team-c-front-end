@@ -12,6 +12,9 @@
 <body>
 
 <div class="container-fluid">
+    <div id="response" class="alert alert-success hidden" role="alert"></div>
+    <div id="error" class="alert alert-danger hidden" role="alert"></div>
+
     <div id="add_list"></div>
 
     <div class="row form-group">
@@ -34,17 +37,23 @@
     <br/>
 
     <div class="row form-group">
-        <div class="col-sm-4">
+        <div class="col-sm-6 col-xs-12">
             <form>
-                        Location
-                        <input type="text" id="location_input" name="location_input" value=""
-                               selectBoxOptions="A-1;A-2">
+                <label for="location_input">Location</label>
+                <input type="text" id="location_input" name="location_input" value="" selectBoxOptions="A-1;A-2" title="The location this inventory will be stored at."/>
             </form>
         </div>
     </div>
 
+    <div class="row form-group">
+        <div class="col-sm-6  col-xs-12">
+            <label for="alt_id_input">Alternate ID (optional)</label>
+            <input id="alt_id_input" class="form-control" title="The alternate ID for this inventory."></input>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-xs-6">
             <button id="inventory_add_button" class="btn btn-default" title="Submit this inventory into IMP." onclick="addInventory.submitAdd()">
                 Add to Inventory
             </button>
@@ -58,12 +67,13 @@
 
     <div class="row form-group">
         <div class="col-sm-4">
-            <label for="pkg_name">Name</label><label id="pkg_name" class="form-control" type="text"
-                                                     title="Name of the package."></label>
+
+            <label for="pkg_name">Name</label>
+            <input id="pkg_name" class="form-control" type="text" title="Name of the package."></input>
         </div>
         <div class="col-sm-4">
-            <label for="pkg_size">Size</label><label id="pkg_size" class="form-control" type="number"
-                                                     title="Size of the package." min="0"></label>
+            <label for="pkg_size">Size</label>
+            <input id="pkg_size" class="form-control" type="number" title="Size of the package." min="0"></input>
         </div>
     </div>
 
