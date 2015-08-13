@@ -194,21 +194,12 @@ var addInventory = {
         var total = this.getTotal();
         var location = this.getLocation();
         var altId = this.getAlternateId();
-<<<<<<< HEAD
 
         if (productId == 0) {
             this.showError("Failed to add inventory. Invalid product ID. Please reload the page.");
             return;
         }
 
-=======
-
-        if (productId == 0) {
-            this.showError("Failed to add inventory. Invalid product ID. Please reload the page.");
-            return;
-        }
-
->>>>>>> origin/IM-226
         if (total == 0) {
             this.showError("Failed to add inventory. Invalid total. Please enter a number greater than 0.");
             return;
