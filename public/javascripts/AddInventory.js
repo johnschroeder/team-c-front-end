@@ -10,6 +10,13 @@ var addInventory = {
         navigation.setTitle("Add Inventory: " + window.args.ProductName);
         this.productId = parseInt(window.args.ProductID) || 0;
 
+        var locations = "No locations;sorry".split(";");
+
+        navigation.get(apiRoute + "/GetInventoryLocations/" + this.productId, function (err, res) {
+            locations = (JSON.parse(res)).locationList;
+            createEditableSelect(document.forms[0].location_input, locations);
+        });
+
         if (this.productId == 0) {
             this.showError("Failed to initialize. Invalid product ID. Please reload the page.");
             console.log("Error: Init: Invalid product ID.");
@@ -187,12 +194,21 @@ var addInventory = {
         var total = this.getTotal();
         var location = this.getLocation();
         var altId = this.getAlternateId();
+<<<<<<< HEAD
 
         if (productId == 0) {
             this.showError("Failed to add inventory. Invalid product ID. Please reload the page.");
             return;
         }
 
+=======
+
+        if (productId == 0) {
+            this.showError("Failed to add inventory. Invalid product ID. Please reload the page.");
+            return;
+        }
+
+>>>>>>> origin/IM-226
         if (total == 0) {
             this.showError("Failed to add inventory. Invalid total. Please enter a number greater than 0.");
             return;
