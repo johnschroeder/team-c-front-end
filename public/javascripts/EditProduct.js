@@ -146,17 +146,12 @@ var editProduct = {
                 }
             })
         });
-
         //submit name and descricption change:
         navigation.get(window.apiRoute + "/reSubmit/" + window.args.ProductID + "/" + name + "/" + description, function (err, response) {
-            if (err) {
-                $("#message").text("Error: " + err.responseText);
-            }
-            else if (response != "Success") {
-                $("#message").text("Error: " + response);
-            }
-            else {
+            if (response === "Success") {
                 navigation.back();
+            } else {
+                $("#message").text("Error: " + response);
             }
         });
     },
