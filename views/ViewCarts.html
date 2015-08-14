@@ -2,47 +2,133 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Pull Carts</title>
+    <title>Pull Inventory</title>
     <script src="javascripts/ViewCarts.js"></script>
 </head>
 <body>
+
 <div class="container-fluid">
-    <div id="response" class="alert alert-success hidden" role="alert"></div>
-    <div id="error" class="alert alert-danger hidden" role="alert"></div>
+    <h1>View Carts</h1>
+    <hr/>
+    <label for="selectCart">Select a cart to view</label>
+    <select id="selectCart" onchange="CartView.CartOnChange(this)" class="form-control Size">
+    </select>
 
-    <div class="row form-group">
-        <div class="col-sm-6">
-            <label for="selectDropDown">Select a job to view</label>
-            <select id="selectDropDown" class="form-control filter track-by" onChange=displayCartInventory()></select>
-        </div>
-        <div class="col-sm-6">
-            <button class="btn btn-default pull-right" title="View or edit the details of the selected job." onclick="gotoEditCarts()">
-                View/Edit Job
-            </button>
-            <br/>
-            <div id="notSelected"></div>
-        </div>
+    <hr/>
+
+
+    <div id="response"></div>
+    <div class="addBtn" style="display:none">
+        <button class="addBtn" onClick="CartView.AddNewEditRow(this)">Add</button>
     </div>
 
-    <button id="qr_button" class="btn btn-default hidden" title="Show the QR code for this page." onclick="qrCode()">
-        Show QR Code
-    </button>
 
-    <div id="inventory-container"></div>
+    <div id="addItemCalc" style="display:none">
+        <label id="lblNewProductToPull"></label>
+        <div id="InputDiv">
+            <div class="divCalc row form-group">
+                <div class="col-sm-3">
+                    <select onchange="CartView.AddRowOnChange()" class="form-control Size">
+                        <option value="0">Please Select Package Size---</option>
+                    </select>
+                </div>
+                <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
 
-    <br/>
+                <div class="col-sm-1">
+                    <input type="number" class="form-control Count" onchange="CartView.AddRowOnChange()" min="0">
+                </div>
 
-    <div class="row">
-        <div class="col-sm-4">
-            <button id="pullAllButton" class="btn btn-default" onclick="pullAll()">Pull All</button>
+                <div class="col-sm-1">
+                    <p class="form-control-static text-center">=</p>
+                </div>
+                <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
+                <div class="col-sm-3">
+                    <select onchange="CartView.AddRowOnChange()" class="form-control Location"> </select>
+                </div>
+                <div class="col-sm-1">
+                    <button class="form-control Color"></button>
+                </div>
+            </div>
         </div>
+        <button id="btnAddRow" onclick="CartView.addNewProductRow(this)">Add</button>
+        <button id="btnDoneAdding" onclick="CartView.DoneAdding()">Exit</button>
     </div>
+
+
+    <div id="divProductsContainer">
+
+        <div class="divOneProductContainer row form-group">
+            <div class="divProductInfo" >
+                <label class="lbProductID"style="display:none" ></label>
+                <label class="lbProductName "></label>
+                <label class="lbProductTotal"></label>
+            </div>
+
+            <div class="divEditPullButtons" style="display:none">
+                <button class="btnEdit" onclick="CartView.Edit(this)">Edit</button>
+                <button class="btnPull" onclick="CartView.Pull(this)">Pull</button>
+            </div>
+            <div class="divDoneEditButtons" style="display:none">
+                <button class="btnDone" onclick="CartView.DoneEditing(this)">Done Editing</button>
+            </div>
+            <div class="divUnpullButton" style="display:none">
+                <button class="btnUnpull" onclick="CartView.Unpull(this)">Unpull</button>
+            </div>
+
+
+            <div class="divItemRowEdit row form-group" style="display:none">
+                <div style="display:none"><label class="CartItemID">-1</label></div>
+                <div class="col-sm-3">
+                    <select class="form-control Size" onchange="CartView.RowItemOnChange(this)">
+                        <option value="0">Please Select Package Size---</option>
+                    </select>
+                </div>
+                <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+                <div class="col-sm-2">
+                    <input type="number" class="form-control Count"  min="0" onchange="CartView.RowItemOnChange(this)">
+                </div>
+                <div class="col-sm-1">
+                    <p class="form-control-static text-center">=</p>
+                </div>
+                <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
+                <div class="col-sm-3">
+                    <select  class="form-control Location" onchange="CartView.RowItemOnChange(this)"></select>
+                </div>
+                <div class="col-sm-1">
+                    <button class="form-control Color"></button>
+                </div>
+            </div>
+
+            <div class="divItemRowView row form-group" style="display:none">
+                <div class="col-sm-3">
+                    <label class="ViewSize form-control-static text-center"></label>
+                </div>
+                <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
+
+                <div class="col-sm-1">
+                    <label class="form-control-static text-center ViewCount"></label>
+                </div>
+                <div class="col-sm-1">
+                    <p class="form-control-static text-center">=</p>
+                </div>
+                <div class="col-sm-2"><label class="form-control-static ViewSubtotal"></label></div>
+                <div class="col-sm-2">
+                    <label class="form-control-static text-center ViewLocation"></label>
+                </div>
+                <div class="col-sm-1">
+                    <button class="form-control form-control-static text-center ViewColor"></button>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
 
 
 </div>
-<script>
-    $(function () {
-        populateByCartId();
-    })</script>
+<script>CartView.init()</script>
 </body>
 </html>
