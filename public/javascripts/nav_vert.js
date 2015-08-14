@@ -25,44 +25,23 @@ $(document).ready(function () {
         AddProduct();
     });
 
-    $('#PreDefined').on( 'touchend click', function( event ){
+    $('#AdminLogs').on( 'touchend click', function( event ){
         event.preventDefault();
-        PreDefinedReports();
+        AdminLogs();
     });
 
-    $('#MakeMyOwn').on( 'touchend click', function( event ){
+    $('#ManageUsers').on( 'touchend click', function( event ){
         event.preventDefault();
-        MakeMyOwnReport();
-    });
-
-    $('#Audit').on( 'touchend click', function( event ){
-        event.preventDefault();
-        Audit();
-    });
-
-    $('#Logs').on( 'touchend click', function( event ){
-        event.preventDefault();
-        Logs();
-    });
-
-    $('#AddUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        AddUsers();
-    });
-
-    $('#DeleteUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        DeleteUsers();
-    });
-
-    $('#ViewUsers').on( 'touchend click', function( event ){
-        event.preventDefault();
-        ViewUsers();
+        ManageUsers();
     });
 
     $('#login').on( 'touchend click', function( event ){
         event.preventDefault();
         loginPage();
+    });
+    $('#logOut').on( 'touchend click', function( event ){
+        event.preventDefault();
+        logOutPage();
     });
 
     $('.header-logo').on( 'touchend click', function( event ){
@@ -100,59 +79,88 @@ function preventBehavior(e)
     e.preventDefault();
 };
 
-document.addEventListener("touchmove", preventBehavior, false);
+function getCurrentFileName(){
+    var pagePathName= window.location.pathname;
+    return pagePathName.substring(pagePathName.lastIndexOf("/") + 1);
+}
+
+function stayOrRedirect()
+{
+    var stayPage = getCurrentFileName();
+    if (stayPage == "")
+    {
+        Home();
+    }
+}
+
+function logOutPage(){
+    $("#AdminBar").addClass("hidden");
+    $("#AdminLogs").addClass("hidden");
+    $("#ManageUsers").addClass("hidden");
+
+    navigation.get("/getUserInfo", function(err, userName){
+        if(err){
+            console.log(err);
+        }
+        else {
+            navigation.get("/Login/LogOut/" + userName.Username, function (err, res) {
+                if(err){
+                    console.log(err);
+                }
+                else {
+                    loginPage();
+                }
+            });
+        }
+    });
+}
+
+// Menu
 
 function Home(){
+    navigation.clearPageHistory();
     navigation.go("Home.html");
 }
 
-//
 function CreateUser(){
+    navigation.clearPageHistory();
     navigation.go("CreateUser.html");
 }
 
 function ViewCarts(){
+    navigation.clearPageHistory();
     navigation.go("ViewCarts.html");
 }
 
 function AddProduct(){
+    navigation.clearPageHistory();
     navigation.go("NewProduct.html");
 }
 
 function DisplayInventories(){
+    navigation.clearPageHistory();
     navigation.go("DisplayInventory.html");
 }
 
-// Reports
-function PreDefinedReports(){
-    $('#main_cont').text("PreDefinedReports");
-}
-
-function MakeMyOwnReport(){
-    $('#main_cont').text("MakeMyOwnReport");
-}
-
-// Administrator
-function Audit(){
-    $('#main_cont').text("Audit");
-}
-
 function Logs(){
+    navigation.clearPageHistory();
     navigation.go("Logs.html");
 }
 
-function AddUsers(){
-    $('#main_cont').text("AddUsers");
+// Administrator
+
+function AdminLogs()
+{
+    navigation.clearPageHistory();
+    navigation.go("AdminLogs.html");
 }
 
-function DeleteUsers(){
-    $('#main_cont').text("DeleteUsers");
-}
-
-function ViewUsers(){
+function ManageUsers(){
+    navigation.clearPageHistory();
     navigation.go("ManageUsers.html");
 }
 
 function loginPage() {
+    navigation.clearPageHistory();
     navigation.go("loginForm.html");
 }

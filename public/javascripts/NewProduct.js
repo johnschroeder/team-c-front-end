@@ -5,12 +5,20 @@ var newProduct = {
     productID: false,
     productName: false,
     customers: false,
+
+    //Tack the date on in the upper-right corner
+    init:function() {
+        navigation.setTitle("New Product");
+        $("#customer_select").multiselect({maxHeight:192});
+        newProduct.getCustomers();
+        $("#date").text(newProduct.getDate());
+    },
+
     /**
      * Generates the current date and returns it as a string
      * @returns {string}
      */
     getDate:function() {
-
         var date_object = new Date();
         var day = date_object.getDate();
         var month = date_object.getMonth() + 1;
@@ -27,17 +35,14 @@ var newProduct = {
         return date;
     },
 
-    //Tack the date on in the upper-right corner
-    init:function() {
-        newProduct.getCustomers();
-        $("#date").text(newProduct.getDate());
-
-    },
-
     getCustomers:function() {
         var host = window.apiRoute + "/getCustomers/";
-        $.get(host, function(response) {
-            if(response && response.length) {
+        navigation.get(host, function(err, response) {
+            if(err){
+                console.log("An error occured in getCustomers when trying to access the route /getCustomers");
+                console.log(err);
+            }
+            else if(response && response.length) {
                 newProduct.customers = JSON.parse(response);
                 newProduct.populateCustomers();
             } else {
@@ -45,21 +50,34 @@ var newProduct = {
             }
         })
     },
-    stupidCounter: 0,
     populateCustomers: function() {
-        if(newProduct.customers) {
-            var rowToCopy = $(".customer_checkbox").first();
-            var rowsContainer = $("#checkbox_cont");
-            rowsContainer.empty();
+        var selected = [];
 
-            newProduct.customers.forEach(function(customer) {
-                var newRow = rowToCopy.clone();
-                newRow.find(".checkbox_label").text(customer.Name);
-                newRow.removeClass("hidden");
-                newRow.appendTo( rowsContainer );
-                newRow.attr("data-ID", customer.CustomerID);
+        $("#customer_select option:selected").each(function(){
+            selected.push($(this).val());
+        });
+
+        if(this.customers) {
+            $("#customer_select").empty();
+
+            this.customers.forEach(function(customer){
+                $("#customer_select").append(
+                    $("<option/>")
+                        .text(customer.Name)
+                        .val(customer.CustomerID)
+                );
             });
         }
+
+        selected.forEach(function(v){
+            $("#customer_select option").each(function(){
+                if ($(this).val() == v) {
+                    $(this).prop("selected", true);
+                }
+            });
+        });
+
+        $("#customer_select").multiselect("rebuild");
     },
 
     addCustomer:function() {
@@ -72,8 +90,12 @@ var newProduct = {
         var newCustomer = $("#new_customer_text").val();
         var host = window.apiRoute + "/addCustomer/" + newCustomer;
 
-        $.get(host, function(response) {
-            if( response && response.length) {
+        navigation.get(host, function(err, response) {
+            if(err){
+                console.log("An error occured with submitCustomer trying to access route /addCustomer/");
+                console.log(err);
+            }
+            else if( response && response.length) {
                 newProduct.customers.push({
                     CustomerID:response.CustomerID,
                     Name:newCustomer
@@ -113,8 +135,12 @@ var newProduct = {
 
         submit_button.prop("disabled", true);
 
-        $.get(host, function (response) {
-            if( response && response.length ){
+        navigation.get(host, function (err, response) {
+            if(err){
+                $("#message").text("Error: " + err.responseText);
+                submit_button.prop("disabled", false);
+            }
+            else if( response && response.length ){
                 newProduct.productID = JSON.parse(response).ProductID;
                 $("#message").text("Successfully created product");
                 submit_button.prop("disabled", false);
@@ -124,44 +150,37 @@ var newProduct = {
                 $("#message").text("Error: " + response);
                 submit_button.prop("disabled", false);
             }
-        }).fail(function (err) {
-            $("#message").text("Error: " + err.responseText);
-            submit_button.prop("disabled", false);
-        });
+        })
     },
 
     associateCustomers: function() {
-        var customerContainer = $("#checkbox_cont").children();
-        var nextPage = true;
-        customerContainer.each(function(){
-            if($(this).find(".checkbox_input")[0].checked) {
-                var host = window.apiRoute
-                    + "/associateProductCustomer/"
-                    + newProduct.productID + "/"
-                    + $(this).data().id;
+        $("#customer_select option:selected").each(function(){
+            var host ="/associateProductCustomer/"
+                + newProduct.productID + "/"
+                + parseInt($(this).val());
 
-                $.get(host, function(response) {
-                    if( response != "Success" ){
-                        nextPage = false;
+                navigation.get(host, function(err, response) {
+                    if(err){
+                        $("#message").text("Error: " + err.responseText);
+                    }
+                    else if( response != "Success" ){
                         $("#message").text("Error: " + response);
                     }
-                }).fail(function(err) {
-                    nextPage = false;
-                    $("#message").text("Error: " + err.responseText);
                 })
-            }
-        })
+        });
 
         newProduct.nextPage();
     },
 
     nextPage:function() {
         if($("#new_run_checkbox")[0].checked){
+            navigation.clearPageHistory();
             navigation.go("AddInventory.html", {
                 ProductID:newProduct.productID,
                 ProductName:newProduct.productName
             });
         } else {
+            navigation.clearPageHistory();
             navigation.go("DisplayInventory.html");
         }
     }

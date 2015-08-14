@@ -15,7 +15,6 @@ function DisplayNext(log, currId) {
         $('.InputChild').first().remove();
     }
     clonedRow.find('label').prop('id', 'log' + counter);
-    clonedRow.find('input:checkbox').prop('id', currId);
     clonedRow.find('label').text(log);
 
     counter++;
@@ -33,9 +32,7 @@ function clearLogs()
     }
 }
 
-function selectAllLogs() {
-    $( '#InputDiv input:checkbox').prop('checked', true);
-}
+
 
 var filterCounter = 0;
 function DisplayNextFilter(filterName, filterId) {
@@ -68,15 +65,15 @@ var DisplayAll =
 
     Now: function () {
         counter = 0;
-//alert("Now called");
+
         var filterParameters = JSON.stringify({"filter":logTypesDisplayed});
-        var host = window.apiRoute + "/getLogs/" + filterParameters;
+      
+        var host = window.apiRoute + "/getAllLogs/" + filterParameters;
+
         navigation.get(host, function (err, logsForUsername) {
             var logsObj = JSON.parse(logsForUsername);
-
-            //alert("Json parsed");
             var logs = logsObj.logs;
-            //alert("Start for loop");
+
 
             for (var i = logs.length -1; i >= 0; i--) {
 
@@ -141,21 +138,6 @@ var DisplayAll =
 
     },
 
-    Ignore: function () {
-
-        $("input:checkbox").each(function(){
-            var $this = $(this);
-            if ($this.attr("name") == "ignoreLog")
-            {
-                if ($this.is(":checked")) {
-                    var push = $this.attr("id");
-                    navigation.get(apiRoute + "/Logging/AddLogViewMapEntry/" + push + "/", function (err, logsForUsername) {
-                    });
-                }
-            }
-        });
-        navigation.go("Logs.html");
-    },
 
     Filter: function () {
 

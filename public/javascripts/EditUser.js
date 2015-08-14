@@ -1,41 +1,31 @@
-/**
- * Created by Trevor on 7/10/2015.
- */
 var editUser = {
     init: function () {
+        navigation.setTitle("User Data: " + window.args.editUser)
         $("#username").text(window.args.editUser);
 
         var host = window.apiRoute + "/getUser/" + window.args.editUser;
 
-        $.get(host, function (data) {
-            var userData = $.parseJSON(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                var userData = $.parseJSON(data);
 
-            var firstName = userData.firstName;
-            var lastName = userData.lastName;
+                var firstName = userData.firstName;
+                var lastName = userData.lastName;
+                var permsId = userData.permsId;
 
 
-            $("#FirstName").val(firstName);
-            $("#LastName").val(lastName);
+                $("#FirstName").val(firstName);
+                $("#LastName").val(lastName);
+                $('select option[value="' + permsId + '"]').attr("selected", true);
+            }
         });
 
     },
 
-    _submitChanges: function (isConfirmed, callback) {
+    _submitChanges: function (requestDeactivate, callback) {
         var username = $("#username").text();
         var newFirstName = $("#FirstName").val();
         var newLastName = $("#LastName").val();
-
-        /* var values = new Array();
-        $.each($("input[name='user_permission[]']:checked"), function () {
-            values.push($(this).val());
-        });
-
-        perms = "";
-        for (var i = 0; i < values.length; i++) {
-            perms += values[i].toString();
-            // alert(values[i]);
-        }
-         */
 
         var dropdown = document.getElementById("permission_select");
         var perms = dropdown.options[dropdown.selectedIndex].value;
@@ -46,34 +36,31 @@ var editUser = {
             '"' + username + '"' + '/'
             + '"' + newFirstName + '"' + '/'
             + '"' + newLastName + '"' + '/'
-            + perms + '/' + isConfirmed;
+            + perms + '/' + requestDeactivate;
 
         //alert(host);
 
-        $.get(host, function (data) {
-            callback(data);
+        navigation.get(host, function (err, data) {
+            if(data) {
+                callback(data);
+            }
         });
     },
 
     save: function () {
         if (confirm('Do you really want to make these edits?')) {
 
-            var message = editUser._submitChanges(1, function (message) {
-                alert(message);
-            });
-        }
-    },
-
-    delete: function () {
-        if (confirm('Do you really want to delete this user?')) {
             var message = editUser._submitChanges(0, function (message) {
                 alert(message);
             });
         }
     },
 
-
-    back: function () {
-        navigation.go(window.args.previousPage);
+    deactivate: function () {
+        if (confirm('Do you really want to deactivate this user?')) {
+            var message = editUser._submitChanges(1, function (message) {
+                alert(message);
+            });
+        }
     }
 };

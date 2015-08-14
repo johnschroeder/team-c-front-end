@@ -3,13 +3,21 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Home</title>
+    <script src="javascripts/Home.js"></script>
 </head>
 <body>
-<div>
+<div class="container-fluid">
     <!-- TODO If user is not logged in, this should present the login page and all vertical nav bar buttons should be greyed out-->
     <!-- TODO if user is logged in, this should be a nicer splash screen of some sort -->
-    Home content here.
+    <div class="row">
+        <div class="col-sm-12">
+            <span>Redirecting ...</span>
+        </div>
+    </div>
 </div>
-
+<script>
+    navigation.setTitle("Home");
+    Redirect.Now();
+</script>
 </body>
 </html>

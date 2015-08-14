@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>QR Code</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="qr"></div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-12">
+            <span id="link"></span>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-3 col-xs-6">
+            <button class="btn btn-default" title="Print the QR code image only." onclick="printQrCode()">
+                Print
+            </button>
+        </div>
+    </div>
+</div>
+
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+
+<script>
+    $(function () {
+        navigation.setTitle("QR Code");
+
+        if (window.args.Text) {
+            new QRCode($("#qr").get(0), window.args.Text);
+            $("#link").text(window.args.Text);
+        }
+    });
+
+    var printQrCode = function () {
+        window.frames["print_frame"].document.body.innerHTML = $("#qr").html();
+        window.frames["print_frame"].window.focus();
+        window.frames["print_frame"].window.print();
+
+/*
+        // Alternative method to print (opens a new page)
+        var w = window.open();
+        w.document.write($("#qr").html());
+        w.document.close();
+        w.focus();
+        w.print();
+        w.close();
+*/
+    }
+
+    var back = function () {
+        if (window.args.PreviousPage)
+            navigation.go(window.args.PreviousPage);
+    }
+</script>
+</body>
+</html>

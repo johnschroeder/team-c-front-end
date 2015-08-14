@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <script src="javascripts/EditUser.js"></script>
+</head>
+<style>
+    span.spacer {
+        padding: 0em 0em 0em 2em;
+    }
+    span.buttonSpacer {
+        padding : 0em 3em 0em;
+    }
+</style>
+<body>
+<div class="container-fluid">
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label>Username</label>
+            <br/>
+            <span id="username"/>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="FirstName">First Name</label>
+            <input id="FirstName" class="form-control" type="text">
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="LastName">Last Name</label>
+            <input id="LastName" class="form-control" type="text">
+        </div>
+    </div>
+
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <label for="permission_select" class="input-label">Permission Type</label>
+            <br/>
+            <select id="permission_select" class="form-control">
+                <option value="601">Customer</option>
+                <option value="602">Account manager</option>
+                <option value="603">Employee</option>
+                <option value="604">Admin</option>
+            </select>
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div class="row form-group">
+        <div class="col-sm-12">
+            <button id="Deactivate_User" class="btn btn-default" onclick="editUser.deactivate()">Deactivate User
+            </button>
+
+        </div>
+        <span class = "buttonSpacer">
+            <div class="col-sm-12">
+                <button id="Save_Changes" class="btn btn-default"  onclick="editUser.save()">
+                    Save Changes
+                </button>
+            </div>
+        </span>
+    </div>
+
+    <br/>
+
+    <div id="response"></div>
+</div>
+<script>
+    editUser.init();
+</script>
+</body>
+</html>

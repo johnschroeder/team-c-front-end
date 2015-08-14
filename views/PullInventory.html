@@ -8,12 +8,6 @@
 <body>
 
 <div class="container-fluid">
-    <h1>Pull Inventory</h1>
-
-    <h2>Item: <span id="ProductName"></span></h2>
-    <button class="btn btn-default" title="Go back to the last page." onclick="pullInventory.back()">Back</button>
-    <hr/>
-
     <span>Amount Available: </span>
     <label id="AvailableAmout"></label>
 
@@ -80,7 +74,7 @@
 
     <div id="divAddtoCart">
         <input type="radio" name="Cart" value="true" id="rbExistingCart" onclick="pullInventory.AddToExistingCart()"/>
-        <label for="rbExistingCart">Add to Existing Cart</label>
+        <label for="rbExistingCart">Add to an Existing Job</label>
         <br/>
         <input type="radio" name="Cart" value="false" id="rbNewCart" onclick="pullInventory.AddToNewCart()"/>
         <label for="rbNewCart">Create a New Cart</label>
@@ -103,6 +97,10 @@
         <div id="divSelectCart" class="form-group form-inline" style="display:none">
             <select id="slCart" class="form-control"></select>
             <button id="btnAddToExistingCart" class="btn btn-default" onclick="pullInventory.ChooseExistingCart()">Add To This Cart
+            </button>
+            <br/><br/>
+            <button id="qr_button" class="btn btn-default" title="Show the QR code for this page." onclick="pullInventory.qrCode()">
+                Show QR Code
             </button>
         </div>
     </div>

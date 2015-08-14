@@ -4,25 +4,14 @@
     <meta charset="UTF-8"/>
     <title>Current Inventory</title>
     <script src="javascripts/itemDetailView.js"></script>
-    <style>
-        .thumbnail {
-            width: 128px;
-            height: 128px;
-            background-color: red;
-        }
-    </style>
 </head>
 <body>
 <div class="container-fluid">
-    <h1>Item Details</h1>
-
     <h2 id="product_name"></h2>
-    <button class="btn btn-default" title="Go back to the last page." onclick="itemDetailView.back()">Back</button>
-    <hr/>
 
     <div class="row">
         <div class="col-sm-3">
-            <div class="thumbnail unimplemented">Thumbnail</div>
+            <div class="thumbnail">Thumbnail</div>
         </div>
 
         <div id="details" class="col-sm-9"></div>
@@ -32,40 +21,33 @@
 
     <div id="buttons" class="row">
         <div class="col-sm-12">
-            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">Add
-                Inventory
+            <button class="btn btn-default" title="Add inventory to this product." onclick="itemDetailView.add()">
+                Add Inventory
             </button>
             <button class="btn btn-default" title="Pull inventory from this product." onclick="itemDetailView.pull()">
                 Pull Inventory
             </button>
-            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">View/Edit
-                Product
+            <button class="btn btn-default" title="View or edit this product." onclick="itemDetailView.edit()">
+                View/Edit Product
+            </button>
+            <button id="qr_button" class="btn btn-default" title="Show the QR code for this page." onclick="itemDetailView.qrCode()">
+                Show QR Code
             </button>
             <button class="btn btn-default pull-right" title="Delete this product." onclick="itemDetailView.Delete()">Delete Product</button>
         </div>
     </div>
 
-    <br/>
     <hr/>
 
-    <h2>Timeline</h2>
-
-    <div class="row form-group">
-        <div class="col-sm-2">
-            <select class="form-control">
-                <option>All</option>
-                <option>Runs</option>
-                <option>Pulls</option>
-                <option>Changes</option>
-            </select>
-        </div>
+    <div class="row">
+        <div id="runs" class="col-sm-12"></div>
     </div>
+
+    <br/>
 
     <div id="response"></div>
 </div>
 <script>
-
-
     $(function () {
         itemDetailView.init();
     });
