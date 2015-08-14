@@ -25,7 +25,9 @@ var CartView={
 
 
         if(window.args.ProductID != null) {
-            this.AddNewCartItem();
+            CartView.AddNewCartItem();
+
+            window.setInterval(CartView.AddRowOnChange, 5000);
 
 
              var productID = window.args.ProductID;
@@ -97,28 +99,27 @@ var CartView={
 
 
     AddNewCartItem: function(){
-        $("#divCalc").show();
+        var addItemCalc = $("#addItemCalc");
+        addItemCalc.show();
         $("#lblNewProductToPull").text(window.args.ProductName);
-        this.PopulateSize();
-    },
-
-
-    PopulateSize: function(){
-        var inputChild = $( '.InputChild').first();
-        var dropdown = $(inputChild).find('.Size')
-        var addNew = new Option("New ---", -1);
-        $(dropdown).append($(addNew));
+        var sizeDropdown = $(addItemCalc).find('.Size');
+        var locationDropdown = $(addItemCalc).find('.Location');
         var productID = window.args.ProductID;
 
-        navigation.hit("/GetSizeByProductID/" + productID,function(res){
-            var temp = $.parseJSON(res);
-
-            for (var i = 0; i < temp.length; i++) {
-                var obj = temp[i];
-                var optionname = obj.Name + "---" + obj.Size;
-                var option = new Option(optionname, obj.SizeMapID);
-                var exist = 0;
-                $(dropdown).append($(option));
+        navigation.hit("/carts/getproductforaddrow/" + productID,function(res){
+            console.log(res)
+            var locationSize = res.availableByLocations.locations.length;
+            var sizeSize = res.sizes.length;
+            for(var i = 0; i < locationSize; ++i){
+                var optionname = res.availableByLocations.locations[i] + "---" + res.availableByLocations.available[i] + " still available";
+                var option = new Option(optionname, res.availableByLocations.locations[i]);
+                $(locationDropdown).append($(option));
+            }
+            for(var i = 0; i < sizeSize; ++i){
+                var obj = res.sizes[i];
+                var optionname = obj.name + "---" + obj.amountPerPackage;
+                var option = new Option(optionname, obj.sizeMapID);
+                $(sizeDropdown).append($(option));
             }
         });
 
@@ -126,16 +127,49 @@ var CartView={
 
 
 
-    SizeOnChange: function(dropdown){
-        var selectedValue = dropdown.value;
-
-        this.ReCalculate();
+    AddRowOnChange: function(){
+        var row = $('#addItemCalc');
+        var legal = CartView.RowRecalculate(row);
+        var cartItemID = $(row).find('.CartItemID').text();
+        if(legal == false){
+            alert("There is not enough inventory in the selected location.");
+            CartView.addNewCartItem();
+            $('#btnAddRow').prop('disabled', true);
+            return false;
+        }
+        else{
+            $('#btnAddRow').prop('disabled', false);
+            return true;
+        }
     },
 
-    LocationOnChange: function(){
-        this.ReCalculate();
+    addNewProductRow: function(button){
+        if(window.state.CartIDSelected != 0 && CartView.AddRowOnChange()) {
+            var row = $(button).parent();
+            console.log($(row).find('.Size').find('option:selected').val())
+            var dirtyRow = {
+                "cartItemID": -1,
+                "cartID": window.state.CartIDSelected,
+                "productID": window.args.ProductID,
+                "location": $(row).find('.Location').find('option:selected').val(),
+                "packageSize": $(row).find('.Size :selected').text().split('---', 2)[1],
+                "packageCount": $(row).find('.Count').val(),
+                "sizeMapID": $(row).find('.Size').find('option:selected').val()
+            };
+            navigation.hit("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+                if (res == "Success") {
+                    CartView.BindPage(window.state.CartIDSelected);
+                    //or parseresult
+                    $("#addItemCalc").hide();
+                }
+            });
+        }
     },
 
+    DoneAdding: function(){
+        $("#divCalc").hide();
+        this.ReBindPage($("#selectCart").val());
+    },
 
     ReCalculate: function(){
         //decrease calculate ability
@@ -150,14 +184,7 @@ var CartView={
 
     },
 
-    addNewProductRow: function(){
 
-    },
-
-    DoneAdding: function(){
-        $("#divCalc").hide();
-        this.ReBindPage($("#selectCart").val());
-    },
 
 
     CleanPage: function(cartIDSelected){
@@ -169,21 +196,24 @@ var CartView={
     PopulateSizeByProductID: function(dropdown,pID,sizeMapID){
 
         var productID = pID;
-        navigation.hit("/GetSizeByProductID/" + productID,function(res){
-            var temp = $.parseJSON(res);
-
-            for (var i = 0; i < temp.length; i++) {
-                var obj = temp[i];
-                var optionname = obj.Name + "---" + obj.Size;
-                var option = new Option(optionname, obj.SizeMapID);
-                var exist = 0;
-                $(dropdown).append($(option));
-            }
-            if(sizeMapID) {
-                dropdown.val(sizeMapID);
+        var products = window.state.CartModel.products;
+        products.forEach(function(p){
+            if(p.productID == pID){
+                p.sizes.forEach(function(size){
+                    var optionname = size.Name + "---" + size.Size;
+                    var option = new Option(optionname, size.SizeMapID);
+                    var exist = 0;
+                    $(dropdown).append($(option));
+                })
             }
         });
 
+        /*for (var i = 0; i < temp.length; i++) {
+
+        }
+        if(sizeMapID) {
+            dropdown.val(sizeMapID);
+        }*/
     },
 
 
@@ -464,12 +494,12 @@ var CartView={
         var legal = this.RowRecalculate(row);
         var cartItemID = $(row).find('.CartItemID').text();
         if(legal == false){
-            this.ReBindPage(row);
+            this.BindPage(row);
             alert("There is not enough inventory in the selected location.");
         }
         else{
 
-            this.ReBindPage(row);
+            this.BindPage(row);
         }
 
     },
