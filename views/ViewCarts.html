@@ -23,19 +23,19 @@
     </div>
 
 
-    <div id="divCalc" style="display:none">
+    <div id="addItemCalc" style="display:none">
         <label id="lblNewProductToPull"></label>
         <div id="InputDiv">
-            <div class="InputChild row form-group">
+            <div class="divCalc row form-group">
                 <div class="col-sm-3">
-                    <select onchange="CartView.SizeOnChange(this)" class="form-control Size">
+                    <select onchange="CartView.AddRowOnChange()" class="form-control Size">
                         <option value="0">Please Select Package Size---</option>
                     </select>
                 </div>
                 <div class="col-sm-1"><p style="font-size: 150%;" class="form-control-static text-center">*</p></div>
 
                 <div class="col-sm-1">
-                    <input type="number" class="form-control Count" onchange="CartView.ReCalculate()" min="0">
+                    <input type="number" class="form-control Count" onchange="CartView.AddRowOnChange()" min="0">
                 </div>
 
                 <div class="col-sm-1">
@@ -43,14 +43,14 @@
                 </div>
                 <div class="col-sm-1"><p class="form-control-static Subtotal">0</p></div>
                 <div class="col-sm-3">
-                    <select onchange="CartView.LocationOnChange(this)" class="form-control Location"> </select>
+                    <select onchange="CartView.AddRowOnChange()" class="form-control Location"> </select>
                 </div>
                 <div class="col-sm-1">
                     <button class="form-control Color"></button>
                 </div>
             </div>
         </div>
-        <button id="btnAddRow" onclick="CartView.addNewProductRow()">Add</button>
+        <button id="btnAddRow" onclick="CartView.addNewProductRow(this)">Add</button>
         <button id="btnDoneAdding" onclick="CartView.DoneAdding()">Exit</button>
     </div>
 
