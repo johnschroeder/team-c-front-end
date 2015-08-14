@@ -85,7 +85,7 @@ var CartView= {
                     });
             }
         });
-        navigation.get("/Carts/GetCartsByUser/" + user, function (res) {
+        navigation.get("/Carts/GetCartsByUser/" + user, function (err, res) {
             var results = JSON.parse(res);
 
             for (var i = 0; i < results.length; ++i) {
@@ -107,7 +107,7 @@ var CartView= {
         var locationDropdown = $(addItemCalc).find('.Location');
         var productID = window.args.ProductID;
 
-        navigation.get("/carts/getproductforaddrow/" + productID, function (res) {
+        navigation.get("/Carts/getproductforaddrow/" + productID, function (err, res) {
             console.log(res)
             var locationSize = res.availableByLocations.locations.length;
             var sizeSize = res.sizes.length;
@@ -156,7 +156,7 @@ var CartView= {
                 "packageCount": $(row).find('.Count').val(),
                 "sizeMapID": $(row).find('.Size').find('option:selected').val()
             };
-            navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+            navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (err, res) {
                 if (res == "Success") {
                     CartView.BindPage(window.state.CartIDSelected);
                     //or parseresult
@@ -216,7 +216,7 @@ var CartView= {
 
 
     BindPage: function (cartID) {
-        navigation.get("/Carts/GetCartModel/" + cartID, function (res) {
+        navigation.get("/Carts/GetCartModel/" + cartID, function (err, res) {
             var state = window.state;
             state.CartModel = res;
             navigation.saveState(state);
@@ -352,7 +352,7 @@ var CartView= {
                     var deleteHost = "/Carts/DeleteCart/" + cartID;
                     // alert(deleteHost);
                     navigation.get(deleteHost,
-                        function (res) {
+                        function (err, res) {
                             if (res == "Success") {
 
                                 alert("Shipping!");
@@ -543,7 +543,7 @@ var CartView= {
             "location": location
         };
 
-        navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+        navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (err, res) {
             if (res == "Success") {
                 CartView.BindPage(cartID);
             }
