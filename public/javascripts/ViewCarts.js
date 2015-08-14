@@ -2,43 +2,42 @@
  * Created by Kun on 7/19/2015.
  */
 
-var CartView={
+var CartView= {
 
 
-
-    init: function(){
+    init: function () {
         var scID
-        if(window.args.CartID === undefined) {
+        if (window.args.CartID === undefined) {
             scID = state.CartIDSelected;
         } else {
             scID = window.args.CartID;
         }
 
-        
-        if(typeof window.state.productUnderEdit === 'undefined')
+
+        if (typeof window.state.productUnderEdit === 'undefined')
             window.state.productUnderEdit = [];
-        this.PopulateCart(function(){
+        this.PopulateCart(function () {
             if (state && state.CartIDSelected) {
                 $('#selectCart').val(scID);
             }
         });
 
 
-        if(window.args.ProductID != null) {
+        if (window.args.ProductID != null) {
             CartView.AddNewCartItem();
 
             window.setInterval(CartView.AddRowOnChange, 5000);
 
 
-             var productID = window.args.ProductID;
-             var products = window.state.productUnderEdit;
-             var hasProduct = false;
-             $.each(products, function(i,obj) {
-             if (obj.pID === productID)
-             hasProduct = true;
-             });
-             if(hasProduct == false)
-             window.state.productUnderEdit.push({"pID":productID.toString()});
+            var productID = window.args.ProductID;
+            var products = window.state.productUnderEdit;
+            var hasProduct = false;
+            $.each(products, function (i, obj) {
+                if (obj.pID === productID)
+                    hasProduct = true;
+            });
+            if (hasProduct == false)
+                window.state.productUnderEdit.push({"pID": productID.toString()});
 
         }
 
@@ -47,9 +46,9 @@ var CartView={
         }
     },
 
-    CartOnChange: function( dropdown ) {
-        var cartIDSelected=$("#selectCart").val();
-        if(cartIDSelected == -1)
+    CartOnChange: function (dropdown) {
+        var cartIDSelected = $("#selectCart").val();
+        if (cartIDSelected == -1)
             return;
         var state = window.state;
         state.CartIDSelected = $("#selectCart").val();
@@ -58,7 +57,7 @@ var CartView={
         this.BindPage(cartIDSelected);
     },
 
-    PopulateCart: function(callback){
+    PopulateCart: function (callback) {
         //clean existing options
         $('#selectCart').empty();
         var option = $("<option/>")
@@ -71,20 +70,22 @@ var CartView={
             .appendTo("#selectCart");
         var user = 'don';
         var assignee = 'don';
-        $('#selectCart').on('change', function() {
-            if($(this).find('option:selected').text()=="--- New Cart ---" ){
+        $('#selectCart').on('change', function () {
+            if ($(this).find('option:selected').text() == "--- New Cart ---") {
                 var cartName = window.prompt("Enter job ID:", "Job ID");
-                navigation.hit("/Carts/CreateCart/" + cartName + "/" + user  + "/" + assignee + "/" + 5,
-                                function(res) {
-                                    state.CartIDSelected = res;
-                                    console.log("STUFF");
-                                    $('#sel1').off('change');
-                                    navigation.go("ViewCarts.html", {CartID: res,
-                                                    ProductID: window.args.ProductID});
-                                });
+                navigation.get("/Carts/CreateCart/" + cartName + "/" + user + "/" + assignee + "/" + 5,
+                    function (res) {
+                        state.CartIDSelected = res;
+                        console.log("STUFF");
+                        $('#sel1').off('change');
+                        navigation.go("ViewCarts.html", {
+                            CartID: res,
+                            ProductID: window.args.ProductID
+                        });
+                    });
             }
         });
-        navigation.hit("/Carts/GetCartsByUser/" + user,function(res){
+        navigation.get("/Carts/GetCartsByUser/" + user, function (res) {
             var results = JSON.parse(res);
 
             for (var i = 0; i < results.length; ++i) {
@@ -98,7 +99,7 @@ var CartView={
     },
 
 
-    AddNewCartItem: function(){
+    AddNewCartItem: function () {
         var addItemCalc = $("#addItemCalc");
         addItemCalc.show();
         $("#lblNewProductToPull").text(window.args.ProductName);
@@ -106,16 +107,16 @@ var CartView={
         var locationDropdown = $(addItemCalc).find('.Location');
         var productID = window.args.ProductID;
 
-        navigation.hit("/carts/getproductforaddrow/" + productID,function(res){
+        navigation.get("/carts/getproductforaddrow/" + productID, function (res) {
             console.log(res)
             var locationSize = res.availableByLocations.locations.length;
             var sizeSize = res.sizes.length;
-            for(var i = 0; i < locationSize; ++i){
+            for (var i = 0; i < locationSize; ++i) {
                 var optionname = res.availableByLocations.locations[i] + "---" + res.availableByLocations.available[i] + " still available";
                 var option = new Option(optionname, res.availableByLocations.locations[i]);
                 $(locationDropdown).append($(option));
             }
-            for(var i = 0; i < sizeSize; ++i){
+            for (var i = 0; i < sizeSize; ++i) {
                 var obj = res.sizes[i];
                 var optionname = obj.name + "---" + obj.amountPerPackage;
                 var option = new Option(optionname, obj.sizeMapID);
@@ -126,25 +127,24 @@ var CartView={
     },
 
 
-
-    AddRowOnChange: function(){
+    AddRowOnChange: function () {
         var row = $('#addItemCalc');
         var legal = CartView.RowRecalculate(row);
         var cartItemID = $(row).find('.CartItemID').text();
-        if(legal == false){
+        if (legal == false) {
             alert("There is not enough inventory in the selected location.");
             CartView.addNewCartItem();
             $('#btnAddRow').prop('disabled', true);
             return false;
         }
-        else{
+        else {
             $('#btnAddRow').prop('disabled', false);
             return true;
         }
     },
 
-    addNewProductRow: function(button){
-        if(window.state.CartIDSelected != 0 && CartView.AddRowOnChange()) {
+    addNewProductRow: function (button) {
+        if (window.state.CartIDSelected != 0 && CartView.AddRowOnChange()) {
             var row = $(button).parent();
             console.log($(row).find('.Size').find('option:selected').val())
             var dirtyRow = {
@@ -156,7 +156,7 @@ var CartView={
                 "packageCount": $(row).find('.Count').val(),
                 "sizeMapID": $(row).find('.Size').find('option:selected').val()
             };
-            navigation.hit("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+            navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
                 if (res == "Success") {
                     CartView.BindPage(window.state.CartIDSelected);
                     //or parseresult
@@ -166,40 +166,38 @@ var CartView={
         }
     },
 
-    DoneAdding: function(){
+    DoneAdding: function () {
         $("#divCalc").hide();
         this.ReBindPage($("#selectCart").val());
     },
 
-    ReCalculate: function(){
+    ReCalculate: function () {
         //decrease calculate ability
         //increase hit by ReBindPage
 
         var size = $('#InputDiv').children('.InputChild').find('.Size').find('option:selected').text().split('---', 2)[1];
         if (size < 0) size = 0;
         var count = $('#InputDiv').children('.InputChild').find('.Count').val();
-        var subtotal = size*count;
+        var subtotal = size * count;
         $('#InputDiv').children('.InputChild').find('.Subtotal').text(subtotal);
-        $('#InputDiv').children('.InputChild').find('.Color').css({"background-color":"red"});
+        $('#InputDiv').children('.InputChild').find('.Color').css({"background-color": "red"});
 
     },
 
 
-
-
-    CleanPage: function(cartIDSelected){
+    CleanPage: function (cartIDSelected) {
         var temp = ($("#divProductsContainer").children())[0];
         $("#divProductsContainer").empty();
         $(temp).appendTo("#divProductsContainer");
     },
 
-    PopulateSizeByProductID: function(dropdown,pID,sizeMapID){
+    PopulateSizeByProductID: function (dropdown, pID, sizeMapID) {
 
         var productID = pID;
         var products = window.state.CartModel.products;
-        products.forEach(function(p){
-            if(p.productID == pID){
-                p.sizes.forEach(function(size){
+        products.forEach(function (p) {
+            if (p.productID == pID) {
+                p.sizes.forEach(function (size) {
                     var optionname = size.Name + "---" + size.Size;
                     var option = new Option(optionname, size.SizeMapID);
                     var exist = 0;
@@ -210,20 +208,19 @@ var CartView={
 
         /*for (var i = 0; i < temp.length; i++) {
 
-        }
-        if(sizeMapID) {
-            dropdown.val(sizeMapID);
-        }*/
+         }
+         if(sizeMapID) {
+         dropdown.val(sizeMapID);
+         }*/
     },
 
 
-
-    BindPage: function(cartID){
-        navigation.hit("/Carts/GetCartModel/" + cartID,function(res){
+    BindPage: function (cartID) {
+        navigation.get("/Carts/GetCartModel/" + cartID, function (res) {
             var state = window.state;
             state.CartModel = res;
             navigation.saveState(state);
-            if(res == 'empty') {
+            if (res == 'empty') {
                 return;
             }
             console.log(res);
@@ -235,8 +232,8 @@ var CartView={
             var products = res.products;
             var oneProductContainer = ($("#divProductsContainer").children())[0];
 
-            products.forEach(function(product){
-                if(product != null) {
+            products.forEach(function (product) {
+                if (product != null) {
                     var productName = product.name;
                     var productID = product.productID;
                     var sizes = product.sizes;
@@ -248,17 +245,15 @@ var CartView={
                     $(pnameLabel).text(productName);
                     $(pIDLabel).text(productID);
 
-                    if(window.args.ProductID != null && window.args.ProductID == productID){
+                    if (window.args.ProductID != null && window.args.ProductID == productID) {
                         var firstdiv = $('#divProductsContainer').children()[0];
                         console.log(firstdiv);
                         $(newProductContainer).insertAfter($(firstdiv));
 
                     }
-                    else{
+                    else {
                         $(newProductContainer).appendTo("#divProductsContainer");
                     }
-
-
 
 
                     var items = product.items;
@@ -273,7 +268,7 @@ var CartView={
 
                     var products = window.state.productUnderEdit;
                     var inEditMode = false;
-                    $.each(products, function(i,obj) {
+                    $.each(products, function (i, obj) {
                         if (obj.pID == productID.toString())
                             inEditMode = true;
                     });
@@ -288,15 +283,15 @@ var CartView={
                         var newEditRow = editRow.clone();
                         var sizeSelect = $(newEditRow).find('.Size');
 
-                        CartView.PopulateSizeByProductID(sizeSelect,productID,sizeMapID);
+                        CartView.PopulateSizeByProductID(sizeSelect, productID, sizeMapID);
                         $(newEditRow).find('.CartItemID').text(items[i].cartItemID);
                         $(newEditRow).find('.Count').val(items[i].packageCount);
                         $(newEditRow).find('.Subtotal').text(subtotal);
                         $(newEditRow).find('.Location').text(items[i].location);
-                        $(newEditRow).find('.Color').css({'background':items[i].color});
+                        $(newEditRow).find('.Color').css({'background': items[i].color});
 
                         var locSelect = $(newEditRow).find('.Location');
-                        for(j = 0; j < locs.length; j++){
+                        for (j = 0; j < locs.length; j++) {
                             var optionname = locs[j] + "---" + avlQty[j] + " still available";
                             var option = new Option(optionname, locs[j]);
                             $(locSelect).append($(option));
@@ -310,23 +305,23 @@ var CartView={
                         $(newRow).find('.ViewCount').text(items[i].packageCount);
                         $(newRow).find('.ViewSubtotal').text(subtotal);
                         $(newRow).find('.ViewLocation').text(items[i].location);
-                        $(newRow).find('.ViewColor').css({'background':items[i].color});
+                        $(newRow).find('.ViewColor').css({'background': items[i].color});
                         //$(newRow).show();
                         newRow.appendTo(newProductContainer);
 
                         var lbTotal = $(newProductContainer).find(".lbProductTotal");
-                        $(lbTotal).text(" with Quantity of "+total+" in Cart");
+                        $(lbTotal).text(" with Quantity of " + total + " in Cart");
                         var btnsEditPull = $(newProductContainer).find('.divEditPullButtons');
                         var btnsDoneEdit = $(newProductContainer).find('.divDoneEditButtons');
                         $(btnsEditPull).show();
 
-                        if(inEditMode == false){
+                        if (inEditMode == false) {
                             $(newRow).show();
                             $(newEditRow).hide();
                             $(btnsEditPull).show();
                             $(btnsDoneEdit).hide();
                         }
-                        else{
+                        else {
                             $(newRow).hide();
                             $(newEditRow).show();
                             $(btnsEditPull).hide();
@@ -334,18 +329,14 @@ var CartView={
                         }
 
 
-
                     }
 
                     var addBtn = $('.addBtn').first().clone();
                     $(addBtn).appendTo(newProductContainer);
 
-                    if(inEditMode == true){
+                    if (inEditMode == true) {
                         $(addBtn).show();
                     }
-
-
-
 
 
                 }
@@ -357,17 +348,17 @@ var CartView={
 
             btn.appendChild(t); // Append the text to <button>
             btn.addEventListener("click",
-                function() {
+                function () {
                     var deleteHost = "/Carts/DeleteCart/" + cartID;
-                   // alert(deleteHost);
-                    navigation.hit(deleteHost,
-                        function(res) {
+                    // alert(deleteHost);
+                    navigation.get(deleteHost,
+                        function (res) {
                             if (res == "Success") {
 
-                            alert("Shipping!");
+                                alert("Shipping!");
                                 navigation.go("DisplayInventory.html", null);
-                        }
-                            else{
+                            }
+                            else {
                                 alert(res);
                             }
 
@@ -378,19 +369,19 @@ var CartView={
         });
     },
 
-    AddNewEditRow: function(button){
+    AddNewEditRow: function (button) {
         var thisProd = $(button).parent().parent();
         var newRow = $(thisProd).children('.divItemRowEdit').first().clone();
         var productID = $(thisProd).find(".lbProductID").text();
         var sizeSelect = $(newRow).find('.Size');
         var product = false;
         var products = state.CartModel.products;
-        products.forEach(function(p){
-            if(p.productID == productID){
+        products.forEach(function (p) {
+            if (p.productID == productID) {
                 product = p;
             }
         });
-        if(!product){
+        if (!product) {
             console.log("ERROR, Product not found in AddNewEditRow")
         }
         else {
@@ -410,18 +401,18 @@ var CartView={
         }
     },
 
-    Edit: function(button){
+    Edit: function (button) {
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         var productID = $(oneProd).find('.lbProductID').text();
         var products = window.state.productUnderEdit;
         var hasProduct = false;
-        $.each(products, function(i,obj) {
+        $.each(products, function (i, obj) {
             if (obj.pID === productID)
                 hasProduct = true;
         });
-        if(hasProduct == false)
-            window.state.productUnderEdit.push({"pID":productID});
+        if (hasProduct == false)
+            window.state.productUnderEdit.push({"pID": productID});
         $(oneProd).find('.divDoneEditButtons').show();
         var editRows = $(oneProd).children('.divItemRowEdit');
         var viewRows = $(oneProd).children('.divItemRowView');
@@ -433,7 +424,7 @@ var CartView={
         $(oneProd).find('.AddBtn').show();
     },
 
-    DoneEditing: function(button){
+    DoneEditing: function (button) {
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divEditPullButtons').show();
@@ -444,12 +435,12 @@ var CartView={
         var productID = $(oneProd).find('.lbProductID').text();
         var products = window.state.productUnderEdit;
         var hasProduct = false;
-        $.each(products, function(i,obj) {
+        $.each(products, function (i, obj) {
             if (obj.pID === productID)
                 hasProduct = true;
         });
-        if(hasProduct == true)
-            window.state.productUnderEdit.pop({"pID":productID});
+        if (hasProduct == true)
+            window.state.productUnderEdit.pop({"pID": productID});
 
         for (i = 1; i < editRowsLen; i++) {
             $(viewRows[i]).show();
@@ -458,29 +449,27 @@ var CartView={
         $(oneProd).find('.AddBtn').hide();
     },
 
-    Pull: function(button){
+    Pull: function (button) {
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divUnpullButton').show();
 
         var readyToShip = true;
-        $(".btnPull").each(function(){
+        $(".btnPull").each(function () {
 
 
-            if ($(this).is(":visible"))
-            {
+            if ($(this).is(":visible")) {
                 readyToShip = false;
             }
         });
 
-        if (readyToShip)
-        {
+        if (readyToShip) {
             document.getElementById('shipBtnId').style.display = "";
         }
 
     },
 
-    Unpull: function(button){
+    Unpull: function (button) {
         $(button).parent().hide();
         var oneProd = $(button).parent().parent();
         $(oneProd).find('.divEditPullButtons').show();
@@ -488,16 +477,16 @@ var CartView={
     },
 
 
-    RowItemOnChange: function(input){
+    RowItemOnChange: function (input) {
         console.log(input);
         var row = $(input).parent().parent();
         var legal = this.RowRecalculate(row);
         var cartItemID = $(row).find('.CartItemID').text();
-        if(legal == false){
+        if (legal == false) {
             this.BindPage(row);
             alert("There is not enough inventory in the selected location.");
         }
-        else{
+        else {
 
             this.BindPage(row);
         }
@@ -505,7 +494,7 @@ var CartView={
     },
 
 
-    RowRecalculate: function(row){
+    RowRecalculate: function (row) {
         var dirtyCartItemID = $(row).find('.CartItemID').text();
         var originalCount = 0;
         window.state.CartModel.products.forEach(function (product) {
@@ -518,22 +507,22 @@ var CartView={
         var sizeNumber = $(row).find('.Size :selected').text().split('---', 2)[1];
         var count = $(row).find('.Count').val();
         var diffCount = count - originalCount;
-        var available = ($(row).find('.Location').find('option:selected').text().split('---', 2)[1]).split('still',2)[0];
+        var available = ($(row).find('.Location').find('option:selected').text().split('---', 2)[1]).split('still', 2)[0];
         //alert(available + ", " + sizeNumber + ", " + diffCount);
-        if(available<sizeNumber*diffCount){
-            count = (available - available%sizeNumber)/sizeNumber;
+        if (available < sizeNumber * diffCount) {
+            count = (available - available % sizeNumber) / sizeNumber;
             $(row).find('.Count').val(count);
-            $(row).find('.Subtotal').text(count*sizeNumber);
+            $(row).find('.Subtotal').text(count * sizeNumber);
             return false;
         }
-        else{
-            $(row).find('.Subtotal').text(count*sizeNumber);
+        else {
+            $(row).find('.Subtotal').text(count * sizeNumber);
             return true;
         }
     },
 
 
-    ReBindPage: function(row){
+    ReBindPage: function (row) {
         var cartID = $("#selectCart").val();
         var productID = $(row).parent().find('.lbProductID').text();
         var cartItemID = $(row).find('.CartItemID').text();
@@ -544,83 +533,20 @@ var CartView={
         var packageSizeOption = $(sizeSelect).find('option:selected').text();
         var packageSize = (packageSizeOption.split('---'))[1];
 
-        var dirtyRow = {"cartID":cartID,
-            "productID":productID,
-            "cartItemID":cartItemID,
-            "sizeMapID":sizeMapID,
-            "packageSize":packageSize,
-            "packageCount":packageCount,
-            "location":location
+        var dirtyRow = {
+            "cartID": cartID,
+            "productID": productID,
+            "cartItemID": cartItemID,
+            "sizeMapID": sizeMapID,
+            "packageSize": packageSize,
+            "packageCount": packageCount,
+            "location": location
         };
 
-        navigation.hit("/Carts/PutCartModel/" +  JSON.stringify(dirtyRow),function(res){
-            if(res=="Success"){
+        navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+            if (res == "Success") {
                 CartView.BindPage(cartID);
-                //or parseresult
-
             }
         });
-
-
-        /*
-        var cartModel = window.state.CartModel;
-        var index;
-        for(k=0; k<cartModel.products.length; k++){
-            if(cartModel.products[k].productID == productID){
-                index = k;
-            }
-        }
-        var items = cartModel.products[index].items;
-
-        cartModel.products[index].items.forEach(function(item){
-            if(item.cartItemID == cartItemID){
-                //can update more.....but below are the critical ones
-                item.sizeMapID = sizeMapID;
-                item.packageCount = packageCount;
-                item.location = location;
-                item.dirty = true;
-            }
-        });
-        window.state.CartModel = cartModel;
-        navigation.saveState(window.state);
-
-        var mmm = window.state.CartModel;
-//console.log(JSON.stringify(mmm));
-        */
-
-
-        //hit backend with window.state.CartModel
-        /*
-        navigation.hit("/Carts/GetCartModelWithProductID/" + cartID,function(res){
-            //compare res with current webpage values loop through only that product's items rows
-
-
-
-            var products = res.products;
-
-            products.forEach(function(product){
-                if(product != null) {
-                    var productName = product.name;
-                    var productID = product.productID;
-                    var sizes = product.sizes;
-                    //console.log(productName+ ' ' + productID);
-                    //console.log(sizes);
-
-
-                }
-            });
-        });
-        */
-
     }
-
-
-
-
-
-
-
-
-
-
-}
+};
