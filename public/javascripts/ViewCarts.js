@@ -74,7 +74,7 @@ var CartView= {
             if ($(this).find('option:selected').text() == "--- New Cart ---") {
                 var cartName = window.prompt("Enter job ID:", "Job ID");
                 navigation.get("/Carts/CreateCart/" + cartName + "/" + user + "/" + assignee + "/" + 5,
-                    function (res) {
+                    function (err,res) {
                         state.CartIDSelected = res;
                         console.log("STUFF");
                         $('#sel1').off('change');
@@ -85,7 +85,8 @@ var CartView= {
                     });
             }
         });
-        navigation.get("/Carts/GetCartsByUser/" + user, function (res) {
+        navigation.get("/Carts/GetCartsByUser/", function (err,res) {
+            console.log(err,res);
             var results = JSON.parse(res);
 
             for (var i = 0; i < results.length; ++i) {
@@ -107,8 +108,8 @@ var CartView= {
         var locationDropdown = $(addItemCalc).find('.Location');
         var productID = window.args.ProductID;
 
-        navigation.get("/carts/getproductforaddrow/" + productID, function (res) {
-            console.log(res)
+        navigation.get("/carts/getproductforaddrow/" + productID, function (err,res) {
+            console.log(err,res)
             var locationSize = res.availableByLocations.locations.length;
             var sizeSize = res.sizes.length;
             for (var i = 0; i < locationSize; ++i) {
@@ -156,7 +157,7 @@ var CartView= {
                 "packageCount": $(row).find('.Count').val(),
                 "sizeMapID": $(row).find('.Size').find('option:selected').val()
             };
-            navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+            navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (err,res) {
                 if (res == "Success") {
                     CartView.BindPage(window.state.CartIDSelected);
                     //or parseresult
@@ -216,14 +217,14 @@ var CartView= {
 
 
     BindPage: function (cartID) {
-        navigation.get("/Carts/GetCartModel/" + cartID, function (res) {
+        navigation.get("/Carts/GetCartModel/" + cartID, function (err,res) {
             var state = window.state;
             state.CartModel = res;
             navigation.saveState(state);
             if (res == 'empty') {
                 return;
             }
-            console.log(res);
+            console.log(err,res);
 
 
             var template = ($('#divProductsContainer').children())[0];
@@ -352,14 +353,14 @@ var CartView= {
                     var deleteHost = "/Carts/DeleteCart/" + cartID;
                     // alert(deleteHost);
                     navigation.get(deleteHost,
-                        function (res) {
+                        function (err,res) {
                             if (res == "Success") {
 
                                 alert("Shipping!");
                                 navigation.go("DisplayInventory.html", null);
                             }
                             else {
-                                alert(res);
+                                alert(err,res);
                             }
 
                         });
@@ -543,7 +544,7 @@ var CartView= {
             "location": location
         };
 
-        navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (res) {
+        navigation.get("/Carts/PutCartModel/" + JSON.stringify(dirtyRow), function (err,res) {
             if (res == "Success") {
                 CartView.BindPage(cartID);
             }
