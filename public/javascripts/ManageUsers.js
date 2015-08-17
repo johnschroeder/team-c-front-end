@@ -70,6 +70,7 @@ var manageUsers = {
                 var rowsContainer = '#DisplayUsersDiv';
                 $("#DisplayUsersDiv").empty();
                 newRow.appendTo(rowsContainer);
+                newRow.appendTo(rowsContainer);
 
                 function permsName(perms) {
                     switch (perms) {
@@ -148,7 +149,7 @@ var manageUsers = {
 
         var toPass = {
             "username":uname,
-            "password":"demo",
+            "password":"0000",
             "email":email,
             "firstName":fname,
             "lastName":lname,
