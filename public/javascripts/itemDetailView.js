@@ -43,11 +43,10 @@ var itemDetailView = {
 
     displayItem: function () {
 
-        var lastRunDate = this.item.MostRecent ? this.item.MostRecent : "No last run date available";
-
+        var lastRunDate = this.item.MostRecent;
         var dateString;
 
-        if (lastRunDate != "No last run date available")
+        if (lastRunDate != 'n/a')
         {
             lastRunDate = new Date(lastRunDate);
             dateString = lastRunDate.getMonth() + "/" + lastRunDate.getDay() + "/" + lastRunDate.getFullYear() + " ";
