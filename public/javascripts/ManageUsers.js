@@ -148,7 +148,7 @@ var manageUsers = {
 
         var toPass = {
             "username":uname,
-            "password":"0000",
+            "password":"demo",
             "email":email,
             "firstName":fname,
             "lastName":lname,
