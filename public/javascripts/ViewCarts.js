@@ -108,7 +108,7 @@ var CartView= {
         var locationDropdown = $(addItemCalc).find('.Location');
         var productID = window.args.ProductID;
 
-        navigation.get("/carts/getproductforaddrow/" + productID, function (err,res) {
+        navigation.get("/Carts/getproductforaddrow/" + productID, function (err,res) {
             console.log(err,res)
             var locationSize = res.availableByLocations.locations.length;
             var sizeSize = res.sizes.length;

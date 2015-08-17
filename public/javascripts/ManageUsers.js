@@ -81,7 +81,7 @@ var manageUsers = {
                             return 'Employee';
                         case 3:
                             return 'Admin';
-                        case 4:
+                        default:
                             return "Level: " + perms;
                     }
                 }
