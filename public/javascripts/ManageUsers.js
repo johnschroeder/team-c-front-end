@@ -70,7 +70,6 @@ var manageUsers = {
                 var rowsContainer = '#DisplayUsersDiv';
                 $("#DisplayUsersDiv").empty();
                 newRow.appendTo(rowsContainer);
-                newRow.appendTo(rowsContainer);
 
                 function permsName(perms) {
                     switch (perms) {
