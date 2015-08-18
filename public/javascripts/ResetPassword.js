@@ -1,22 +1,23 @@
-if(window.lookup){
+if(window.pageKey){
     jQuery('#complete').show();
 }
 else{
     jQuery("#start").show();
 }
 
-jQuery('#complete').submit(function(){
+var completeReset = function(){
     if(jQuery('#newpw').val() == jQuery('#confirm').val()) {
+        console.log(window.pageKey)
         var toPass = {
-            "lookup": window.lookup,
+            "lookup": window.pageKey,
             "password": jQuery('#newpw').val()
         };
         navigation.postJSON(window.apiRoute + '/login/completepasswordreset/', toPass, function(err, response) {
             if(response){
-                jQuery("#formContainer").innerHTML("Your password was reset.");
+                jQuery("#formContainer").hmtl("Your password was reset.");
             }
             else{
-                jQuery("#formContainer").innerHTML("Something went wrong please contact the site admin.");
+                jQuery("#formContainer").html("Something went wrong please contact the site admin.");
                 console.log(err);
             }
         })
@@ -24,16 +25,16 @@ jQuery('#complete').submit(function(){
     else{
         window.alert("Please try again, the passwords did not match");
     }
-});
+};
 
-jQuery('#start').submit(function(){
+var startReset = function(){
     navigation.postJSON(window.apiRoute+"/Login/StartPasswordReset/", {username:jQuery('#username').val()}, function(err, response) {
         if(response){
-            jQuery("#formContainer").innerHTML("Please check your email for a password reset link");
+            jQuery("#formContainer").html("Please check your email for a password reset link");
         }
         else{
-            jQuery("#formContainer").innerHTML("Something went wrong please contact the site admin.");
+            jQuery("#formContainer").html("Something went wrong please contact the site admin.");
             console.log(err);
         }
     })
-});
+};

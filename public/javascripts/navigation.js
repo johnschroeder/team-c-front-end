@@ -5,8 +5,7 @@ var navigation = {
 
     go:function(targetPage, args) {
         var self = this;
-
-        if(targetPage == "loginForm.html"){
+        if(targetPage == "loginForm.html" || targetPage == "ResetPassword.html"){
             this.clearPageHistory();
             this.savePageHistory(targetPage);
             $("#main_cont").load('/load/' + targetPage, {args:args, state:this.stateTable[targetPage.toLowerCase().split(".")[0]]});
@@ -21,6 +20,9 @@ var navigation = {
                     jQuery('#usersName').text(function () {
                         return result.FirstName + " " + result.LastName
                     });
+                    if (result.PermsID == 604) {
+                        $("#AdminBar").removeClass("hidden");
+                    }
                     jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
                         self.savePageHistory(targetPage);
 
@@ -72,8 +74,8 @@ var navigation = {
     getJSON:function(route, callback){
         this._ajax(route, 'GET', null, 'json', callback);
     },
-    postJSON:function(route, callback){
-        this._ajax(route, 'POST', null, 'json', callback);
+    postJSON:function(route, data, callback){
+        this._ajax(route, 'POST', data, 'json', callback);
     },
     post:function(route, data, callback){
         this._ajax(route, 'POST', data, null, callback);
