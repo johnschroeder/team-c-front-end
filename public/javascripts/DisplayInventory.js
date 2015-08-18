@@ -354,7 +354,7 @@
  */
 
 var gotoPullInventory = function (pid, pname, tlq) {
-    navigation.go("PullInventory.html", {
+    navigation.go("ViewCarts.html", {
         ProductID: pid,
         ProductName: pname,
         TotalQuantity: tlq
