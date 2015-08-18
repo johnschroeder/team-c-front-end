@@ -21,7 +21,7 @@ var navigation = {
                     jQuery('#usersName').text(function () {
                         return result.FirstName + " " + result.LastName
                     });
-                    jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage + "/" + result.PermsID, function (res) {
+                    jQuery.get(window.apiRoute + "/checkPermissions/" + targetPage.toLowerCase().split(".")[0] + "/" + result.PermsID, function (res) {
                         self.savePageHistory(targetPage);
 
                         $("#main_cont").load('/load/' + targetPage, {
