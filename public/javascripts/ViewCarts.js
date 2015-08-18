@@ -68,15 +68,14 @@ var CartView= {
             .val(1)
             .text("--- New Cart ---")
             .appendTo("#selectCart");
-        var user = 'don';
-        var assignee = 'don';
+        var user = 'demo';
+        var assignee = 'demo';
         $('#selectCart').on('change', function () {
             if ($(this).find('option:selected').text() == "--- New Cart ---") {
                 var cartName = window.prompt("Enter job ID:", "Job ID");
                 navigation.get("/Carts/CreateCart/" + cartName + "/" + user + "/" + assignee + "/" + 5,
                     function (err,res) {
                         state.CartIDSelected = res;
-                        console.log("STUFF");
                         $('#sel1').off('change');
                         navigation.go("ViewCarts.html", {
                             CartID: res,
@@ -147,6 +146,7 @@ var CartView= {
     addNewProductRow: function (button) {
         if (window.state.CartIDSelected != 0 && CartView.AddRowOnChange()) {
             var row = $(button).parent();
+            console.log("CONTENTS OF THE ROW:");
             console.log($(row).find('.Size').find('option:selected').val())
             var dirtyRow = {
                 "cartItemID": -1,
@@ -199,7 +199,7 @@ var CartView= {
         products.forEach(function (p) {
             if (p.productID == pID) {
                 p.sizes.forEach(function (size) {
-                    var optionname = size.Name + "---" + size.Size;
+                    var optionname = size.name + "---" + size.amountPerPackage;
                     var option = new Option(optionname, size.SizeMapID);
                     var exist = 0;
                     $(dropdown).append($(option));
