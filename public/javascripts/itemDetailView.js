@@ -1,16 +1,10 @@
-/**
- * Created by Kun on 7/5/2015.
- */
-
 var itemDetailView = {
     productID: null,
     item: null,
-    prevPage: null,
 
     init: function () {
         $("#response").text("");
-        this.productID = window.args.ProductID || window.args.pageKey || window.state.ProductID;
-        this.prevPage = window.args.PreviousPage || window.state.PreviousPage;
+        this.productID = window.args.ProductID || window.state.ProductID || window.args.pageKey;
 
         if (window.args.ProductID) {
             navigation.saveState(window.args);
@@ -28,6 +22,7 @@ var itemDetailView = {
                 self.productName = self.item.Name;
                 self.displayItem();
                 self.doThumbnail();
+                navigation.setTitle("Product Details: " + self.productName);
             } else {
                 self.renderError("No inventory found");
             }
@@ -47,29 +42,48 @@ var itemDetailView = {
     },
 
     displayItem: function () {
+
+        var lastRunDate = this.item.MostRecent;
+        var dateString;
+
+        if (lastRunDate != 'n/a')
+        {
+            lastRunDate = new Date(lastRunDate);
+            dateString = lastRunDate.getMonth() + "/" + lastRunDate.getDay() + "/" + lastRunDate.getFullYear() + " ";
+            var hhmm = (lastRunDate.getHours() != 0) ? lastRunDate.getHours() : "00";
+            hhmm += ":";
+            hhmm += (lastRunDate.getMinutes() != 0) ? lastRunDate.getMinutes() : "00";
+            lastRunDate = dateString + hhmm;
+        }
+
         $("#response").text("");
         $("#product_name").text(this.item.Name);
         $("#details").append("<div>Total Available: <span>" + this.item.TotalAvailable + "</span></div>" +
         "<div>Total Reserved: <span>" + this.item.TotalReserved + "</span></div>" +
-        "<div>Last run: <span>" + this.item.MostRecent + "</span></div>");
+        "<div>Last run: <span>" + lastRunDate + "</span></div>");
     },
 
     displayRuns: function () {
-        //this.runs.forEach(function (run) {
-        // using for loop instead of forEach to reverse order
         $("#runs").append("<h2>" + "Run History" + "</h2>" +
-                          "<div class=\"col-sm-12\">" + "<b>" + "<div class=\"col-sm-1\">" + "Run ID" + "</div>" + "<div class=\"col-sm-1\">" + "Alt ID" + "</div>" + "<div class=\"col-sm-2\">" + "Location" + "</div>" + "<div class=\"col-sm-2\">" + "Date Created" + "</div>" + "<div class=\"col-sm-2\">" + "Initial Quantity" + "</div>" + "<div class=\"col-sm-2\">" + "Quantity Available" + "</div>" + "<div class=\"col-sm-2\">" + "Quantity Reserved" + "</div>" + "</b>" + "</div>");
-        var displayColor = 0;  // using i % 2 was inconsistent, depends on whether the total number of runs was even or odd
-        for (var i = this.runs.length - 1; i >= 0; --i) {
-            var run = this.runs[i];
-            var dateRegex = /\d\d\d\d-\d\d-\d\d/;
+                          "<div class=\"col-sm-12\">" + "<b>" + "<div class=\"col-sm-1\">" + "Run ID" + "</div>" + "<div class=\"col-sm-1\">" + "Alt ID" + "</div>" + "<div class=\"col-sm-2\">" + "Date Created" + "</div>" + "<div class=\"col-sm-2\">" + "Location" + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + "Initial Quantity" + "</div>" + "<div class=\"col-sm-4\">" + "Quantity Available" + "</div>" + "<div class=\"col-sm-4\">" + "Quantity Reserved" + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + "Color" + "</div>" + "</b>" + "</div>");
+        var displayColor = 0;  // used to set background of every other row
+        this.runs.forEach(function (run) {
             if (displayColor % 2 == 0) {
-                $("#runs").append("<div style=\"background:lightgray\" class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityReserved + "</div>" + " </div>");
+                $("#runs").append("<div style=\"background:lightgray\" class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + formatDate(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityReserved + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + run.Marker + "</div>" + "</div>");
                 ++displayColor;
             } else {
-                $("#runs").append("<div class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-2\">" + dateRegex.exec(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-2\">" + run.QuantityReserved + "</div>" + " </div>");
+                $("#runs").append("<div class=\"col-sm-12\">" + "<div class=\"col-sm-1\">" + run.RunID + "</div>" + "<div class=\"col-sm-1\">" + run.AltID + "</div>" + "<div class=\"col-sm-2\">" + formatDate(run.DateCreated) + "</div>" + "<div class=\"col-sm-2\">" + run.Location + "</div>" + "<div class=\"col-sm-5\">" + "<div class=\"col-sm-4\">" + run.InitialQuantity + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityAvailable + "</div>" + "<div class=\"col-sm-4\">" + run.QuantityReserved + "</div>" + "</div>" + "<div class=\"col-sm-1\">" + run.Marker + "</div>" + "</div>");
                 ++displayColor;
             }
+        });
+
+        function formatDate(date) {
+            var dateString;
+            var dateRegex = /\d\d\d\d-\d\d-\d\d/;
+            dateString = dateRegex.exec(date).toString();
+            var dateArray = dateString.split("-");
+            dateString = dateArray[1] + "/" + dateArray[2] + "/" + dateArray[0];
+            return dateString;
         }
     },
 
@@ -81,18 +95,16 @@ var itemDetailView = {
         if (!this.productID || !this.item) return;
         navigation.go("AddInventory.html", {
             ProductID: this.productID,
-            ProductName: this.item.Name || "",
-            PreviousPage: "ItemDetailView.html"
+            ProductName: this.item.Name || ""
         });
     },
 
     pull: function () {
         if (!this.productID || !this.item) return;
-        navigation.go("PullInventory.html", {
-            ProductID: this.productID,
+        navigation.go("ViewCarts.html", {
+            ProductID: window.args.ProductID,
             ProductName: this.item.Name || "",
-            TotalQuantity: this.item.TotalAvailable,
-            PreviousPage: "ItemDetailView.html"
+            TotalQuantity: this.item.TotalAvailable
         });
     },
 
@@ -100,16 +112,14 @@ var itemDetailView = {
         if (!this.productID || !this.item) return;
         navigation.go("EditProduct.html", {
             ProductID: this.productID,
-            ProductName: this.item.Name || "",
-            PreviousPage: "ItemDetailView.html"
+            ProductName: this.item.Name || ""
         });
     },
 
     qrCode: function () {
         if (!this.productID || !this.item) return;
         navigation.go("ShowQRCode.html", {
-            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ItemDetailView-" + this.productID,
-            PreviousPage: "ItemDetailView.html"
+            Text: window.location.protocol + "//" + window.location.hostname + "/" + "ItemDetailView-" + this.productID
         });
     },
 
@@ -122,7 +132,7 @@ var itemDetailView = {
             var r = jQuery.parseJSON(resp);
             if (r[0].message == 'Success') {
                 alert("Product " + $("#product_name").text() + " is deleted.");
-                navigation.go("DisplayInventory.html",{ProductID: window.args.ProductID, PreviousPage:"ItemDetailView"});
+                navigation.go("DisplayInventory.html",{ProductID: window.args.ProductID});
             }
             else {
                 alert(r[0].message);
@@ -149,8 +159,4 @@ var itemDetailView = {
             });
 
     },
-    back: function () {
-        if (this.prevPage)
-            navigation.go(this.prevPage);
-    }
 };

@@ -5,7 +5,6 @@
      */
 
     var display_inventory = {
-
         host: window.apiRoute + "/displayInventory/",
         inventory: false,
         customerSelector: null,
@@ -15,6 +14,7 @@
          * Go fetch everything and get it set up
          */
         init: function() {
+            navigation.setTitle("View Inventory");
             var self = this;
 
             $("#track_by").change(function() {
@@ -26,7 +26,7 @@
                         $("#customer-filter").show();
                         $("#qr_button").removeClass("hidden");
                         break;
-                    case "Item":
+                    case "Product":
                         $("#item-filter").show();
                         $("#qr_button").removeClass("hidden");
                         break;
@@ -39,14 +39,14 @@
                 }
             });
 
-            // Customer search bar.
+            // Setup customer search bar.
             $("#customer").autocomplete({
                 minLength: 1,
                 source: function(request, response) {
                     $.getJSON(window.apiRoute + "/customerAutoComplete/" + encodeURIComponent(request.term), response); // data = [{label:"item 1"}, {label:"item 2"}, ..]
                 },
                 select: function(event, ui) {
-                    // ui { label, value }
+                    // ui { item { label, value } }
                     self.searchCustomer(ui.item.label);
                 }
             });
@@ -61,14 +61,14 @@
                 self.searchItem($("#customer").val());
             });
 
-            // Item search bar.
+            // Setup item search bar.
             $("#item").autocomplete({
                 minLength: 1,
                 source: function(request, response) {
                     $.getJSON(window.apiRoute + "/itemAutoComplete/" + encodeURIComponent(request.term), response); // data = [{label:"item 1"}, {label:"item 2"}, ..]
                 },
                 select: function(event, ui) {
-                    // ui { label, value }
+                    // ui { item { label, value } }
                     self.searchItem(ui.item.label);
                 }
             });
@@ -83,27 +83,39 @@
                 self.searchItem($("#item").val());
             });
 
-            var query = window.location.search.substring(1).split('&');
-            var pair = query[0].split('=');
-            var key = decodeURIComponent(pair[0]);
-            var value = decodeURIComponent(pair[1]);
+            // State
+            var filter = "";
+            var keyword = "";
 
-            switch (key.toLowerCase()) {
+            if (window.state && window.state.filter && window.state.keyword) {
+                filter = window.state.filter || "";
+                keyword = window.state.keyword || "";
+            } else {
+                var query = window.location.search.substring(1).split('&');
+                var pair = query[0].split('=');
+
+                filter = decodeURIComponent(pair[0]);
+                keyword = decodeURIComponent(pair[1]);
+
+                navigation.saveState({filter:filter, keyword:keyword});
+            }
+
+            // Show state
+            switch (filter.toLowerCase()) {
                 case "customer":
                     $("#track_by option:contains('Customer')").prop("selected", true);
                     $("#track_by").trigger("change");
-                    this.customerSelector[0].selectize.addOption({label:value, value:value});
-                    this.customerSelector[0].selectize.addItem(value);
-                    this.searchCustomer(value);
+                    $("#customer").val(keyword);
+                    this.searchCustomer(keyword);
                     break;
-                case "item":
-                    $("#track_by option:contains('Item')").prop("selected", true);
+                case "product":
+                    $("#track_by option:contains('Product')").prop("selected", true);
                     $("#track_by").trigger("change");
-                    $("#item").val(value);
-                    this.searchItem(value);
+                    $("#item").val(keyword);
+                    this.searchItem(keyword);
                     break;
                 case "all":
-                    if (value.toLowerCase() == "true") {
+                    if (keyword.toLowerCase() == "true") {
                         $("#track_by option:contains('All')").prop("selected", true);
                         $("#track_by").trigger("change");
                         this.showAllItems();
@@ -116,89 +128,84 @@
 
         searchItem: function(keyword) {
             if (!keyword) return;
+            this.hideError();
 
-            //console.log("Search item: " + keyword); return;
-
+            //console.log("Search product: " + keyword); return;
             var self = this;
+
             $.getJSON(window.apiRoute + "/searchItem/" + encodeURIComponent(keyword), function(data) {
                 if (!data.length || data[0] === null) {
-                    $(".inventory-container")
-                        .empty()
-                        .text("No inventory found.");
-
+                    self.showNotFound();
                     return;
                 }
 
                 self.inventory = data;
                 self.display_inventory();
                 $("#customer").val("");
+                navigation.saveState({filter:"product", keyword:keyword});
             }).fail(function() {
-                self.render_error("Item: Search failed.");
+                self.showError("Failed to search for product: " + keyword + ".");
             });
         },
 
         searchCustomer: function(keyword) {
             if (!keyword) return;
+            this.hideError();
 
             //console.log("Search customer: " + keyword); return;
-
             var self = this;
+
             $.getJSON(window.apiRoute + "/searchCustomer/" + encodeURIComponent(keyword), function(data) {
                 if (!data.length || data[0] === null) {
-                    $(".inventory-container")
-                        .empty()
-                        .text("No inventory found.");
-
+                    self.showNotFound();
                     return;
                 }
 
                 self.inventory = data;
                 self.display_inventory();
                 $("#item").val("");
+                navigation.saveState({filter:"customer", keyword:keyword});
             }).fail(function() {
-                self.render_error("Customer: Search failed.");
+                self.showError("Failed to search for customer: " + keyword + ".");
             });
         },
 
         showAllItems: function() {
+            this.hideError();
             var self = this;
+
             $.getJSON( this.host, function( data ) {
-
                 if( data && data.length && data[0] !== null){
-
                     self.inventory = data;
                     //self.consolidate_inventory();
                     self.display_inventory();
                     $("#customer").val("");
                     $("#item").val("");
+                    navigation.saveState({filter:"all", keyword:"true"});
+                } else {
+                    self.showNotFound();
                 }
-                else {
-                    $(".inventory-container")
-                        .empty()
-                        .text("No inventory found.");
-                }
-
-            }).fail( function( response ){
-
-                self.render_error( "Failed to load inventory: " + response );
-
+            }).fail( function(response){
+                self.showError("Failed to show all inventory: " + response + ".");
             });
+        },
+
+        showNotFound: function() {
+            $(".inventory-container")
+                .empty()
+                .html("<br/><b>No inventory found.</b>");
         },
 
         /**
          * Consolidate all of the items by product id
          */
         /*consolidate_inventory: function() {
-
          this.consolidated = new Array();
          if( !this.inventory || !this.inventory.length )
          return;
-
          for( var i = 0; i < this.inventory.length; ++i ){
-
          var found = false;
          for( var j = 0; j < this.consolidated.length; ++j ){
-
          if( this.consolidated[j].ProductID == this.inventory[i].ProductID ){
          found = true;
          this.consolidated[j].Runs.push( this.inventory[i] );
@@ -206,9 +213,7 @@
          this.consolidated[j].Runs.sort( function(a, b){ return a.Date.localeCompare( b.Date ) } );
          break;
          }
-
          }
-
          if( !found ){
          this.consolidated.push({
          ProductID: this.inventory[i].ProductID,
@@ -240,7 +245,7 @@
 
                 var ProductID = this.inventory[i].ProductID;
                 var ProductName = this.inventory[i].ProductName;
-                var TotalQuantity = this.inventory[i].TotalQuantity;
+                var TotalQuantity = this.inventory[i].TotalQuantityAvailable;
 
                 var inventory_item = "<div class='inventory-item " /*+ concatenated_customer */ + "'>";
                 inventory_item +=
@@ -248,13 +253,15 @@
                     + "<div class='thumbnail'><div class='noImage'>No Image</div></div>"
                     + "<span class='name'>" + this.inventory[i].ProductName + "</span>"
                     + "</a></div>";
-                inventory_item += "<div class='pull-button'>" + "<span>"+
-                    "<button class='btn btn-default' onclick='gotoAddInventory(" + ProductID + "," + "\"" + ProductName + "\"" + ")' type='button'>Add</button> </span>";
+                inventory_item += "<div class='pull-button'>" +
+                    "<button class='btn btn-default' onclick='gotoAddInventory(" + ProductID + "," + "\"" + ProductName + "\"" + ")' type='button'>Add</button>";
 
                 inventory_item += "<button class='btn btn-default' onclick='gotoPullInventory(" + ProductID + "," + "\"" + ProductName + "\"" + "," + TotalQuantity + ")' type='button'>Pull</button></div>";
-                inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
-                inventory_item += "<div class='unimplemented'>Last pull: XXXX (-XXX)</div>";
-                inventory_item += "<div class='total'>" + this.inventory[i].TotalQuantity + "</div>";
+                if( this.inventory[i].LastRunInitialQuantity )
+                    inventory_item += "<div>Last run: " + this.inventory[i].LastRunDate + " (+" + this.inventory[i].LastRunInitialQuantity + ")</div>";
+                else
+                    inventory_item += "<div>No runs yet</div>";
+                inventory_item += "<div class='total'>" + TotalQuantity + "</div>";
                 inventory_item += "</div>";
 
                 inventory_container.append( inventory_item );
@@ -287,15 +294,6 @@
         },
 
         /**
-         * Spit out an error message at the top of the screen
-         * @param error
-         */
-        render_error: function( error ) {
-            $( '.error-message').remove();
-            $( '.display-inventory-container').prepend( "<div class='error-message'>" + error + "</div>" );
-        },
-
-        /**
          * Set up the filter actions for the customer select filter
          */
         setup_customer_select_menu: function() {
@@ -324,8 +322,7 @@
                 var product_id = $( this).data( 'id' );
 
                 navigation.go("ItemDetailView.html", {
-                    ProductID: product_id,
-                    PreviousPage: "DisplayInventory.html"
+                    ProductID: product_id
                 });
 
                 /*$('#main_cont').load('ItemDetailView.html', function(){
@@ -333,6 +330,17 @@
                  });*/
 
             });
+        },
+
+        // Show the error message on top of the page.
+        // msg: The error message to show.
+        showError: function (msg) {
+            $("#error").removeClass("hidden").text(msg);
+        },
+
+        // Hide the error message.
+        hideError: function () {
+            $("#error").addClass("hidden");
         }
 
     };
@@ -349,15 +357,13 @@ var gotoPullInventory = function (pid, pname, tlq) {
     navigation.go("PullInventory.html", {
         ProductID: pid,
         ProductName: pname,
-        TotalQuantity: tlq,
-        PreviousPage: "DisplayInventory.html"
+        TotalQuantity: tlq
     });
 };
 var gotoAddInventory = function (pid, pname) {
     navigation.go("AddInventory.html", {
         ProductID: pid,
-        ProductName: pname || "",
-        PreviousPage: "DisplayInventory.html"
+        ProductName: pname || ""
     });
 };
 
@@ -370,8 +376,8 @@ var qrCode = function () {
             filter = "customer";
             keyword = encodeURIComponent($("#customer").val());
             break;
-        case "Item":
-            filter = "item";
+        case "Product":
+            filter = "product";
             keyword = encodeURIComponent($("#item").val());
             break;
         default:
@@ -381,7 +387,6 @@ var qrCode = function () {
     if (!filter || !keyword) return;
 
     navigation.go("ShowQRCode.html", {
-        Text: window.location.protocol + "//" + window.location.hostname + "/" + "DisplayInventory?" + filter + "=" + keyword,
-        PreviousPage: "DisplayInventory.html"
+        Text: window.location.protocol + "//" + window.location.hostname + "/" + "DisplayInventory?" + filter + "=" + keyword
     });
 };

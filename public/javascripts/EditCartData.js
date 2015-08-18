@@ -1,6 +1,7 @@
 var editCartData = {
     init: function () {
-        $("#cart_name").text(window.args.cartName);
+        navigation.setTitle("Job Data: " + window.args.cartName)
+        //$("#cart_name").text(window.args.cartName);
 
         var host = window.apiRoute + "/Carts/GetAllCarts/";
 
@@ -108,13 +109,13 @@ var editCartData = {
                     .prop("disabled", false)
                     .text("Edit");
 
-                //navigation.go(window.args.previousPage);
+                //navigation.back();
             }
         });
     },
 
     CartItemsEdit: function (cartID, cartName) {
-        //navigation.go("EditCartItems.html", {cartID: cartID, cartName: cartName});
+        navigation.go("ViewCarts.html", {CartID: cartID});
     },
 
     back: function () {

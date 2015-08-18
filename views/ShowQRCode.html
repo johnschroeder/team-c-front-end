@@ -5,23 +5,34 @@
     <title>QR Code</title>
 </head>
 <body>
-<div>
-    <h1>QR Code</h1>
-    <h2 id="link"></h2>
-    <button class="btn btn-default" title="Go back to the last page." onclick="back()">Back</button>
-    <hr/>
-
-    <div id="qr"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="qr"></div>
+        </div>
+    </div>
     <br/>
-    <button class="btn btn-default" title="Print the QR code image only." onclick="printQrCode()">
-        Print
-    </button>
-
-    <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+    <div class="row">
+        <div class="col-sm-12">
+            <span id="link"></span>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-3 col-xs-6">
+            <button class="btn btn-default" title="Print the QR code image only." onclick="printQrCode()">
+                Print
+            </button>
+        </div>
+    </div>
 </div>
+
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 
 <script>
     $(function () {
+        navigation.setTitle("QR Code");
+
         if (window.args.Text) {
             new QRCode($("#qr").get(0), window.args.Text);
             $("#link").text(window.args.Text);
