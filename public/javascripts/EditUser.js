@@ -52,6 +52,7 @@ var editUser = {
 
             var message = editUser._submitChanges(0, function (message) {
                 alert(message);
+                navigation.back();
             });
         }
     },
@@ -60,6 +61,7 @@ var editUser = {
         if (confirm('Do you really want to deactivate this user?')) {
             var message = editUser._submitChanges(1, function (message) {
                 alert(message);
+                navigation.back();
             });
         }
     }
