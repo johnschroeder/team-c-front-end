@@ -62,16 +62,16 @@ var CartView= {
         $('#selectCart').empty();
         var option = $("<option/>")
             .val(0)
-            .text("Please select cart")
+            .text("Please select")
             .appendTo('#selectCart');
         option = $("<option/>")
             .val(1)
-            .text("--- New Cart ---")
+            .text("--- New Job ---")
             .appendTo("#selectCart");
         var user = 'demo';
         var assignee = 'demo';
         $('#selectCart').on('change', function () {
-            if ($(this).find('option:selected').text() == "--- New Cart ---") {
+            if ($(this).find('option:selected').text() == "--- New Job ---") {
                 var cartName = window.prompt("Enter job ID:", "Job ID");
                 navigation.get("/Carts/CreateCart/" + cartName + "/" + user + "/" + assignee + "/" + 5,
                     function (err,res) {
@@ -146,7 +146,6 @@ var CartView= {
     addNewProductRow: function (button) {
         if (window.state.CartIDSelected != 0 && CartView.AddRowOnChange()) {
             var row = $(button).parent();
-            console.log("CONTENTS OF THE ROW:");
             console.log($(row).find('.Size').find('option:selected').val())
             var dirtyRow = {
                 "cartItemID": -1,
