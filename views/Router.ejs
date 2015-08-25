@@ -10,7 +10,7 @@ var page = temp.shift();
 var pageKey = temp.join("-");
 
 if(page.toLowerCase() == "confirm"){
-    navigation.get(window.apiRoute+"/Login/testLookup/"+window.lookup, function(err, lookup){
+    navigation.get(window.apiRoute+"/Login/testLookup/"+window.pageKey, function(err, lookup){
         if(err){
             window.alert("Not a valid key!");
             navigation.go('Home.html');
