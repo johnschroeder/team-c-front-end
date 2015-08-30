@@ -10,14 +10,14 @@ var manageUsers = {
     init: function(){
         navigation.setTitle("Manage Users");
         //initialize page. load all users info
-        this.LoadUsers();
+        this.LoadUsers("default");
         this.PopulatePerms();
     },
 
     PopulatePerms: function(){
         navigation.get(window.apiRoute + "/getAllPermissions/", function (err, resp) {
             if(err){
-                var msg = "Error: LoadUsers: Connection error.";
+                var msg = "Error: LoadUsers: Could not get permission levels.";
                 $("#response").text(msg);
                 return msg;
             }
@@ -34,10 +34,6 @@ var manageUsers = {
                 }
             }
         })
-    },
-
-    LoadUsers: function() {
-        LoadUsers("default");
     },
 
     LoadUsers: function(filterType){
@@ -57,8 +53,8 @@ var manageUsers = {
         navigation.get(window.apiRoute + "/" + route + "/", function (err, resp) {
             if(err){
                 var msg = "Error: LoadUsers: Connection error.";
-                $("#response").text(msg);
-                return msg;
+                $("#response").text(err.toString());
+                return err.toString();
             }
             else {
                 var users = $.parseJSON(resp);
@@ -111,7 +107,20 @@ var manageUsers = {
         $("#divNewUser").show();
     },
 
-    SubmitNewUser: function(){
+    stringGen : function(len)
+{
+    var text = "";
+
+    var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < len; i++ )
+        text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+    return text;
+},
+
+
+SubmitNewUser: function(){
 
         var uname = $('#iptUsername').val();
         var fname = $('#iptFirstName').val();
@@ -119,6 +128,8 @@ var manageUsers = {
         var email = $('#iptEmail').val();
         var perm = $('#sltPermission').text();
         var permID = $('#sltPermission').val();
+
+        var randomPassword = this.stringGen(8);
 
         if(uname=="")
         {
@@ -146,9 +157,11 @@ var manageUsers = {
             //return;
         }
 
+
+
         var toPass = {
             "username":uname,
-            "password":"0000",
+            "password":randomPassword,
             "email":email,
             "firstName":fname,
             "lastName":lname,
@@ -161,23 +174,22 @@ var manageUsers = {
         //alert(createUserArgs);
         navigation.post(window.apiRoute+'/Login/createUser/', toPass, function(err, res){
                 if(err) {
-                    window.alert("Error: "+error);
-                    this.LoadUsers();
+                    window.alert("Error: new user could not be created");
                 }
                 else{
                     window.alert("User "+uname+" is created. Email confirmation is required to complete registration.");
-                    this.LoadUsers();//re-load all users
-                    $('#iptUsername').val('');
-                    $('#iptFirstName').val('');
-                    $('#iptLastName').val('');
-                    $('#iptEmail').val('');
-                    $('select#sltPermission option').removeAttr("selected");
-                    $("#divNewUser").hide();
                 }
         });
+    $('#iptUsername').val('');
+    $('#iptFirstName').val('');
+    $('#iptLastName').val('');
+    $('#iptEmail').val('');
+    $('select#sltPermission option').removeAttr("selected");
+    $("#divNewUser").hide();
+    this.LoadUsers("default");
+
 
 
     }
-
 
 };
